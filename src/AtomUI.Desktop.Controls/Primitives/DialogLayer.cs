@@ -72,7 +72,7 @@ internal class DialogLayer : Canvas
     {
         if (TopLevel.GetTopLevel(visual) is {} tl)
         {
-            var layers = tl.GetVisualDescendants().OfType<VisualLayerManager>().FirstOrDefault();
+            var layers = tl.GetVisualDescendants().OfType<DialogLayerManager>().FirstOrDefault();
             return layers?.DialogLayer;
         }
 

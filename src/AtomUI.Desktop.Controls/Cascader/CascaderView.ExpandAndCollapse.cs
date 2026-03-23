@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using Avalonia.Interactivity;

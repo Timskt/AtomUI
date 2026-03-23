@@ -5,13 +5,15 @@
              xmlns:antdicons="https://atomui.net/icons/antdesign"
              xmlns:gallery="https://atomui.net/oss-controls/gallery">
     <gallery:ShowCasePanel>
-        <!-- <gallery:ShowCaseItem -->
-        <!--     Title="Basic" -->
-        <!--     Description="The most basic usage."> -->
-        <!--     <Panel Height="300"> -->
-        <!--         <atom:FloatButton/> -->
-        <!--     </Panel> -->
-        <!-- </gallery:ShowCaseItem> -->
+        <gallery:ShowCaseItem
+            Title="Basic"
+            Description="The most basic usage.">
+            <Panel Height="300">
+                <atom:FloatButtonHost>
+                    <atom:FloatButton />
+                </atom:FloatButtonHost>
+            </Panel>
+        </gallery:ShowCaseItem>
         <!-- -->
         <!-- <gallery:ShowCaseItem -->
         <!--     Title="Type" -->
@@ -70,20 +72,20 @@
         <!--     </Panel> -->
         <!-- </gallery:ShowCaseItem> -->
 
-        <gallery:ShowCaseItem
-            Title="FloatButton Group"
-            Description="When multiple buttons are used together, FloatButtonGroup is recommended. By setting the shape property of FloatButton.Group, you can change the shape of group. The shape of the FloatButton.Group will override the shape of FloatButtons inside.">
-            <Panel Height="300">
-                <StackPanel HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Orientation="Horizontal"
-                            Spacing="30">
-                    <atom:FloatButtonGroup Shape="Square" Margin="0">
-                        <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QuestionCircleOutlined}" />
-                        <atom:FloatButton />
-                        <atom:FloatButton Icon="{antdicons:AntDesignIconProvider SyncOutlined}" />
-                        <atom:BackTopFloatButton />
-                    </atom:FloatButtonGroup>
+        <!-- <gallery:ShowCaseItem -->
+        <!--     Title="FloatButton Group" -->
+        <!--     Description="When multiple buttons are used together, FloatButtonGroup is recommended. By setting the shape property of FloatButton.Group, you can change the shape of group. The shape of the FloatButton.Group will override the shape of FloatButtons inside."> -->
+        <!--     <Panel Height="300"> -->
+        <!--         <StackPanel HorizontalAlignment="Right" -->
+        <!--                     VerticalAlignment="Bottom" -->
+        <!--                     Orientation="Horizontal" -->
+        <!--                     Spacing="30"> -->
+        <!--             <atom:FloatButtonGroup Shape="Square" Margin="0"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QuestionCircleOutlined}" /> -->
+        <!--                 <atom:FloatButton /> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider SyncOutlined}" /> -->
+        <!--                 <atom:BackTopFloatButton /> -->
+        <!--             </atom:FloatButtonGroup> -->
         
                     <!-- <atom:FloatButtonGroup Shape="Circle" Margin="0"> -->
                     <!--     <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QuestionCircleOutlined}" /> -->
@@ -91,9 +93,9 @@
                     <!--     <atom:FloatButton Icon="{antdicons:AntDesignIconProvider SyncOutlined}" /> -->
                     <!--     <atom:BackTopFloatButton /> -->
                     <!-- </atom:FloatButtonGroup> -->
-                </StackPanel>
-            </Panel>
-        </gallery:ShowCaseItem>
+        <!--         </StackPanel> -->
+        <!--     </Panel> -->
+        <!-- </gallery:ShowCaseItem> -->
         
         <!-- <gallery:ShowCaseItem -->
         <!--     Title="Menu mode" -->

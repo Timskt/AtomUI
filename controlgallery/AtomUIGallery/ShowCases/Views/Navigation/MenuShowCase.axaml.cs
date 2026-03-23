@@ -1,9 +1,8 @@
-﻿using AtomUI.Desktop.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+﻿using AtomUI.Controls.Primitives;
+using AtomUI.Desktop.Controls;
 using AtomUI.Icons.AntDesign;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia.Input;
-using Avalonia.Threading;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
 

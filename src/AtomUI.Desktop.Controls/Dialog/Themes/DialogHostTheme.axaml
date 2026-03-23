@@ -23,7 +23,7 @@
                                           ClipToBounds="True" />
                         <Border CornerRadius="{TemplateBinding CornerRadius}"
                                 ClipToBounds="True">
-                            <atom:VisualLayerManager Padding="{TemplateBinding OffScreenMargin, Mode=OneWay}">
+                            <atom:DialogLayerManager Padding="{TemplateBinding OffScreenMargin, Mode=OneWay}">
                                 <DockPanel Name="{x:Static atom:WindowThemeConstants.ContentLayoutPart}"
                                            LastChildFill="True">
                                     <Panel DockPanel.Dock="Top"
@@ -69,7 +69,7 @@
                                         </DockPanel>
                                     </Panel>
                                 </DockPanel>
-                            </atom:VisualLayerManager>
+                            </atom:DialogLayerManager>
                         </Border>
                     </Panel>
                 </Border>

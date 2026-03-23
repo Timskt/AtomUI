@@ -1,4 +1,4 @@
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 public sealed record TreeNodePath
 {

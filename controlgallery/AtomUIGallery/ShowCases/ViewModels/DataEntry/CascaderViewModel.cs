@@ -1,7 +1,7 @@
 ﻿using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls;
 using AtomUI.Desktop.Controls.DataLoad;
-using AtomUI.Desktop.Controls.Primitives;
 using ReactiveUI;
 
 namespace AtomUIGallery.ShowCases.ViewModels;

@@ -1,7 +1,7 @@
 using System.Collections.Specialized;
 using System.Reactive.Disposables.Fluent;
 using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Utils;

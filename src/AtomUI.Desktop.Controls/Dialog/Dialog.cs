@@ -482,7 +482,7 @@ public partial class Dialog : TemplatedControl,
             var dialogLayer = DialogLayer.GetDialogLayer(placementTarget);
             if (dialogLayer != null)
             {
-                var overlayDialogHost              = CreateOverlayDialogHost(dialogLayer, this);
+                var overlayDialogHost = CreateOverlayDialogHost(dialogLayer, this);
                 OverlayInputPassThroughElement = overlayDialogHost;
                 RelayOverlayDialogBindings(relayBindingDisposables, overlayDialogHost);
                 overlayDialogHost.CustomButtons.AddRange(CustomButtons);
