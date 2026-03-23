@@ -1,8 +1,8 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls;
-using AtomUI.Desktop.Controls.Primitives;
 using Avalonia.Interactivity;
 using ReactiveUI;
 

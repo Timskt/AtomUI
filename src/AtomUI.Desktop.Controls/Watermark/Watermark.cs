@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;

@@ -1,4 +1,4 @@
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using Avalonia.Rendering;
 
 namespace AtomUI.Desktop.Controls;

@@ -1,15 +1,15 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 public class ScopeAwareAdornerLayer : Canvas
 {

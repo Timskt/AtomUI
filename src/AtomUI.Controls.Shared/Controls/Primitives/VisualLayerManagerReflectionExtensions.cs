@@ -4,7 +4,7 @@ using System.Reflection;
 using AtomUI.Reflection;
 using Avalonia.Controls;
 
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 using AvaloniaVisualLayerManager = Avalonia.Controls.Primitives.VisualLayerManager;
 
