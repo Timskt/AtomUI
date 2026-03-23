@@ -10,6 +10,10 @@ public partial class FloatButtonShowCase : ReactiveUserControl<FloatButtonViewMo
     {
         this.WhenActivated(disposables =>
         {
+            if (DataContext is FloatButtonViewModel vm)
+            {
+                vm.IsOpened = true;
+            }
         });
         InitializeComponent();
     }

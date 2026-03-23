@@ -6,24 +6,107 @@
     <ControlTheme x:Key="{x:Type atom:FloatButtonGroup}" TargetType="atom:FloatButtonGroup">
         <Setter Property="Template">
             <ControlTemplate>
-                <DockPanel Name="RootLayout">
-                    <atom:FloatButtonItemsControl Name="ItemsControl"
-                                                  BoxShadow="{TemplateBinding BoxShadow}"
-                                                  Shape="{TemplateBinding Shape}"/>
-                </DockPanel>
+                <Border Background="{TemplateBinding Background}"
+                        ClipToBounds="{TemplateBinding ClipToBounds}">
+                    <DockPanel Name="RootLayout" LastChildFill="True">
+                        <atom:FloatButton Name="Trigger"
+                                          Icon="{TemplateBinding Icon}"
+                                          Shape="{TemplateBinding Shape}"
+                                          ButtonType="{TemplateBinding ButtonType}" />
+                        <atom:FloatButtonItemsControl Name="ItemsControl"
+                                                      BoxShadow="{TemplateBinding BoxShadow}"
+                                                      Shape="{TemplateBinding Shape}" />
+                    </DockPanel>
+                </Border>
             </ControlTemplate>
         </Setter>
-        
+
         <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
         <Setter Property="Margin" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonMargin}}" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
-        
+
         <Style Selector="^[Shape=Square]">
+            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
             <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
         </Style>
+
+        <Style Selector="^[Placement=Top], ^[Placement=Bottom]">
+            <Style Selector="^ /template/ DockPanel#RootLayout">
+                <Setter Property="VerticalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+            </Style>
+            <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
+                <Setter Property="Orientation" Value="Vertical" />
+            </Style>
+        </Style>
+
+        <Style Selector="^[Placement=Left], ^[Placement=Right]">
+            <Style Selector="^ /template/ DockPanel#RootLayout">
+                <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+            </Style>
+            <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
+                <Setter Property="Orientation" Value="Horizontal" />
+            </Style>
+        </Style>
+
+        <Style Selector="^ /template/ atom|FloatButton#Trigger[IsEmbedMode=False]">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="^[Placement=Top]">
+            <Style Selector="^ /template/ atom|FloatButton#Trigger">
+                <Setter Property="DockPanel.Dock" Value="Bottom" />
+            </Style>
+        </Style>
+
+        <Style Selector="^[Placement=Bottom]">
+            <Style Selector="^ /template/ atom|FloatButton#Trigger">
+                <Setter Property="DockPanel.Dock" Value="Top" />
+            </Style>
+        </Style>
+
+        <Style Selector="^[Placement=Left]">
+            <Style Selector="^ /template/ atom|FloatButton#Trigger">
+                <Setter Property="DockPanel.Dock" Value="Right" />
+            </Style>
+        </Style>
+
+        <Style Selector="^[Placement=Right]">
+            <Style Selector="^ /template/ atom|FloatButton#Trigger">
+                <Setter Property="DockPanel.Dock" Value="Left" />
+            </Style>
+        </Style>
         
+        <Style Selector="^[Trigger=Default]">
+            <Style Selector="^ /template/ atom|FloatButton#Trigger">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:not(^[Trigger=Default])">
+            <Style Selector="^[IsOpen=True]">
+                <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
+                    <Setter Property="IsVisible" Value="True" />
+                </Style>
+            </Style>
+            <Style Selector="^[IsOpen=False]">
+                <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+            </Style>
+        </Style>
+
+        <Style Selector="^[IsOpen=True]">
+            <Style Selector="^ /template/ atom|FloatButton#Trigger">
+                <Setter Property="Icon" Value="{Binding CloseIcon, RelativeSource={RelativeSource TemplatedParent}}" />
+            </Style>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

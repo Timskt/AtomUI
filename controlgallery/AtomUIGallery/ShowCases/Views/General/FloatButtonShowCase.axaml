@@ -82,17 +82,111 @@
                         <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QuestionCircleOutlined}" />
                         <atom:FloatButton />
                         <atom:FloatButton Icon="{antdicons:AntDesignIconProvider SyncOutlined}" />
-                        <atom:FloatButton Icon="{antdicons:AntDesignIconProvider FullscreenOutlined}" />
+                        <atom:BackTopFloatButton />
                     </atom:FloatButtonGroup>
-                    
-                    <atom:FloatButtonGroup Shape="Circle" Margin="0">
-                        <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QuestionCircleOutlined}" />
-                        <atom:FloatButton />
-                        <atom:FloatButton Icon="{antdicons:AntDesignIconProvider SyncOutlined}" />
-                        <atom:FloatButton Icon="{antdicons:AntDesignIconProvider FullscreenOutlined}" />
-                    </atom:FloatButtonGroup>
+        
+                    <!-- <atom:FloatButtonGroup Shape="Circle" Margin="0"> -->
+                    <!--     <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QuestionCircleOutlined}" /> -->
+                    <!--     <atom:FloatButton /> -->
+                    <!--     <atom:FloatButton Icon="{antdicons:AntDesignIconProvider SyncOutlined}" /> -->
+                    <!--     <atom:BackTopFloatButton /> -->
+                    <!-- </atom:FloatButtonGroup> -->
                 </StackPanel>
             </Panel>
         </gallery:ShowCaseItem>
+        
+        <!-- <gallery:ShowCaseItem -->
+        <!--     Title="Menu mode" -->
+        <!--     Description="Open menu mode with trigger, which could be hover or click."> -->
+        <!--     <Panel Height="300"> -->
+        <!--         <StackPanel HorizontalAlignment="Right" -->
+        <!--                     VerticalAlignment="Bottom" -->
+        <!--                     Orientation="Horizontal" -->
+        <!--                     Spacing="30"> -->
+        <!--             <atom:FloatButtonGroup Shape="Circle" Margin="0" Trigger="Hover" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}" -->
+        <!--                                    ButtonType="Primary"> -->
+        <!--                 <atom:FloatButton /> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider CommentOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--              -->
+        <!--             <atom:FloatButtonGroup Shape="Circle" Margin="0" Trigger="Click" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}" -->
+        <!--                                    ButtonType="Primary"> -->
+        <!--                 <atom:FloatButton /> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider CommentOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--         </StackPanel> -->
+        <!--     </Panel> -->
+        <!-- </gallery:ShowCaseItem> -->
+        <!-- -->
+        <!-- <gallery:ShowCaseItem -->
+        <!--     Title="Controlled mode" -->
+        <!--     Description="Set the component to controlled mode through open, which need to be used together with trigger."> -->
+        <!--     <Panel Height="300"> -->
+        <!--         <atom:ToggleSwitch HorizontalContentAlignment="Left" -->
+        <!--                            VerticalAlignment="Top" -->
+        <!--                            IsChecked="{Binding IsOpened, Mode=TwoWay}"/> -->
+        <!--         <StackPanel HorizontalAlignment="Right" -->
+        <!--                     VerticalAlignment="Bottom" -->
+        <!--                     Orientation="Horizontal" -->
+        <!--                     Spacing="30"> -->
+        <!--             <atom:FloatButtonGroup Shape="Circle" Margin="0" Trigger="Hover" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}" -->
+        <!--                                    IsOpen="{Binding IsOpened}"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider WechatOutlined}"/> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QqOutlined}" /> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider TwitterOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--              -->
+        <!--             <atom:FloatButtonGroup Shape="Circle" Margin="0" Trigger="Click" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}" -->
+        <!--                                    IsOpen="{Binding IsOpened}"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider WechatOutlined}"/> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QqOutlined}" /> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider TwitterOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--         </StackPanel> -->
+        <!--     </Panel> -->
+        <!-- </gallery:ShowCaseItem> -->
+        
+        <!-- <gallery:ShowCaseItem -->
+        <!--     Title="Controlled mode" -->
+        <!--     Description="Set the component to controlled mode through open, which need to be used together with trigger."> -->
+        <!--     <Panel Height="300"> -->
+        <!--         <Grid RowDefinitions="Auto, Auto, Auto" -->
+        <!--               ColumnDefinitions="Auto, Auto, Auto" -->
+        <!--               HorizontalAlignment="Center" -->
+        <!--               VerticalAlignment="Center" -->
+        <!--               ColumnSpacing="10"> -->
+        <!--             <atom:FloatButtonGroup Grid.Row="0" Grid.Column="1" Shape="Circle" -->
+        <!--                                    Margin="0"  -->
+        <!--                                    Trigger="Click" -->
+        <!--                                    Placement="Top" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider WechatOutlined}"/> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QqOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--             <atom:FloatButtonGroup Grid.Row="1" Grid.Column="0" Shape="Circle" Margin="0" Trigger="Click" -->
+        <!--                                    Placement="Left" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider WechatOutlined}"/> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QqOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--             <atom:FloatButtonGroup Grid.Row="2" Grid.Column="1" Shape="Circle" Margin="0" Trigger="Click" -->
+        <!--                                                Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}" -->
+        <!--                                                Placement="Bottom"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider WechatOutlined}"/> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QqOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--             <atom:FloatButtonGroup Grid.Row="1" Grid.Column="2" Shape="Circle" Margin="0" Trigger="Click" -->
+        <!--                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}" -->
+        <!--                                    Placement="Right"> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider WechatOutlined}"/> -->
+        <!--                 <atom:FloatButton Icon="{antdicons:AntDesignIconProvider QqOutlined}" /> -->
+        <!--             </atom:FloatButtonGroup> -->
+        <!--         </Grid> -->
+        <!--     </Panel> -->
+        <!-- </gallery:ShowCaseItem> -->
     </gallery:ShowCasePanel>
 </UserControl>

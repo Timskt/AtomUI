@@ -111,7 +111,6 @@ internal class FloatButtonItemsControl : TemplatedControl
 
     public override void Render(DrawingContext context)
     {
-    
         if (Shape == FloatButtonShape.Square && SeparatorBrush != null)
         {
             var children = Children.Where(c => c.IsVisible).ToList();
@@ -126,19 +125,21 @@ internal class FloatButtonItemsControl : TemplatedControl
                 {
                     var child       = children[i];
                     var childPos    = child.TranslatePoint(new Point(0, 0), this);
-                    Debug.Assert(childPos != null);
-                    var childBounds = child.Bounds;
-                    if (Orientation == Orientation.Horizontal)
+                    if (childPos != null)
                     {
-                        startPoint = new Point(childPos.Value.X + childBounds.Width, 0);
-                        endPoint   = new Point(childPos.Value.X + childBounds.Width, DesiredSize.Height);
+                        var childBounds = child.Bounds;
+                        if (Orientation == Orientation.Horizontal)
+                        {
+                            startPoint = new Point(childPos.Value.X + childBounds.Width, 0);
+                            endPoint   = new Point(childPos.Value.X + childBounds.Width, DesiredSize.Height);
+                        }
+                        else
+                        {
+                            startPoint = new Point(0, childPos.Value.Y + childBounds.Height);
+                            endPoint   = new Point(DesiredSize.Width, childPos.Value.Y + childBounds.Height);
+                        }
+                        context.DrawLine(pen, startPoint, endPoint);
                     }
-                    else
-                    {
-                        startPoint = new Point(0, childPos.Value.Y + childBounds.Height);
-                        endPoint   = new Point(DesiredSize.Width, childPos.Value.Y + childBounds.Height);
-                    }
-                    context.DrawLine(pen, startPoint, endPoint);
                 }
             }
         }

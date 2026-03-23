@@ -222,7 +222,7 @@ public class FloatButton : AvaloniaButton,
         Transitions = null;
     }
 
-    private void ConfigureDefaultIcon()
+    protected virtual void ConfigureDefaultIcon()
     {
         if ((Shape == FloatButtonShape.Circle && Icon == null) ||
             (Shape == FloatButtonShape.Square && Content == null && Icon == null))
