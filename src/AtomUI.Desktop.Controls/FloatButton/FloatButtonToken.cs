@@ -1,0 +1,68 @@
+using AtomUI.Theme.TokenSystem;
+using Avalonia;
+using Avalonia.Media;
+
+namespace AtomUI.Desktop.Controls;
+
+[ControlDesignToken]
+internal class FloatButtonToken : AbstractControlDesignToken
+{
+    public const string ID = "FloatButton";
+
+    public FloatButtonToken()
+        : base(ID)
+    {
+    }
+    
+    /// <summary>
+    /// FloatButton 尺寸
+    /// Size of FloatButton
+    /// </summary>
+    public double FloatButtonSize { get; set; }
+    
+    /// <summary>
+    /// FloatButton 图标尺寸
+    /// Icon size of FloatButton
+    /// </summary>
+    public double FloatButtonIconSize { get; set; }
+    
+    /// <summary>
+    /// FloatButton 外边距
+    /// </summary>
+    public Thickness FloatButtonMargin { get; set; }
+    
+    /// <summary>
+    /// 正方形的徽章偏移大小
+    /// </summary>
+    public double SquareBadgeOffset { get; set; }
+    
+    /// <summary>
+    /// 原型的徽章偏移大小
+    /// </summary>
+    public double CircleBadgeOffset { get; set; }
+    
+    /// <summary>
+    /// 主要按钮文本颜色
+    /// </summary>
+    public Color PrimaryColor { get; set; }
+    
+    /// <summary>
+    /// 描述文本行高
+    /// </summary>
+    public double DescriptionLineHeight { get; set; }
+    
+    public override void CalculateTokenValues(bool isDarkMode)
+    {
+        base.CalculateTokenValues(isDarkMode);
+        PrimaryColor        = SharedToken.ColorTextLightSolid;
+        FloatButtonIconSize = SharedToken.FontSizeIcon * 1.5;
+        FloatButtonSize     = SharedToken.ControlHeightLG;
+        FloatButtonMargin   = new Thickness(SharedToken.UniformlyMarginLG, SharedToken.UniformlyMarginLG);
+        DescriptionLineHeight = SharedToken.FontSizeSM * 1.2;
+
+        var r       = Math.Sqrt(2);
+        var offsetR = (r - 1) / r;
+        SquareBadgeOffset = SharedToken.BorderRadius.BottomLeft * offsetR;
+        CircleBadgeOffset = SharedToken.ControlHeight / 2 * offsetR;
+    }
+}

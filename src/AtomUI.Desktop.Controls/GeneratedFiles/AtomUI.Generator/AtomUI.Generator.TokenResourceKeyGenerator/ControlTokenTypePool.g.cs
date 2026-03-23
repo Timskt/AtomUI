@@ -32,6 +32,7 @@ namespace AtomUI.Theme
             tokenTypes.Add(typeof(AtomUI.Desktop.Controls.DrawerToken));
             tokenTypes.Add(typeof(AtomUI.Desktop.Controls.EmptyToken));
             tokenTypes.Add(typeof(AtomUI.Desktop.Controls.ExpanderToken));
+            tokenTypes.Add(typeof(AtomUI.Desktop.Controls.FloatButtonToken));
             tokenTypes.Add(typeof(AtomUI.Desktop.Controls.FlyoutHostToken));
             tokenTypes.Add(typeof(AtomUI.Desktop.Controls.FormToken));
             tokenTypes.Add(typeof(AtomUI.Desktop.Controls.GroupBoxToken));

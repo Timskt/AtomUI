@@ -12,6 +12,7 @@ internal class zh_CN : LanguageProvider
     public const string General_Icons = "Icons 图标";
     public const string General_OsInfo = "系统信息";
     public const string General_Button = "Button 按钮";
+    public const string General_FloatButton = "FloatButton 悬浮按钮";
     public const string General_SplitButton = "SplitButton 分割按钮";
     public const string General_Separator = "Separator 分割线";
     public const string General_CustomizeTheme = "CustomizeTheme 主题";
@@ -73,11 +74,11 @@ internal class zh_CN : LanguageProvider
     public const string DataDisplay_QRCode = "QRCode 二维码";
     public const string DataDisplay_Segmented = "Segmented 分段控制器";
     public const string DataDisplay_Statistic = "Statistic 统计数值";
+    public const string DataDisplay_Tag = "Tag 标签";
     public const string DataDisplay_Timeline = "Timeline 时间轴";
     public const string DataDisplay_TreeView = "TreeView 树形控件";
     public const string DataDisplay_Tooltip = "Tooltip 文字提示";
-    public const string DataDisplay_Tag = "Tag 标签";
-    public const string DataDisplay_BoxPanel = "BoxPanel 盒布局";
+    public const string DataDisplay_Tour = "Tour 漫游式引导";
     
     public const string Feedback = "反馈";
     public const string Feedback_Alert = "Alert 警告提示";

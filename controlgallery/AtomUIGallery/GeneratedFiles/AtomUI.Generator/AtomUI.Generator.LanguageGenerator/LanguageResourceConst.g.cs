@@ -8,7 +8,6 @@ namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang
         public static readonly LanguageResourceKey DataDisplay = new LanguageResourceKey("CaseNavigation.DataDisplay", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Avatar = new LanguageResourceKey("CaseNavigation.DataDisplay_Avatar", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Badge = new LanguageResourceKey("CaseNavigation.DataDisplay_Badge", "AtomUIGallery");
-        public static readonly LanguageResourceKey DataDisplay_BoxPanel = new LanguageResourceKey("CaseNavigation.DataDisplay_BoxPanel", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Calendar = new LanguageResourceKey("CaseNavigation.DataDisplay_Calendar", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Card = new LanguageResourceKey("CaseNavigation.DataDisplay_Card", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Carousel = new LanguageResourceKey("CaseNavigation.DataDisplay_Carousel", "AtomUIGallery");
@@ -27,6 +26,7 @@ namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang
         public static readonly LanguageResourceKey DataDisplay_Tag = new LanguageResourceKey("CaseNavigation.DataDisplay_Tag", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Timeline = new LanguageResourceKey("CaseNavigation.DataDisplay_Timeline", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_Tooltip = new LanguageResourceKey("CaseNavigation.DataDisplay_Tooltip", "AtomUIGallery");
+        public static readonly LanguageResourceKey DataDisplay_Tour = new LanguageResourceKey("CaseNavigation.DataDisplay_Tour", "AtomUIGallery");
         public static readonly LanguageResourceKey DataDisplay_TreeView = new LanguageResourceKey("CaseNavigation.DataDisplay_TreeView", "AtomUIGallery");
         public static readonly LanguageResourceKey DataEntry = new LanguageResourceKey("CaseNavigation.DataEntry", "AtomUIGallery");
         public static readonly LanguageResourceKey DataEntry_AutoComplete = new LanguageResourceKey("CaseNavigation.DataEntry_AutoComplete", "AtomUIGallery");
@@ -63,6 +63,7 @@ namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang
         public static readonly LanguageResourceKey General_AboutUs = new LanguageResourceKey("CaseNavigation.General_AboutUs", "AtomUIGallery");
         public static readonly LanguageResourceKey General_Button = new LanguageResourceKey("CaseNavigation.General_Button", "AtomUIGallery");
         public static readonly LanguageResourceKey General_CustomizeTheme = new LanguageResourceKey("CaseNavigation.General_CustomizeTheme", "AtomUIGallery");
+        public static readonly LanguageResourceKey General_FloatButton = new LanguageResourceKey("CaseNavigation.General_FloatButton", "AtomUIGallery");
         public static readonly LanguageResourceKey General_Icons = new LanguageResourceKey("CaseNavigation.General_Icons", "AtomUIGallery");
         public static readonly LanguageResourceKey General_OsInfo = new LanguageResourceKey("CaseNavigation.General_OsInfo", "AtomUIGallery");
         public static readonly LanguageResourceKey General_Palette = new LanguageResourceKey("CaseNavigation.General_Palette", "AtomUIGallery");

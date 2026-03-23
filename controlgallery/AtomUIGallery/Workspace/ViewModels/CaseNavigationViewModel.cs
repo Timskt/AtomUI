@@ -45,6 +45,7 @@ public class CaseNavigationViewModel : ReactiveObject
     {
         _showCaseViewModelFactories.Add(AboutUsViewModel.ID, () => new AboutUsViewModel(HostScreen));
         _showCaseViewModelFactories.Add(ButtonViewModel.ID, () => new ButtonViewModel(HostScreen));
+        _showCaseViewModelFactories.Add(FloatButtonViewModel.ID, () => new FloatButtonViewModel(HostScreen));
         _showCaseViewModelFactories.Add(IconViewModel.ID, () => new IconViewModel(HostScreen));
         _showCaseViewModelFactories.Add(OsInfoViewModel.ID, () => new OsInfoViewModel(HostScreen));
         _showCaseViewModelFactories.Add(PaletteViewModel.ID, () => new PaletteViewModel(HostScreen));
@@ -85,6 +86,7 @@ public class CaseNavigationViewModel : ReactiveObject
         _showCaseViewModelFactories.Add(TimelineViewModel.ID, () => new TimelineViewModel(HostScreen));
         _showCaseViewModelFactories.Add(TooltipViewModel.ID, () => new TooltipViewModel(HostScreen));
         _showCaseViewModelFactories.Add(TreeViewViewModel.ID, () => new TreeViewViewModel(HostScreen));
+        _showCaseViewModelFactories.Add(TourViewModel.ID, () => new TourViewModel(HostScreen));
     }
 
     private void RegisterDataEntryViewModels()

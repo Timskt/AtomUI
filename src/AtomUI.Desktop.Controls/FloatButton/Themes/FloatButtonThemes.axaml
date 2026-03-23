@@ -1,0 +1,11 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:atom="https://atomui.net"
+                    x:ClassModifier="internal">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="FloatButtonGroupTheme.axaml" />
+        <ResourceInclude Source="FloatButtonItemsControlTheme.axaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <atom:FloatButtonTheme x:Key="{x:Type atom:FloatButton}" TargetType="atom:FloatButton"/>
+    <atom:BackTopFloatButtonTheme x:Key="{x:Type atom:BackTopFloatButton}" TargetType="atom:BackTopFloatButton"/>
+</ResourceDictionary>

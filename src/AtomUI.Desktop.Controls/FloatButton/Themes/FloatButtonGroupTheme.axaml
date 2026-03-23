@@ -1,0 +1,29 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:atom="https://atomui.net"
+    x:ClassModifier="internal">
+    <ControlTheme x:Key="{x:Type atom:FloatButtonGroup}" TargetType="atom:FloatButtonGroup">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DockPanel Name="RootLayout">
+                    <atom:FloatButtonItemsControl Name="ItemsControl"
+                                                  BoxShadow="{TemplateBinding BoxShadow}"
+                                                  Shape="{TemplateBinding Shape}"/>
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
+        
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="Margin" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonMargin}}" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+        
+        <Style Selector="^[Shape=Square]">
+            <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
+        </Style>
+        
+    </ControlTheme>
+</ResourceDictionary>

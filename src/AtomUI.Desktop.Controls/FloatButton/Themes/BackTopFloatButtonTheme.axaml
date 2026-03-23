@@ -1,0 +1,12 @@
+<ControlTheme TargetType="atom:BackTopFloatButton"
+              xmlns="https://github.com/avaloniaui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:atom="https://atomui.net"
+              x:Class="AtomUI.Desktop.Controls.Themes.BackTopFloatButtonTheme">
+    <ControlTheme.BasedOn>
+        <atom:FloatButtonTheme TargetType="atom:BackTopFloatButton" />
+    </ControlTheme.BasedOn>
+
+    <Style Selector="^:is(atom|BackTopFloatButton)">
+    </Style>
+</ControlTheme>

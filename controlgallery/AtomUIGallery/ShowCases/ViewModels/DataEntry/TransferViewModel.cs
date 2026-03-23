@@ -83,8 +83,8 @@ public class TransferViewModel : ReactiveObject, IRoutableViewModel
     
     public List<IListItemData>? PaginationTransferItems
     {
-        get => _advanceTransferItems;
-        set => this.RaiseAndSetIfChanged(ref _advanceTransferItems, value);
+        get => _paginationTransferItems;
+        set => this.RaiseAndSetIfChanged(ref _paginationTransferItems, value);
     }
 
     private List<EntityKey>? _paginationTransferDefaultTargetKeys;

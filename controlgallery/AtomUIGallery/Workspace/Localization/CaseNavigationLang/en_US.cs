@@ -12,6 +12,7 @@ internal class en_US : LanguageProvider
     public const string General_Icons = "Icons";
     public const string General_OsInfo = "OsInfo";
     public const string General_Button = "Button";
+    public const string General_FloatButton = "FloatButton";
     public const string General_SplitButton = "SplitButton";
     public const string General_Separator = "Separator";
     public const string General_CustomizeTheme = "CustomizeTheme";
@@ -73,11 +74,11 @@ internal class en_US : LanguageProvider
     public const string DataDisplay_QRCode = "QRCode";
     public const string DataDisplay_Segmented = "Segmented";
     public const string DataDisplay_Statistic = "Statistic";
+    public const string DataDisplay_Tag = "Tag";
     public const string DataDisplay_Timeline = "Timeline";
     public const string DataDisplay_TreeView = "TreeView";
     public const string DataDisplay_Tooltip = "Tooltip";
-    public const string DataDisplay_Tag = "Tag";
-    public const string DataDisplay_BoxPanel = "BoxPanel";
+    public const string DataDisplay_Tour = "Tour";
     
     public const string Feedback = "Feedback";
     public const string Feedback_Alert = "Alert";

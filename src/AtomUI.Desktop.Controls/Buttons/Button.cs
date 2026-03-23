@@ -229,7 +229,6 @@ public class Button : AvaloniaButton,
     
     #endregion
     
-    protected bool ThemeConfigured;
     private WaveSpiritDecorator? _waveSpiritDecorator;
 
     static Button()
@@ -428,17 +427,6 @@ public class Button : AvaloniaButton,
         {
             EffectiveBorderThickness = BorderThickness;
         }
-        // else if (ButtonType == ButtonType.Primary)
-        // {
-        //     if (IsGhost || !IsEnabled)
-        //     {
-        //         EffectiveBorderThickness = BorderThickness;
-        //     }
-        //     else
-        //     {
-        //         EffectiveBorderThickness = new Thickness(0);
-        //     }
-        // }
         else
         {
             EffectiveBorderThickness = new Thickness(0);

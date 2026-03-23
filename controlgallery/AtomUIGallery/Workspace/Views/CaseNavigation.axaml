@@ -20,6 +20,8 @@
                               ItemKey="{x:Static viewmodels:IconViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.General_Button}}"
                               ItemKey="{x:Static viewmodels:ButtonViewModel.ID}" />
+            <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.General_FloatButton}}"
+                              ItemKey="{x:Static viewmodels:FloatButtonViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.General_SplitButton}}"
                               ItemKey="{x:Static viewmodels:SplitButtonViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.General_Separator}}"
@@ -156,14 +158,16 @@
                               ItemKey="{x:Static viewmodels:SegmentedViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_Statistic}}"
                               ItemKey="{x:Static viewmodels:StatisticViewModel.ID}" />
+            <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_Tag}}"
+                              ItemKey="{x:Static viewmodels:TagViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_Timeline}}"
                               ItemKey="{x:Static viewmodels:TimelineViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_TreeView}}"
                               ItemKey="{x:Static viewmodels:TreeViewViewModel.ID}" />
             <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_Tooltip}}"
                               ItemKey="{x:Static viewmodels:TooltipViewModel.ID}" />
-            <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_Tag}}"
-                              ItemKey="{x:Static viewmodels:TagViewModel.ID}" />
+            <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.DataDisplay_Tour}}"
+                              ItemKey="{x:Static viewmodels:TourViewModel.ID}" />
         </atom:NavMenuNode>
 
         <atom:NavMenuNode Header="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.Feedback}}"
