@@ -1,11 +1,9 @@
-using System;
-using AtomUI;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
-using AtomUIThumb = AtomUI.Desktop.Controls.Primitives.Thumb;
+using AtomUIThumb = AtomUI.Controls.Primitives.Thumb;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;

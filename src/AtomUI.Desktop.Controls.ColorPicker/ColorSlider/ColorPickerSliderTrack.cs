@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Metadata;
-using Thumb = AtomUI.Desktop.Controls.Primitives.Thumb;
+using Thumb = AtomUI.Controls.Primitives.Thumb;
 using AvaloniaButton = Avalonia.Controls.Button;
 
 namespace AtomUI.Desktop.Controls;

@@ -11,7 +11,7 @@
         </ControlTheme.BasedOn>
         <Setter Property="Template">
             <ControlTemplate>
-                <atom:ArrowDecoratedBox Name="{x:Static atom:ArrowDecoratedBox.ArrowDecoratorPart}"
+                <atom:ArrowDecoratedBox Name="{x:Static atom:AbstractArrowDecoratedBox.ArrowDecoratorPart}"
                                         IsShowArrow="{TemplateBinding IsShowArrow}"
                                         ArrowPosition="{TemplateBinding ArrowPosition}"
                                         Background="{TemplateBinding Background}"
