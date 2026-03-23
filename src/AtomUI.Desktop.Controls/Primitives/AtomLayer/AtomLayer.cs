@@ -9,8 +9,6 @@ namespace AtomUI.Desktop.Controls.Primitives;
 
 public class AtomLayer : Canvas
 {
-    #region Static
-
     public static AtomLayer? GetLayer(Visual target)
     {
         return target.GetLayer();
@@ -56,10 +54,6 @@ public class AtomLayer : Canvas
         AvaloniaProperty
             .RegisterAttached<AtomLayer, Visual, IDisposable?>("DisposableForSubscriptionOfTargetBounds");
 
-    #endregion
-
-    #region Properties
-
     public Visual? Host
     {
         get => GetValue(HostProperty);
@@ -79,10 +73,7 @@ public class AtomLayer : Canvas
         .Register<AtomLayer, Vector>(nameof(HostOffset));
 
     private readonly IList<WeakReference<Control>> _detachedAdorners = new List<WeakReference<Control>>();
-
-    #endregion
-
-    #region Ctor
+    private bool _internalOperation;
 
     static AtomLayer()
     {
@@ -109,10 +100,6 @@ public class AtomLayer : Canvas
                 $"Please use {nameof(AddAdorner)}() method to add a child to {nameof(AtomLayer)} instead of adding it by Children's Add().");
         };
     }
-
-    #endregion
-
-    #region Public Methods
 
     public T? GetAdorner<T>(Visual target) where T : Control
     {
@@ -169,10 +156,6 @@ public class AtomLayer : Canvas
         }
     }
 
-    #endregion
-
-    #region Measure & Arrange
-
     private void Measure()
     {
         Measure(new Size());
@@ -183,10 +166,6 @@ public class AtomLayer : Canvas
     {
         Arrange(new Rect(new Point(HostOffset.X, -HostOffset.Y), new Size()));
     }
-
-    #endregion
-
-    #region Update Adorner Location
 
     private void UpdateAdornersLocationOfTarget(Visual target)
     {
@@ -232,10 +211,6 @@ public class AtomLayer : Canvas
         adorner.Height = provider.Bounds.Height;
     }
 
-    #endregion
-
-    #region Attach & Detach
-
     private void OnTargetOnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs args)
     {
         if (sender is not Visual target)
@@ -276,10 +251,6 @@ public class AtomLayer : Canvas
         }
     }
 
-    #endregion
-
-    #region Monitor Target Bounds
-
     private void MonitorTargetBounds(Visual target)
     {
         var provider = GetBoundsAnchor(target);
@@ -307,12 +278,6 @@ public class AtomLayer : Canvas
         }
     }
 
-    #endregion
-
-    #region Children
-
-    private bool _internalOperation;
-
     private void AddChild(Control adorner)
     {
         try
@@ -338,7 +303,4 @@ public class AtomLayer : Canvas
             _internalOperation = false;
         }
     }
-
-    #endregion
-    
 }

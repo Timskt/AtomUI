@@ -2,11 +2,16 @@ using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
+using AtomUI.Desktop.Controls.Utils;
+using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -36,6 +41,12 @@ public class FloatButtonGroup : TemplatedControl,
                                 IControlSharedTokenResourcesHost
 {
     #region 公共属性定义
+    public static readonly StyledProperty<PathIcon?> IconProperty =
+        AvaloniaProperty.Register<FloatButtonGroup, PathIcon?>(nameof(Icon));
+    
+    public static readonly StyledProperty<PathIcon?> CloseIconProperty =
+        AvaloniaProperty.Register<FloatButtonGroup, PathIcon?>(nameof(CloseIcon));
+    
     public static readonly StyledProperty<FloatButtonType> ButtonTypeProperty =
         FloatButton.ButtonTypeProperty.AddOwner<FloatButtonGroup>();
 
@@ -56,6 +67,18 @@ public class FloatButtonGroup : TemplatedControl,
     
     public static readonly StyledProperty<bool> IsOpenProperty =
         AvaloniaProperty.Register<FloatButtonGroup, bool>(nameof(IsOpen));
+    
+    public PathIcon? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+    
+    public PathIcon? CloseIcon
+    {
+        get => GetValue(CloseIconProperty);
+        set => SetValue(CloseIconProperty, value);
+    }
     
     public FloatButtonType ButtonType
     {
@@ -135,15 +158,6 @@ public class FloatButtonGroup : TemplatedControl,
     #endregion
     
     #region 内部属性定义
-    
-    internal static readonly StyledProperty<Orientation> OrientationProperty =
-        FloatButtonItemsControl.OrientationProperty.AddOwner<FloatButtonItemsControl>();
-    
-    internal Orientation Orientation
-    {
-        get => GetValue(OrientationProperty);
-        set => SetValue(OrientationProperty, value);
-    }
 
     Control IControlSharedTokenResourcesHost.HostControl => this;
     string IControlSharedTokenResourcesHost.TokenId => FloatButtonToken.ID;
@@ -152,28 +166,51 @@ public class FloatButtonGroup : TemplatedControl,
     
     private FloatButtonItemsControl? _itemsControl;
     private readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
+    private bool _initPressed;
+    private IDisposable? _clickTriggerDisposable;
+    private FloatButton? _triggerButton;
     
+    static FloatButtonGroup()
+    {
+        AffectsMeasure<FloatButtonGroup>(IsOpenProperty);
+    }
+
     public FloatButtonGroup()
     {
         this.RegisterResources();
         Children.CollectionChanged += NotifyChildrenChanged;
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (Icon == null)
+        {
+            SetCurrentValue(IconProperty, new FileTextOutlined());
+        }
+
+        if (CloseIcon == null)
+        {
+            SetCurrentValue(CloseIconProperty, new CloseOutlined());
+        }
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == PlacementProperty)
+        if (change.Property == TriggerProperty)
         {
-            ConfigureOrientation();
+            ConfigureTriggerType();
         }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        _itemsControl = e.NameScope.Find<FloatButtonItemsControl>("ItemsControl");
+        _itemsControl  = e.NameScope.Find<FloatButtonItemsControl>("ItemsControl");
+        _triggerButton = e.NameScope.Find<FloatButton>("Trigger");
         _itemsControl?.Children.AddRange(Children);
-        ConfigureOrientation();
+        ConfigureTriggerType();
         foreach (var item in Children)
         {
             if (item is FloatButton floatButton)
@@ -252,15 +289,74 @@ public class FloatButtonGroup : TemplatedControl,
         _itemsBindingDisposables.Add(floatButton, disposables);
     }
 
-    private void ConfigureOrientation()
+    protected override void OnPointerEntered(PointerEventArgs e)
     {
-        if (Placement == FloatButtonGroupPlacement.Top || Placement == FloatButtonGroupPlacement.Bottom)
+        base.OnPointerEntered(e);
+        if (Trigger == FloatButtonGroupTrigger.Hover)
         {
-            SetCurrentValue(OrientationProperty, Orientation.Vertical);
+            SetValue(IsOpenProperty, true, BindingPriority.Style);
         }
-        else
+    }
+
+    protected override void OnPointerExited(PointerEventArgs e)
+    {
+        base.OnPointerExited(e);
+        if (Trigger == FloatButtonGroupTrigger.Hover)
         {
-            SetCurrentValue(OrientationProperty, Orientation.Horizontal);
+            SetValue(IsOpenProperty, false, BindingPriority.Style);
+        }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _clickTriggerDisposable?.Dispose();
+        _clickTriggerDisposable = null;
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        ConfigureTriggerType();
+    }
+
+    private void ConfigureTriggerType()
+    {
+        _clickTriggerDisposable?.Dispose();
+        if (Trigger == FloatButtonGroupTrigger.Click)
+        {
+            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+            _clickTriggerDisposable = inputManager.Process.Subscribe(HandleMouseClick);
+        }
+    }
+
+    private void HandleMouseClick(RawInputEventArgs args)
+    {
+        if (args is RawPointerEventArgs pointerEventArgs)
+        {
+            if (pointerEventArgs.Type == RawPointerEventType.LeftButtonDown)
+            {
+                if (pointerEventArgs.IsPointLogicalIn(this))
+                {
+                    _initPressed = true;
+                }
+            }
+            else if (pointerEventArgs.Type == RawPointerEventType.LeftButtonUp)
+            {
+                Console.WriteLine(pointerEventArgs.GetInputHitTestResult().element);
+                if (pointerEventArgs.IsPointLogicalIn(this))
+                {
+                    if (_initPressed && pointerEventArgs.IsPointLogicalIn(_triggerButton))
+                    {
+                        SetValue(IsOpenProperty, !IsOpen, BindingPriority.Style);
+                    }
+                }
+                else
+                {
+                    SetValue(IsOpenProperty, false, BindingPriority.Style);
+                }
+                _initPressed = false;
+            }
         }
     }
 }
