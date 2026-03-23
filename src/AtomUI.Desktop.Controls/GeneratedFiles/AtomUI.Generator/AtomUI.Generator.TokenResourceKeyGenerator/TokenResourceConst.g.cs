@@ -393,6 +393,17 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         public static readonly TokenResourceKey RightExpandButtonVMargin = new TokenResourceKey("AtomUI.Desktop.Controls.Expander.RightExpandButtonVMargin");
     }
 
+    public static class FloatButtonTokenKey
+    {
+        public static readonly TokenResourceKey CircleBadgeOffset = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.CircleBadgeOffset");
+        public static readonly TokenResourceKey DescriptionLineHeight = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.DescriptionLineHeight");
+        public static readonly TokenResourceKey FloatButtonIconSize = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatButtonIconSize");
+        public static readonly TokenResourceKey FloatButtonMargin = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatButtonMargin");
+        public static readonly TokenResourceKey FloatButtonSize = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatButtonSize");
+        public static readonly TokenResourceKey PrimaryColor = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.PrimaryColor");
+        public static readonly TokenResourceKey SquareBadgeOffset = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.SquareBadgeOffset");
+    }
+
     public static class FlyoutHostTokenKey
     {
         public static readonly TokenResourceKey MarginToAnchor = new TokenResourceKey("AtomUI.Desktop.Controls.FlyoutHost.MarginToAnchor");

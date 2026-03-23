@@ -1,0 +1,125 @@
+<ControlTheme TargetType="atom:FloatButton"
+              xmlns="https://github.com/avaloniaui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              x:Class="AtomUI.Desktop.Controls.Themes.FloatButtonTheme"
+              xmlns:atom="https://atomui.net">
+    <Style Selector="^:is(atom|FloatButton)">
+        <Style Selector="^[Shape=Square]">
+            <Setter Property="Template">
+                <ControlTemplate TargetType="atom:FloatButton">
+                    <Border Name="Frame"
+                            Padding="{TemplateBinding Padding}"
+                            BoxShadow="{TemplateBinding BoxShadow}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Cursor="{TemplateBinding Cursor}">
+                        <StackPanel Name="RootLayout">
+                            <atom:IconPresenter Name="IconPresenter" Icon="{TemplateBinding Icon}"
+                                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              TextWrapping="Wrap"
+                                              HorizontalContentAlignment="Center"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="^[Shape=Circle]">
+            <Setter Property="Template">
+                <ControlTemplate TargetType="atom:FloatButton">
+                    <Border Name="Frame"
+                            Padding="{TemplateBinding Padding}"
+                            BoxShadow="{TemplateBinding BoxShadow}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Cursor="{TemplateBinding Cursor}">
+                        <atom:IconPresenter Name="IconPresenter" Icon="{TemplateBinding Icon}"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
+        <Setter Property="ZIndex" Value="{DynamicResource {x:Static atom:SharedTokenKey.ZIndexPopupBase}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXXS}}" />
+        <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+
+        <Style Selector="^[IsEmbedMode=False]">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonMargin}}" />
+            <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
+        </Style>
+
+        <Style Selector="^[Shape=Circle]">
+            <Setter Property="Height" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+        </Style>
+
+        <Style Selector="^[Shape=Square]">
+            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+            <Style Selector="^ /template/ StackPanel#RootLayout">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            <Style Selector="^ /template/ StackPanel > ContentPresenter">
+                <Setter Property="LineHeight"
+                        Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.DescriptionLineHeight}}" />
+            </Style>
+        </Style>
+
+        <Style Selector="^[IsEmbedMode=True]">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+         
+            <Style Selector="^[Shape=Square]">
+                <Style Selector="^ /template/ Border#Frame">
+                    <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SharedTokenKey.MarginXXS}}" />
+                </Style>
+                <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+            </Style>
+            <Style Selector="^[Shape=Circle]">
+                <Setter Property="BoxShadow"
+                        Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
+            </Style>
+        </Style>
+
+        <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
+            <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonIconSize}}" />
+            <Setter Property="Height" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonIconSize}}" />
+        </Style>
+
+        <Style Selector="^[ButtonType=Default]">
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextHover}}" />
+            </Style>
+        </Style>
+
+        <Style Selector="^[ButtonType=Primary]">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.PrimaryColor}}" />
+            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+            <Style Selector="^:pointerover">
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryHover}}" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Background"
+                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryActive}}" />
+            </Style>
+            <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
+                <Setter Property="IconBrush"
+                        Value="{DynamicResource {x:Static atom:ButtonTokenKey.PrimaryColor}}" />
+            </Style>
+        </Style>
+
+    </Style>
+</ControlTheme>

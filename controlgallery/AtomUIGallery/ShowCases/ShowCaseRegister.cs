@@ -22,6 +22,7 @@ internal static class ShowCaseRegister
     {
         Locator.CurrentMutable.Register(() => new AboutUsPage(), typeof(IViewFor<AboutUsViewModel>));
         Locator.CurrentMutable.Register(() => new ButtonShowCase(), typeof(IViewFor<ButtonViewModel>));
+        Locator.CurrentMutable.Register(() => new FloatButtonShowCase(), typeof(IViewFor<FloatButtonViewModel>));
         Locator.CurrentMutable.Register(() => new CustomizeThemeShowCase(), typeof(IViewFor<CustomizeThemeViewModel>));
         Locator.CurrentMutable.Register(() => new IconShowCase(), typeof(IViewFor<IconViewModel>));
         Locator.CurrentMutable.Register(() => new OsInfoPage(), typeof(IViewFor<OsInfoViewModel>));
@@ -61,6 +62,7 @@ internal static class ShowCaseRegister
         Locator.CurrentMutable.Register(() => new TagShowCase(), typeof(IViewFor<TagViewModel>));
         Locator.CurrentMutable.Register(() => new TimelineShowCase(), typeof(IViewFor<TimelineViewModel>));
         Locator.CurrentMutable.Register(() => new TooltipShowCase(), typeof(IViewFor<TooltipViewModel>));
+        Locator.CurrentMutable.Register(() => new TourShowCase(), typeof(IViewFor<TourViewModel>));
         Locator.CurrentMutable.Register(() => new TreeViewShowCase(), typeof(IViewFor<TreeViewViewModel>));
     }
     

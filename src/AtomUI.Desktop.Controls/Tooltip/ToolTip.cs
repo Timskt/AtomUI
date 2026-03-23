@@ -149,7 +149,7 @@ public class ToolTip : ContentControl,
         return element.GetValue(ColorProperty);
     }
 
-    public static void SetColor(Control element, Color color)
+    public static void SetColor(Control element, Color? color)
     {
         element.SetValue(ColorProperty, color);
     }
