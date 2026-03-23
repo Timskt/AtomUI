@@ -7,7 +7,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Thumb = AtomUI.Desktop.Controls.Primitives.Thumb;
+using Thumb = AtomUI.Controls.Primitives.Thumb;
 
 namespace AtomUI.Desktop.Controls;
 

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 internal class MotionBitmapGhostControl : Control
 {

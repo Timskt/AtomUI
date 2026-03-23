@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class ArrowIndicator : Control
 {    

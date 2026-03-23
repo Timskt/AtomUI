@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal interface IShadowMaskInfoProvider
 {
@@ -17,5 +17,5 @@ internal interface IArrowAwareShadowMaskInfoProvider : IShadowMaskInfoProvider
     Rect GetArrowIndicatorBounds();
     Rect GetArrowIndicatorLayoutBounds();
     void SetArrowOpacity(double opacity);
-    ArrowDecoratedBox GetArrowDecoratedBox();
+    AbstractArrowDecoratedBox GetArrowDecoratedBox();
 }

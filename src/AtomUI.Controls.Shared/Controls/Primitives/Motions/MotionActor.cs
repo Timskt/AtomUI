@@ -1,6 +1,6 @@
 ﻿using AtomUI.MotionScene;
 
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 public class MotionActor : BaseMotionActor
 {

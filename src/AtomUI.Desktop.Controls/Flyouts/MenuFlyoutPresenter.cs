@@ -369,7 +369,7 @@ public class MenuFlyoutPresenter : MenuBase,
         return _arrowDecoratedBox.ArrowIndicatorLayoutBounds;
     }
     
-    ArrowDecoratedBox IArrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox()
+    AbstractArrowDecoratedBox IArrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox()
     {
         Debug.Assert(_arrowDecoratedBox != null);
         return _arrowDecoratedBox;

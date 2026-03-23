@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -137,9 +138,9 @@ internal class OverlayPopupContent : ContentControl
     
     private void ConfigureShadowInfo()
     {
-        if (Content is IArrowAwareShadowMaskInfoProvider arrowAwareShadowMaskInfoProvider)
+        if (Content is IArrowAwareShadowMaskInfoProvider maskInfoProvider)
         {
-            var arrowDecoratedBox = arrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox();
+            var arrowDecoratedBox = maskInfoProvider.GetArrowDecoratedBox();
             _bindingDisposables?.Dispose();
             _bindingDisposables = new CompositeDisposable();
             _bindingDisposables?.Add(BindUtils.RelayBind(arrowDecoratedBox, ArrowDecoratedBox.CornerRadiusProperty, this, MaskShadowsContentCornerRadiusProperty));

@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 /// <summary>
 /// 只在动画过程中使用且不能改变属性，所以在这里使用了自动属性

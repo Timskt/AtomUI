@@ -8,19 +8,19 @@
             <DockPanel Name="ContentLayout" LastChildFill="True">
                 <Panel Name="ArrowPositionLayout">
                     <LayoutTransformControl
-                        Name="{x:Static atom:ArrowDecoratedBoxThemeConstants.ArrowIndicatorLayoutPart}"
+                        Name="PART_ArrowIndicatorLayout"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsVisible="{TemplateBinding IsShowArrow}"
                         Opacity="{TemplateBinding ArrowOpacity}">
                         <atom:ArrowIndicator
-                            Name="{x:Static atom:ArrowDecoratedBoxThemeConstants.ArrowIndicatorPart}"
+                            Name="PART_ArrowIndicator"
                             FilledColor="{TemplateBinding Background}" 
                             ArrowSize="{TemplateBinding ArrowSize}"/>
                     </LayoutTransformControl>
                 </Panel>
                 <Border
-                    Name="{x:Static atom:ArrowDecoratedBoxThemeConstants.ContentDecoratorPart}"
+                    Name="PART_ContentDecorator"
                     Margin="0"
                     BackgroundSizing="{TemplateBinding BackgroundSizing}"
                     Background="{TemplateBinding Background}"
