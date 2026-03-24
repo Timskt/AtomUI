@@ -172,7 +172,7 @@ public class FloatButton : AvaloniaButton,
 
         if (IsEmbedMode && _overlayLayer != null)
         {
-            CalculatePosition(_overlayLayer.DesiredSize);
+            CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
         }
     }
 
@@ -213,13 +213,18 @@ public class FloatButton : AvaloniaButton,
                  change.Property == ParentProperty)
         {
             SetupParentLayer(Parent);
+            if (_overlayLayer != null)
+            {
+                CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
+            }
         }
         else if (change.Property == FloatOffsetXProperty ||
-                 change.Property == FloatOffsetYProperty)
+                 change.Property == FloatOffsetYProperty ||
+                 change.Property == PlacementProperty)
         {
             if (_overlayLayer != null)
             {
-                CalculatePosition(_overlayLayer.DesiredSize);
+                CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
             }
         }
     }
@@ -301,70 +306,81 @@ public class FloatButton : AvaloniaButton,
 
     private void HandleLayerSizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        CalculatePosition(e.NewSize);
+        CalculatePosition(this, e.NewSize, Placement, FloatOffsetX, FloatOffsetY);
     }
 
-    private void CalculatePosition(Size layerSize)
+    internal static void CalculatePosition(Control floatControl, 
+                                           Size layerSize, 
+                                           FloatButtonPlacement placement,
+                                           double offsetX,
+                                           double offsetY)
     {
-        var width   = DesiredSize.Width;
-        var height  = DesiredSize.Height;
-        var offsetX = 0.0d;
-        var offsetY = 0.0d;
-        if (Placement == FloatButtonPlacement.Left)
+        var width   = floatControl.DesiredSize.Width;
+        var height  = floatControl.DesiredSize.Height;
+        var targetOffsetX = 0.0d;
+        var targetOffsetY = 0.0d;
+        if (placement == FloatButtonPlacement.Left)
         {
-            offsetY =  (layerSize.Height - height) / 2;
-            offsetX += FloatOffsetX;
-            offsetY += FloatOffsetY;
+            targetOffsetY =  (layerSize.Height - height) / 2;
+            targetOffsetX += offsetX;
+            targetOffsetY += offsetY;
         }
-        else if (Placement == FloatButtonPlacement.Right)
+        else if (placement == FloatButtonPlacement.Right)
         {
-            offsetX =  (layerSize.Width - width);
-            offsetY =  (layerSize.Height - height) / 2;
-            offsetX -= FloatOffsetX;
-            offsetY += FloatOffsetY;
+            targetOffsetX =  (layerSize.Width - width);
+            targetOffsetY =  (layerSize.Height - height) / 2;
+            targetOffsetX -= offsetX;
+            targetOffsetY += offsetY;
         }
-        else if (Placement == FloatButtonPlacement.Top)
+        else if (placement == FloatButtonPlacement.Top)
         {
-            offsetX =  (layerSize.Width - width) / 2;
-            offsetX += FloatOffsetX;
-            offsetY += FloatOffsetY;
+            targetOffsetX =  (layerSize.Width - width) / 2;
+            targetOffsetX += offsetX;
+            targetOffsetY += offsetY;
         }
-        else if (Placement == FloatButtonPlacement.Bottom)
+        else if (placement == FloatButtonPlacement.Bottom)
         {
-            offsetX =  (layerSize.Width - width) / 2;
-            offsetY =  (layerSize.Height - height);
-            offsetX += FloatOffsetX;
-            offsetY -= FloatOffsetY;
+            targetOffsetX =  (layerSize.Width - width) / 2;
+            targetOffsetY =  (layerSize.Height - height);
+            targetOffsetX += offsetX;
+            targetOffsetY -= offsetY;
         }
-        else if (Placement == FloatButtonPlacement.TopLeft)
+        else if (placement == FloatButtonPlacement.TopLeft)
         {
-            offsetX =  0.0d;
-            offsetY =  0.0d;
-            offsetX += FloatOffsetX;
-            offsetY += FloatOffsetY;
+            targetOffsetX =  0.0d;
+            targetOffsetY =  0.0d;
+            targetOffsetX += offsetX;
+            targetOffsetY += offsetY;
         }
-        else if (Placement == FloatButtonPlacement.TopRight)
+        else if (placement == FloatButtonPlacement.TopRight)
         {
-            offsetX =  (layerSize.Width - width);
-            offsetY =  0.0d;
-            offsetX -= FloatOffsetX;
-            offsetY += FloatOffsetY;
+            targetOffsetX =  (layerSize.Width - width);
+            targetOffsetY =  0.0d;
+            targetOffsetX -= offsetX;
+            targetOffsetY += offsetY;
         }
-        else if (Placement == FloatButtonPlacement.BottomLeft)
+        else if (placement == FloatButtonPlacement.BottomLeft)
         {
-            offsetX =  0.0d;
-            offsetY =  (layerSize.Height - height);
-            offsetX += FloatOffsetX;
-            offsetY -= FloatOffsetY;
+            targetOffsetX =  0.0d;
+            targetOffsetY =  (layerSize.Height - height);
+            targetOffsetX += offsetX;
+            targetOffsetY -= offsetY;
         }
-        else if (Placement == FloatButtonPlacement.BottomRight)
+        else if (placement == FloatButtonPlacement.BottomRight)
         {
-            offsetX =  (layerSize.Width - width);
-            offsetY =  (layerSize.Height - height);
-            offsetX -= FloatOffsetX;
-            offsetY -= FloatOffsetY;
+            targetOffsetX =  (layerSize.Width - width);
+            targetOffsetY =  (layerSize.Height - height);
+            targetOffsetX -= offsetX;
+            targetOffsetY -= offsetY;
         }
-        Canvas.SetLeft(this, offsetX);
-        Canvas.SetTop(this, offsetY);
+        else if (placement == FloatButtonPlacement.Center)
+        {
+            targetOffsetX =  (layerSize.Width - width) / 2;
+            targetOffsetY =  (layerSize.Height - height) / 2;
+            targetOffsetX += offsetX;
+            targetOffsetY += offsetY;
+        }
+        Canvas.SetLeft(floatControl, targetOffsetX);
+        Canvas.SetTop(floatControl, targetOffsetY);
     }
 }
