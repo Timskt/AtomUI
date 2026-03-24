@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace AtomUI.Desktop.Controls.Utils;
+namespace AtomUI.Controls.Utils;
 
 internal static class TopLevelUtils
 {
