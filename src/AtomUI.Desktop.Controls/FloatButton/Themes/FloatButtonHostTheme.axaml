@@ -1,0 +1,12 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:atom="https://atomui.net"
+    x:ClassModifier="internal">
+    <ControlTheme x:Key="{x:Type atom:FloatButtonHost}" TargetType="atom:FloatButtonHost">
+        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="Placement" Value="BottomRight" />
+        <Setter Property="FloatOffsetX" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatOffsetX}}" />
+        <Setter Property="FloatOffsetY" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatOffsetY}}" />
+    </ControlTheme>
+</ResourceDictionary>

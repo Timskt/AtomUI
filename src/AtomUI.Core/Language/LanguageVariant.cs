@@ -25,7 +25,7 @@ public sealed record LanguageVariant
     
     public override string ToString()
     {
-        return NormalizeLanguageCode(Code.ToString());
+        return Code.ToHyphenString();
     }
 
     public override int GetHashCode()
@@ -36,11 +36,6 @@ public sealed record LanguageVariant
     public bool Equals(LanguageVariant? other)
     {
         return other is not null && Equals(Code, other.Code);
-    }
-
-    public static string NormalizeLanguageCode(string languageCode)
-    {
-        return languageCode.Replace("_", "-");
     }
     
     private string GetDisplayText()

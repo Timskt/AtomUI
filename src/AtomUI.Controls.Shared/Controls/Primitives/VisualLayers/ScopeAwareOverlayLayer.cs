@@ -20,19 +20,13 @@ public class ScopeAwareOverlayLayer : Canvas
     }
     
     protected override bool BypassFlowDirectionPolicies => true;
+    
     public Size AvailableSize { get; private set; }
+    public bool Injecting { get; private set; }
     
     public static ScopeAwareOverlayLayer? GetLayer(Visual visual)
     {
-        Layoutable? layerHost = visual.FindAncestorOfType<ScrollContentPresenter>(true);
-        if (layerHost != null)
-        {
-            while (layerHost != null)
-            {
-                layerHost = layerHost.FindAncestorOfType<ScrollContentPresenter>();
-            }
-        }
-
+        Layoutable? layerHost = visual.FindAncestorOfType<ScopeAwareOverlayLayerPanel>(true);
         layerHost ??= visual.FindAncestorOfType<VisualLayerManager>();
         layerHost ??= TopLevel.GetTopLevel(visual);
 
@@ -48,100 +42,54 @@ public class ScopeAwareOverlayLayer : Canvas
         return layer;
     }
     
-     private static ScopeAwareOverlayLayer InjectLayer(Layoutable layerHost)
+    private static ScopeAwareOverlayLayer InjectLayer(Layoutable layerHost)
     {
-        var layer = FindAdornerLayer(layerHost);
+        var layer = FindLayer(layerHost);
         if (layer != null)
         {
             return layer;
         }
-
         layer = new ScopeAwareOverlayLayer
         {
             HorizontalAlignment = HorizontalAlignment.Stretch,
             VerticalAlignment   = VerticalAlignment.Stretch,
             ZIndex              = VisualLayerManager.ScopeAwareOverlayZIndex
         };
-
-        layer.LayerHost = layerHost;
-        if (layerHost is VisualLayerManager visualLayerManager)
+        try
         {
-            visualLayerManager.AddLayer(layer, visualLayerManager.ZIndex);
-        }
-        else if (layerHost is ScrollContentPresenter scrollContentPresenter)
-        {
-            if (scrollContentPresenter.Content is Control controlContent)
+            layer.Injecting = true;
+            layer.LayerHost = layerHost;
+            if (layerHost is VisualLayerManager visualLayerManager)
             {
-                var oldOffset = scrollContentPresenter.Offset;
-                // 直接内容控件
-                scrollContentPresenter.Content = null;
-                scrollContentPresenter.UpdateChild();
-                var panel = new Panel
-                {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment   = VerticalAlignment.Stretch,
-                };
-                panel.Children.Add(controlContent);
-                panel.Children.Add(layer);
-                scrollContentPresenter.Content = panel;
-                var scrollViewer = scrollContentPresenter.FindAncestorOfType<ScrollViewer>();
-                if (scrollViewer != null)
-                {
-                    scrollViewer.Offset = oldOffset;
-                }
+                visualLayerManager.AddLayer(layer, visualLayerManager.ZIndex);
             }
-            else if (scrollContentPresenter.Content != null && scrollContentPresenter.ContentTemplate != null)
+            else if (layerHost is ScopeAwareOverlayLayerPanel scopeAwareOverlayLayerPanel)
             {
-                // 模版处理
-                var injectTemplate = new FuncDataTemplate<object?>((o, scope) =>
-                {
-                    var originControl = scrollContentPresenter.ContentTemplate.Build(o);
-                    var panel = new Panel
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment   = VerticalAlignment.Stretch,
-                    };
-                    Debug.Assert(originControl != null);
-                    panel.Children.Add(originControl);
-                    panel.Children.Add(layer);
-                    return panel;
-                });
-                scrollContentPresenter.ContentTemplate = injectTemplate;
+                scopeAwareOverlayLayerPanel.Children.Add(layer);
             }
-        }
 
-        return layer;
+            return layer;
+        }
+        finally
+        {
+            layer.Injecting = false;
+        }
     }
      
-    private static ScopeAwareOverlayLayer? FindAdornerLayer(Layoutable layerHost)
+    public static ScopeAwareOverlayLayer? FindLayer(Layoutable layerHost)
     {
-        if (layerHost is ScrollContentPresenter scrollContentPresenter)
+        ScopeAwareOverlayLayer? layer = null;
+        if (layerHost is ScopeAwareOverlayLayerPanel scopeAwareOverlayLayerPanel)
         {
-            // 在 Panel 下面
-            var panel = scrollContentPresenter.FindChildOfType<Panel>();
-            if (panel is not null)
-            {
-                return panel.FindChildOfType<ScopeAwareOverlayLayer>();
-            }
+            layer = scopeAwareOverlayLayerPanel.FindChildOfType<ScopeAwareOverlayLayer>();
         }
         else if (layerHost is VisualLayerManager visualLayerManager)
         {
-            // 直接就在下面
-            visualLayerManager.FindChildOfType<ScopeAwareOverlayLayer>();
+            layer = visualLayerManager.FindChildOfType<ScopeAwareOverlayLayer>();
         }
-
-        return null;
+        return layer;
     }
     
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        foreach (Control child in Children)
-        {
-            child.Measure(availableSize);
-        }
-        return availableSize;
-    }
-
     protected override Size ArrangeOverride(Size finalSize)
     {
         // We are saving it here since child controls might need to know the entire size of the overlay

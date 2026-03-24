@@ -27,11 +27,6 @@ internal class FloatButtonToken : AbstractControlDesignToken
     public double FloatButtonIconSize { get; set; }
     
     /// <summary>
-    /// FloatButton 外边距
-    /// </summary>
-    public Thickness FloatButtonMargin { get; set; }
-    
-    /// <summary>
     /// 正方形的徽章偏移大小
     /// </summary>
     public double SquareBadgeOffset { get; set; }
@@ -51,15 +46,25 @@ internal class FloatButtonToken : AbstractControlDesignToken
     /// </summary>
     public double DescriptionLineHeight { get; set; }
     
+    /// <summary>
+    /// 默认的基于定位的水平偏移值
+    /// </summary>
+    public double FloatOffsetX { get; set; }
+    
+    /// <summary>
+    /// 默认的基于定位的垂直偏移值
+    /// </summary>
+    public double FloatOffsetY { get; set; }
+    
     public override void CalculateTokenValues(bool isDarkMode)
     {
         base.CalculateTokenValues(isDarkMode);
-        PrimaryColor        = SharedToken.ColorTextLightSolid;
-        FloatButtonIconSize = SharedToken.FontSizeIcon * 1.5;
-        FloatButtonSize     = SharedToken.ControlHeightLG;
-        FloatButtonMargin   = new Thickness(SharedToken.UniformlyMarginLG, SharedToken.UniformlyMarginLG);
+        PrimaryColor          = SharedToken.ColorTextLightSolid;
+        FloatButtonIconSize   = SharedToken.FontSizeIcon * 1.5;
+        FloatButtonSize       = SharedToken.ControlHeightLG;
         DescriptionLineHeight = SharedToken.FontSizeSM * 1.2;
-
+        FloatOffsetX          = SharedToken.UniformlyMargin;
+        FloatOffsetY          = SharedToken.UniformlyMargin;
         var r       = Math.Sqrt(2);
         var offsetR = (r - 1) / r;
         SquareBadgeOffset = SharedToken.BorderRadius.BottomLeft * offsetR;

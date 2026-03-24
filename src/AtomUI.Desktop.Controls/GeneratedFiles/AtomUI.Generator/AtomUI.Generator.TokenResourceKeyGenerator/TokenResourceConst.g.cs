@@ -398,8 +398,9 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         public static readonly TokenResourceKey CircleBadgeOffset = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.CircleBadgeOffset");
         public static readonly TokenResourceKey DescriptionLineHeight = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.DescriptionLineHeight");
         public static readonly TokenResourceKey FloatButtonIconSize = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatButtonIconSize");
-        public static readonly TokenResourceKey FloatButtonMargin = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatButtonMargin");
         public static readonly TokenResourceKey FloatButtonSize = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatButtonSize");
+        public static readonly TokenResourceKey FloatOffsetX = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatOffsetX");
+        public static readonly TokenResourceKey FloatOffsetY = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.FloatOffsetY");
         public static readonly TokenResourceKey PrimaryColor = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.PrimaryColor");
         public static readonly TokenResourceKey SquareBadgeOffset = new TokenResourceKey("AtomUI.Desktop.Controls.FloatButton.SquareBadgeOffset");
     }
