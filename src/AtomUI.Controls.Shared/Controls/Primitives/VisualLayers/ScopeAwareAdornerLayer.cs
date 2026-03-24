@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -13,8 +12,6 @@ namespace AtomUI.Controls.Primitives;
 
 public class ScopeAwareAdornerLayer : Canvas
 {
-    private const int ScopeAwareAdornerLayerZIndex = int.MaxValue - 1000;
-
     #region 公共属性定义
 
     public static readonly AttachedProperty<Control?> AdornedElementProperty =
@@ -338,7 +335,7 @@ public class ScopeAwareAdornerLayer : Canvas
         {
             HorizontalAlignment = HorizontalAlignment.Stretch,
             VerticalAlignment   = VerticalAlignment.Stretch,
-            ZIndex              = ScopeAwareAdornerLayerZIndex
+            ZIndex              = VisualLayerManager.ScopeAwareAdornerLayerZIndex
         };
 
         layer.LayerHost = layerHost;
