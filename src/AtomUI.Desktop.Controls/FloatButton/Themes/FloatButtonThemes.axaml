@@ -6,6 +6,7 @@
         <ResourceInclude Source="FloatButtonGroupTheme.axaml" />
         <ResourceInclude Source="FloatButtonItemsControlTheme.axaml" />
         <ResourceInclude Source="FloatButtonHostTheme.axaml" />
+        <ResourceInclude Source="BackTopFloatButtonHostTheme.axaml" />
     </ResourceDictionary.MergedDictionaries>
     <atom:FloatButtonTheme x:Key="{x:Type atom:FloatButton}" TargetType="atom:FloatButton"/>
     <atom:BackTopFloatButtonTheme x:Key="{x:Type atom:BackTopFloatButton}" TargetType="atom:BackTopFloatButton"/>
