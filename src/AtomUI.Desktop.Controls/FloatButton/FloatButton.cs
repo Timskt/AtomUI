@@ -1,5 +1,6 @@
 using AtomUI.Animations;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
 using AtomUI.Utils;
@@ -32,7 +33,15 @@ public class FloatButton : AvaloniaButton,
                            IControlSharedTokenResourcesHost
 {
     #region 公共属性定义
-
+    public static readonly StyledProperty<FloatButtonPlacement> PlacementProperty =
+        AvaloniaProperty.Register<FloatButton, FloatButtonPlacement>(nameof(Placement));
+    
+    public static readonly StyledProperty<double> FloatOffsetXProperty =
+        AvaloniaProperty.Register<FloatButton, double>(nameof(FloatOffsetX));
+    
+    public static readonly StyledProperty<double> FloatOffsetYProperty =
+        AvaloniaProperty.Register<FloatButton, double>(nameof(FloatOffsetY));
+    
     public static readonly StyledProperty<PathIcon?> IconProperty =
         AvaloniaProperty.Register<FloatButton, PathIcon?>(nameof(Icon));
     
@@ -56,7 +65,25 @@ public class FloatButton : AvaloniaButton,
     
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<FloatButton>();
+    
+    public FloatButtonPlacement Placement
+    {
+        get => GetValue(PlacementProperty);
+        set => SetValue(PlacementProperty, value);
+    }
+    
+    public double FloatOffsetX
+    {
+        get => GetValue(FloatOffsetXProperty);
+        set => SetValue(FloatOffsetXProperty, value);
+    }
 
+    public double FloatOffsetY
+    {
+        get => GetValue(FloatOffsetYProperty);
+        set => SetValue(FloatOffsetYProperty, value);
+    }
+    
     public PathIcon? Icon
     {
         get => GetValue(IconProperty);
@@ -127,6 +154,8 @@ public class FloatButton : AvaloniaButton,
 
     #endregion
     
+    ScopeAwareOverlayLayer? _overlayLayer;
+    
     public FloatButton()
     {
         this.RegisterResources();
@@ -139,6 +168,11 @@ public class FloatButton : AvaloniaButton,
         if (Shape == FloatButtonShape.Circle)
         {
             SetCurrentValue(CornerRadiusProperty, new CornerRadius(e.NewSize.Height / 2));
+        }
+
+        if (IsEmbedMode && _overlayLayer != null)
+        {
+            CalculatePosition(_overlayLayer.DesiredSize);
         }
     }
 
@@ -158,7 +192,7 @@ public class FloatButton : AvaloniaButton,
         {
             UpdatePseudoClasses();
         }
-        
+
         if (IsLoaded)
         {
             if (change.Property == IsMotionEnabledProperty)
@@ -174,6 +208,19 @@ public class FloatButton : AvaloniaButton,
         else if (change.Property == TooltipColorProperty)
         {
             ToolTipControl.SetColor(this, TooltipColor);
+        }
+        else if (change.Property == IsEmbedModeProperty ||
+                 change.Property == ParentProperty)
+        {
+            SetupParentLayer(Parent);
+        }
+        else if (change.Property == FloatOffsetXProperty ||
+                 change.Property == FloatOffsetYProperty)
+        {
+            if (_overlayLayer != null)
+            {
+                CalculatePosition(_overlayLayer.DesiredSize);
+            }
         }
     }
 
@@ -229,5 +276,95 @@ public class FloatButton : AvaloniaButton,
         {
             SetCurrentValue(IconProperty, new FileTextOutlined());
         }
+    }
+
+    private void SetupParentLayer(StyledElement? parent)
+    {
+        if (_overlayLayer != null)
+        {
+            _overlayLayer.SizeChanged -= HandleLayerSizeChanged;
+        }
+        if (!IsEmbedMode)
+        {
+            if (parent is ScopeAwareOverlayLayer scopeAwareOverlayLayer)
+            {
+                _overlayLayer                      =  scopeAwareOverlayLayer;
+                scopeAwareOverlayLayer.SizeChanged += HandleLayerSizeChanged;
+            }
+        }
+        else
+        {
+            _overlayLayer = null;
+        }
+        
+    }
+
+    private void HandleLayerSizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        CalculatePosition(e.NewSize);
+    }
+
+    private void CalculatePosition(Size layerSize)
+    {
+        var width   = DesiredSize.Width;
+        var height  = DesiredSize.Height;
+        var offsetX = 0.0d;
+        var offsetY = 0.0d;
+        if (Placement == FloatButtonPlacement.Left)
+        {
+            offsetY =  (layerSize.Height - height) / 2;
+            offsetX += FloatOffsetX;
+            offsetY += FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.Right)
+        {
+            offsetX =  (layerSize.Width - width);
+            offsetY =  (layerSize.Height - height) / 2;
+            offsetX -= FloatOffsetX;
+            offsetY += FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.Top)
+        {
+            offsetX =  (layerSize.Width - width) / 2;
+            offsetX += FloatOffsetX;
+            offsetY += FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.Bottom)
+        {
+            offsetX =  (layerSize.Width - width) / 2;
+            offsetY =  (layerSize.Height - height);
+            offsetX += FloatOffsetX;
+            offsetY -= FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.TopLeft)
+        {
+            offsetX =  0.0d;
+            offsetY =  0.0d;
+            offsetX += FloatOffsetX;
+            offsetY += FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.TopRight)
+        {
+            offsetX =  (layerSize.Width - width);
+            offsetY =  0.0d;
+            offsetX -= FloatOffsetX;
+            offsetY += FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.BottomLeft)
+        {
+            offsetX =  0.0d;
+            offsetY =  (layerSize.Height - height);
+            offsetX += FloatOffsetX;
+            offsetY -= FloatOffsetY;
+        }
+        else if (Placement == FloatButtonPlacement.BottomRight)
+        {
+            offsetX =  (layerSize.Width - width);
+            offsetY =  (layerSize.Height - height);
+            offsetX -= FloatOffsetX;
+            offsetY -= FloatOffsetY;
+        }
+        Canvas.SetLeft(this, offsetX);
+        Canvas.SetTop(this, offsetY);
     }
 }

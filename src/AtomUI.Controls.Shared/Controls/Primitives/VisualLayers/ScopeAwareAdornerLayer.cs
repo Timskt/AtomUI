@@ -390,22 +390,23 @@ public class ScopeAwareAdornerLayer : Canvas
 
     private static ScopeAwareAdornerLayer? FindAdornerLayer(Layoutable layerHost)
     {
+        ScopeAwareAdornerLayer? layer = null;
         if (layerHost is ScrollContentPresenter scrollContentPresenter)
         {
             // 在 Panel 下面
             var panel = scrollContentPresenter.FindChildOfType<Panel>();
             if (panel is not null)
             {
-                return panel.FindChildOfType<ScopeAwareAdornerLayer>();
+                layer = panel.FindChildOfType<ScopeAwareAdornerLayer>();
             }
         }
         else if (layerHost is VisualLayerManager visualLayerManager)
         {
             // 直接就在下面
-            visualLayerManager.FindChildOfType<ScopeAwareAdornerLayer>();
+            layer = visualLayerManager.FindChildOfType<ScopeAwareAdornerLayer>();
         }
 
-        return null;
+        return layer;
     }
 
     private class AdornedElementInfo
