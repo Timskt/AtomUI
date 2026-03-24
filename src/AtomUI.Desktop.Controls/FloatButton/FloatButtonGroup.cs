@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Icons.AntDesign;
@@ -21,7 +22,7 @@ namespace AtomUI.Desktop.Controls;
 
 using ControlList = Avalonia.Controls.Controls;
 
-public enum FloatButtonGroupPlacement
+public enum FloatButtonGroupMenuPlacement
 {
     Top,
     Bottom,
@@ -41,6 +42,15 @@ public class FloatButtonGroup : TemplatedControl,
                                 IControlSharedTokenResourcesHost
 {
     #region 公共属性定义
+    public static readonly StyledProperty<FloatButtonPlacement> PlacementProperty =
+        FloatButton.PlacementProperty.AddOwner<FloatButtonGroup>();
+    
+    public static readonly StyledProperty<double> FloatOffsetXProperty =
+        FloatButton.FloatOffsetXProperty.AddOwner<FloatButtonGroup>();
+    
+    public static readonly StyledProperty<double> FloatOffsetYProperty =
+        FloatButton.FloatOffsetYProperty.AddOwner<FloatButtonGroup>();
+    
     public static readonly StyledProperty<PathIcon?> IconProperty =
         AvaloniaProperty.Register<FloatButtonGroup, PathIcon?>(nameof(Icon));
     
@@ -59,14 +69,32 @@ public class FloatButtonGroup : TemplatedControl,
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<FloatButtonGroup>();
     
-    public static readonly StyledProperty<FloatButtonGroupPlacement> PlacementProperty =
-        AvaloniaProperty.Register<FloatButtonGroup, FloatButtonGroupPlacement>(nameof(Placement), FloatButtonGroupPlacement.Top);
+    public static readonly StyledProperty<FloatButtonGroupMenuPlacement> MenuPlacementProperty =
+        AvaloniaProperty.Register<FloatButtonGroup, FloatButtonGroupMenuPlacement>(nameof(MenuPlacement), FloatButtonGroupMenuPlacement.Top);
     
     public static readonly StyledProperty<FloatButtonGroupTrigger> TriggerProperty =
         AvaloniaProperty.Register<FloatButtonGroup, FloatButtonGroupTrigger>(nameof(Trigger), FloatButtonGroupTrigger.Default);
     
     public static readonly StyledProperty<bool> IsOpenProperty =
         AvaloniaProperty.Register<FloatButtonGroup, bool>(nameof(IsOpen));
+    
+    public FloatButtonPlacement Placement
+    {
+        get => GetValue(PlacementProperty);
+        set => SetValue(PlacementProperty, value);
+    }
+    
+    public double FloatOffsetX
+    {
+        get => GetValue(FloatOffsetXProperty);
+        set => SetValue(FloatOffsetXProperty, value);
+    }
+
+    public double FloatOffsetY
+    {
+        get => GetValue(FloatOffsetYProperty);
+        set => SetValue(FloatOffsetYProperty, value);
+    }
     
     public PathIcon? Icon
     {
@@ -104,10 +132,10 @@ public class FloatButtonGroup : TemplatedControl,
         set => SetValue(IsMotionEnabledProperty, value);
     }
     
-    public FloatButtonGroupPlacement Placement
+    public FloatButtonGroupMenuPlacement MenuPlacement
     {
-        get => GetValue(PlacementProperty);
-        set => SetValue(PlacementProperty, value);
+        get => GetValue(MenuPlacementProperty);
+        set => SetValue(MenuPlacementProperty, value);
     }
     
     public FloatButtonGroupTrigger Trigger
@@ -156,6 +184,13 @@ public class FloatButtonGroup : TemplatedControl,
     }
 
     #endregion
+
+    #region 内部属性定义
+
+    internal event EventHandler? OpenRequest;
+    internal event EventHandler? CloseRequest;
+
+    #endregion
     
     #region 内部属性定义
 
@@ -169,6 +204,7 @@ public class FloatButtonGroup : TemplatedControl,
     private bool _initPressed;
     private IDisposable? _clickTriggerDisposable;
     private FloatButton? _triggerButton;
+    ScopeAwareOverlayLayer? _overlayLayer;
     
     static FloatButtonGroup()
     {
@@ -202,13 +238,46 @@ public class FloatButtonGroup : TemplatedControl,
         {
             ConfigureTriggerType();
         }
+        else if (change.Property == ParentProperty)
+        {
+            SetupParentLayer(Parent);
+            if (_overlayLayer != null)
+            {
+                FloatButton.CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
+            }
+        }
+        else if (change.Property == FloatOffsetXProperty ||
+                 change.Property == FloatOffsetYProperty ||
+                 change.Property == PlacementProperty)
+        {
+            if (_overlayLayer != null)
+            {
+                FloatButton.CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
+            }
+        }
+        else if (change.Property == IsOpenProperty)
+        {
+            CalculateItemsControlPosition();
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        if (_triggerButton != null)
+        {
+            _triggerButton.PointerEntered -= HandlePointerEntered;
+            _triggerButton.PointerExited  -= HandlePointerExited;
+        }
         _itemsControl  = e.NameScope.Find<FloatButtonItemsControl>("ItemsControl");
         _triggerButton = e.NameScope.Find<FloatButton>("Trigger");
+
+        if (_triggerButton != null)
+        {
+            _triggerButton.PointerEntered += HandlePointerEntered;
+            _triggerButton.PointerExited  += HandlePointerExited;
+        }
+        
         _itemsControl?.Children.AddRange(Children);
         ConfigureTriggerType();
         foreach (var item in Children)
@@ -289,21 +358,28 @@ public class FloatButtonGroup : TemplatedControl,
         _itemsBindingDisposables.Add(floatButton, disposables);
     }
 
-    protected override void OnPointerEntered(PointerEventArgs e)
+    private void HandlePointerEntered(object? sender, PointerEventArgs? e)
     {
-        base.OnPointerEntered(e);
         if (Trigger == FloatButtonGroupTrigger.Hover)
         {
             SetValue(IsOpenProperty, true, BindingPriority.Style);
+            if (_overlayLayer != null)
+            {
+                OpenRequest?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
-
-    protected override void OnPointerExited(PointerEventArgs e)
+    
+    private void HandlePointerExited(object? sender, PointerEventArgs e)
     {
         base.OnPointerExited(e);
         if (Trigger == FloatButtonGroupTrigger.Hover)
         {
             SetValue(IsOpenProperty, false, BindingPriority.Style);
+            if (_overlayLayer != null)
+            {
+                CloseRequest?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 
@@ -343,20 +419,121 @@ public class FloatButtonGroup : TemplatedControl,
             }
             else if (pointerEventArgs.Type == RawPointerEventType.LeftButtonUp)
             {
-                Console.WriteLine(pointerEventArgs.GetInputHitTestResult().element);
-                if (pointerEventArgs.IsPointLogicalIn(this))
+                if (pointerEventArgs.IsPointLogicalIn(this) || pointerEventArgs.IsPointLogicalIn(_itemsControl))
                 {
                     if (_initPressed && pointerEventArgs.IsPointLogicalIn(_triggerButton))
                     {
                         SetValue(IsOpenProperty, !IsOpen, BindingPriority.Style);
+                        if (_overlayLayer != null)
+                        {
+                            if (!IsOpen)
+                            {
+                                OpenRequest?.Invoke(this, EventArgs.Empty);
+                            }
+                            else
+                            {
+                                CloseRequest?.Invoke(this, EventArgs.Empty);
+                            }
+                        }
                     }
                 }
                 else
                 {
                     SetValue(IsOpenProperty, false, BindingPriority.Style);
+                    if (_overlayLayer != null)
+                    {
+                        CloseRequest?.Invoke(this, EventArgs.Empty);
+                    }
                 }
                 _initPressed = false;
             }
         }
+    }
+    
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+        if (Shape == FloatButtonShape.Circle)
+        {
+            SetCurrentValue(CornerRadiusProperty, new CornerRadius(e.NewSize.Height / 2));
+        }
+
+        if (_overlayLayer != null)
+        {
+            FloatButton.CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
+        }
+    }
+    
+     private void SetupParentLayer(StyledElement? parent)
+    {
+        if (_overlayLayer != null)
+        {
+            _overlayLayer.SizeChanged -= HandleLayerSizeChanged;
+        }
+        if (parent is ScopeAwareOverlayLayer scopeAwareOverlayLayer)
+        {
+            _overlayLayer                      =  scopeAwareOverlayLayer;
+            scopeAwareOverlayLayer.SizeChanged += HandleLayerSizeChanged;
+        }
+        else
+        {
+            _overlayLayer = null;
+        }
+    }
+
+    private void HandleLayerSizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        FloatButton.CalculatePosition(this, e.NewSize, Placement, FloatOffsetX, FloatOffsetY);
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        if (Trigger == FloatButtonGroupTrigger.Default)
+        {
+            return base.MeasureOverride(availableSize);
+        }
+        var size = base.MeasureOverride(availableSize);
+        return _triggerButton?.DesiredSize ?? size; 
+    }
+
+    private void CalculateItemsControlPosition()
+    {
+        if (Trigger == FloatButtonGroupTrigger.Default)
+        {
+            return;
+        }
+        if (_itemsControl == null || _triggerButton == null)
+        {
+            return;
+        }
+
+        var offsetX = 0.0d;
+        var offsetY = 0.0d;
+        var width   = DesiredSize.Width;
+        var height = DesiredSize.Height;
+        
+        LayoutHelper.MeasureChild(_itemsControl, new Size(double.PositiveInfinity, double.PositiveInfinity), new Thickness(0));
+        
+        if (IsOpen)
+        {
+            if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
+            {
+                offsetY = -_itemsControl.DesiredSize.Height;
+            }
+            else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
+            {
+                offsetY = height;
+            }
+            else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
+            {
+                offsetX = -_itemsControl.DesiredSize.Width;
+            }
+            else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
+            {
+                offsetX = width;
+            }
+        }
+        Canvas.SetLeft(_itemsControl, offsetX);
+        Canvas.SetTop(_itemsControl, offsetY);
     }
 }

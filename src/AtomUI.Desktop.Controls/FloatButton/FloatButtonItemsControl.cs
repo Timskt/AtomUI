@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -25,7 +24,10 @@ internal class FloatButtonItemsControl : TemplatedControl
         StackPanel.OrientationProperty.AddOwner<FloatButtonItemsControl>();
     
     public static readonly StyledProperty<IBrush?> SeparatorBrushProperty =
-        AvaloniaProperty.Register<StackPanel, IBrush?>(nameof(SeparatorBrush));
+        AvaloniaProperty.Register<FloatButtonItemsControl, IBrush?>(nameof(SeparatorBrush));
+    
+    public static readonly StyledProperty<FloatButtonGroupMenuPlacement> MenuPlacementProperty =
+        FloatButtonGroup.MenuPlacementProperty.AddOwner<FloatButtonItemsControl>();
     
     public FloatButtonShape Shape
     {
@@ -49,6 +51,12 @@ internal class FloatButtonItemsControl : TemplatedControl
     {
         get => GetValue(SeparatorBrushProperty);
         set => SetValue(SeparatorBrushProperty, value);
+    }
+    
+    public FloatButtonGroupMenuPlacement MenuPlacement
+    {
+        get => GetValue(MenuPlacementProperty);
+        set => SetValue(MenuPlacementProperty, value);
     }
     
     [Content] 

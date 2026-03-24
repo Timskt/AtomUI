@@ -147,16 +147,16 @@ public class FloatButtonHost : TemplatedControl,
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        PrepareScopedAdornerLayer();
+        PrepareScopedOverlayLayer();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        CleanupScopedAdornerLayer();
+        CleanupScopedOverlayLayer();
     }
 
-    private void PrepareScopedAdornerLayer()
+    private void PrepareScopedOverlayLayer()
     {
         _overlayLayer = ScopeAwareOverlayLayer.GetLayer(this);
         Disposables?.Dispose();
@@ -165,7 +165,7 @@ public class FloatButtonHost : TemplatedControl,
         _overlayLayer?.Children.Add(FloatButton);
     }
 
-    private void CleanupScopedAdornerLayer()
+    private void CleanupScopedOverlayLayer()
     {
         if (FloatButton != null)
         {

@@ -1,5 +1,4 @@
 using AtomUI.Theme.TokenSystem;
-using Avalonia;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
