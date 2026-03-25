@@ -8,5 +8,62 @@
     </ControlTheme.BasedOn>
 
     <Style Selector="^:is(atom|BackTopFloatButton)">
+        <Style Selector="^[Shape=Square]">
+            <Setter Property="Template">
+                <ControlTemplate TargetType="atom:FloatButton">
+                    <atom:MotionActor Name="{x:Static atom:BaseMotionActor.MotionActorPart}"
+                                      ClipToBounds="False">
+                        <Panel>
+                            <Border Name="BackgroundFrame"
+                                    BoxShadow="{TemplateBinding BoxShadow}"
+                                    CornerRadius="{TemplateBinding CornerRadius}" />
+                            <Border Name="Frame"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Cursor="{TemplateBinding Cursor}">
+                                <StackPanel Name="RootLayout">
+                                    <atom:IconPresenter Name="IconPresenter" Icon="{TemplateBinding Icon}"
+                                                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                    <ContentPresenter Content="{TemplateBinding Content}"
+                                                      TextWrapping="Wrap"
+                                                      HorizontalContentAlignment="Center"
+                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                      IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                </StackPanel>
+                            </Border>
+                            <Canvas Name="BadgeLayout" />
+                        </Panel>
+                    </atom:MotionActor>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="^[Shape=Circle]">
+            <Setter Property="Template">
+                <ControlTemplate TargetType="atom:FloatButton">
+                    <atom:MotionActor Name="{x:Static atom:BaseMotionActor.MotionActorPart}"
+                                      ClipToBounds="False">
+                        <Panel>
+                            <Border Name="BackgroundFrame"
+                                    BoxShadow="{TemplateBinding BoxShadow}"
+                                    CornerRadius="{TemplateBinding CornerRadius}" />
+                            <Border Name="Frame"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Cursor="{TemplateBinding Cursor}">
+                                <atom:IconPresenter Name="IconPresenter"
+                                                    Icon="{TemplateBinding Icon}"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+                            </Border>
+                            <Canvas Name="BadgeLayout" />
+                        </Panel>
+                    </atom:MotionActor>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Setter Property="MotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}" />
     </Style>
 </ControlTheme>

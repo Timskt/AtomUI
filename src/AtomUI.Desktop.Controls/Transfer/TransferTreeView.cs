@@ -51,8 +51,9 @@ public class TransferTreeView : TreeView, ITransferTreeView, ITransferDecoratorP
     #endregion
     
     #region 公共事件定义
-
+#pragma warning disable CS0067
     public event EventHandler<TransferItemsRemovedEventArgs>? ItemsRemoved;
+#pragma warning restore CS0067
     public event EventHandler? SelectedKeyChanged;
     public event EventHandler<ItemCountChangedEventArgs>? ItemCountChanged;
     public event EventHandler<SelectionCountChangedEventArgs>? SelectionCountChanged;

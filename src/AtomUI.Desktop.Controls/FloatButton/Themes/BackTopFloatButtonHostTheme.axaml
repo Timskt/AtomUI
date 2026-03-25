@@ -8,5 +8,6 @@
         <Setter Property="Placement" Value="BottomRight" />
         <Setter Property="FloatOffsetX" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatOffsetX}}" />
         <Setter Property="FloatOffsetY" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatOffsetY}}" />
+        <Setter Property="MotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}" />
     </ControlTheme>
 </ResourceDictionary>
