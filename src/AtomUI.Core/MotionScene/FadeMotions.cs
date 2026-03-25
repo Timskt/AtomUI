@@ -21,12 +21,12 @@ public class FadeInMotion : AbstractMotion
 
     protected override void ConfigureMotionStartValue(BaseMotionActor actor)
     {
-        actor.Opacity         = 0.0;
+        actor.Opacity = 0.0;
     }
 
     protected override void ConfigureMotionEndValue(BaseMotionActor actor)
     {
-        actor.Opacity         = 1.0;
+        actor.Opacity = 1.0;
     }
 }
 
@@ -47,11 +47,11 @@ public class FadeOutMotion : AbstractMotion
 
     protected override void ConfigureMotionStartValue(BaseMotionActor actor)
     {
-        actor.Opacity         = 1.0;
+        actor.Opacity = 1.0;
     }
 
     protected override void ConfigureMotionEndValue(BaseMotionActor actor)
     {
-        actor.Opacity         = 0.0;
+        actor.Opacity = 0.0;
     }
 }

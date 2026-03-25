@@ -24,10 +24,13 @@
                                               Icon="{TemplateBinding Icon}"
                                               Shape="{TemplateBinding Shape}"
                                               ButtonType="{TemplateBinding ButtonType}" />
-                            <atom:FloatButtonItemsControl Name="ItemsControl"
-                                                          BoxShadow="{TemplateBinding BoxShadow}"
-                                                          Shape="{TemplateBinding Shape}"
-                                                          MenuPlacement="{TemplateBinding MenuPlacement}"/>
+                            <atom:MotionActor Name="{x:Static atom:BaseMotionActor.MotionActorPart}"
+                                              ClipToBounds="False">
+                                <atom:FloatButtonItemsControl Name="ItemsControl"
+                                                              BoxShadow="{TemplateBinding BoxShadow}"
+                                                              Shape="{TemplateBinding Shape}"
+                                                              MenuPlacement="{TemplateBinding MenuPlacement}" />
+                            </atom:MotionActor>
                         </Canvas>
                     </Border>
                 </ControlTemplate>
@@ -37,6 +40,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="MenuMotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}" />
 
         <Style Selector="^[Shape=Square]">
             <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
@@ -53,21 +57,6 @@
             <Setter Property="Height" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
             <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
                 <Setter Property="Orientation" Value="Horizontal" />
-            </Style>
-        </Style>
-        
-        <Style Selector="^:not(^[Trigger=Default])">
-            <Style Selector="^[IsOpen=True]">
-                <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
-                    <Setter Property="Opacity" Value="1.0" />
-                    <Setter Property="IsEnabled" Value="True" />
-                </Style>
-            </Style>
-            <Style Selector="^[IsOpen=False]">
-                <Style Selector="^ /template/ atom|FloatButtonItemsControl#ItemsControl">
-                    <Setter Property="Opacity" Value="0.0" />
-                    <Setter Property="IsEnabled" Value="False" />
-                </Style>
             </Style>
         </Style>
 
