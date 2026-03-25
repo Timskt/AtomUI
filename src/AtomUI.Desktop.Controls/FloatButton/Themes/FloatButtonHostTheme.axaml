@@ -8,5 +8,18 @@
         <Setter Property="Placement" Value="BottomRight" />
         <Setter Property="FloatOffsetX" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatOffsetX}}" />
         <Setter Property="FloatOffsetY" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatOffsetY}}" />
+        
+        <Style Selector="^[Shape=Circle][IsDotBadge=True]">
+            <Setter Property="BadgeOffset" Value="-10, 4" />
+        </Style>
+        <Style Selector="^[Shape=Circle][IsDotBadge=False]">
+            <Setter Property="BadgeOffset" Value="-10, -2" />
+        </Style>
+        <Style Selector="^[Shape=Square][IsDotBadge=True]">
+            <Setter Property="BadgeOffset" Value="-5, -1" />
+        </Style>
+        <Style Selector="^[Shape=Square][IsDotBadge=False]">
+            <Setter Property="BadgeOffset" Value="-10, -5" />
+        </Style>
     </ControlTheme>
 </ResourceDictionary>

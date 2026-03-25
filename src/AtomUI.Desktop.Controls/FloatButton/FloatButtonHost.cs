@@ -54,6 +54,24 @@ public class FloatButtonHost : TemplatedControl,
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         FloatButton.IsMotionEnabledProperty.AddOwner<FloatButtonHost>();
     
+    public static readonly StyledProperty<bool> IsBadgeEnabledProperty =
+        FloatButton.IsBadgeEnabledProperty.AddOwner<FloatButtonHost>();
+    
+    public static readonly StyledProperty<bool> IsDotBadgeProperty =
+        FloatButton.IsDotBadgeProperty.AddOwner<FloatButtonHost>();
+    
+    public static readonly StyledProperty<int> BadgeCountProperty =
+        FloatButton.BadgeCountProperty.AddOwner<FloatButtonHost>();
+    
+    public static readonly StyledProperty<string?> BadgeColorProperty =
+        FloatButton.BadgeColorProperty.AddOwner<FloatButtonHost>();
+    
+    public static readonly StyledProperty<Point> BadgeOffsetProperty =
+        FloatButton.BadgeOffsetProperty.AddOwner<FloatButtonHost>();
+
+    public static readonly StyledProperty<int> BadgeOverflowCountProperty =
+        FloatButton.BadgeOverflowCountProperty.AddOwner<FloatButtonHost>();
+    
     public FloatButtonPlacement Placement
     {
         get => GetValue(PlacementProperty);
@@ -126,6 +144,42 @@ public class FloatButtonHost : TemplatedControl,
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
     }
+    
+    public bool IsBadgeEnabled
+    {
+        get => GetValue(IsBadgeEnabledProperty);
+        set => SetValue(IsBadgeEnabledProperty, value);
+    }
+
+    public bool IsDotBadge
+    {
+        get => GetValue(IsDotBadgeProperty);
+        set => SetValue(IsDotBadgeProperty, value);
+    }
+    
+    public int BadgeCount
+    {
+        get => GetValue(BadgeCountProperty);
+        set => SetValue(BadgeCountProperty, value);
+    }
+    
+    public string? BadgeColor
+    {
+        get => GetValue(BadgeColorProperty);
+        set => SetValue(BadgeColorProperty, value);
+    }
+    
+    public Point BadgeOffset
+    {
+        get => GetValue(BadgeOffsetProperty);
+        set => SetValue(BadgeOffsetProperty, value);
+    }
+
+    public int BadgeOverflowCount
+    {
+        get => GetValue(BadgeOverflowCountProperty);
+        set => SetValue(BadgeOverflowCountProperty, value);
+    }
     #endregion
     
     #region 内部属性定义
@@ -189,7 +243,16 @@ public class FloatButtonHost : TemplatedControl,
         disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, floatButton, IsMotionEnabledProperty));
         disposables.Add(BindUtils.RelayBind(this, PlacementProperty, floatButton, PlacementProperty));
         disposables.Add(BindUtils.RelayBind(this, FloatOffsetXProperty, floatButton, FloatOffsetXProperty));
-        disposables.Add(BindUtils.RelayBind(this, FloatOffsetXProperty, floatButton, FloatOffsetXProperty));
+        disposables.Add(BindUtils.RelayBind(this, FloatOffsetYProperty, floatButton, FloatOffsetYProperty));
+        disposables.Add(BindUtils.RelayBind(this, DescriptionProperty, floatButton, FloatButton.ContentProperty));
+        disposables.Add(BindUtils.RelayBind(this, DescriptionTemplateProperty, floatButton, FloatButton.ContentTemplateProperty));
+        
+        disposables.Add(BindUtils.RelayBind(this, IsBadgeEnabledProperty, floatButton, IsBadgeEnabledProperty));
+        disposables.Add(BindUtils.RelayBind(this, IsDotBadgeProperty, floatButton, IsDotBadgeProperty));
+        disposables.Add(BindUtils.RelayBind(this, BadgeCountProperty, floatButton, BadgeCountProperty));
+        disposables.Add(BindUtils.RelayBind(this, BadgeColorProperty, floatButton, BadgeColorProperty));
+        disposables.Add(BindUtils.RelayBind(this, BadgeOffsetProperty, floatButton, BadgeOffsetProperty));
+        disposables.Add(BindUtils.RelayBind(this, BadgeOverflowCountProperty, floatButton, BadgeOverflowCountProperty));
         return floatButton;
     }
 }

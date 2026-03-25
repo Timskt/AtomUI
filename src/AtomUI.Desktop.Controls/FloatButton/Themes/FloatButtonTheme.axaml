@@ -7,22 +7,27 @@
         <Style Selector="^[Shape=Square]">
             <Setter Property="Template">
                 <ControlTemplate TargetType="atom:FloatButton">
-                    <Border Name="Frame"
-                            Padding="{TemplateBinding Padding}"
-                            BoxShadow="{TemplateBinding BoxShadow}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            Cursor="{TemplateBinding Cursor}">
-                        <StackPanel Name="RootLayout">
-                            <atom:IconPresenter Name="IconPresenter" Icon="{TemplateBinding Icon}"
-                                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                            <ContentPresenter Content="{TemplateBinding Content}"
-                                              TextWrapping="Wrap"
-                                              HorizontalContentAlignment="Center"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                        </StackPanel>
-                    </Border>
+                    <Panel>
+                        <Border Name="BackgroundFrame"
+                                BoxShadow="{TemplateBinding BoxShadow}"
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                        <Border Name="Frame"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Cursor="{TemplateBinding Cursor}">
+                            <StackPanel Name="RootLayout">
+                                <atom:IconPresenter Name="IconPresenter" Icon="{TemplateBinding Icon}"
+                                                    IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  TextWrapping="Wrap"
+                                                  HorizontalContentAlignment="Center"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                            </StackPanel>
+                        </Border>
+                        <Canvas Name="BadgeLayout"/>
+                    </Panel>
                 </ControlTemplate>
             </Setter>
         </Style>
@@ -30,28 +35,53 @@
         <Style Selector="^[Shape=Circle]">
             <Setter Property="Template">
                 <ControlTemplate TargetType="atom:FloatButton">
-                    <Border Name="Frame"
-                            Padding="{TemplateBinding Padding}"
-                            BoxShadow="{TemplateBinding BoxShadow}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            Cursor="{TemplateBinding Cursor}">
-                        <atom:IconPresenter Name="IconPresenter" Icon="{TemplateBinding Icon}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center" />
-                    </Border>
+                    <Panel>
+                        <Border Name="BackgroundFrame"
+                                BoxShadow="{TemplateBinding BoxShadow}"
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                        <Border Name="Frame"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Cursor="{TemplateBinding Cursor}">
+                            <atom:IconPresenter Name="IconPresenter" 
+                                                Icon="{TemplateBinding Icon}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                        </Border>
+                        <Canvas Name="BadgeLayout"/>
+                    </Panel>
                 </ControlTemplate>
             </Setter>
         </Style>
 
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="BadgeEffectiveColor" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeColor}}" />
         <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Style Selector="^[IsEmbedMode=False], ^[IsEmbedMode=True][Shape=Circle]">
+            <Style Selector="^ /template/ Border#BackgroundFrame">
+                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+            </Style>
+        </Style>
         <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
         <Setter Property="ZIndex" Value="{DynamicResource {x:Static atom:SharedTokenKey.ZIndexPopupBase}}" />
         <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXXS}}" />
         <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+        
+        <Style Selector="^[Shape=Circle][IsDotBadge=True]">
+            <Setter Property="BadgeOffset" Value="-10, 4" />
+        </Style>
+        <Style Selector="^[Shape=Circle][IsDotBadge=False]">
+            <Setter Property="BadgeOffset" Value="-10, -2" />
+        </Style>
+        <Style Selector="^[Shape=Square][IsDotBadge=True]">
+            <Setter Property="BadgeOffset" Value="-5, -1" />
+        </Style>
+        <Style Selector="^[Shape=Square][IsDotBadge=False]">
+            <Setter Property="BadgeOffset" Value="-10, -5" />
+        </Style>
 
         <Style Selector="^[IsEmbedMode=False]">
             <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
@@ -88,7 +118,7 @@
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
+            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
             <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonIconSize}}" />
             <Setter Property="Height" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonIconSize}}" />
         </Style>

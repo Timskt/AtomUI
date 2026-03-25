@@ -2,12 +2,10 @@
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Theme.Palette;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
@@ -147,7 +145,7 @@ public class CountBadge : Control,
             HandleDecoratedTargetChanged();
             if (BadgeColor is not null)
             {
-                SetupBadgeColor(BadgeColor);
+                ConfigureDotColor(BadgeColor);
             }
         }
 
@@ -275,7 +273,7 @@ public class CountBadge : Control,
 
             if (change.Property == BadgeColorProperty)
             {
-                SetupBadgeColor(change.GetNewValue<string>());
+                ConfigureDotColor(change.GetNewValue<string>());
             }
         }
 
@@ -297,23 +295,9 @@ public class CountBadge : Control,
             BadgeIsVisible = true;
         }
     }
-
-    private void SetupBadgeColor(string colorStr)
+    
+    private void ConfigureDotColor(string colorStr)
     {
-        colorStr = colorStr.Trim().ToLower();
-
-        foreach (var presetColor in PresetPrimaryColor.AllColorTypes())
-        {
-            if (presetColor.Type.ToString().ToLower() == colorStr)
-            {
-                _badgeAdorner!.BadgeColor = new SolidColorBrush(presetColor.Color());
-                return;
-            }
-        }
-
-        if (Color.TryParse(colorStr, out var color))
-        {
-            _badgeAdorner!.BadgeColor = new SolidColorBrush(color);
-        }
+        _badgeAdorner!.BadgeColor = BadgeColorUtils.CalculateColor(colorStr);
     }
 }

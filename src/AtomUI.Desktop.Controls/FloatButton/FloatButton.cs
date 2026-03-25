@@ -7,6 +7,7 @@ using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
@@ -65,6 +66,26 @@ public class FloatButton : AvaloniaButton,
     
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<FloatButton>();
+    
+    public static readonly StyledProperty<bool> IsBadgeEnabledProperty =
+        AvaloniaProperty.Register<FloatButton, bool>(nameof(IsBadgeEnabled));
+    
+    public static readonly StyledProperty<bool> IsDotBadgeProperty =
+        AvaloniaProperty.Register<FloatButton, bool>(nameof(IsDotBadge));
+    
+    public static readonly StyledProperty<int> BadgeCountProperty =
+        AvaloniaProperty.Register<FloatButton, int>(nameof(BadgeCount));
+    
+    public static readonly StyledProperty<string?> BadgeColorProperty =
+        AvaloniaProperty.Register<FloatButton, string?>(
+            nameof(BadgeColor));
+    
+    public static readonly StyledProperty<Point> BadgeOffsetProperty =
+        AvaloniaProperty.Register<FloatButton, Point>(nameof(BadgeOffset));
+
+    public static readonly StyledProperty<int> BadgeOverflowCountProperty =
+        AvaloniaProperty.Register<FloatButton, int>(nameof(BadgeOverflowCount), 99,
+            coerce: (o, v) => Math.Max(0, v));
     
     public FloatButtonPlacement Placement
     {
@@ -131,7 +152,42 @@ public class FloatButton : AvaloniaButton,
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
     }
+    
+    public bool IsBadgeEnabled
+    {
+        get => GetValue(IsBadgeEnabledProperty);
+        set => SetValue(IsBadgeEnabledProperty, value);
+    }
 
+    public bool IsDotBadge
+    {
+        get => GetValue(IsDotBadgeProperty);
+        set => SetValue(IsDotBadgeProperty, value);
+    }
+    
+    public int BadgeCount
+    {
+        get => GetValue(BadgeCountProperty);
+        set => SetValue(BadgeCountProperty, value);
+    }
+    
+    public string? BadgeColor
+    {
+        get => GetValue(BadgeColorProperty);
+        set => SetValue(BadgeColorProperty, value);
+    }
+    
+    public Point BadgeOffset
+    {
+        get => GetValue(BadgeOffsetProperty);
+        set => SetValue(BadgeOffsetProperty, value);
+    }
+
+    public int BadgeOverflowCount
+    {
+        get => GetValue(BadgeOverflowCountProperty);
+        set => SetValue(BadgeOverflowCountProperty, value);
+    }
     #endregion
 
     #region 内部属性定义
@@ -140,6 +196,10 @@ public class FloatButton : AvaloniaButton,
             nameof(IsEmbedMode),
             o => o.IsEmbedMode,
             (o, v) => o.IsEmbedMode = v);
+    
+    internal static readonly StyledProperty<IBrush?> BadgeEffectiveColorProperty =
+        AvaloniaProperty.Register<FloatButton, IBrush?>(
+            nameof(BadgeEffectiveColor));
 
     private bool _isEmbedMode;
 
@@ -149,12 +209,20 @@ public class FloatButton : AvaloniaButton,
         set => SetAndRaise(IsEmbedModeProperty, ref _isEmbedMode, value);
     }
     
+    internal IBrush? BadgeEffectiveColor
+    {
+        get => GetValue(BadgeEffectiveColorProperty);
+        set => SetValue(BadgeEffectiveColorProperty, value);
+    }
+    
     Control IControlSharedTokenResourcesHost.HostControl => this;
     string IControlSharedTokenResourcesHost.TokenId => FloatButtonToken.ID;
 
     #endregion
     
-    ScopeAwareOverlayLayer? _overlayLayer;
+    private ScopeAwareOverlayLayer? _overlayLayer;
+    private Canvas? _badgeLayout;
+    private Control? _badge;
     
     public FloatButton()
     {
@@ -174,6 +242,14 @@ public class FloatButton : AvaloniaButton,
         {
             CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
         }
+        CalculateBadgePosition();
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _badgeLayout = e.NameScope.Find<Canvas>("BadgeLayout");
+        ConfigureBadge();
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -226,6 +302,20 @@ public class FloatButton : AvaloniaButton,
             {
                 CalculatePosition(this, _overlayLayer.Bounds.Size, Placement, FloatOffsetX, FloatOffsetY);
             }
+        }
+        else if (change.Property == IsBadgeEnabledProperty ||
+                 change.Property == IsDotBadgeProperty)
+
+        {
+            ConfigureBadge();
+        }
+        else if (change.Property == BadgeOffsetProperty)
+        {
+            CalculateBadgePosition();
+        }
+        else if (change.Property == BadgeColorProperty)
+        {
+            SetCurrentValue(BadgeEffectiveColorProperty, BadgeColorUtils.CalculateColor(BadgeColor));
         }
     }
 
@@ -307,6 +397,56 @@ public class FloatButton : AvaloniaButton,
     private void HandleLayerSizeChanged(object? sender, SizeChangedEventArgs e)
     {
         CalculatePosition(this, e.NewSize, Placement, FloatOffsetX, FloatOffsetY);
+    }
+
+    private void ConfigureBadge()
+    {
+        if (_badgeLayout != null)
+        {
+            if (IsBadgeEnabled)
+            {
+                if (IsDotBadge)
+                {
+                    var dotBadge = new DotBadgeAdorner();
+                    dotBadge[!DotBadgeAdorner.BadgeDotColorProperty]   = this[!BadgeEffectiveColorProperty];
+                    dotBadge[!DotBadgeAdorner.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+                    _badge                                             = dotBadge;
+                }
+                else
+                {
+                    var countBadge = new CountBadgeAdorner();
+                    countBadge[!CountBadgeAdorner.BadgeColorProperty]      = this[!BadgeEffectiveColorProperty];
+                    countBadge[!CountBadgeAdorner.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+                    countBadge[!CountBadgeAdorner.CountProperty]           = this[!BadgeCountProperty];
+                    countBadge[!CountBadgeAdorner.OverflowCountProperty]   = this[!BadgeOverflowCountProperty];
+                    _badge                                                 = countBadge;
+                }
+                
+                _badgeLayout.Children.Add(_badge);
+                CalculateBadgePosition();
+            }
+            else
+            {
+                if (_badge != null)
+                {
+                    _badgeLayout.Children.Remove(_badge);
+                }
+                _badge = null;
+            }
+        }
+    }
+
+    private void CalculateBadgePosition()
+    {
+        if (IsBadgeEnabled && _badge != null)
+        {
+            var targetOffsetX = DesiredSize.Width;
+            var targetOffsetY = 0.0d;
+            targetOffsetX += BadgeOffset.X;
+            targetOffsetY += BadgeOffset.Y;
+            Canvas.SetLeft(_badge, targetOffsetX);
+            Canvas.SetTop(_badge, targetOffsetY);
+        }
     }
 
     internal static void CalculatePosition(Control floatControl, 
