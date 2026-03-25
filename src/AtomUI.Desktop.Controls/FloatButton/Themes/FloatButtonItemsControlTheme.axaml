@@ -4,59 +4,89 @@
     xmlns:atom="https://atomui.net"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:FloatButtonItemsControl}" TargetType="atom:FloatButtonItemsControl">
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border Name="Frame" Background="Transparent">
-                    <DockPanel Name="RootLayout" LastChildFill="True">
-                        <Control Name="EmptyControl" />
-                        <Border Name="ContentFrame"
-                                CornerRadius="{TemplateBinding CornerRadius}"
-                                BoxShadow="{TemplateBinding BoxShadow}"
-                                Background="{TemplateBinding Background}">
+        <Style Selector="^[IsTriggerMode=True]">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="Frame" Background="Transparent">
+                        <DockPanel Name="RootLayout" LastChildFill="True">
+                            <Control Name="EmptyControl" />
+                            <Border Name="ContentFrame"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    BoxShadow="{TemplateBinding BoxShadow}"
+                                    Background="{TemplateBinding Background}">
+                                <Panel>
+                                    <atom:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
+                                                                    Lines="{TemplateBinding Lines}" />
+                                    <StackPanel Name="ItemsLayout" Orientation="{TemplateBinding Orientation}" />
+                                </Panel>
+                            </Border>
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="^[IsTriggerMode=False]">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="ContentFrame"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            BoxShadow="{TemplateBinding BoxShadow}"
+                            Background="{TemplateBinding Background}">
+                        <Panel>
+                            <atom:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
+                                                            Lines="{TemplateBinding Lines}" />
                             <StackPanel Name="ItemsLayout" Orientation="{TemplateBinding Orientation}" />
-                        </Border>
-                    </DockPanel>
-                </Border>
-            </ControlTemplate>
-        </Setter>
+                        </Panel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
 
         <Setter Property="ClipToBounds" Value="False" />
 
         <Style Selector="^[Shape=Square]">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="SeparatorBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
+            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
             <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
             <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
         </Style>
-
+        <Style Selector="^ /template/ atom|FloatButtonSeparatorLayer">
+            <Setter Property="SeparatorBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
+        </Style>
+        
         <Style Selector="^[Shape=Circle]">
             <Style Selector="^ /template/ StackPanel#ItemsLayout">
                 <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
             </Style>
-        </Style>
-        
-        <Style Selector="^[MenuPlacement=Top]">
-            <Style Selector="^ /template/ Control#EmptyControl">
-                <Setter Property="DockPanel.Dock" Value="Bottom" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+            <Style Selector="^ /template/ atom|FloatButtonSeparatorLayer">
+                <Setter Property="IsVisible" Value="False" />
             </Style>
         </Style>
-        <Style Selector="^[MenuPlacement=Bottom]">
-            <Style Selector="^ /template/ Control#EmptyControl">
-                <Setter Property="DockPanel.Dock" Value="Top" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+
+        <Style Selector="^[IsTriggerMode=True]">
+            <Style Selector="^[MenuPlacement=Top]">
+                <Style Selector="^ /template/ Control#EmptyControl">
+                    <Setter Property="DockPanel.Dock" Value="Bottom" />
+                    <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                </Style>
             </Style>
-        </Style>
-        <Style Selector="^[MenuPlacement=Left]">
-            <Style Selector="^ /template/ Control#EmptyControl">
-                <Setter Property="DockPanel.Dock" Value="Right" />
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+            <Style Selector="^[MenuPlacement=Bottom]">
+                <Style Selector="^ /template/ Control#EmptyControl">
+                    <Setter Property="DockPanel.Dock" Value="Top" />
+                    <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                </Style>
             </Style>
-        </Style>
-        <Style Selector="^[MenuPlacement=Right]">
-            <Style Selector="^ /template/ Control#EmptyControl">
-                <Setter Property="DockPanel.Dock" Value="Left" />
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+            <Style Selector="^[MenuPlacement=Left]">
+                <Style Selector="^ /template/ Control#EmptyControl">
+                    <Setter Property="DockPanel.Dock" Value="Right" />
+                    <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                </Style>
+            </Style>
+            <Style Selector="^[MenuPlacement=Right]">
+                <Style Selector="^ /template/ Control#EmptyControl">
+                    <Setter Property="DockPanel.Dock" Value="Left" />
+                    <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                </Style>
             </Style>
         </Style>
 

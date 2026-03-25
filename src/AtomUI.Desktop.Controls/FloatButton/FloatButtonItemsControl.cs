@@ -23,11 +23,11 @@ internal class FloatButtonItemsControl : TemplatedControl
     public static readonly StyledProperty<Orientation> OrientationProperty =
         StackPanel.OrientationProperty.AddOwner<FloatButtonItemsControl>();
     
-    public static readonly StyledProperty<IBrush?> SeparatorBrushProperty =
-        AvaloniaProperty.Register<FloatButtonItemsControl, IBrush?>(nameof(SeparatorBrush));
-    
     public static readonly StyledProperty<FloatButtonGroupMenuPlacement> MenuPlacementProperty =
         FloatButtonGroup.MenuPlacementProperty.AddOwner<FloatButtonItemsControl>();
+
+    public static readonly StyledProperty<bool> IsTriggerModeProperty =
+        AvaloniaProperty.Register<FloatButtonGroup, bool>(nameof(IsTriggerMode));
     
     public FloatButtonShape Shape
     {
@@ -47,28 +47,40 @@ internal class FloatButtonItemsControl : TemplatedControl
         set => SetValue(OrientationProperty, value);
     }
     
-    public IBrush? SeparatorBrush
-    {
-        get => GetValue(SeparatorBrushProperty);
-        set => SetValue(SeparatorBrushProperty, value);
-    }
-    
     public FloatButtonGroupMenuPlacement MenuPlacement
     {
         get => GetValue(MenuPlacementProperty);
         set => SetValue(MenuPlacementProperty, value);
     }
     
+    public bool IsTriggerMode
+    {
+        get => GetValue(IsTriggerModeProperty);
+        set => SetValue(IsTriggerModeProperty, value);
+    }
+    
     [Content] 
     public ControlList Children { get; } = new ();
  
+    #endregion
+
+    #region 内部属性定义
+
+    internal static readonly StyledProperty<IList<(Point, Point)>?> LinesProperty =
+        AvaloniaProperty.Register<FloatButtonItemsControl, IList<(Point, Point)>?>(nameof(Lines));
+    
+    internal IList<(Point, Point)>? Lines
+    {
+        get => GetValue(LinesProperty);
+        set => SetValue(LinesProperty, value);
+    }
+
     #endregion
     
     private StackPanel? _itemsLayout;
 
     static FloatButtonItemsControl()
     {
-        AffectsRender<FloatButtonItemsControl>(SeparatorBrushProperty);
         AffectsMeasure<FloatButtonItemsControl>(ShapeProperty, OrientationProperty);
     }
     
@@ -117,22 +129,22 @@ internal class FloatButtonItemsControl : TemplatedControl
         }
     }
 
-    public override void Render(DrawingContext context)
+    protected override Size ArrangeOverride(Size finalSize)
     {
-        if (Shape == FloatButtonShape.Square && SeparatorBrush != null)
+        var size     = base.ArrangeOverride(finalSize);
+        if (Shape == FloatButtonShape.Square)
         {
+            var lines = new List<(Point, Point)>();
             var children = Children.Where(c => c.IsVisible).ToList();
             var count    = children.Count;
-            // TODO 没有处理中间隐藏的
             Point startPoint = default;
             Point endPoint   = default;
-            var   pen        = new Pen(SeparatorBrush);
             for (var i = 0; i < count; ++i)
             {
                 if (i != count - 1)
                 {
-                    var child       = children[i];
-                    var childPos    = child.TranslatePoint(new Point(0, 0), this);
+                    var child    = children[i];
+                    var childPos = child.TranslatePoint(new Point(0, 0), this);
                     if (childPos != null)
                     {
                         var childBounds = child.Bounds;
@@ -146,10 +158,13 @@ internal class FloatButtonItemsControl : TemplatedControl
                             startPoint = new Point(0, childPos.Value.Y + childBounds.Height);
                             endPoint   = new Point(DesiredSize.Width, childPos.Value.Y + childBounds.Height);
                         }
-                        context.DrawLine(pen, startPoint, endPoint);
+                        lines.Add((startPoint, endPoint));
                     }
                 }
             }
+
+            Lines = lines;
         }
+        return size;
     }
 }

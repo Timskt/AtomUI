@@ -278,6 +278,11 @@ public class FloatButtonGroup : TemplatedControl,
             _triggerButton.PointerExited  += HandlePointerExited;
         }
         
+        if (_itemsControl != null)
+        {
+            _itemsControl.IsTriggerMode = Trigger != FloatButtonGroupTrigger.Default;
+        }
+        
         _itemsControl?.Children.AddRange(Children);
         ConfigureTriggerType();
         foreach (var item in Children)
@@ -403,6 +408,11 @@ public class FloatButtonGroup : TemplatedControl,
         {
             var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
             _clickTriggerDisposable = inputManager.Process.Subscribe(HandleMouseClick);
+        }
+
+        if (_itemsControl != null)
+        {
+            _itemsControl.IsTriggerMode = Trigger != FloatButtonGroupTrigger.Default;
         }
     }
 

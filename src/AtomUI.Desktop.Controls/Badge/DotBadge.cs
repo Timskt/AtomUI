@@ -2,13 +2,11 @@
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Theme.Palette;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
@@ -29,17 +27,16 @@ public class DotBadge : Control,
 {
     #region 公共属性定义
 
-    public static readonly StyledProperty<string?> DotColorProperty
-        = AvaloniaProperty.Register<DotBadge, string?>(
+    public static readonly StyledProperty<string?> DotColorProperty =
+        AvaloniaProperty.Register<DotBadge, string?>(
             nameof(DotColor));
 
-    public static readonly StyledProperty<DotBadgeStatus?> StatusProperty
-        = AvaloniaProperty.Register<DotBadge, DotBadgeStatus?>(
+    public static readonly StyledProperty<DotBadgeStatus?> StatusProperty =
+        AvaloniaProperty.Register<DotBadge, DotBadgeStatus?>(
             nameof(Status));
 
-    public static readonly StyledProperty<string?> TextProperty
-        = AvaloniaProperty.Register<DotBadge, string?>(
-            nameof(Text));
+    public static readonly StyledProperty<string?> TextProperty =
+        AvaloniaProperty.Register<DotBadge, string?>(nameof(Text));
 
     public static readonly StyledProperty<Control?> DecoratedTargetProperty =
         AvaloniaProperty.Register<DotBadge, Control?>(nameof(DecoratedTarget));
@@ -132,7 +129,7 @@ public class DotBadge : Control,
             HandleDecoratedTargetChanged();
             if (DotColor is not null)
             {
-                SetupDotColor(DotColor);
+                ConfigureDotColor(DotColor);
             }
         }
 
@@ -256,27 +253,14 @@ public class DotBadge : Control,
 
             if (change.Property == DotColorProperty)
             {
-                SetupDotColor(change.GetNewValue<string>());
+                ConfigureDotColor(change.GetNewValue<string>());
             }
         }
     }
 
-    private void SetupDotColor(string colorStr)
+    private void ConfigureDotColor(string colorStr)
     {
-        colorStr = colorStr.Trim().ToLower();
-
-        foreach (var presetColor in PresetPrimaryColor.AllColorTypes())
-        {
-            if (presetColor.Type.ToString().ToLower() == colorStr)
-            {
-                _dotBadgeAdorner!.BadgeDotColor = new SolidColorBrush(presetColor.Color());
-                return;
-            }
-        }
-
-        if (Color.TryParse(colorStr, out var color))
-        {
-            _dotBadgeAdorner!.BadgeDotColor = new SolidColorBrush(color);
-        }
+        _dotBadgeAdorner!.BadgeDotColor = BadgeColorUtils.CalculateColor(colorStr);
     }
+    
 }
