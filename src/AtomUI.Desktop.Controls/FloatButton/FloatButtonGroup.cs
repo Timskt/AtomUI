@@ -512,7 +512,7 @@ public class FloatButtonGroup : TemplatedControl,
         }
     }
     
-     private void SetupParentLayer(StyledElement? parent)
+    private void SetupParentLayer(StyledElement? parent)
     {
         if (_overlayLayer != null)
         {
@@ -608,58 +608,32 @@ public class FloatButtonGroup : TemplatedControl,
                 }
                 _showAnimating = true;
                 _motionActor.SetCurrentValue(IsVisibleProperty, false);
+                AbstractMotion? motion = null;
                 if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
                 {
-                    var motion = new MoveDownInMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseOut());
-                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
-                    {
-                        _showAnimating = false;
-                        if (_closeRequest)
-                        {
-                            _closeRequest = false;
-                            Dispatcher.UIThread.Post(ApplyHideMotion);
-                        }
-                    });
+                    motion = new MoveDownInMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseOut());
                 }
                 else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
                 {
-                    var motion = new MoveUpInMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseOut());
-                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
-                    {
-                        _showAnimating = false;
-                        if (_closeRequest)
-                        {
-                            _closeRequest = false;
-                            Dispatcher.UIThread.Post(ApplyHideMotion);
-                        }
-                    });
+                    motion = new MoveUpInMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseOut());
                 }
                 else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
                 {
-                    var motion = new MoveRightInMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseOut());
-                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
-                    {
-                        _showAnimating = false;
-                        if (_closeRequest)
-                        {
-                            _closeRequest = false;
-                            Dispatcher.UIThread.Post(ApplyHideMotion);
-                        }
-                    });
+                    motion = new MoveRightInMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseOut());
                 }
                 else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
                 {
-                    var motion = new MoveLeftInMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseOut());
-                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
-                    {
-                        _showAnimating = false;
-                        if (_closeRequest)
-                        {
-                            _closeRequest = false;
-                            Dispatcher.UIThread.Post(ApplyHideMotion);
-                        }
-                    });
+                    motion = new MoveLeftInMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseOut());
                 }
+                motion?.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
+                {
+                    _showAnimating = false;
+                    if (_closeRequest)
+                    {
+                        _closeRequest = false;
+                        Dispatcher.UIThread.Post(ApplyHideMotion);
+                    }
+                });
             }
             else
             {
@@ -685,30 +659,36 @@ public class FloatButtonGroup : TemplatedControl,
                     return;
                 }
                 _hideAnimating = true;
+                AbstractMotion? motion = null;
                 if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
                 {
-                    var motion =
+                    motion =
                         new MoveDownOutMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseIn());
-                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
                 }
                 else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
                 {
-                    var motion =
+                    motion =
                         new MoveUpOutMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseIn());
-                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
                 }
                 else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
                 {
-                    var motion =
+                    motion =
                         new MoveRightOutMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseIn());
-                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
                 }
                 else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
                 {
-                    var motion =
+                    motion =
                         new MoveLeftOutMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseIn());
-                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
                 }
+                motion?.Run(_motionActor, null, () =>
+                {
+                    _hideAnimating = false; 
+                    _motionActor.SetCurrentValue(IsVisibleProperty, true);
+                });
+            }
+            else
+            {
+                _motionActor.SetCurrentValue(IsVisibleProperty, false);
             }
         }
     }

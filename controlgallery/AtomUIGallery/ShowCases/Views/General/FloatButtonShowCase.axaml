@@ -110,7 +110,7 @@
                 </Border>
             </atom:ScrollViewer>
         </gallery:ShowCaseItem>
-
+        
         <gallery:ShowCaseItem
             Title="Menu mode"
             Description="Open menu mode with trigger, which could be hover or click.">
@@ -125,7 +125,7 @@
                             <atom:FloatButton />
                             <atom:FloatButton Icon="{antdicons:AntDesignIconProvider CommentOutlined}" />
                         </atom:FloatButtonGroupHost>
-
+        
                         <atom:FloatButtonGroupHost Shape="Circle"
                                                    Trigger="Click"
                                                    Icon="{antdicons:AntDesignIconProvider CustomerServiceOutlined}"
@@ -137,7 +137,7 @@
                 </Border>
             </atom:ScrollViewer>
         </gallery:ShowCaseItem>
-
+        
         <gallery:ShowCaseItem
             Title="Controlled mode"
             Description="Set the component to controlled mode through open, which need to be used together with trigger.">
@@ -248,6 +248,28 @@
                                               IsBadgeEnabled="True" IsDotBadge="False" BadgeCount="1230"
                                               BadgeOverflowCount="" />
                         </atom:FloatButtonGroupHost>
+                    </Panel>
+                </Border>
+            </atom:ScrollViewer>
+        </gallery:ShowCaseItem>
+        
+        <gallery:ShowCaseItem
+            Title="BackTop"
+            Description="BackTop makes it easy to go back to the top of the page.">
+            <atom:ScrollViewer Height="300">
+                <Border Background="White">
+                    <Panel Height="1000">
+                        <StackPanel>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                            <TextBlock>Scroll to bottom</TextBlock>
+                        </StackPanel>
+                        <atom:BackTopFloatButtonHost ButtonType="Default" />
                     </Panel>
                 </Border>
             </atom:ScrollViewer>

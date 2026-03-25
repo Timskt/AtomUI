@@ -1,29 +1,35 @@
 using System.Reactive.Disposables;
-using AtomUI.Data;
+using AtomUI.Controls;
 using Avalonia;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
+
+using AvaScrollViewer = Avalonia.Controls.ScrollViewer;
 
 public class BackTopFloatButtonHost : FloatButtonHost
 {
     #region 公共属性定义
 
-    public static readonly StyledProperty<TimeSpan> DurationProperty =
-        BackTopFloatButton.DurationProperty.AddOwner<BackTopFloatButtonHost>();
+    public static readonly StyledProperty<TimeSpan> ToTopDurationProperty =
+        BackTopFloatButton.ToTopDurationProperty.AddOwner<BackTopFloatButtonHost>();
     
-    public static readonly StyledProperty<ScrollViewer?> TargetProperty =
+    public static readonly StyledProperty<AvaScrollViewer?> TargetProperty =
         BackTopFloatButton.TargetProperty.AddOwner<BackTopFloatButtonHost>();
     
     public static readonly StyledProperty<double> VisibilityHeightProperty =
         BackTopFloatButton.VisibilityHeightProperty.AddOwner<BackTopFloatButtonHost>();
+    
+    public static readonly StyledProperty<TimeSpan> MotionDurationProperty =
+        MotionAwareControlProperty.MotionDurationProperty.AddOwner<BackTopFloatButtonHost>();
 
-    public TimeSpan Duration
+    public TimeSpan ToTopDuration
     {
-        get => GetValue(DurationProperty);
-        set => SetValue(DurationProperty, value);
+        get => GetValue(ToTopDurationProperty);
+        set => SetValue(ToTopDurationProperty, value);
     }
     
-    public ScrollViewer? Target
+    public AvaScrollViewer? Target
     {
         get => GetValue(TargetProperty);
         set => SetValue(TargetProperty, value);
@@ -34,24 +40,39 @@ public class BackTopFloatButtonHost : FloatButtonHost
         get => GetValue(VisibilityHeightProperty);
         set => SetValue(VisibilityHeightProperty, value);
     }
+    
+    public TimeSpan MotionDuration
+    {
+        get => GetValue(MotionDurationProperty);
+        set => SetValue(MotionDurationProperty, value);
+    }
     #endregion
     
     protected override FloatButton NotifyCreateFloatButton(CompositeDisposable disposables)
     {
         var floatButton = new BackTopFloatButton();
-        disposables.Add(BindUtils.RelayBind(this, IconProperty, floatButton, IconProperty));
-        disposables.Add(BindUtils.RelayBind(this, TooltipProperty, floatButton, TooltipProperty));
-        disposables.Add(BindUtils.RelayBind(this, TooltipColorProperty, floatButton, TooltipColorProperty));
-        disposables.Add(BindUtils.RelayBind(this, ButtonTypeProperty, floatButton, ButtonTypeProperty));
-        disposables.Add(BindUtils.RelayBind(this, ShapeProperty, floatButton, ShapeProperty));
-        disposables.Add(BindUtils.RelayBind(this, HrefProperty, floatButton, HrefProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, floatButton, IsMotionEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, PlacementProperty, floatButton, PlacementProperty));
-        disposables.Add(BindUtils.RelayBind(this, FloatOffsetXProperty, floatButton, FloatOffsetXProperty));
-        disposables.Add(BindUtils.RelayBind(this, FloatOffsetXProperty, floatButton, FloatOffsetXProperty));
-        disposables.Add(BindUtils.RelayBind(this, DurationProperty, floatButton, DurationProperty));
-        disposables.Add(BindUtils.RelayBind(this, TargetProperty, floatButton, TargetProperty));
-        disposables.Add(BindUtils.RelayBind(this, VisibilityHeightProperty, floatButton, VisibilityHeightProperty));
+        
+        floatButton[!BackTopFloatButton.IconProperty]             = this[!IconProperty];
+        floatButton[!BackTopFloatButton.TooltipProperty]          = this[!TooltipProperty];
+        floatButton[!BackTopFloatButton.TooltipColorProperty]     = this[!TooltipColorProperty];
+        floatButton[!BackTopFloatButton.ButtonTypeProperty]       = this[!ButtonTypeProperty];
+        floatButton[!BackTopFloatButton.ShapeProperty]            = this[!ShapeProperty];
+        floatButton[!BackTopFloatButton.HrefProperty]             = this[!HrefProperty];
+        floatButton[!BackTopFloatButton.IsMotionEnabledProperty]  = this[!IsMotionEnabledProperty];
+        floatButton[!BackTopFloatButton.PlacementProperty]        = this[!PlacementProperty];
+        floatButton[!BackTopFloatButton.FloatOffsetXProperty]     = this[!FloatOffsetXProperty];
+        floatButton[!BackTopFloatButton.FloatOffsetYProperty]     = this[!FloatOffsetYProperty];
+        floatButton[!BackTopFloatButton.ToTopDurationProperty]    = this[!ToTopDurationProperty];
+        floatButton[!BackTopFloatButton.TargetProperty]           = this[!TargetProperty];
+        floatButton[!BackTopFloatButton.VisibilityHeightProperty] = this[!VisibilityHeightProperty];
+        floatButton[!BackTopFloatButton.MotionDurationProperty]   = this[!MotionDurationProperty];
+        
         return floatButton;
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        Target ??= this.FindAncestorOfType<AvaScrollViewer>();
     }
 }

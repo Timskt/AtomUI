@@ -234,25 +234,26 @@ public class FloatButtonHost : TemplatedControl,
     protected virtual FloatButton NotifyCreateFloatButton(CompositeDisposable disposables)
     {
         var floatButton = new FloatButton();
-        disposables.Add(BindUtils.RelayBind(this, IconProperty, floatButton, IconProperty));
-        disposables.Add(BindUtils.RelayBind(this, TooltipProperty, floatButton, TooltipProperty));
-        disposables.Add(BindUtils.RelayBind(this, TooltipColorProperty, floatButton, TooltipColorProperty));
-        disposables.Add(BindUtils.RelayBind(this, ButtonTypeProperty, floatButton, ButtonTypeProperty));
-        disposables.Add(BindUtils.RelayBind(this, ShapeProperty, floatButton, ShapeProperty));
-        disposables.Add(BindUtils.RelayBind(this, HrefProperty, floatButton, HrefProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, floatButton, IsMotionEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, PlacementProperty, floatButton, PlacementProperty));
-        disposables.Add(BindUtils.RelayBind(this, FloatOffsetXProperty, floatButton, FloatOffsetXProperty));
-        disposables.Add(BindUtils.RelayBind(this, FloatOffsetYProperty, floatButton, FloatOffsetYProperty));
-        disposables.Add(BindUtils.RelayBind(this, DescriptionProperty, floatButton, FloatButton.ContentProperty));
-        disposables.Add(BindUtils.RelayBind(this, DescriptionTemplateProperty, floatButton, FloatButton.ContentTemplateProperty));
-        
-        disposables.Add(BindUtils.RelayBind(this, IsBadgeEnabledProperty, floatButton, IsBadgeEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsDotBadgeProperty, floatButton, IsDotBadgeProperty));
-        disposables.Add(BindUtils.RelayBind(this, BadgeCountProperty, floatButton, BadgeCountProperty));
-        disposables.Add(BindUtils.RelayBind(this, BadgeColorProperty, floatButton, BadgeColorProperty));
-        disposables.Add(BindUtils.RelayBind(this, BadgeOffsetProperty, floatButton, BadgeOffsetProperty));
-        disposables.Add(BindUtils.RelayBind(this, BadgeOverflowCountProperty, floatButton, BadgeOverflowCountProperty));
+
+        floatButton[!FloatButton.IconProperty]               = this[!IconProperty];
+        floatButton[!FloatButton.TooltipProperty]            = this[!TooltipProperty];
+        floatButton[!FloatButton.TooltipColorProperty]       = this[!TooltipColorProperty];
+        floatButton[!FloatButton.ButtonTypeProperty]         = this[!ButtonTypeProperty];
+        floatButton[!FloatButton.ShapeProperty]              = this[!ShapeProperty];
+        floatButton[!FloatButton.HrefProperty]               = this[!HrefProperty];
+        floatButton[!FloatButton.IsMotionEnabledProperty]    = this[!IsMotionEnabledProperty];
+        floatButton[!FloatButton.PlacementProperty]          = this[!PlacementProperty];
+        floatButton[!FloatButton.FloatOffsetXProperty]       = this[!FloatOffsetXProperty];
+        floatButton[!FloatButton.FloatOffsetYProperty]       = this[!FloatOffsetYProperty];
+        floatButton[!FloatButton.ContentProperty]            = this[!DescriptionProperty];
+        floatButton[!FloatButton.ContentTemplateProperty]    = this[!DescriptionTemplateProperty];
+        floatButton[!FloatButton.IsBadgeEnabledProperty]     = this[!IsBadgeEnabledProperty];
+        floatButton[!FloatButton.IsDotBadgeProperty]         = this[!IsDotBadgeProperty];
+        floatButton[!FloatButton.BadgeCountProperty]         = this[!BadgeCountProperty];
+        floatButton[!FloatButton.BadgeColorProperty]         = this[!BadgeColorProperty];
+        floatButton[!FloatButton.BadgeOffsetProperty]        = this[!BadgeOffsetProperty];
+        floatButton[!FloatButton.BadgeOverflowCountProperty] = this[!BadgeOverflowCountProperty];
+    
         return floatButton;
     }
 }
