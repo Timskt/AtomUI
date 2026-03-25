@@ -5,9 +5,11 @@ using AtomUI.Controls.Primitives;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Icons.AntDesign;
+using AtomUI.MotionScene;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
@@ -17,6 +19,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Metadata;
+using Avalonia.Threading;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -77,6 +80,9 @@ public class FloatButtonGroup : TemplatedControl,
     
     public static readonly StyledProperty<bool> IsOpenProperty =
         AvaloniaProperty.Register<FloatButtonGroup, bool>(nameof(IsOpen));
+    
+    public static readonly StyledProperty<TimeSpan> MenuMotionDurationProperty =
+        AvaloniaProperty.Register<FloatButtonGroup, TimeSpan>(nameof(MenuMotionDuration));
     
     public FloatButtonPlacement Placement
     {
@@ -149,6 +155,12 @@ public class FloatButtonGroup : TemplatedControl,
         get => GetValue(IsOpenProperty);
         set => SetValue(IsOpenProperty, value);
     }
+    
+    public TimeSpan MenuMotionDuration
+    {
+        get => GetValue(MenuMotionDurationProperty);
+        set => SetValue(MenuMotionDurationProperty, value);
+    }
 
     [Content] 
     public ControlList Children { get; } = new ();
@@ -205,6 +217,10 @@ public class FloatButtonGroup : TemplatedControl,
     private IDisposable? _clickTriggerDisposable;
     private FloatButton? _triggerButton;
     ScopeAwareOverlayLayer? _overlayLayer;
+    private BaseMotionActor? _motionActor;
+    private bool _showAnimating;
+    private bool _hideAnimating;
+    private bool _closeRequest;
     
     static FloatButtonGroup()
     {
@@ -258,6 +274,22 @@ public class FloatButtonGroup : TemplatedControl,
         else if (change.Property == IsOpenProperty)
         {
             CalculateItemsControlPosition();
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (IsOpen)
+                {
+                    ApplyShowMotion();
+                }
+                else
+                {
+                    ApplyHideMotion();
+                }
+            });
+        }
+        if (change.Property == TriggerProperty ||
+            change.Property == MenuPlacementProperty)
+        {
+            CalculateItemsControlPosition();
         }
     }
 
@@ -271,7 +303,13 @@ public class FloatButtonGroup : TemplatedControl,
         }
         _itemsControl  = e.NameScope.Find<FloatButtonItemsControl>("ItemsControl");
         _triggerButton = e.NameScope.Find<FloatButton>("Trigger");
+        _motionActor   = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
 
+        if (_motionActor != null)
+        {
+            _motionActor.SetCurrentValue(IsVisibleProperty, IsOpen);
+        }
+        
         if (_triggerButton != null)
         {
             _triggerButton.PointerEntered += HandlePointerEntered;
@@ -512,38 +550,180 @@ public class FloatButtonGroup : TemplatedControl,
         {
             return;
         }
-        if (_itemsControl == null || _triggerButton == null)
+        if (_motionActor == null || _triggerButton == null)
         {
             return;
         }
 
-        var offsetX = 0.0d;
-        var offsetY = 0.0d;
-        var width   = DesiredSize.Width;
-        var height = DesiredSize.Height;
-        
-        LayoutHelper.MeasureChild(_itemsControl, new Size(double.PositiveInfinity, double.PositiveInfinity), new Thickness(0));
-        
-        if (IsOpen)
+        var  offsetX         = 0.0d;
+        var  offsetY         = 0.0d;
+        var  width           = DesiredSize.Width;
+        var  height          = DesiredSize.Height;
+        var  originOpacity   = _motionActor.Opacity;
+        var  originVisible   = _motionActor.IsVisible;
+        Size motionActorSize = default;
+        try
         {
-            if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
+            _motionActor.SetCurrentValue(IsVisibleProperty, true);
+            _motionActor.SetCurrentValue(OpacityProperty, 0.0d);
+            LayoutHelper.MeasureChild(_motionActor, new Size(double.PositiveInfinity, double.PositiveInfinity),
+                new Thickness(0));
+            motionActorSize = _motionActor.DesiredSize;
+        }
+        finally
+        {
+            _motionActor.SetCurrentValue(IsVisibleProperty, originVisible);
+            _motionActor.SetCurrentValue(OpacityProperty, originOpacity);
+        }
+     
+        if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
+        {
+            offsetY = -motionActorSize.Height;
+        }
+        else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
+        {
+            offsetY = height;
+        }
+        else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
+        {
+            offsetX = -motionActorSize.Width;
+        }
+        else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
+        {
+            offsetX = width;
+        }
+        Canvas.SetLeft(_motionActor, offsetX);
+        Canvas.SetTop(_motionActor, offsetY);
+    }
+    
+    private void ApplyShowMotion()
+    {
+        if (_motionActor is not null)
+        {
+            if (IsMotionEnabled)
             {
-                offsetY = -_itemsControl.DesiredSize.Height;
+                if (_showAnimating)
+                {
+                    return;
+                }
+                _showAnimating = true;
+                _motionActor.SetCurrentValue(IsVisibleProperty, false);
+                if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
+                {
+                    var motion = new MoveDownInMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseOut());
+                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
+                    {
+                        _showAnimating = false;
+                        if (_closeRequest)
+                        {
+                            _closeRequest = false;
+                            Dispatcher.UIThread.Post(ApplyHideMotion);
+                        }
+                    });
+                }
+                else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
+                {
+                    var motion = new MoveUpInMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseOut());
+                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
+                    {
+                        _showAnimating = false;
+                        if (_closeRequest)
+                        {
+                            _closeRequest = false;
+                            Dispatcher.UIThread.Post(ApplyHideMotion);
+                        }
+                    });
+                }
+                else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
+                {
+                    var motion = new MoveRightInMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseOut());
+                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
+                    {
+                        _showAnimating = false;
+                        if (_closeRequest)
+                        {
+                            _closeRequest = false;
+                            Dispatcher.UIThread.Post(ApplyHideMotion);
+                        }
+                    });
+                }
+                else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
+                {
+                    var motion = new MoveLeftInMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseOut());
+                    motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); }, () =>
+                    {
+                        _showAnimating = false;
+                        if (_closeRequest)
+                        {
+                            _closeRequest = false;
+                            Dispatcher.UIThread.Post(ApplyHideMotion);
+                        }
+                    });
+                }
             }
-            else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
+            else
             {
-                offsetY = height;
-            }
-            else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
-            {
-                offsetX = -_itemsControl.DesiredSize.Width;
-            }
-            else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
-            {
-                offsetX = width;
+                _motionActor.SetCurrentValue(IsVisibleProperty, true);
             }
         }
-        Canvas.SetLeft(_itemsControl, offsetX);
-        Canvas.SetTop(_itemsControl, offsetY);
+    }
+
+    private void ApplyHideMotion()
+    {
+        if (_motionActor is not null)
+        {
+            if (IsMotionEnabled)
+            {
+                if (_hideAnimating)
+                {
+                    return;
+                }
+
+                if (_showAnimating)
+                {
+                    _closeRequest = true;
+                    return;
+                }
+                _hideAnimating = true;
+                if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
+                {
+                    var motion =
+                        new MoveDownOutMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseIn());
+                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
+                }
+                else if (MenuPlacement == FloatButtonGroupMenuPlacement.Bottom)
+                {
+                    var motion =
+                        new MoveUpOutMotion(DesiredSize.Height, MenuMotionDuration, new CubicEaseIn());
+                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
+                }
+                else if (MenuPlacement == FloatButtonGroupMenuPlacement.Left)
+                {
+                    var motion =
+                        new MoveRightOutMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseIn());
+                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
+                }
+                else if (MenuPlacement == FloatButtonGroupMenuPlacement.Right)
+                {
+                    var motion =
+                        new MoveLeftOutMotion(DesiredSize.Width, MenuMotionDuration, new CubicEaseIn());
+                    motion.Run(_motionActor, null, () => { _hideAnimating = false; });
+                }
+            }
+        }
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        CalculateItemsControlPosition();
+        if (IsOpen)
+        {
+            ApplyShowMotion();
+        }
+        else
+        {
+            ApplyHideMotion();
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
@@ -197,7 +196,7 @@ public class MessageCard : TemplatedControl,
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        _motionActor = e.NameScope.Find<BaseMotionActor>(MessageCardThemeConstants.MotionActorPart);
+        _motionActor = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
         ApplyShowMotion();
         UpdatePseudoClasses();
         SetupDefaultMessageIcon();
