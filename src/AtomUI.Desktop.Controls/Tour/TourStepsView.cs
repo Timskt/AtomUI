@@ -57,6 +57,9 @@ internal class TourStepsView : SelectingItemsControl
     
     public static readonly StyledProperty<TourIndicator?> IndicatorProperty =
         Tour.IndicatorProperty.AddOwner<TourStepsView>();
+    
+    public static readonly StyledProperty<IList<Control>?> CustomActionsProperty =
+        AvaloniaProperty.Register<Tour, IList<Control>?>(nameof(CustomActions));
 
     public bool IsMotionEnabled
     {
@@ -118,6 +121,11 @@ internal class TourStepsView : SelectingItemsControl
         set => SetValue(IndicatorProperty, value);
     }
     
+    public IList<Control>? CustomActions
+    {
+        get => GetValue(CustomActionsProperty);
+        set => SetValue(CustomActionsProperty, value);
+    }
     #endregion
 
     #region 公共事件定义
@@ -150,6 +158,8 @@ internal class TourStepsView : SelectingItemsControl
         private set => SetAndRaise(CurrentStyleTypeProperty, ref _currentStyleType, value);
     }
     #endregion
+    
+    private Panel? _customActionsPanel;
 
     static TourStepsView()
     {
@@ -222,6 +232,33 @@ internal class TourStepsView : SelectingItemsControl
     {
     }
 
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _customActionsPanel = e.NameScope.Find<StackPanel>("ActionsLayout");
+        if (_customActionsPanel != null)
+        {
+            if (CustomActions != null)
+            {
+                foreach (Control customAction in CustomActions)
+                {
+                    if (customAction is ITourAction tourAction)
+                    {
+                        SyncActionProperties(tourAction);
+                    }
+                    _customActionsPanel.Children.Insert(0, customAction);
+                }
+            }
+        }
+    }
+
+    private void SyncActionProperties(ITourAction customAction)
+    {
+        customAction.StyleType   = CurrentStyleType;
+        customAction.ActiveIndex = SelectedIndex;
+        customAction.StepCount   = ItemCount;
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -245,6 +282,44 @@ internal class TourStepsView : SelectingItemsControl
                 else
                 {
                     IndexPosition = TourStepPosition.Middle;
+                }
+            }
+        }
+        else if (change.Property == CustomActionsProperty)
+        {
+            if (change.OldValue is IList<Control> oldCustomActions)
+            {
+                foreach (Control customAction in oldCustomActions)
+                {
+                    _customActionsPanel?.Children.Remove(customAction);
+                }
+            }
+
+            if (change.NewValue is IList<Control> newCustomActions)
+            {
+                foreach (Control customAction in newCustomActions)
+                {
+                    if (customAction is ITourAction tourAction)
+                    {
+                        SyncActionProperties(tourAction);
+                    }
+                    _customActionsPanel?.Children.Insert(0, customAction);
+                }
+            }
+        }
+
+        if (change.Property == SelectedIndexProperty ||
+            change.Property == ItemCountProperty ||
+            change.Property == CurrentStyleTypeProperty)
+        {
+            if (CustomActions != null)
+            {
+                foreach (Control customAction in CustomActions)
+                {
+                    if (customAction is ITourAction tourAction)
+                    {
+                        SyncActionProperties(tourAction);
+                    }
                 }
             }
         }
