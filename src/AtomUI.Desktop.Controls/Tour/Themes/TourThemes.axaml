@@ -6,5 +6,7 @@
         <ResourceInclude Source="TourTheme.axaml" />
         <ResourceInclude Source="TourStepsViewTheme.axaml" />
         <ResourceInclude Source="TourStepTheme.axaml" />
+        <ResourceInclude Source="DefaultTourIndicatorTheme.axaml" />
+        <ResourceInclude Source="TextTourIndicatorTheme.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

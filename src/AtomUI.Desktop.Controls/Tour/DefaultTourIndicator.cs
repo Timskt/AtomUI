@@ -1,30 +1,23 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
-internal class TourStepIndicator : Control
+public class DefaultTourIndicator : TourIndicator
 {
     #region 公共属性定义
 
     public static readonly StyledProperty<double> IndicatorSizeProperty = 
-        AvaloniaProperty.Register<TourStepIndicator, double>(nameof(IndicatorSize));
+        AvaloniaProperty.Register<DefaultTourIndicator, double>(nameof(IndicatorSize));
     
     public static readonly StyledProperty<IBrush?> IndicatorColorProperty = 
-        AvaloniaProperty.Register<TourStepIndicator, IBrush?>(nameof(IndicatorColor));
+        AvaloniaProperty.Register<DefaultTourIndicator, IBrush?>(nameof(IndicatorColor));
     
     public static readonly StyledProperty<IBrush?> IndicatorActiveColorProperty = 
-        AvaloniaProperty.Register<TourStepIndicator, IBrush?>(nameof(IndicatorActiveColor));
-    
-    public static readonly StyledProperty<int> StepCountProperty = 
-        AvaloniaProperty.Register<TourStepIndicator, int>(nameof(StepCount));
-    
-    public static readonly StyledProperty<int> ActiveIndexProperty = 
-        AvaloniaProperty.Register<TourStepIndicator, int>(nameof(ActiveIndex));
+        AvaloniaProperty.Register<DefaultTourIndicator, IBrush?>(nameof(IndicatorActiveColor));
     
     public static readonly StyledProperty<double> ItemSpacingProperty = 
-        AvaloniaProperty.Register<TourStepIndicator, double>(nameof(ItemSpacing));
+        AvaloniaProperty.Register<DefaultTourIndicator, double>(nameof(ItemSpacing));
 
     public double IndicatorSize
     {
@@ -44,18 +37,6 @@ internal class TourStepIndicator : Control
         set => SetValue(IndicatorActiveColorProperty, value);
     }
     
-    public int StepCount
-    {
-        get => GetValue(StepCountProperty);
-        set => SetValue(StepCountProperty, value);
-    }
-    
-    public int ActiveIndex
-    {
-        get => GetValue(ActiveIndexProperty);
-        set => SetValue(ActiveIndexProperty, value);
-    }
-    
     public double ItemSpacing
     {
         get => GetValue(ItemSpacingProperty);
@@ -63,16 +44,16 @@ internal class TourStepIndicator : Control
     }
     #endregion
 
-    static TourStepIndicator()
+    static DefaultTourIndicator()
     {
-        AffectsRender<TourStepIndicator>(IndicatorColorProperty, IndicatorActiveColorProperty, ActiveIndexProperty);
-        AffectsMeasure<TourStepIndicator>(ItemSpacingProperty, IndicatorSizeProperty, StepCountProperty);
+        AffectsRender<DefaultTourIndicator>(IndicatorColorProperty, IndicatorActiveColorProperty);
+        AffectsMeasure<DefaultTourIndicator>(ItemSpacingProperty, IndicatorSizeProperty);
     }
 
     protected override Size MeasureOverride(Size availableSize)
     {
         var height = IndicatorSize;
-        var width = StepCount * IndicatorSize + ItemSpacing * (StepCount + 1);
+        var width  = StepCount * IndicatorSize + ItemSpacing * (StepCount + 1);
         return new Size(width, height);
     }
 

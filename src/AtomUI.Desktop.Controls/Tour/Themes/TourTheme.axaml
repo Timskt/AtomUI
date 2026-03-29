@@ -27,7 +27,8 @@
                                             IsShowMask="{TemplateBinding IsShowMask}"
                                             CloseIcon="{TemplateBinding CloseIcon}"
                                             IsScrollIntoView="{TemplateBinding IsScrollIntoView}"
-                                            CurrentStyleType="{TemplateBinding CurrentStyleType}"/>
+                                            CurrentStyleType="{TemplateBinding CurrentStyleType}"
+                                            Indicator="{TemplateBinding Indicator}"/>
                     </atom:ArrowDecoratedBox>
                 </atom:Popup>
             </ControlTemplate>
