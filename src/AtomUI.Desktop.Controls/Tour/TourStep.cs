@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
@@ -47,6 +48,9 @@ public class TourStep : ContentControl, ITourStepOption
     
     public static readonly StyledProperty<bool?> IsShowMaskProperty =
         AvaloniaProperty.Register<TourStep, bool?>(nameof(IsShowMask));
+    
+    public static readonly StyledProperty<IBrush?> MaskColorProperty =
+        AvaloniaProperty.Register<TourStep, IBrush?>(nameof(MaskColor));
 
     public static readonly StyledProperty<TourStyleType?> StyleTypeProperty =
         AvaloniaProperty.Register<TourStep, TourStyleType?>(nameof(StyleType));
@@ -127,6 +131,12 @@ public class TourStep : ContentControl, ITourStepOption
     {
         get => GetValue(IsShowMaskProperty);
         set => SetValue(IsShowMaskProperty, value);
+    }
+    
+    public IBrush? MaskColor
+    {
+        get => GetValue(MaskColorProperty);
+        set => SetValue(MaskColorProperty, value);
     }
     
     public TourStyleType? StyleType

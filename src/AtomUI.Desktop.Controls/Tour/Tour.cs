@@ -70,6 +70,9 @@ public class Tour : TemplatedControl,
     public static readonly StyledProperty<bool> IsShowMaskProperty =
         AvaloniaProperty.Register<Tour, bool>(nameof(IsShowMask), true);
     
+    public static readonly StyledProperty<IBrush?> MaskColorProperty =
+        AvaloniaProperty.Register<Tour, IBrush?>(nameof(MaskColor));
+    
     public static readonly StyledProperty<TourStyleType> StyleTypeProperty =
         AvaloniaProperty.Register<Tour, TourStyleType>(nameof(StyleType));
     
@@ -86,9 +89,6 @@ public class Tour : TemplatedControl,
             (o, v) => o.CurrentIndex = v,
             unsetValue: -1,
             defaultBindingMode: BindingMode.TwoWay);
-    
-    public static readonly StyledProperty<IBrush?> MaskBackgroundProperty =
-        AvaloniaProperty.Register<Tour, IBrush?>(nameof(MaskBackground));
     
     public static readonly DirectProperty<Tour, int> StepCountProperty =
         AvaloniaProperty.RegisterDirect<Tour, int>(nameof(StepCount), o => o.StepCount);
@@ -169,6 +169,12 @@ public class Tour : TemplatedControl,
         set => SetValue(IsShowMaskProperty, value);
     }
     
+    public IBrush? MaskColor
+    {
+        get => GetValue(MaskColorProperty);
+        set => SetValue(MaskColorProperty, value);
+    }
+    
     public TourStyleType StyleType
     {
         get => GetValue(StyleTypeProperty);
@@ -192,12 +198,6 @@ public class Tour : TemplatedControl,
     {
         get => _currentIndex;
         private set => SetAndRaise(CurrentIndexProperty, ref _currentIndex, value);
-    }
-    
-    public IBrush? MaskBackground
-    {
-        get => GetValue(MaskBackgroundProperty);
-        set => SetValue(MaskBackgroundProperty, value);
     }
     
     private int _stepCount;
@@ -242,6 +242,11 @@ public class Tour : TemplatedControl,
             o => o.CurrentShowArrow,
             (o, v) => o.CurrentShowArrow = v);
     
+    internal static readonly DirectProperty<Tour, IBrush?> CurrentMaskColorProperty =
+        AvaloniaProperty.RegisterDirect<Tour, IBrush?>(nameof(CurrentMaskColor),
+            o => o.CurrentMaskColor,
+            (o, v) => o.CurrentMaskColor = v);
+    
     private Rect _targetClipBounds;
 
     internal Rect TargetClipBounds
@@ -278,6 +283,14 @@ public class Tour : TemplatedControl,
     {
         get => _currentShowArrow;
         private set => SetAndRaise(CurrentShowArrowProperty, ref _currentShowArrow, value);
+    }
+    
+    private IBrush? _currentMaskColor;
+
+    internal IBrush? CurrentMaskColor
+    {
+        get => _currentMaskColor;
+        private set => SetAndRaise(CurrentMaskColorProperty, ref _currentMaskColor, value);
     }
     
     Control IControlSharedTokenResourcesHost.HostControl => this;
@@ -334,6 +347,7 @@ public class Tour : TemplatedControl,
                 stepOption.StyleType        ??= StyleType;
                 stepOption.Placement        ??= Placement;
                 stepOption.IsScrollIntoView ??= IsScrollIntoView;
+                stepOption.MaskColor        ??= MaskColor;
             }
         }
     }
@@ -542,7 +556,7 @@ public class Tour : TemplatedControl,
         _layer = TourLayer.GetTourLayer(this);
         if (_layer != null)
         {
-            _layer[!TourLayer.BackgroundProperty]               = this[!MaskBackgroundProperty];
+            _layer[!TourLayer.BackgroundProperty]               = this[!CurrentMaskColorProperty];
             _layer[!TourLayer.TargetRegionCornerRadiusProperty] = this[!GapRadiusProperty];
             _layer[!TourLayer.TargetRegionProperty]             = this[!TargetClipBoundsProperty];
         }
@@ -608,6 +622,7 @@ public class Tour : TemplatedControl,
             CurrentShowArrow = stepOption.IsShowArrow ?? IsShowArrow;
             if (_layer != null)
             {
+                CurrentMaskColor = stepOption.MaskColor ?? MaskColor;
                 _layer.IsVisible = stepOption.IsShowMask ?? IsShowArrow;
             }
 
@@ -787,7 +802,7 @@ public class Tour : TemplatedControl,
     
         public IgnorePropertyChangedScope(Tour owner)
         {
-            _owner                      = owner;
+            _owner                        = owner;
             _owner._ignorePropertyChanged = true;
         }
     

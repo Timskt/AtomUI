@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -44,6 +45,9 @@ internal class TourStepsView : SelectingItemsControl
     
     public static readonly StyledProperty<bool> IsShowMaskProperty =
         Tour.IsShowMaskProperty.AddOwner<TourStepsView>();
+    
+    public static readonly StyledProperty<IBrush?> MaskColorProperty =
+        Tour.MaskColorProperty.AddOwner<TourStepsView>();
     
     public static readonly StyledProperty<bool> IsScrollIntoViewProperty =
         Tour.IsScrollIntoViewProperty.AddOwner<TourStepsView>();
@@ -88,6 +92,12 @@ internal class TourStepsView : SelectingItemsControl
     {
         get => GetValue(IsShowMaskProperty);
         set => SetValue(IsShowMaskProperty, value);
+    }
+    
+    public IBrush? MaskColor
+    {
+        get => GetValue(MaskColorProperty);
+        set => SetValue(MaskColorProperty, value);
     }
     
     public bool IsScrollIntoView
@@ -199,6 +209,7 @@ internal class TourStepsView : SelectingItemsControl
             BindUtils.RelayBind(this, PlacementProperty, tourStep, TourStep.PlacementProperty, priority: BindingPriority.Template);
             BindUtils.RelayBind(this, IsShowMaskProperty, tourStep, TourStep.IsShowMaskProperty, priority: BindingPriority.Template);
             BindUtils.RelayBind(this, IsScrollIntoViewProperty, tourStep, TourStep.IsScrollIntoViewProperty, priority: BindingPriority.Template);
+            BindUtils.RelayBind(this, MaskColorProperty, tourStep, TourStep.MaskColorProperty, priority: BindingPriority.Template);
             PrepareStepItem(tourStep, item, index);
         }
         else

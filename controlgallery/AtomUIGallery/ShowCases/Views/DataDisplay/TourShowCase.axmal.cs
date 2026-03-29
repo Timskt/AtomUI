@@ -46,4 +46,13 @@ public partial class TourShowCase : ReactiveUserControl<TourViewModel>
             vm.CustomIndicatorTourOpened = !vm.CustomIndicatorTourOpened;
         }
     }
+    
+    private void HandleCustomMaskBeginTour(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is TourViewModel vm)
+        {
+            vm.CustomMaskTourOpened = !vm.CustomMaskTourOpened;
+        }
+    }
+    
 }

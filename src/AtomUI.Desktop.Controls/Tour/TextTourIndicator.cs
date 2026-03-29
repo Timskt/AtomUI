@@ -33,6 +33,6 @@ public class TextTourIndicator : TourIndicator
 
     protected virtual void NotifyBuildIndicatorText()
     {
-        SetCurrentValue(IndicatorTextProperty, $"{ActiveIndex} / {StepCount}");
+        SetCurrentValue(IndicatorTextProperty, $"{ActiveIndex + 1} / {StepCount}");
     }
 }
