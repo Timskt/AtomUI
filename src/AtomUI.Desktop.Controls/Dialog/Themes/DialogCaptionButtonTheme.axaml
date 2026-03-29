@@ -16,6 +16,7 @@
                             Icon="{TemplateBinding NormalIcon}"
                             Width="{TemplateBinding IconWidth}"
                             Height="{TemplateBinding IconHeight}"
+                            IconBrush="{TemplateBinding IconBrush}"
                             IsVisible="{TemplateBinding IsChecked, Converter={x:Static BoolConverters.Not}}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -23,6 +24,7 @@
                         <atom:IconPresenter
                             Name="CheckedIconPresenter"
                             Icon="{TemplateBinding CheckedIcon}"
+                            IconBrush="{TemplateBinding IconBrush}"
                             IsVisible="{TemplateBinding IsChecked}"
                             Width="{TemplateBinding IconWidth}"
                             Height="{TemplateBinding IconHeight}"
@@ -40,22 +42,16 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
         
-        <Style Selector="^ /template/ atom|IconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIcon}}" />
-        </Style>
+        <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIcon}}" />
         
         <Style Selector="^:pointerover">
             <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextHover}}" />
-            <Style Selector="^ /template/ atom|IconPresenter">
-                <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
-            </Style>
+            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
         </Style>
         
         <Style Selector="^:pressed">
             <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextActive}}" />
-            <Style Selector="^ /template/ atom|IconPresenter">
-                <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
-            </Style>
+            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

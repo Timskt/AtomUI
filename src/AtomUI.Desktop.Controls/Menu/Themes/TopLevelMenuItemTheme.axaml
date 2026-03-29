@@ -18,7 +18,7 @@
                                           Content="{TemplateBinding Header}"
                                           ContentTemplate="{TemplateBinding HeaderTemplate}" />
                     </Border>
-                    <atom:Popup Name="{x:Static atom:TopLevelMenuItemThemeConstants.PopupPart}"
+                    <atom:Popup Name="{x:Static atom:PopupThemeConstants.PopupPart}"
                                 WindowManagerAddShadowHint="False"
                                 IsLightDismissEnabled="False"
                                 Placement="BottomEdgeAlignedLeft"

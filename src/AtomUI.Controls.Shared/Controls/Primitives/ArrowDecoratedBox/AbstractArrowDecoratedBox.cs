@@ -196,6 +196,7 @@ public abstract class AbstractArrowDecoratedBox : ContentControl,
     static AbstractArrowDecoratedBox()
     {
         AffectsMeasure<AbstractArrowDecoratedBox>(IsShowArrowProperty, ArrowDirectionProperty);
+        AffectsArrange<AbstractArrowDecoratedBox>(ArrowPositionProperty);
         AffectsRender<AbstractArrowDecoratedBox>(BackgroundProperty, ArrowOpacityProperty);
     }
 
@@ -301,12 +302,16 @@ public abstract class AbstractArrowDecoratedBox : ContentControl,
             return default;
         }
 
-        if (_arrowIndicatorLayout.Bounds == default)
+        if (!_arrowIndicatorLayout.IsMeasureValid)
         {
             LayoutHelper.MeasureChild(this, Size.Infinity, Padding);
-            Arrange(new Rect(DesiredSize));
         }
 
+        if (!_arrowIndicatorLayout.IsArrangeValid)
+        {
+            Arrange(new Rect(DesiredSize));
+        }
+        
         var targetRect  = _arrowIndicatorLayout.Bounds;
         var center      = targetRect.Center;
         var controlSize = Bounds.Size;
@@ -317,7 +322,7 @@ public abstract class AbstractArrowDecoratedBox : ContentControl,
         {
             return (center.Y, controlSize.Height - center.Y);
         }
-
+    
         return (center.X, controlSize.Width - center.X);
     }
 

@@ -1,0 +1,127 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:atom="https://atomui.net"
+    xmlns:lang="clr-namespace:AtomUI.Desktop.Controls.TourLang"
+    x:ClassModifier="internal">
+    <ControlTheme x:Key="{x:Type atom:TourStepsView}" TargetType="atom:TourStepsView">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="Frame"
+                        ClipToBounds="True" 
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                    <DockPanel Name="RootLayout" LastChildFill="True">
+                        <Border Name="FooterFrame" DockPanel.Dock="Bottom">
+                            <Panel>
+                                <atom:TourStepIndicator HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        StepCount="{TemplateBinding ItemCount}"
+                                                        ActiveIndex="{TemplateBinding SelectedIndex}"/>
+                                <StackPanel Orientation="Horizontal" Name="ActionsLayout" HorizontalAlignment="Right">
+                                    <atom:Button SizeType="Small"
+                                                 Name="PreviousButton"
+                                                 IsVisible="False"
+                                                 Tag="{x:Static atom:TourStepNavType.Previous}"
+                                                 Classes="previous-btn"
+                                                 Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Previous}}"/>
+                                    <atom:Button SizeType="Small" 
+                                                 ButtonType="Primary" 
+                                                 Name="NextButton" 
+                                                 Classes="next-btn"
+                                                 IsVisible="False"
+                                                 Tag="{x:Static atom:TourStepNavType.Next}"
+                                                 Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Next}}"/>
+                                    <atom:Button SizeType="Small"
+                                                 ButtonType="Primary"
+                                                 Name="FinishButton"
+                                                 IsVisible="False"
+                                                 Classes="next-btn"
+                                                 Tag="{x:Static atom:TourStepNavType.Finished}"
+                                                 Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Finish}}"/>
+                                </StackPanel>
+                            </Panel>
+                        </Border>
+                        <ItemsPresenter ItemsPanel="{TemplateBinding ItemsPanel}"/>
+                    </DockPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:TourTokenKey.TourViewMinWidth}}" />
+        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:TourTokenKey.TourViewMinHeight}}" />
+        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXXS}}" />
+        <Style Selector="^ /template/ DockPanel#RootLayout">
+            <Setter Property="VerticalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+        </Style>
+        
+        <Style Selector="^ /template/ StackPanel#ActionsLayout">
+            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+        </Style>
+        
+        <Style Selector="^[IndexPosition=OnePage]">
+            <Style Selector="^ /template/ atom|Button#FinishButton">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+        
+        <Style Selector="^[IndexPosition=First]">
+            <Style Selector="^ /template/ atom|Button#NextButton">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+        
+        <Style Selector="^[IndexPosition=Middle]">
+            <Style Selector="^ /template/ atom|Button#PreviousButton">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style Selector="^ /template/ atom|Button#NextButton">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+        
+        <Style Selector="^[IndexPosition=Last]">
+            <Style Selector="^ /template/ atom|Button#PreviousButton">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style Selector="^ /template/ atom|Button#FinishButton">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+
+        <Style Selector="^ /template/ atom|TourStepIndicator">
+            <Setter Property="ItemSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+            <Setter Property="IndicatorSize" Value="{DynamicResource {x:Static atom:TourTokenKey.IndicatorSize}}" />
+            <Setter Property="IndicatorColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFill}}" />
+            <Setter Property="IndicatorActiveColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+        </Style>
+
+        <Style Selector="^[StyleType=Primary]">
+            <Style Selector="^ /template/ atom|TourStepIndicator">
+                <Setter Property="IndicatorColor" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryPrevBtnBg}}" />
+                <Setter Property="IndicatorActiveColor"
+                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+            </Style>
+            
+            <Style Selector="^ /template/ atom|Button.previous-btn">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryPrevBtnBg}}" />
+            </Style>
+            <Style Selector="^ /template/ atom|Button.previous-btn:pointerover">
+                <Setter Property="Background" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryPrevBtnBg}}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+            
+            <Style Selector="^ /template/ atom|Button.next-btn">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWhite}}" />
+            </Style>
+            <Style Selector="^ /template/ atom|Button.next-btn:pointerover">
+                <Setter Property="Background" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryNextBtnHoverBg}}" />
+            </Style>
+            
+        </Style>
+        
+    </ControlTheme>
+</ResourceDictionary>

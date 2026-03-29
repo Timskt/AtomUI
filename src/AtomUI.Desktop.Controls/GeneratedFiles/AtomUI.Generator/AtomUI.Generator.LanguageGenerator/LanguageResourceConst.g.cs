@@ -74,6 +74,16 @@ namespace AtomUI.Desktop.Controls.TimePickerLang
     }
 }
 
+namespace AtomUI.Desktop.Controls.TourLang
+{
+    internal static class TourLangResourceKey
+    {
+        public static readonly LanguageResourceKey Finish = new LanguageResourceKey("Tour.Finish", "AtomUI.Lang");
+        public static readonly LanguageResourceKey Next = new LanguageResourceKey("Tour.Next", "AtomUI.Lang");
+        public static readonly LanguageResourceKey Previous = new LanguageResourceKey("Tour.Previous", "AtomUI.Lang");
+    }
+}
+
 namespace AtomUI.Desktop.Controls.TransferLang
 {
     internal static class TransferLangResourceKey

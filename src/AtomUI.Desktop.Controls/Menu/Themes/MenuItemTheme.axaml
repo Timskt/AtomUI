@@ -74,7 +74,7 @@
                                                  Grid.Column="4" />
                     </Grid>
                 </Border>
-                <atom:Popup Name="{x:Static atom:MenuItemThemeConstants.PopupPart}"
+                <atom:Popup Name="{x:Static atom:PopupThemeConstants.PopupPart}"
                             WindowManagerAddShadowHint="False"
                             IsLightDismissEnabled="False"
                             IsDetectMouseClickEnabled="True"

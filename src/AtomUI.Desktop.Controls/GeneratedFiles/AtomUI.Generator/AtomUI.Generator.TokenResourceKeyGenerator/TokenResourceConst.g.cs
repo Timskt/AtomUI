@@ -1173,6 +1173,19 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         public static readonly TokenResourceKey ToolTipShadows = new TokenResourceKey("AtomUI.Desktop.Controls.ToolTip.ToolTipShadows");
     }
 
+    public static class TourTokenKey
+    {
+        public static readonly TokenResourceKey CloseBtnSize = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.CloseBtnSize");
+        public static readonly TokenResourceKey HeaderColor = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.HeaderColor");
+        public static readonly TokenResourceKey IndicatorSize = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.IndicatorSize");
+        public static readonly TokenResourceKey PopupMarginToAnchor = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.PopupMarginToAnchor");
+        public static readonly TokenResourceKey PrimaryNextBtnHoverBg = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.PrimaryNextBtnHoverBg");
+        public static readonly TokenResourceKey PrimaryPrevBtnBg = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.PrimaryPrevBtnBg");
+        public static readonly TokenResourceKey TourBorderRadius = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.TourBorderRadius");
+        public static readonly TokenResourceKey TourViewMinHeight = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.TourViewMinHeight");
+        public static readonly TokenResourceKey TourViewMinWidth = new TokenResourceKey("AtomUI.Desktop.Controls.Tour.TourViewMinWidth");
+    }
+
     public static class TransferTokenKey
     {
         public static readonly TokenResourceKey DataGridSelectionHeaderMargin = new TokenResourceKey("AtomUI.Desktop.Controls.Transfer.DataGridSelectionHeaderMargin");
