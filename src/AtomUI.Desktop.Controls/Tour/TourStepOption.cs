@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -17,6 +18,7 @@ public interface ITourStepOption
     TourPlacementMode? Placement { get; set; }
     TourStyleType? StyleType { get; set; }
     bool? IsShowMask { get; set; }
+    IBrush? MaskColor { get; set; }
     bool? IsScrollIntoView { get; set; }
 }
 
@@ -34,5 +36,6 @@ public class TourStepOption : ITourStepOption
     public TourPlacementMode? Placement { get; set; }
     public TourStyleType? StyleType { get; set; }
     public bool? IsShowMask { get; set; }
+    public IBrush? MaskColor { get; set; }
     public bool? IsScrollIntoView { get; set; }
 }

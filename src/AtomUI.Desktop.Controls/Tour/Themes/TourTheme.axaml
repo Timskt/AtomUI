@@ -25,6 +25,7 @@
                                             IsPointAtCenter="{TemplateBinding IsPointAtCenter}"
                                             Placement="{TemplateBinding Placement}"
                                             IsShowMask="{TemplateBinding IsShowMask}"
+                                            MaskColor="{TemplateBinding MaskColor}"
                                             CloseIcon="{TemplateBinding CloseIcon}"
                                             IsScrollIntoView="{TemplateBinding IsScrollIntoView}"
                                             CurrentStyleType="{TemplateBinding CurrentStyleType}"
@@ -35,7 +36,7 @@
         </Setter>
         
         <Setter Property="Placement" Value="Bottom" />
-        <Setter Property="MaskBackground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
+        <Setter Property="MaskColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
         <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
         
         <Style Selector="^ /template/ atom|ArrowDecoratedBox#PART_ArrowDecorator">

@@ -44,6 +44,14 @@ public class TourViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _customIndicatorTourOpened, value);
     }
     
+    private bool _customMaskTourOpened;
+
+    public bool CustomMaskTourOpened
+    {
+        get => _customMaskTourOpened;
+        set => this.RaiseAndSetIfChanged(ref _customMaskTourOpened, value);
+    }
+    
     private IList<ITourStepOption>? _basicCaseSteps;
 
     public IList<ITourStepOption>? BasicCaseSteps
