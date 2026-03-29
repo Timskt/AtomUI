@@ -307,7 +307,7 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         
         _radioButton = e.NameScope.Find<RadioButton>(MenuItemThemeConstants.ToggleRadioPart);
         _checkBox    = e.NameScope.Find<CheckBox>(MenuItemThemeConstants.ToggleCheckboxPart);
-        _popup       = e.NameScope.Find<Popup>(MenuItemThemeConstants.PopupPart);
+        _popup       = e.NameScope.Find<Popup>(PopupThemeConstants.PopupPart);
         if (_popup != null)
         {
             _popup.ClickHidePredicate = MenuPopupClosePredicate;

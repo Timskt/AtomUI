@@ -614,8 +614,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
             if ((direction == PopupHostMarginPlacement.Top && flipInfo.bottom) ||
                 (direction == PopupHostMarginPlacement.Bottom && flipInfo.top))
             {
-                flipPlacement = GetFlipPlacement(Placement, false, true);
-                IsFlipped     = true;
+                flipPlacement  = GetFlipPlacement(Placement, false, true);
+                IsFlipped      = true;
             }
             else if ((direction == PopupHostMarginPlacement.Left && flipInfo.right) ||
                      (direction == PopupHostMarginPlacement.Right && flipInfo.left))

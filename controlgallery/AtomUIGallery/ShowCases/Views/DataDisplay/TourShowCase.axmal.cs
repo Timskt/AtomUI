@@ -1,4 +1,5 @@
 using AtomUIGallery.ShowCases.ViewModels;
+using Avalonia.Interactivity;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
 
@@ -12,5 +13,29 @@ public partial class TourShowCase : ReactiveUserControl<TourViewModel>
         {
         });
         InitializeComponent();
+    }
+
+    private void HandleBasicBeginTour(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is TourViewModel vm)
+        {
+            vm.BasicCaseTourOpened = !vm.BasicCaseTourOpened;
+        }
+    }
+    
+    private void HandleNonMaskBeginTour(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is TourViewModel vm)
+        {
+            vm.NonMaskTourOpened = !vm.NonMaskTourOpened;
+        }
+    }
+    
+    private void HandlePlacementBeginTour(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is TourViewModel vm)
+        {
+            vm.PlacementTourOpened = !vm.PlacementTourOpened;
+        }
     }
 }

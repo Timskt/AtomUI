@@ -4,6 +4,7 @@ internal static class PopupThemeConstants
 {
     public const string TransparencyFallbackPart = "PART_TransparencyFallback";
     public const string ContentPresenterPart = "PART_ContentPresenter";
+    public const string PopupPart = "PART_Popup";
 }
 
 internal static class OverlayPopupHostThemeConstants

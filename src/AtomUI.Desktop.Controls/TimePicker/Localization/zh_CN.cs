@@ -1,5 +1,4 @@
-﻿using AtomUI.Desktop.Controls;
-using AtomUI.Theme.Language;
+﻿using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.TimePickerLang;
 

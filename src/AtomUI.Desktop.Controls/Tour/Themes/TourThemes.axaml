@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:atom="https://atomui.net"
+                    x:ClassModifier="internal">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="TourTheme.axaml" />
+        <ResourceInclude Source="TourStepsViewTheme.axaml" />
+        <ResourceInclude Source="TourStepTheme.axaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

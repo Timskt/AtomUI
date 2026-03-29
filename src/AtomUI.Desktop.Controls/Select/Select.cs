@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using AtomUI.Controls.Data;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
@@ -131,7 +129,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
     }
     
     [Content]
-    public ItemCollection Options { get; set; } = new();
+    public ItemCollection Options { get; } = new();
     
     private IList<ISelectOption>? _selectedOptions;
 
