@@ -38,4 +38,12 @@ public partial class TourShowCase : ReactiveUserControl<TourViewModel>
             vm.PlacementTourOpened = !vm.PlacementTourOpened;
         }
     }
+
+    private void HandleCustomIndicatorBeginTour(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is TourViewModel vm)
+        {
+            vm.CustomIndicatorTourOpened = !vm.CustomIndicatorTourOpened;
+        }
+    }
 }

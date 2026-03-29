@@ -14,10 +14,10 @@
                     <DockPanel Name="RootLayout" LastChildFill="True">
                         <Border Name="FooterFrame" DockPanel.Dock="Bottom">
                             <Panel>
-                                <atom:TourStepIndicator HorizontalAlignment="Left"
-                                                        VerticalAlignment="Center"
-                                                        StepCount="{TemplateBinding ItemCount}"
-                                                        ActiveIndex="{TemplateBinding SelectedIndex}"/>
+                                <ContentPresenter Name="IndicatorPresenter"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Content="{TemplateBinding Indicator}"/>
                                 <StackPanel Orientation="Horizontal" Name="ActionsLayout" HorizontalAlignment="Right">
                                     <atom:Button SizeType="Small"
                                                  Name="PreviousButton"
@@ -89,20 +89,8 @@
             </Style>
         </Style>
 
-        <Style Selector="^ /template/ atom|TourStepIndicator">
-            <Setter Property="ItemSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
-            <Setter Property="IndicatorSize" Value="{DynamicResource {x:Static atom:TourTokenKey.IndicatorSize}}" />
-            <Setter Property="IndicatorColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFill}}" />
-            <Setter Property="IndicatorActiveColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
-        </Style>
-
         <Style Selector="^[StyleType=Primary]">
-            <Style Selector="^ /template/ atom|TourStepIndicator">
-                <Setter Property="IndicatorColor" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryPrevBtnBg}}" />
-                <Setter Property="IndicatorActiveColor"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
-            </Style>
-            
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
             <Style Selector="^ /template/ atom|Button.previous-btn">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
                 <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />

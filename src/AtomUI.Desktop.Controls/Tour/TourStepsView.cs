@@ -50,6 +50,9 @@ internal class TourStepsView : SelectingItemsControl
     
     public static readonly StyledProperty<IIconTemplate?> CloseIconProperty =
         Tour.CloseIconProperty.AddOwner<TourStepsView>();
+    
+    public static readonly StyledProperty<TourIndicator?> IndicatorProperty =
+        Tour.IndicatorProperty.AddOwner<TourStepsView>();
 
     public bool IsMotionEnabled
     {
@@ -99,6 +102,12 @@ internal class TourStepsView : SelectingItemsControl
         set => SetValue(CloseIconProperty, value);
     }
 
+    public TourIndicator? Indicator
+    {
+        get => GetValue(IndicatorProperty);
+        set => SetValue(IndicatorProperty, value);
+    }
+    
     #endregion
 
     #region 公共事件定义

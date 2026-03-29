@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.DesignTokens;
@@ -21,7 +22,6 @@ using Avalonia.VisualTree;
 namespace AtomUI.Desktop.Controls;
 
 using ItemCollection = AtomUI.Collections.ItemCollection;
-using FlyoutControl = Flyout;
 
 public enum TourStyleType
 {
@@ -92,6 +92,9 @@ public class Tour : TemplatedControl,
     
     public static readonly DirectProperty<Tour, int> StepCountProperty =
         AvaloniaProperty.RegisterDirect<Tour, int>(nameof(StepCount), o => o.StepCount);
+    
+    public static readonly StyledProperty<TourIndicator?> IndicatorProperty =
+        AvaloniaProperty.Register<Tour, TourIndicator?>(nameof(Indicator));
     
     public IEnumerable<ITourStepOption>? StepsSource
     {
@@ -204,6 +207,12 @@ public class Tour : TemplatedControl,
         private set => SetAndRaise(StepCountProperty, ref _stepCount, value);
     }
     
+    public TourIndicator? Indicator
+    {
+        get => GetValue(IndicatorProperty);
+        set => SetValue(IndicatorProperty, value);
+    }
+    
     [Content]
     public ItemCollection Steps { get; } = new();
     
@@ -281,6 +290,7 @@ public class Tour : TemplatedControl,
     private Popup? _popup;
     private TourLayer? _layer;
     private TourStepsView? _stepsView;
+    private CompositeDisposable? _indicatorDisposables;
 
     static Tour()
     {
@@ -296,6 +306,10 @@ public class Tour : TemplatedControl,
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        if (Indicator == null)
+        {
+            SetCurrentValue(IndicatorProperty, new DefaultTourIndicator());
+        }
         ConfigureDefaultValues();
     }
 
@@ -365,6 +379,24 @@ public class Tour : TemplatedControl,
             if (!_ignorePropertyChanged)
             {
                 HandleCurrentStepChanged();
+            }
+        }
+
+        if (change.Property == IndicatorProperty)
+        {
+            if (change.OldValue is TourIndicator)
+            {
+                _indicatorDisposables?.Dispose();
+                _indicatorDisposables = null;
+            }
+
+            if (change.NewValue is TourIndicator newIndicator)
+            {
+                _indicatorDisposables = new CompositeDisposable();
+                _indicatorDisposables.Add(BindUtils.RelayBind(this, StepCountProperty, newIndicator, TourIndicator.StepCountProperty));
+                _indicatorDisposables.Add(BindUtils.RelayBind(this, CurrentIndexProperty, newIndicator, TourIndicator.ActiveIndexProperty));
+                _indicatorDisposables.Add(BindUtils.RelayBind(this, CurrentStyleTypeProperty, newIndicator, TourIndicator.StyleTypeProperty));
+                _indicatorDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, newIndicator, TourIndicator.IsMotionEnabledProperty));
             }
         }
     }
