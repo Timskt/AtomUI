@@ -52,12 +52,52 @@ public class TourViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _customMaskTourOpened, value);
     }
     
+    private bool _customGapTourOpened;
+
+    public bool CustomGapTourOpened
+    {
+        get => _customGapTourOpened;
+        set => this.RaiseAndSetIfChanged(ref _customGapTourOpened, value);
+    }
+    
+    private double _customGapRadius;
+
+    public double CustomGapRadius
+    {
+        get => _customGapRadius;
+        set => this.RaiseAndSetIfChanged(ref _customGapRadius, value);
+    }
+    
+    private double _customGapOffsetX;
+
+    public double CustomGapOffsetX
+    {
+        get => _customGapOffsetX;
+        set => this.RaiseAndSetIfChanged(ref _customGapOffsetX, value);
+    }
+    
+    private double _customGapOffsetY;
+
+    public double CustomGapOffsetY
+    {
+        get => _customGapOffsetY;
+        set => this.RaiseAndSetIfChanged(ref _customGapOffsetY, value);
+    }
+    
     private IList<ITourStepOption>? _basicCaseSteps;
 
     public IList<ITourStepOption>? BasicCaseSteps
     {
         get => _basicCaseSteps;
         set => this.RaiseAndSetIfChanged(ref _basicCaseSteps, value);
+    }
+    
+    private bool _customActionTourOpened;
+
+    public bool CustomActionTourOpened
+    {
+        get => _customActionTourOpened;
+        set => this.RaiseAndSetIfChanged(ref _customActionTourOpened, value);
     }
 
     public TourViewModel(IScreen screen)

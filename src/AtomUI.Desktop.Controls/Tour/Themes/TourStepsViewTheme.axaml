@@ -13,34 +13,36 @@
                         Background="{TemplateBinding Background}">
                     <DockPanel Name="RootLayout" LastChildFill="True">
                         <Border Name="FooterFrame" DockPanel.Dock="Bottom">
-                            <Panel>
+                            <DockPanel LastChildFill="True" HorizontalSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}">
                                 <ContentPresenter Name="IndicatorPresenter"
-                                                  HorizontalAlignment="Left"
+                                                  DockPanel.Dock="Left"
                                                   VerticalAlignment="Center"
                                                   Content="{TemplateBinding Indicator}"/>
-                                <StackPanel Orientation="Horizontal" Name="ActionsLayout" HorizontalAlignment="Right">
-                                    <atom:Button SizeType="Small"
-                                                 Name="PreviousButton"
-                                                 IsVisible="False"
-                                                 Tag="{x:Static atom:TourStepNavType.Previous}"
-                                                 Classes="previous-btn"
-                                                 Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Previous}}"/>
-                                    <atom:Button SizeType="Small" 
-                                                 ButtonType="Primary" 
-                                                 Name="NextButton" 
-                                                 Classes="next-btn"
-                                                 IsVisible="False"
-                                                 Tag="{x:Static atom:TourStepNavType.Next}"
-                                                 Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Next}}"/>
-                                    <atom:Button SizeType="Small"
-                                                 ButtonType="Primary"
-                                                 Name="FinishButton"
-                                                 IsVisible="False"
-                                                 Classes="next-btn"
-                                                 Tag="{x:Static atom:TourStepNavType.Finished}"
-                                                 Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Finish}}"/>
-                                </StackPanel>
-                            </Panel>
+                                <Panel>
+                                    <StackPanel Orientation="Horizontal" Name="ActionsLayout" HorizontalAlignment="Right">
+                                        <atom:Button SizeType="Small"
+                                                     Name="PreviousButton"
+                                                     IsVisible="False"
+                                                     Tag="{x:Static atom:TourStepNavType.Previous}"
+                                                     Classes="previous-btn"
+                                                     Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Previous}}"/>
+                                        <atom:Button SizeType="Small" 
+                                                     ButtonType="Primary" 
+                                                     Name="NextButton" 
+                                                     Classes="next-btn"
+                                                     IsVisible="False"
+                                                     Tag="{x:Static atom:TourStepNavType.Next}"
+                                                     Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Next}}"/>
+                                        <atom:Button SizeType="Small"
+                                                     ButtonType="Primary"
+                                                     Name="FinishButton"
+                                                     IsVisible="False"
+                                                     Classes="next-btn"
+                                                     Tag="{x:Static atom:TourStepNavType.Finished}"
+                                                     Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Finish}}"/>
+                                    </StackPanel>
+                                </Panel>
+                            </DockPanel>
                         </Border>
                         <ItemsPresenter ItemsPanel="{TemplateBinding ItemsPanel}"/>
                     </DockPanel>
@@ -62,6 +64,10 @@
         <Style Selector="^[IndexPosition=OnePage]">
             <Style Selector="^ /template/ atom|Button#FinishButton">
                 <Setter Property="IsVisible" Value="True" />
+            </Style>
+                    
+            <Style Selector="^ /template/ ContentPresenter#IndicatorPresenter">
+                <Setter Property="IsVisible" Value="False" />
             </Style>
         </Style>
         

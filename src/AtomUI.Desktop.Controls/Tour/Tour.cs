@@ -215,6 +215,7 @@ public class Tour : TemplatedControl,
     
     [Content]
     public ItemCollection Steps { get; } = new();
+    public ItemCollection CustomActions { get; } = new();
     
     #endregion
 
@@ -313,7 +314,8 @@ public class Tour : TemplatedControl,
     public Tour()
     {
         this.RegisterResources();
-        Steps.CollectionChanged += HandleItemsViewCollectionChanged;
+        Steps.CollectionChanged         += HandleItemsViewCollectionChanged;
+        CustomActions.CollectionChanged += HandleCustomActionsChanged;
     }
 
     protected override void OnInitialized()
@@ -332,6 +334,22 @@ public class Tour : TemplatedControl,
         if (IsInitialized)
         {
             ConfigureDefaultValues();
+        }
+    }
+
+    private void HandleCustomActionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (_stepsView != null)
+        {
+            var actions = CustomActions.Cast<Control>().ToList();
+            foreach (var action in actions)
+            {
+                if (action is ITourAction tourAction)
+                {
+                    tourAction.NotifyAttached(this);
+                }
+            }
+            _stepsView.CustomActions = actions;
         }
     }
 
@@ -519,8 +537,19 @@ public class Tour : TemplatedControl,
         _stepsView = e.NameScope.Find<TourStepsView>("StepsView");
         if (_stepsView != null)
         {
-            _stepsView.CloseRequest += HandleCloseRequest;
-            _stepsView.NavRequest   += HandleNavRequest;
+            _stepsView.CloseRequest  += HandleCloseRequest;
+            _stepsView.NavRequest    += HandleNavRequest;
+            var actions =  CustomActions.Cast<Control>().ToList();
+
+            foreach (var action in actions)
+            {
+                if (action is ITourAction tourAction)
+                {
+                    tourAction.NotifyAttached(this);
+                }
+            }
+
+            _stepsView.CustomActions = actions;
         }
     }
 
