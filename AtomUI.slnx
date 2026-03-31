@@ -4,6 +4,9 @@
     <Project Path="controlgallery/AtomUIGallery.Icons.Desktop/AtomUIGallery.Icons.Desktop.csproj" />
     <Project Path="controlgallery/AtomUIGallery/AtomUIGallery.csproj" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/AtomUI.Generator.Tests/AtomUI.Generator.Tests.csproj" />
+  </Folder>
   <Project Path="src/AtomUI.Controls.Shared/AtomUI.Controls.Shared.csproj" />
   <Project Path="src/AtomUI.Core/AtomUI.Core.csproj" />
   <Project Path="src/AtomUI.Desktop.Controls.ColorPicker/AtomUI.Desktop.Controls.ColorPicker.csproj" />
