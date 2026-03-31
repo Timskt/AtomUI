@@ -2,6 +2,7 @@ namespace AtomUI.Desktop.Controls;
 
 public class DialogButton : Button
 {
+    protected override Type StyleKeyOverride => typeof(Button);
     public DialogStandardButton? StandardButtonType { get; set; }
     public DialogButtonRole Role { get; set; } = DialogButtonRole.CustomRole;
     public bool IsDefaultConfirmButton { get; set; }

@@ -1,8 +1,3 @@
-// This source file is adapted from the Windows Presentation Foundation project. 
-// (https://github.com/dotnet/wpf/) 
-// 
-// Licensed to The Avalonia Project under MIT License, courtesy of The .NET Foundation.
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
