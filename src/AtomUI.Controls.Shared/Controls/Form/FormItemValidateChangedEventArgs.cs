@@ -1,6 +1,6 @@
 using Avalonia.Interactivity;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class FormItemValidateChangedEventArgs : RoutedEventArgs
 {

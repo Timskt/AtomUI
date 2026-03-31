@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public interface IFormItem
 {
