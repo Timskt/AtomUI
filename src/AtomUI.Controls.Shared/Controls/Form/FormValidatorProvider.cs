@@ -2,7 +2,7 @@ using System.Collections;
 using Avalonia.Markup.Xaml;
 using Avalonia.Metadata;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class FormValidatorProvider : MarkupExtension
 {

@@ -19,50 +19,6 @@ using Avalonia.Threading;
 
 namespace AtomUI.Desktop.Controls;
 
-public enum FormLabelAlign
-{
-    Left,
-    Right
-}
-
-public enum FormLayout
-{
-    Horizontal,
-    Vertical,
-    Inline
-}
-
-public enum FormRequiredMark
-{
-    Default,
-    Hidden,
-    Optional,
-    Customize
-}
-
-public enum FormValidateTrigger
-{
-    OnChanged,
-    OnBlur,
-    OnSubmit
-}
-
-public enum FormValidateStrategy
-{
-    StopWhenFirstFailed,
-    Sequential,
-    Parallel
-}
-
-public enum FormValidateStatus
-{
-    Default,
-    Success,
-    Warning,
-    Error,
-    Validating
-}
-
 public class Form : ItemsControl,
                     ISizeTypeAware,
                     IMotionAwareControl,
@@ -658,7 +614,7 @@ public class Form : ItemsControl,
         return FormValidateResult.Success;
     }
 
-    public void SetFormValues(FormValues formValues)
+    public void SetFormValues(IFormValues formValues)
     {
         foreach (var item in Items)
         {
@@ -888,7 +844,7 @@ public class Form : ItemsControl,
         }
     }
 
-    public void DeleteFormItem(FormItem formItem)
+    public void DeleteFormItem(IFormItem formItem)
     {
         Items.Remove(formItem);
     }

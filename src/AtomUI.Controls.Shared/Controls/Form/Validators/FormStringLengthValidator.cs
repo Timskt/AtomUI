@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class FormStringLengthValidator : AbstractFormValidator
 {

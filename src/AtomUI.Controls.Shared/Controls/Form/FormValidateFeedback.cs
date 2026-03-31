@@ -1,16 +1,11 @@
-using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
-public class FormValidateFeedback : TemplatedControl,
-                                    IControlSharedTokenResourcesHost,
-                                    IFormValidateFeedback
+public class FormValidateFeedback : TemplatedControl, IFormValidateFeedback
 {
     #region 公共属性定义
 
@@ -104,14 +99,4 @@ public class FormValidateFeedback : TemplatedControl,
         set => SetAndRaise(ValidateStatusProperty, ref _validateStatus, value);
     }
     #endregion
-    
-    #region 内部属性定义
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FormToken.ID;
-    #endregion
-
-    public FormValidateFeedback()
-    {
-        this.RegisterResources();
-    }
 }

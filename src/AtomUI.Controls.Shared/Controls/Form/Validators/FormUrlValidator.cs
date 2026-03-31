@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class FormUrlValidator : AbstractFormValidator
 {

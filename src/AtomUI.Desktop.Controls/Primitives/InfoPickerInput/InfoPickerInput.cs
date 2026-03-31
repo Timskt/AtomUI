@@ -247,8 +247,8 @@ public abstract class InfoPickerInput : TemplatedControl,
     internal static readonly StyledProperty<bool> IsUsedInCompactSpaceProperty = 
         CompactSpaceAwareControlProperty.IsUsedInCompactSpaceProperty.AddOwner<InfoPickerInput>();
     
-    public static readonly StyledProperty<FormValidateFeedback?> FormFeedbackProperty =
-        AvaloniaProperty.Register<InfoPickerInput, FormValidateFeedback?>(nameof (FormFeedback));
+    public static readonly StyledProperty<IFormValidateFeedback?> FormFeedbackProperty =
+        AvaloniaProperty.Register<InfoPickerInput, IFormValidateFeedback?>(nameof (FormFeedback));
     
     protected string? Text
     {
@@ -290,7 +290,7 @@ public abstract class InfoPickerInput : TemplatedControl,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    public FormValidateFeedback? FormFeedback
+    public IFormValidateFeedback? FormFeedback
     {
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);

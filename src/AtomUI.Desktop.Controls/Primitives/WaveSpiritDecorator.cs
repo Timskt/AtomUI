@@ -13,6 +13,7 @@ namespace AtomUI.Desktop.Controls.Primitives;
 internal class WaveSpiritDecorator : Control
 {
     public const string WaveSpiritPart = "PART_WaveSpirit";
+    
     #region 公共属性定义
     public static readonly StyledProperty<CornerRadius> CornerRadiusProperty =
         AvaloniaProperty.Register<WaveSpiritDecorator, CornerRadius>(nameof(CornerRadius));
