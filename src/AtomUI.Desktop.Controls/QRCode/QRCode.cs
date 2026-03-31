@@ -242,8 +242,7 @@ public class QRCode : TemplatedControl, IControlSharedTokenResourcesHost
     private void SetupQRCode()
     {
         TryParse(EccLevel.ToString(), out ECCLevel eccLevel);
-        using var generator = new QRCodeGenerator();
-        var       qrcode    = generator.CreateQrCode(Value, eccLevel, quietZoneSize: 0);
+        var       qrcode    = QRCodeGenerator.CreateQrCode(Value, eccLevel, quietZoneSize: 0);
         var       info      = new SKImageInfo(Size, Size);
         using var surface   = SKSurface.Create(info);
         var       canvas    = surface.Canvas;
