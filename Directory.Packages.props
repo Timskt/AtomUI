@@ -8,10 +8,9 @@
         <PackageVersion Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Win32" Version="$(AvaloniaVersion)"/>
-        <PackageVersion Include="ReactiveUI.Avalonia" Version="11.3.8"/>
-        <PackageVersion Include="Svg.Controls.Avalonia" Version="11.3.6.2"/>
-        <PackageVersion Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1"/>
-        <PackageVersion Include="SkiaSharp.QrCode" Version="0.7.0"/>
+        <PackageVersion Include="ReactiveUI.Avalonia" Version="11.4.12"/>
+        <PackageVersion Include="Svg.Controls.Avalonia" Version="11.3.9.5"/>
+        <PackageVersion Include="SkiaSharp.QrCode" Version="0.12.0"/>
         <PackageVersion Include="System.Reactive" Version="6.1.0"/>
         <!-- 测试相关依赖 -->
         <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0"/>
