@@ -7,8 +7,6 @@
         <PackageReference Include="NSubstitute"/>
         <PackageReference Include="Shouldly"/>
         <PackageReference Include="xunit"/>
-        <PackageReference Include="xunit.extensibility.execution"/>
-        <PackageReference Include="xunit.runner.visualstudio"/>
     </ItemGroup>
 
     <ItemGroup>
