@@ -735,10 +735,10 @@ public class AbstractAutoComplete : TemplatedControl,
         
             _userCalledPopulate = false;
         
-            var TextInputBoxContextMenuIsOpen = TextInputBox?.ContextFlyout?.IsOpen == true || TextInputBox?.ContextMenu?.IsOpen == true;
+            var textInputBoxContextMenuIsOpen = TextInputBox?.ContextFlyout?.IsOpen == true || TextInputBox?.ContextMenu?.IsOpen == true;
             var contextMenuIsOpen = ContextFlyout?.IsOpen == true || ContextMenu?.IsOpen == true;
         
-            if (!TextInputBoxContextMenuIsOpen && !contextMenuIsOpen && ClearSelectionOnLostFocus)
+            if (!textInputBoxContextMenuIsOpen && !contextMenuIsOpen && ClearSelectionOnLostFocus)
             {
                 ClearTextInputBoxSelection();
             }
@@ -1079,14 +1079,7 @@ public class AbstractAutoComplete : TemplatedControl,
         
             // cache properties
             var newViewItems = new Collection<IAutoCompleteOption>();
-        
-            // if the mode is objectFiltering and itemFilter is null, we throw an exception
-            if (Filter is null)
-            {
-                throw new Exception(
-                    "Filter property can not be null when FilterMode has value ValueFilterMode.Custom");
-            }
-        
+            
             foreach (var item in items)
             {
                 if (item is IAutoCompleteOption option)
@@ -1101,7 +1094,7 @@ public class AbstractAutoComplete : TemplatedControl,
 
                     if (!inResults)
                     {
-                        inResults = Filter.Filter(GetValueByOption(option), text);
+                        inResults = Filter?.Filter(GetValueByOption(option), text) ?? true;
                     }
               
                     if (inResults)
