@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -15,8 +14,7 @@ namespace AtomUI.Desktop.Controls;
 public abstract class AbstractTransfer: TemplatedControl,
                                         IMotionAwareControl,
                                         IInputControlStatusAware,
-                                        ISizeTypeAware,
-                                        IControlSharedTokenResourcesHost
+                                        ISizeTypeAware
 {
     #region 公共属性定义
     
@@ -380,9 +378,6 @@ public abstract class AbstractTransfer: TemplatedControl,
         set => SetValue(IsPaginationEnabledProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TransferToken.ID;
-
     #endregion
 
     private TransferItemDecorator? _sourceViewDecorator;
@@ -400,7 +395,7 @@ public abstract class AbstractTransfer: TemplatedControl,
     
     public AbstractTransfer()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TransferToken.ScopeProvider);
     }
 
     protected override void OnInitialized()

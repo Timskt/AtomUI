@@ -5,7 +5,6 @@ using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -16,8 +15,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class RangeTimePicker : RangeInfoPickerInput,
-                               IControlSharedTokenResourcesHost
+public class RangeTimePicker : RangeInfoPickerInput
 {
     #region 公共属性定义
 
@@ -111,10 +109,6 @@ public class RangeTimePicker : RangeInfoPickerInput,
     #endregion
     
     #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    
-    string IControlSharedTokenResourcesHost.TokenId => TimePickerToken.ID;
     
     internal static readonly DirectProperty<RangeTimePicker, double> PreferredWidthProperty =
         AvaloniaProperty.RegisterDirect<RangeTimePicker, double>(nameof(PreferredWidth),
@@ -143,7 +137,7 @@ public class RangeTimePicker : RangeInfoPickerInput,
 
     public RangeTimePicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TimePickerToken.ScopeProvider);
     }
     
     /// <summary>

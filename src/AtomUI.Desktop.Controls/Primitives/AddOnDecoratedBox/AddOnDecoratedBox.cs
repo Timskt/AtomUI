@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -19,7 +18,6 @@ using Avalonia.Styling;
 namespace AtomUI.Desktop.Controls;
 
 internal class AddOnDecoratedBox : ContentControl, 
-                                   IControlSharedTokenResourcesHost,
                                    ISizeTypeAware,
                                    IMotionAwareControl,
                                    IInputControlStatusAware,
@@ -274,10 +272,7 @@ internal class AddOnDecoratedBox : ContentControl,
         get => GetValue(IsUsedInCompactSpaceProperty);
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => AddOnDecoratedBoxToken.ID;
-
+    
     #endregion
     
     private protected Control? _leftAddOn;
@@ -300,7 +295,7 @@ internal class AddOnDecoratedBox : ContentControl,
 
     public AddOnDecoratedBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(AddOnDecoratedBoxToken.ScopeProvider);
         ConfigureInstanceStyles();
     }
     

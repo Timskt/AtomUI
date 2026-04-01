@@ -88,12 +88,11 @@ public record SliderMark(string Label, double Value)
 [PseudoClasses(StdPseudoClass.Vertical, StdPseudoClass.Horizontal, StdPseudoClass.Pressed)]
 public class Slider : RangeBase,
                       IMotionAwareControl,
-                      IControlSharedTokenResourcesHost,
                       IFormItemAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<Orientation> OrientationProperty =
-        ScrollBar.OrientationProperty.AddOwner<Slider>();
+        StackPanel.OrientationProperty.AddOwner<Slider>();
     
     public static readonly StyledProperty<bool> IsDirectionReversedProperty =
         SliderTrack.IsDirectionReversedProperty.AddOwner<Slider>();
@@ -195,13 +194,6 @@ public class Slider : RangeBase,
     }
 
     #endregion
-
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SliderToken.ID;
-
-    #endregion
     
     protected bool IsDragging { get; private set; }
     
@@ -234,7 +226,7 @@ public class Slider : RangeBase,
     }
     public Slider()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SliderToken.ScopeProvider);
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

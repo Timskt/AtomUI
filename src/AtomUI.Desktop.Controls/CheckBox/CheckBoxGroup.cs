@@ -2,7 +2,6 @@ using System.Collections;
 using System.Diagnostics;
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -18,7 +17,6 @@ namespace AtomUI.Desktop.Controls;
 
 public class CheckBoxGroup: TemplatedControl,
                             IMotionAwareControl,
-                            IControlSharedTokenResourcesHost,
                             IFormItemAware
 {
     #region 公共属性定义
@@ -110,13 +108,6 @@ public class CheckBoxGroup: TemplatedControl,
     }
     #endregion
     
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CheckBoxToken.ID;
-    
-    #endregion
-    
     private readonly ItemCollection _items = new();
     private CheckBoxItemsControl? _itemsControl;
     private bool _ignoreSyncToItemsControl;
@@ -129,7 +120,7 @@ public class CheckBoxGroup: TemplatedControl,
     
     public CheckBoxGroup()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CheckBoxToken.ScopeProvider);
     }
     
     private void HandleItemsSourceChanged(AvaloniaPropertyChangedEventArgs args)

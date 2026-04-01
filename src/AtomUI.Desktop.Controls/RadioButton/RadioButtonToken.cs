@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class RadioButtonToken : AbstractControlDesignToken
 {
     public const string ID = "RadioButton";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 单选框大小，除去文字部分的
     /// </summary>

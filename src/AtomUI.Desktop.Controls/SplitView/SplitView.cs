@@ -1,6 +1,5 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
@@ -11,7 +10,7 @@ namespace AtomUI.Desktop.Controls;
 
 using AvaloniaSplitView = Avalonia.Controls.SplitView;
 
-public class SplitView : AvaloniaSplitView, IMotionAwareControl, IControlSharedTokenResourcesHost
+public class SplitView : AvaloniaSplitView, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<Easing?> PaneMotionEasingProperty =
@@ -81,14 +80,11 @@ public class SplitView : AvaloniaSplitView, IMotionAwareControl, IControlSharedT
         set => SetAndRaise(PaneCloseTransitionsProperty, ref _paneCloseTransitions, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SplitViewToken.ID;
-    
     #endregion
     
     public SplitView()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SplitViewToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

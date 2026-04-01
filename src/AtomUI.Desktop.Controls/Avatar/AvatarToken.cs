@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
@@ -7,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class AvatarToken : AbstractControlDesignToken
 {
     public const string ID = "Avatar";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     /// <summary>
     /// 头像尺寸

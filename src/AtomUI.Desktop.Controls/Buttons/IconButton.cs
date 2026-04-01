@@ -4,7 +4,6 @@ using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Reflection;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -17,9 +16,7 @@ namespace AtomUI.Desktop.Controls;
 using AvaloniaButton = Avalonia.Controls.Button;
 using IconControl = Icon;
 
-public class IconButton : AvaloniaButton,
-                          IMotionAwareControl,
-                          IControlSharedTokenResourcesHost
+public class IconButton : AvaloniaButton, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -100,9 +97,6 @@ public class IconButton : AvaloniaButton,
         set => SetValue(IsPassthroughMouseEventProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-
     #endregion
     
     #region 反射信息定义
@@ -120,7 +114,7 @@ public class IconButton : AvaloniaButton,
 
     public IconButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

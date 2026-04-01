@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class ComboBoxToken : ButtonSpinnerToken
 {
     public new const string ID = "ComboBox";
+    public new static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public ComboBoxToken()
         : base(ID)

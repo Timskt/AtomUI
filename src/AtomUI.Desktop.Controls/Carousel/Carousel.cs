@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
@@ -18,9 +17,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class Carousel : SelectingItemsControl, 
-                        IControlSharedTokenResourcesHost,
-                        IMotionAwareControl
+public class Carousel : SelectingItemsControl, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<bool> IsShowNavButtonsProperty = 
@@ -247,9 +244,6 @@ public class Carousel : SelectingItemsControl,
         get => GetValue(PaginationOffsetProperty);
         set => SetValue(PaginationOffsetProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CarouselToken.ID;
 
     #endregion
     
@@ -273,7 +267,7 @@ public class Carousel : SelectingItemsControl,
 
     public Carousel()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CarouselToken.ScopeProvider);
         SelectionChanged += HandleSelectionChanged;
     }
     

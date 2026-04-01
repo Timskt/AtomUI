@@ -5,7 +5,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -14,9 +13,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class DialogButtonBox : TemplatedControl, 
-                               IControlSharedTokenResourcesHost,
-                               IMotionAwareControl
+public class DialogButtonBox : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -246,12 +243,6 @@ public class DialogButtonBox : TemplatedControl,
         set => SetValue(IgnoreButtonTextProperty, value);
     }
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DialogToken.ID;
-    #endregion
 
     private DockPanel? _leftGroup;
     private DockPanel? _centerGroup;
@@ -268,8 +259,8 @@ public class DialogButtonBox : TemplatedControl,
     
     public DialogButtonBox()
     {
-        this.RegisterResources();
-        CustomButtons.CollectionChanged += new NotifyCollectionChangedEventHandler(HandleCustomButtonsChanged);
+        this.RegisterTokenResourceScope(DialogToken.ScopeProvider);
+        CustomButtons.CollectionChanged += new (HandleCustomButtonsChanged);
         _standardButtonGroup            =  new Dictionary<DialogButtonRole, List<DialogButton>>();
         _buttonGroup                    =  new Dictionary<DialogButtonRole, List<DialogButton>>();
         _bindingDisposables             =  new Dictionary<DialogButton, CompositeDisposable>();

@@ -3,7 +3,6 @@ using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,7 +18,7 @@ public enum PaginationAlign
     End
 }
 
-public class Pagination : AbstractPagination, IControlSharedTokenResourcesHost
+public class Pagination : AbstractPagination
 {
     internal const int MaxNavItemCount = 11;
 
@@ -117,9 +116,6 @@ public class Pagination : AbstractPagination, IControlSharedTokenResourcesHost
         set => SetAndRaise(TotalInfoTextProperty, ref _totalInfoText, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => PaginationToken.ID;
-
     #endregion
 
     private PaginationNav? _paginationNav;
@@ -132,7 +128,7 @@ public class Pagination : AbstractPagination, IControlSharedTokenResourcesHost
 
     public Pagination()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(PaginationToken.ScopeProvider);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

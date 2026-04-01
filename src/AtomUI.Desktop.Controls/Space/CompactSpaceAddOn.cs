@@ -1,8 +1,6 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -12,7 +10,6 @@ using Avalonia.Metadata;
 namespace AtomUI.Desktop.Controls;
 
 public class CompactSpaceAddOn : TemplatedControl,
-                                 IControlSharedTokenResourcesHost,
                                  ISizeTypeAware,
                                  ICompactSpaceAware,
                                  IInputControlStatusAware,
@@ -109,8 +106,6 @@ public class CompactSpaceAddOn : TemplatedControl,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SpaceToken.ID;
     #endregion
 
     static CompactSpaceAddOn()
@@ -121,7 +116,7 @@ public class CompactSpaceAddOn : TemplatedControl,
 
     public CompactSpaceAddOn()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SpaceToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

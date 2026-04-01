@@ -6,7 +6,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -17,9 +16,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class Descriptions : TemplatedControl,
-                            IControlSharedTokenResourcesHost,
-                            ISizeTypeAware
+public class Descriptions : TemplatedControl, ISizeTypeAware
 {
     #region 公共属性定义
 
@@ -134,9 +131,6 @@ public class Descriptions : TemplatedControl,
         set => SetAndRaise(IsHeaderLayoutVisibleProperty, ref _isHeaderLayoutVisible, value);
     }
 
-    string IControlSharedTokenResourcesHost.TokenId => DescriptionsToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
     #endregion
 
     private Grid? _gridLayout;
@@ -151,7 +145,7 @@ public class Descriptions : TemplatedControl,
 
     public Descriptions()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DescriptionsToken.ScopeProvider);
         Items.CollectionChanged += HandleCollectionChanged;
     }
 

@@ -6,7 +6,6 @@ using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.DataLoad;
 using AtomUI.Input;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -22,7 +21,7 @@ namespace AtomUI.Desktop.Controls;
 using ItemCollection = AtomUI.Collections.ItemCollection;
 using ItemsSourceView = AtomUI.Collections.ItemsSourceView;
 
-public class Cascader : AbstractSelect, IControlSharedTokenResourcesHost
+public class Cascader : AbstractSelect
 {
     #region 公共属性定义
     public static readonly StyledProperty<TreeSelectCheckedStrategy> ShowCheckedStrategyProperty =
@@ -223,9 +222,6 @@ public class Cascader : AbstractSelect, IControlSharedTokenResourcesHost
         set => SetAndRaise(SelectedOptionPathProperty, ref _selectOptionPath, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CascaderToken.ID;
-
     #endregion
     
     private readonly ItemCollection _options = new();
@@ -249,7 +245,7 @@ public class Cascader : AbstractSelect, IControlSharedTokenResourcesHost
     
     public Cascader()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CascaderToken.ScopeProvider);
         Options.CollectionChanged += HandleCascaderOptionsChanged;
     }
     

@@ -28,8 +28,7 @@ namespace AtomUI.Desktop.Controls;
 [PseudoClasses(StdPseudoClass.Invalid, DataGridPseudoClass.EmptyRows, DataGridPseudoClass.EmptyColumns)]
 public partial class DataGrid : TemplatedControl,
                                 ISizeTypeAware,
-                                IMotionAwareControl,
-                                IControlSharedTokenResourcesHost
+                                IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -1009,7 +1008,7 @@ public partial class DataGrid : TemplatedControl,
 
     public DataGrid()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DataGridToken.ScopeProvider);
         KeyDown += HandleKeyDown;
         KeyUp   += HandleKeyUp;
 

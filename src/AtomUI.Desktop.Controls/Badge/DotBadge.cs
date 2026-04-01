@@ -21,9 +21,7 @@ public enum DotBadgeStatus
     Warning
 }
 
-public class DotBadge : Control,
-                        IControlSharedTokenResourcesHost,
-                        IMotionAwareControl
+public class DotBadge : Control, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -94,13 +92,6 @@ public class DotBadge : Control,
     }
 
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => BadgeToken.ID;
-
-    #endregion
 
     private DotBadgeAdorner? _dotBadgeAdorner;
     private AdornerLayer? _adornerLayer;
@@ -116,7 +107,7 @@ public class DotBadge : Control,
 
     public DotBadge()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(BadgeToken.ScopeProvider);
         this.ConfigureMotionBindingStyle();
     }
 

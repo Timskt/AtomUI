@@ -4,7 +4,6 @@ using AtomUI.Theme.Styling;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
-using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -13,7 +12,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class MarqueeLabel : TextBlock, IControlSharedTokenResourcesHost
+public class MarqueeLabel : TextBlock
 {
     #region 公共属性定义
 
@@ -56,10 +55,7 @@ public class MarqueeLabel : TextBlock, IControlSharedTokenResourcesHost
         get => GetValue(PivotOffsetProperty);
         set => SetValue(PivotOffsetProperty, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MarqueeLabelToken.ID;
-
+    
     #endregion
     
     private CancellationTokenSource? _cancellationTokenSource;
@@ -78,7 +74,7 @@ public class MarqueeLabel : TextBlock, IControlSharedTokenResourcesHost
 
     public MarqueeLabel()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MarqueeLabelToken.ScopeProvider);
         ConfigureInstanceStyles();
     }
 

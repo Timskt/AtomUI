@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
 namespace AtomUI.Desktop.Controls;
@@ -7,7 +8,8 @@ namespace AtomUI.Desktop.Controls;
 internal class PopupConfirmToken : AbstractControlDesignToken
 {
     public const string ID = "PopupConfirm";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public PopupConfirmToken()
         : base(ID)
     {

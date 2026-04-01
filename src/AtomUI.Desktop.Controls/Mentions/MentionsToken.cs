@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -7,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class MentionsToken : AbstractControlDesignToken
 {
     public const string ID = "Mentions";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 菜单内容边距

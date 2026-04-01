@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -15,9 +14,7 @@ namespace AtomUI.Desktop.Controls;
 
 using AvaloniaScrollViewer = Avalonia.Controls.ScrollViewer;
 
-public class ScrollViewer : AvaloniaScrollViewer,
-                            IMotionAwareControl,
-                            IControlSharedTokenResourcesHost
+public class ScrollViewer : AvaloniaScrollViewer, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly AttachedProperty<bool> IsLiteModeProperty =
@@ -60,9 +57,6 @@ public class ScrollViewer : AvaloniaScrollViewer,
         get => GetValue(ScrollBarOpacityProperty);
         set => SetValue(ScrollBarOpacityProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ScrollViewerToken.ID;
 
     #endregion
     
@@ -84,7 +78,7 @@ public class ScrollViewer : AvaloniaScrollViewer,
     
     public ScrollViewer()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ScrollViewerToken.ScopeProvider);
     }
     
     public static bool GetIsLiteMode(Control control)

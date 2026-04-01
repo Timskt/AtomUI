@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AtomUI.Utils;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -8,8 +9,11 @@ namespace AtomUI.Theme.TokenSystem;
 /// <summary>
 /// 所有的组件 Token 定义是除了全局的 Token 的之外的专属于当前的组件的 Token 值
 /// </summary>
-public abstract class AbstractControlDesignToken : AbstractDesignToken, IControlDesignToken
+public abstract class AbstractControlDesignToken : AbstractDesignToken,
+                                                   IControlDesignToken,
+                                                   IControlTokenResourceScopeProvider
 {
+    public string Id => _id;
     protected DesignToken SharedToken;
 
     private string _id;
@@ -24,11 +28,6 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken, IControl
         SharedToken                    = default!;
         _customTokens                  = new List<string>();
         _sharedResourceDeltaDictionary = new ResourceDictionary();
-    }
-
-    public string GetId()
-    {
-        return _id;
     }
 
     public void AssignSharedToken(DesignToken sharedToken)

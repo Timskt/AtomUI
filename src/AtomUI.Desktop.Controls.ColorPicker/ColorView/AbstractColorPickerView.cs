@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,9 +11,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public abstract class AbstractColorPickerView : TemplatedControl,
-                                                IMotionAwareControl,
-                                                IControlSharedTokenResourcesHost
+public abstract class AbstractColorPickerView : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -215,9 +212,6 @@ public abstract class AbstractColorPickerView : TemplatedControl,
         get => _isAlphaEffectiveVisible;
         set => SetAndRaise(IsAlphaEffectiveVisibleProperty, ref _isAlphaEffectiveVisible, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ColorPickerToken.ID;
     #endregion
     
     private ColorBlock? _clearColorButton;
@@ -226,7 +220,7 @@ public abstract class AbstractColorPickerView : TemplatedControl,
 
     public AbstractColorPickerView()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ColorPickerToken.ScopeProvider);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

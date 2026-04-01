@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -30,9 +29,7 @@ public enum CollapseExpandIconPosition
 }
 
 [TemplatePart(CollapseThemeConstants.ItemsPresenterPart, typeof(ItemsPresenter))]
-public class Collapse : SelectingItemsControl,
-                        IMotionAwareControl,
-                        IControlSharedTokenResourcesHost
+public class Collapse : SelectingItemsControl, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -139,9 +136,6 @@ public class Collapse : SelectingItemsControl,
         {
             Orientation = Orientation.Vertical
         });
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CollapseToken.ID;
 
     #endregion
     
@@ -159,7 +153,7 @@ public class Collapse : SelectingItemsControl,
     {
         SelectionChanged                  += HandleSelectionChanged;
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CollapseToken.ScopeProvider);
     }
 
     private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

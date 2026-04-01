@@ -6,7 +6,6 @@ using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Reflection;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -28,7 +27,6 @@ internal enum SpaceItemPosition
 }
 
 public class CompactSpace : TemplatedControl,
-                            IControlSharedTokenResourcesHost,
                             ISizeTypeAware,
                             IChildIndexProvider,
                             INavigableContainer
@@ -89,10 +87,6 @@ public class CompactSpace : TemplatedControl,
 
     #region 内部属性定义
     private EventHandler<ChildIndexChangedEventArgs>? _childIndexChanged;
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SpaceToken.ID;
-
     #endregion
 
     private Grid? _contentLayout;
@@ -107,7 +101,7 @@ public class CompactSpace : TemplatedControl,
     
     public CompactSpace()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SpaceToken.ScopeProvider);
         Children.CollectionChanged += HandleChildrenChanged;
     }
     

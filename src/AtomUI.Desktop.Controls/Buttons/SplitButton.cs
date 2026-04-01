@@ -25,7 +25,6 @@ namespace AtomUI.Desktop.Controls;
 public class SplitButton : ContentControl, 
                            ICommandSource, 
                            ISizeTypeAware,
-                           IControlSharedTokenResourcesHost,
                            IWaveSpiritAwareControl,
                            ICompactSpaceAware
 {
@@ -284,9 +283,6 @@ public class SplitButton : ContentControl,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-    
     #endregion
     
     private Button? _primaryButton;
@@ -313,7 +309,7 @@ public class SplitButton : ContentControl,
     public SplitButton()
     {
         _flyoutStateHelper = new FlyoutStateHelper();
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
     }
 
     internal virtual bool InternalIsChecked => false;

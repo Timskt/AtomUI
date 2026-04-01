@@ -21,8 +21,7 @@ namespace AtomUI.Desktop.Controls;
 
 public partial class ListView : ItemsControl,
                                 ISizeTypeAware,
-                                IMotionAwareControl,
-                                IControlSharedTokenResourcesHost
+                                IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -377,9 +376,6 @@ public partial class ListView : ItemsControl,
         get => _isEffectiveEmptyVisible;
         set => SetAndRaise(IsEffectiveEmptyVisibleProperty, ref _isEffectiveEmptyVisible, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ListViewToken.ID;
 
     #endregion
     
@@ -402,7 +398,7 @@ public partial class ListView : ItemsControl,
     
     public ListView()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ListViewToken.ScopeProvider);
         // Selecting 相关设置，只能通过反射设置目前
         ((ItemCollection)ItemsView).AddSourceChangedEvent(OnItemsViewSourceChanged);
         var items = this.GetItems();

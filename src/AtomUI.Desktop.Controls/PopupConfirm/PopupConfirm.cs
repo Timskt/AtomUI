@@ -15,8 +15,7 @@ public enum PopupConfirmStatus
     Error
 }
 
-public class PopupConfirm : FlyoutHost,
-                            IControlSharedTokenResourcesHost
+public class PopupConfirm : FlyoutHost
 {
     #region 公共属性属性
 
@@ -132,16 +131,9 @@ public class PopupConfirm : FlyoutHost,
 
     #endregion
 
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => PopupConfirmToken.ID;
-
-    #endregion
-
     public PopupConfirm()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(PopupConfirmToken.ScopeProvider);
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

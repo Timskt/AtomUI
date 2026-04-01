@@ -17,7 +17,6 @@ namespace AtomUI.Desktop.Controls;
 public class Rate : TemplatedControl, 
                     IMotionAwareControl, 
                     ISizeTypeAware,
-                    IControlSharedTokenResourcesHost,
                     IFormItemAware
 {
     #region 公共属性定义
@@ -154,9 +153,6 @@ public class Rate : TemplatedControl,
         get => _effectiveValue;
         set => SetAndRaise(EffectiveValueProperty, ref _effectiveValue, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => RateToken.ID;
     #endregion
     
     private ItemsControl? _itemsControl;
@@ -174,7 +170,7 @@ public class Rate : TemplatedControl,
     
     public Rate()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(RateToken.ScopeProvider);
     }
 
     protected override void OnInitialized()

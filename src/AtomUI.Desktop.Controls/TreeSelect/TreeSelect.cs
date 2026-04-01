@@ -20,7 +20,7 @@ namespace AtomUI.Desktop.Controls;
 using ItemCollection = AtomUI.Collections.ItemCollection;
 using ItemsSourceView = AtomUI.Collections.ItemsSourceView;
 
-public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
+public class TreeSelect : AbstractSelect
 {
     #region 公共属性定义
     
@@ -304,9 +304,6 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
         set => SetAndRaise(EffectiveSelectedItemsProperty, ref _effectiveSelectedItems, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TreeSelectToken.ID;
-
     #endregion
     
     private SelectFilterTextBox? _singleFilterInput;
@@ -337,7 +334,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
     
     public TreeSelect()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TreeSelectToken.ScopeProvider);
         Items.CollectionChanged += HandleItemsChanged;
     }
     

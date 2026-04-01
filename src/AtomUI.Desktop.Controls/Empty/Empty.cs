@@ -2,7 +2,6 @@
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -17,7 +16,7 @@ public enum PresetEmptyImage
     Default
 }
 
-public class Empty : TemplatedControl, IControlSharedTokenResourcesHost, ISizeTypeAware
+public class Empty : TemplatedControl, ISizeTypeAware
 {
     #region 公共属性定义
 
@@ -124,9 +123,6 @@ public class Empty : TemplatedControl, IControlSharedTokenResourcesHost, ISizeTy
         set => SetValue(BgColorProperty, value);
     }
 
-    string IControlSharedTokenResourcesHost.TokenId => EmptyToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
     #endregion
     
     private Avalonia.Svg.Svg? _svg;
@@ -147,7 +143,7 @@ public class Empty : TemplatedControl, IControlSharedTokenResourcesHost, ISizeTy
 
     public Empty()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(EmptyToken.ScopeProvider);
     }
 
     private void CheckImageSource()

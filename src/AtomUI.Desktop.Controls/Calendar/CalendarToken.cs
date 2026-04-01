@@ -1,7 +1,7 @@
 ﻿using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -10,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class CalendarToken : AbstractControlDesignToken
 {
     public const string ID = "Calendar";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public CalendarToken()
         : base(ID)
     {

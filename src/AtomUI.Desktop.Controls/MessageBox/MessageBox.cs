@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -23,9 +22,7 @@ public enum MessageBoxOkButtonStyle
     Primary
 }
 
-public class MessageBox : TemplatedControl,
-                          IMotionAwareControl,
-                          IControlSharedTokenResourcesHost
+public class MessageBox : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -241,18 +238,11 @@ public class MessageBox : TemplatedControl,
     public event EventHandler? Confirmed;
     #endregion
     
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DialogToken.ID;
-    
-    #endregion
-    
     private Dialog? _dialog;
 
     public MessageBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DialogToken.ScopeProvider);
         CustomButtons.CollectionChanged += HandleCustomButtonsChanged;
     }
 

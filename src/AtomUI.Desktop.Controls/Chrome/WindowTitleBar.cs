@@ -3,7 +3,6 @@ using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -19,7 +18,6 @@ namespace AtomUI.Desktop.Controls;
 [PseudoClasses(StdPseudoClass.Active)]
 [PseudoClasses(StdPseudoClass.Normal, StdPseudoClass.Minimized, StdPseudoClass.Maximized, StdPseudoClass.Fullscreen)]
 public class WindowTitleBar : TemplatedControl, 
-                              IControlSharedTokenResourcesHost,
                               IMotionAwareControl, 
                               IOperationSystemAware
 {
@@ -125,13 +123,6 @@ public class WindowTitleBar : TemplatedControl,
 
     #endregion
 
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ChromeToken.ID;
-
-    #endregion
-
     private CaptionButtonGroup? _captionButtonGroup;
     private CompositeDisposable? _disposables;
 
@@ -144,7 +135,7 @@ public class WindowTitleBar : TemplatedControl,
     public WindowTitleBar()
     {
         this.ConfigureOsType();
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ChromeToken.ScopeProvider);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

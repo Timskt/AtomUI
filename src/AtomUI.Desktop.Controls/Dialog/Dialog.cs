@@ -11,7 +11,6 @@ using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Input;
 using AtomUI.Reflection;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -30,7 +29,6 @@ namespace AtomUI.Desktop.Controls;
 
 public partial class Dialog : TemplatedControl, 
                               IDialogHostProvider, 
-                              IControlSharedTokenResourcesHost,
                               IMotionAwareControl,
                               IDialog
 {
@@ -386,9 +384,6 @@ public partial class Dialog : TemplatedControl,
         set => SetAndRaise(EffectiveMinimizableProperty, ref _effectiveMinimizable, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DialogToken.ID;
-    
     #endregion
     
     private bool _ignoreIsOpenChanged;
@@ -408,7 +403,7 @@ public partial class Dialog : TemplatedControl,
 
     public Dialog()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DialogToken.ScopeProvider);
         CustomButtons.CollectionChanged += HandleCustomButtonsChanged;
     }
 

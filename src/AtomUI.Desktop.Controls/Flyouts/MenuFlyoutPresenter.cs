@@ -4,14 +4,12 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Platform;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -19,7 +17,6 @@ namespace AtomUI.Desktop.Controls;
 public class MenuFlyoutPresenter : MenuBase,
                                    IArrowAwareShadowMaskInfoProvider,
                                    IMotionAwareControl,
-                                   IControlSharedTokenResourcesHost,
                                    ISizeTypeAware
 {
     #region 公共属性定义
@@ -118,9 +115,6 @@ public class MenuFlyoutPresenter : MenuBase,
         get => GetValue(MaxPopupHeightProperty);
         set => SetValue(MaxPopupHeightProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
 
     #endregion
     
@@ -135,14 +129,14 @@ public class MenuFlyoutPresenter : MenuBase,
     public MenuFlyoutPresenter()
         : base(new DefaultMenuInteractionHandler(true))
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
         Items.CollectionChanged += HandleCollectionChanged;
     }
 
     public MenuFlyoutPresenter(IMenuInteractionHandler menuInteractionHandler)
         : base(menuInteractionHandler)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
         Items.CollectionChanged += HandleCollectionChanged;
     }
     

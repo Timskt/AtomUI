@@ -1,7 +1,5 @@
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
 
 namespace AtomUI.Desktop.Controls;
@@ -13,8 +11,7 @@ public enum SkeletonButtonShape
     Circle
 }
 
-public class SkeletonButton : SkeletonElement,
-                              IControlSharedTokenResourcesHost
+public class SkeletonButton : SkeletonElement
 {
     #region 公共属性定义
     public static readonly StyledProperty<SkeletonButtonShape> ShapeProperty =
@@ -27,17 +24,10 @@ public class SkeletonButton : SkeletonElement,
     }
     
     #endregion
-    
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SkeletonToken.ID;
-
-    #endregion
 
     public SkeletonButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SkeletonToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

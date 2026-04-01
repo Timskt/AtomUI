@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
@@ -19,7 +18,6 @@ namespace AtomUI.Desktop.Controls;
 
 [PseudoClasses(StdPseudoClass.Open)]
 public class ToolTip : ContentControl,
-                       IControlSharedTokenResourcesHost,
                        IMotionAwareControl,
                        IArrowAwareShadowMaskInfoProvider,
                        IPopupHostProvider
@@ -317,9 +315,6 @@ public class ToolTip : ContentControl,
     internal static readonly AttachedProperty<ToolTip?> ToolTipProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, ToolTip?>("ToolTip");
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ToolTipToken.ID;
-
     #endregion
 
     internal Control? AdornedControl { get; private set; }
@@ -340,7 +335,7 @@ public class ToolTip : ContentControl,
 
     public ToolTip()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ToolTipToken.ScopeProvider);
     }
     
     public CornerRadius GetMaskCornerRadius()

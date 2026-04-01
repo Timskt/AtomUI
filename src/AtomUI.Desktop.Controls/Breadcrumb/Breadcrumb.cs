@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,7 +11,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
 
-public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotionAwareControl
+public class Breadcrumb : ItemsControl, IMotionAwareControl
 {
     public const string DefaultSeparator = "/";
     
@@ -54,20 +53,13 @@ public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotio
     public event EventHandler<BreadcrumbNavigateEventArgs>? NavigateRequest;
 
     #endregion
-
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => BreadcrumbToken.ID;
-
-    #endregion
     
     private Dictionary<BreadcrumbItem, CompositeDisposable> _itemBindingDisposables = new();
 
     public Breadcrumb()
     {
         LogicalChildren.CollectionChanged += HandleItemsCollectionChanged;
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(BreadcrumbToken.ScopeProvider);
     }
 
     private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

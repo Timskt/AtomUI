@@ -5,7 +5,6 @@ using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Input;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -28,7 +27,6 @@ public enum ButtonSpinnerLocation
 [PseudoClasses(ButtonSpinnerPseudoClass.Left, ButtonSpinnerPseudoClass.Right)]
 public class ButtonSpinner : Spinner,
                              IMotionAwareControl,
-                             IControlSharedTokenResourcesHost,
                              ICompactSpaceAware,
                              IInputControlStatusAware,
                              IInputControlStyleVariantAware
@@ -221,9 +219,6 @@ public class ButtonSpinner : Spinner,
         get => GetValue(IsUsedInCompactSpaceProperty);
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonSpinnerToken.ID;
 
     #endregion
     
@@ -238,7 +233,7 @@ public class ButtonSpinner : Spinner,
     
     public ButtonSpinner()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonSpinnerToken.ScopeProvider);
     }
     
     private IconButton? _decreaseButton;

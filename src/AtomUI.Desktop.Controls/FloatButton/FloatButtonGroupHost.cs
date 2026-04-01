@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -16,9 +15,7 @@ namespace AtomUI.Desktop.Controls;
 
 using ControlList = Avalonia.Controls.Controls;
 
-public class FloatButtonGroupHost : TemplatedControl,
-                                    IControlSharedTokenResourcesHost,
-                                    IMotionAwareControl
+public class FloatButtonGroupHost : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -133,9 +130,6 @@ public class FloatButtonGroupHost : TemplatedControl,
     #endregion
     
     #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FloatButtonToken.ID;
     
     [Content] 
     public ControlList Children { get; } = new ();
@@ -148,7 +142,7 @@ public class FloatButtonGroupHost : TemplatedControl,
     
     public FloatButtonGroupHost()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FloatButtonToken.ScopeProvider);
         Children.CollectionChanged += NotifyChildrenChanged;
     }
     

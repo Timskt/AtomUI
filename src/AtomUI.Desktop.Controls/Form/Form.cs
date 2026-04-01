@@ -5,7 +5,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -22,7 +21,6 @@ namespace AtomUI.Desktop.Controls;
 public class Form : ItemsControl,
                     ISizeTypeAware,
                     IMotionAwareControl,
-                    IControlSharedTokenResourcesHost,
                     IForm,
                     IInputControlStyleVariantAware
 {
@@ -436,9 +434,6 @@ public class Form : ItemsControl,
         set => SetValue(FormLayoutSpacingProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FormToken.ID;
-    
     private readonly Dictionary<FormItem, CompositeDisposable> _itemsBindingDisposables = new();
     #endregion
 
@@ -459,7 +454,7 @@ public class Form : ItemsControl,
     
     public Form()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FormToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
         Items.CollectionChanged += (sender, args) =>
         {

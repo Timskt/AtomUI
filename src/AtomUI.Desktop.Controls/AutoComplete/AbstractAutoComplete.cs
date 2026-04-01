@@ -9,7 +9,6 @@ using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Input;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
@@ -41,7 +40,6 @@ public delegate object? AutoCompleteFilterValueSelector(IAutoCompleteOption opti
 
 [PseudoClasses(AutoCompletePseudoClass.CandidatePopupOpen)]
 public class AbstractAutoComplete : TemplatedControl, 
-                                    IControlSharedTokenResourcesHost, 
                                     ISizeTypeAware,
                                     IMotionAwareControl,
                                     IFormItemAware,
@@ -606,9 +604,6 @@ public class AbstractAutoComplete : TemplatedControl,
             }
         }
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => AutoCompleteToken.ID;
 
     #endregion
     
@@ -649,7 +644,7 @@ public class AbstractAutoComplete : TemplatedControl,
 
     public AbstractAutoComplete()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(AutoCompleteToken.ScopeProvider);
         Options.CollectionChanged += HandleOptionsChanged;
     }
 

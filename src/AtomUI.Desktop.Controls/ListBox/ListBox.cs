@@ -20,7 +20,6 @@ using AvaloniaListBox = Avalonia.Controls.ListBox;
 public class ListBox : AvaloniaListBox,
                        ISizeTypeAware,
                        IMotionAwareControl,
-                       IControlSharedTokenResourcesHost,
                        IListVirtualizingContextAware
 {
     #region 公共属性定义
@@ -228,9 +227,6 @@ public class ListBox : AvaloniaListBox,
         get => _isEffectiveEmptyVisible;
         set => SetAndRaise(IsEffectiveEmptyVisibleProperty, ref _isEffectiveEmptyVisible, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ListBoxToken.ID;
 
     #endregion
     
@@ -247,7 +243,7 @@ public class ListBox : AvaloniaListBox,
     
     public ListBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ListBoxToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleChildrenChanged;
         Items.CollectionChanged += HandleItemCollectionChanged;
     }

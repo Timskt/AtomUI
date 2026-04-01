@@ -1,9 +1,7 @@
 using AtomUI.Controls;
 using AtomUI.Reflection;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.LogicalTree;
@@ -12,7 +10,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
 
-public abstract class AbstractStatistic : HeaderedContentControl, IControlSharedTokenResourcesHost
+public abstract class AbstractStatistic : HeaderedContentControl
 {
     #region 公共属性定义
     
@@ -110,13 +108,6 @@ public abstract class AbstractStatistic : HeaderedContentControl, IControlShared
 
     #endregion
 
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => StatisticToken.ID;
-
-    #endregion
-    
     static AbstractStatistic()
     {
         HeaderProperty.Changed.AddClassHandler<AbstractStatistic>((x, e) => x.HandleChildChanged(e));
@@ -127,7 +118,7 @@ public abstract class AbstractStatistic : HeaderedContentControl, IControlShared
     
     public AbstractStatistic()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(StatisticToken.ScopeProvider);
     }
     
     private void HandleChildChanged(AvaloniaPropertyChangedEventArgs e)

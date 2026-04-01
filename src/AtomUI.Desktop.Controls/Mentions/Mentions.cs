@@ -33,8 +33,7 @@ namespace AtomUI.Desktop.Controls;
 public delegate object? MentionsFilterValueSelector(IMentionOption option);
 
 [PseudoClasses(MentionPseudoClass.CandidatePopupOpen)]
-public class Mentions : TemplatedControl, 
-                        IControlSharedTokenResourcesHost,
+public class Mentions : TemplatedControl,
                         IMotionAwareControl,
                         IFormItemAware,
                         IInputControlStatusAware,
@@ -506,9 +505,6 @@ public class Mentions : TemplatedControl,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MentionsToken.ID;
     #endregion
     
     private static bool IsValidMinimumPopulateDelay(TimeSpan value) => value.TotalMilliseconds >= 0.0;
@@ -543,7 +539,7 @@ public class Mentions : TemplatedControl,
     
     public Mentions()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MentionsToken.ScopeProvider);
     }
 
     private void HandleIsDropDownOpenChanged(AvaloniaPropertyChangedEventArgs e)

@@ -2,7 +2,6 @@ using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -38,7 +37,7 @@ internal struct TagStatusCalcColor
     public Color BorderColor { get; set; }
 }
 
-public class Tag : TemplatedControl, IControlSharedTokenResourcesHost
+public class Tag : TemplatedControl
 {
     #region 公共属性定义
 
@@ -163,10 +162,7 @@ public class Tag : TemplatedControl, IControlSharedTokenResourcesHost
         get => _isColorSet;
         set => SetAndRaise(IsColorSetProperty, ref _isColorSet, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TagToken.ID;
-
+    
     #endregion
     
     private static readonly Dictionary<PresetColorType, TagCalcColor> PresetColorMap;
@@ -189,7 +185,7 @@ public class Tag : TemplatedControl, IControlSharedTokenResourcesHost
 
     public Tag()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TagToken.ScopeProvider);
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

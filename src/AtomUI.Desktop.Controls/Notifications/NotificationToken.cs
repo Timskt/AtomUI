@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class NotificationToken : AbstractControlDesignToken
 {
     public const string ID = "Notification";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public NotificationToken()
         : base(ID)

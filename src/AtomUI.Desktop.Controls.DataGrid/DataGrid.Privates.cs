@@ -239,9 +239,6 @@ public partial class DataGrid
 
     internal ScrollBar? VerticalScrollBar => _vScrollBar;
     internal ScrollBar? HorizontalScrollBar => _hScrollBar;
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DataGridToken.ID;
 
     #endregion
 

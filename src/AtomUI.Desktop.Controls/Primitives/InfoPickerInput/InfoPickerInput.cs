@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
@@ -21,7 +20,6 @@ namespace AtomUI.Desktop.Controls.Primitives;
 [PseudoClasses(InfoPickerPseudoClass.Choosing, InfoPickerPseudoClass.FlyoutOpen)]
 public abstract class InfoPickerInput : TemplatedControl,
                                         IMotionAwareControl,
-                                        IControlSharedTokenResourcesHost,
                                         ICompactSpaceAware,
                                         IFormItemAware,
                                         IInputControlStatusAware,
@@ -295,9 +293,6 @@ public abstract class InfoPickerInput : TemplatedControl,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => InfoPickerInputToken.ID;
 
     #endregion
 
@@ -322,7 +317,7 @@ public abstract class InfoPickerInput : TemplatedControl,
 
     public InfoPickerInput()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(InfoPickerInputToken.ScopeProvider);
         FlyoutStateHelper = new FlyoutStateHelper
         {
             TriggerType = FlyoutTriggerType.Click

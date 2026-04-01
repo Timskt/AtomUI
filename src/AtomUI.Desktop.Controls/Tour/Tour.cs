@@ -6,7 +6,6 @@ using AtomUI.Data;
 using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -29,9 +28,7 @@ public enum TourStyleType
     Primary,
 }
 
-public class Tour : TemplatedControl,
-                    IMotionAwareControl,
-                    IControlSharedTokenResourcesHost
+public class Tour : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<IEnumerable<ITourStepOption>?> StepsSourceProperty =
@@ -293,9 +290,6 @@ public class Tour : TemplatedControl,
         get => _currentMaskColor;
         private set => SetAndRaise(CurrentMaskColorProperty, ref _currentMaskColor, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TourToken.ID;
 
     #endregion
     
@@ -313,7 +307,7 @@ public class Tour : TemplatedControl,
 
     public Tour()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TourToken.ScopeProvider);
         Steps.CollectionChanged         += HandleItemsViewCollectionChanged;
         CustomActions.CollectionChanged += HandleCustomActionsChanged;
     }

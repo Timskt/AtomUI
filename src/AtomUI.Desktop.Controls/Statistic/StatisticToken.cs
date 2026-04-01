@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -6,6 +7,7 @@ namespace AtomUI.Desktop.Controls;
 internal class StatisticToken : AbstractControlDesignToken
 {
     public const string ID = "Statistic";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 标题字体大小

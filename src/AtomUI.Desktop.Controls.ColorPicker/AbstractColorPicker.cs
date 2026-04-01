@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Converters;
@@ -32,7 +31,6 @@ public enum ColorPickerValueSyncMode
 public abstract class AbstractColorPicker : AvaloniaButton, 
                                             ISizeTypeAware,
                                             IMotionAwareControl,
-                                            IControlSharedTokenResourcesHost,
                                             ICompactSpaceAware,
                                             IFormItemAware,
                                             IInputControlStatusAware,
@@ -277,9 +275,6 @@ public abstract class AbstractColorPicker : AvaloniaButton,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ColorPickerToken.ID;
-    
     #endregion
     
     private readonly FlyoutStateHelper _flyoutStateHelper;
@@ -297,7 +292,7 @@ public abstract class AbstractColorPicker : AvaloniaButton,
     
     public AbstractColorPicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ColorPickerToken.ScopeProvider);
         _flyoutStateHelper = new FlyoutStateHelper();
         _flyoutStateHelper.FlyoutAboutToShow        += HandleFlyoutAboutToShow;
         _flyoutStateHelper.FlyoutAboutToClose       += HandleFlyoutAboutToClose;

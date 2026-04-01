@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,8 +18,7 @@ public enum RibbonBadgePlacement
     End
 }
 
-public class RibbonBadge : Control,
-                           IControlSharedTokenResourcesHost
+public class RibbonBadge : Control
 {
     #region 公共属性定义
 
@@ -83,13 +81,6 @@ public class RibbonBadge : Control,
 
     #endregion
     
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => BadgeToken.ID;
-
-    #endregion
-    
     static RibbonBadge()
     {
         AffectsMeasure<RibbonBadge>(DecoratedTargetProperty,
@@ -103,7 +94,7 @@ public class RibbonBadge : Control,
 
     public RibbonBadge()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(BadgeToken.ScopeProvider);
     }
 
     private void HandleDecoratedTargetChanged()

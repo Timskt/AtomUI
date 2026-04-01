@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -18,7 +17,6 @@ namespace AtomUI.Desktop.Controls;
 public class Segmented : SelectingItemsControl,
                          IMotionAwareControl,
                          ISizeTypeAware,
-                         IControlSharedTokenResourcesHost,
                          IFormItemAware
 {
     #region 公共属性定义
@@ -102,9 +100,6 @@ public class Segmented : SelectingItemsControl,
         set => SetValue(SelectedThumbPosProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SegmentedToken.ID;
-    
     #endregion
     
     private readonly Dictionary<SegmentedItem, CompositeDisposable> _itemsBindingDisposables = new();
@@ -124,7 +119,7 @@ public class Segmented : SelectingItemsControl,
 
     public Segmented()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SegmentedToken.ScopeProvider);
         SelectionChanged                  += HandleSelectionChanged;
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
         SelectionMode                     =  SelectionMode.Single;

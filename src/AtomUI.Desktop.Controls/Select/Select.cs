@@ -25,7 +25,7 @@ public enum SelectMode
 }
 
 [PseudoClasses(SelectPseudoClass.DropdownOpen)]
-public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
+public partial class Select : AbstractSelect
 {
     #region 公共属性定义
     public static readonly StyledProperty<IEnumerable<ISelectOption>?> OptionsSourceProperty =
@@ -230,9 +230,6 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         get => _isEffectiveFilterEnabled;
         set => SetAndRaise(IsEffectiveFilterEnabledProperty, ref _isEffectiveFilterEnabled, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SelectToken.ID;
 
     #endregion
     
@@ -261,7 +258,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
 
     public Select()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SelectToken.ScopeProvider);
     }
 
     protected override void OnInitialized()

@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -15,7 +14,6 @@ namespace AtomUI.Desktop.Controls;
 
 public class Upload : ContentControl, 
                       IMotionAwareControl,
-                      IControlSharedTokenResourcesHost,
                       IFormItemAware
 {
     #region 公共属性定义
@@ -179,13 +177,6 @@ public class Upload : ContentControl,
     public Func<UploadFileInfo, bool>? IsImageFilePredicate { get; set; }
     #endregion
     
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => UploadToken.ID;
-
-    #endregion
-    
     private ItemsControl? _uploadListControl;
     private FileUploadScheduler _uploadScheduler;
     private static readonly Regex ImageExtensionRegex = 
@@ -217,7 +208,7 @@ public class Upload : ContentControl,
     
     public Upload()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(UploadToken.ScopeProvider);
         _uploadScheduler = new FileUploadScheduler();
     }
 

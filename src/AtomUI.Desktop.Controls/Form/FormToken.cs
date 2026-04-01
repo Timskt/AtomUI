@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class FormToken : AbstractControlDesignToken
 {
     public const string ID = "Form";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public FormToken()
         : base(ID)
     {

@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -6,6 +7,7 @@ namespace AtomUI.Desktop.Controls;
 internal class CarouselToken : AbstractControlDesignToken
 {
     public const string ID = "Carousel";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public CarouselToken()
         : base(ID)

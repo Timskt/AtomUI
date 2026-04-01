@@ -5,7 +5,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -39,7 +38,6 @@ public enum SpaceItemsAlignment
 
 public class Space : Control,
                      IChildIndexProvider, 
-                     IControlSharedTokenResourcesHost, 
                      ICustomizableSizeTypeAware,
                      INavigableContainer
 {
@@ -147,9 +145,6 @@ public class Space : Control,
     
     #region 内部属性定义
     private EventHandler<ChildIndexChangedEventArgs>? _childIndexChanged;
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SpaceToken.ID;
     #endregion
     
     static Space()
@@ -166,7 +161,7 @@ public class Space : Control,
     
     public Space()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SpaceToken.ScopeProvider);
         ConfigureInstanceStyle();
         Children.CollectionChanged += HandleChildrenChanged;
     }

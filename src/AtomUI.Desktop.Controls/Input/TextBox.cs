@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -16,7 +15,6 @@ namespace AtomUI.Desktop.Controls;
 using AvaloniaTextBox = Avalonia.Controls.TextBox;
 
 public class TextBox : AvaloniaTextBox,
-                       IControlSharedTokenResourcesHost,
                        IMotionAwareControl,
                        ISizeTypeAware,
                        ICompactSpaceAware,
@@ -184,8 +182,6 @@ public class TextBox : AvaloniaTextBox,
         set => SetValue(FormFeedbackProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => LineEditToken.ID;
     #endregion
     
     private IconButton? _clearButton;
@@ -199,7 +195,7 @@ public class TextBox : AvaloniaTextBox,
 
     public TextBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(LineEditToken.ScopeProvider);
     }
 
     protected override void OnInitialized()

@@ -1,7 +1,6 @@
 using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -28,7 +27,7 @@ public enum ResultStatus
     ErrorCode500
 }
 
-public class Result : ContentControl, IControlSharedTokenResourcesHost
+public class Result : ContentControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<object?> ExtraProperty =
@@ -187,10 +186,6 @@ public class Result : ContentControl, IControlSharedTokenResourcesHost
         get => _statusIcon;
         set => SetAndRaise(StatusIconProperty, ref _statusIcon, value);
     }
-    
-    string IControlSharedTokenResourcesHost.TokenId => ResultToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
     #endregion
 
     private SvgControl? _statusImage;
@@ -202,7 +197,7 @@ public class Result : ContentControl, IControlSharedTokenResourcesHost
     
     public Result()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ResultToken.ScopeProvider);
         ConfigureInstanceStyle();
     }
 

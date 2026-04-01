@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class PaginationToken : AbstractControlDesignToken
 {
     public const string ID = "Pagination";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 页码选项背景色

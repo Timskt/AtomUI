@@ -5,9 +5,7 @@ using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -32,7 +30,6 @@ internal enum CardContentType
 }
 
 public class Card : HeaderedContentControl,
-                    IControlSharedTokenResourcesHost,
                     ISizeTypeAware,
                     IMotionAwareControl
 {
@@ -142,9 +139,6 @@ public class Card : HeaderedContentControl,
     #endregion
     
     #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CardToken.ID;
     
     internal static readonly DirectProperty<Card, Thickness> HeaderBorderThicknessProperty =
         AvaloniaProperty.RegisterDirect<Card, Thickness>(
@@ -228,7 +222,7 @@ public class Card : HeaderedContentControl,
     
     public Card()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CardToken.ScopeProvider);
         Actions.CollectionChanged += new NotifyCollectionChangedEventHandler(HandleActionsChanged);
     }
 

@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -42,8 +41,7 @@ public enum StepsStyle
 [PseudoClasses(StdPseudoClass.Vertical, StdPseudoClass.Horizontal)]
 public class Steps : SelectingItemsControl,
                      ISizeTypeAware,
-                     IMotionAwareControl,
-                     IControlSharedTokenResourcesHost
+                     IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -206,9 +204,6 @@ public class Steps : SelectingItemsControl,
         set => SetValue(VerticalItemSpacingProperty, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => StepsToken.ID;
-
     #endregion
 
     private readonly Dictionary<StepsItem, CompositeDisposable> _itemsBindingDisposables = new();
@@ -225,7 +220,7 @@ public class Steps : SelectingItemsControl,
     
     public Steps()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(StepsToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
         SelectionMode                     =  SelectionMode.Single;
     }

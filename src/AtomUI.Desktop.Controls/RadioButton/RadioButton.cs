@@ -1,8 +1,6 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 
 namespace AtomUI.Desktop.Controls;
@@ -11,7 +9,6 @@ using AvaloniaRadioButton = Avalonia.Controls.RadioButton;
 
 public class RadioButton : AvaloniaRadioButton,
                            IWaveSpiritAwareControl,
-                           IControlSharedTokenResourcesHost,
                            IFormItemAware
 {
     #region 公共属性定义
@@ -36,16 +33,9 @@ public class RadioButton : AvaloniaRadioButton,
 
     #endregion
     
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => RadioButtonToken.ID;
-
-    #endregion
-    
     public RadioButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(RadioButtonToken.ScopeProvider);
     }
     
     protected override void OnPointerPressed(PointerPressedEventArgs e)

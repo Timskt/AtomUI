@@ -20,9 +20,7 @@ using Avalonia.Threading;
 
 namespace AtomUI.Desktop.Controls;
 
-public class SpinIndicator : TemplatedControl,
-                             IControlSharedTokenResourcesHost,
-                             ISizeTypeAware
+public class SpinIndicator : TemplatedControl, ISizeTypeAware
 {
     #region 公共属性定义
 
@@ -110,9 +108,6 @@ public class SpinIndicator : TemplatedControl,
         set => SetAndRaise(IndicatorAngleProperty, ref _indicatorAngle, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SpinToken.ID;
-
     #endregion
 
     private Animation? _animation;
@@ -131,7 +126,7 @@ public class SpinIndicator : TemplatedControl,
 
     public SpinIndicator()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SpinToken.ScopeProvider);
         ConfigureInstanceStyles();
     }
 

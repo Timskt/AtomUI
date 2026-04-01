@@ -28,8 +28,7 @@ public enum ProgressStatus
 [PseudoClasses(ProgressBarPseudoClass.Indeterminate, ProgressBarPseudoClass.Completed)]
 public abstract class AbstractProgressBar : RangeBase,
                                             ISizeTypeAware,
-                                            IMotionAwareControl,
-                                            IControlSharedTokenResourcesHost
+                                            IMotionAwareControl
 {
     protected const double LARGE_STROKE_THICKNESS = 8;
     protected const double MIDDLE_STROKE_THICKNESS = 6;
@@ -257,9 +256,6 @@ public abstract class AbstractProgressBar : RangeBase,
         get => GetValue(IsCompletedProperty);
         set => SetValue(IsCompletedProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ProgressBarToken.ID;
 
     #endregion
 
@@ -287,7 +283,7 @@ public abstract class AbstractProgressBar : RangeBase,
 
     public AbstractProgressBar()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ProgressBarToken.ScopeProvider);
         _effectiveSizeType = SizeType;
     }
 

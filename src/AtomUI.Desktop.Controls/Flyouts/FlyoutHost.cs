@@ -2,14 +2,10 @@
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Data;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 
 namespace AtomUI.Desktop.Controls;
@@ -23,33 +19,19 @@ public enum FlyoutTriggerType
     Focus,
 }
 
-public class FlyoutHost : ContentControl,
-                          IMotionAwareControl,
-                          IControlSharedTokenResourcesHost
+public class FlyoutHost : ContentControl, IMotionAwareControl
 {
     #region 公共属性定义
     
-    /// <summary>
-    /// Defines the <see cref="Flyout" /> property
-    /// </summary>
     public static readonly StyledProperty<PopupFlyoutBase?> FlyoutProperty =
         AvaloniaProperty.Register<FlyoutHost, PopupFlyoutBase?>(nameof(Flyout));
 
-    /// <summary>
-    /// 触发方式
-    /// </summary>
     public static readonly StyledProperty<FlyoutTriggerType> TriggerProperty =
         FlyoutStateHelper.TriggerTypeProperty.AddOwner<FlyoutHost>();
-
-    /// <summary>
-    /// 是否显示指示箭头
-    /// </summary>
+    
     public static readonly StyledProperty<bool> IsShowArrowProperty =
         ArrowDecoratedBox.IsShowArrowProperty.AddOwner<FlyoutHost>();
-
-    /// <summary>
-    /// 箭头是否始终指向中心
-    /// </summary>
+    
     public static readonly StyledProperty<bool> IsPointAtCenterProperty =
         FlyoutControl.IsPointAtCenterProperty.AddOwner<FlyoutHost>();
 
@@ -174,13 +156,6 @@ public class FlyoutHost : ContentControl,
 
     #endregion
     
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FlyoutHostToken.ID;
-
-    #endregion
-    
     private readonly FlyoutStateHelper _flyoutStateHelper;
     private CompositeDisposable? _flyoutStateHelperDisposables;
     private CompositeDisposable? _flyoutDisposables;
@@ -192,7 +167,7 @@ public class FlyoutHost : ContentControl,
     
     public FlyoutHost()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FlyoutHostToken.ScopeProvider);
         _flyoutStateHelper = new FlyoutStateHelper();
     }
 
