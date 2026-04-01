@@ -1,7 +1,7 @@
 using System.Collections;
 using Avalonia.Interactivity;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class CheckBoxGroupCheckedChangedEventArgs: RoutedEventArgs
 {

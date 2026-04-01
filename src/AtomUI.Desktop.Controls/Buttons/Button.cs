@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using Avalonia;

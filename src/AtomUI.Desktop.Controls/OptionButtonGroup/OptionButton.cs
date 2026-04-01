@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using AtomUI.Animations;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Controls.Utils;
-using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Utils;
 using Avalonia;

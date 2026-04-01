@@ -10,7 +10,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         CornerRadius="{TemplateBinding CornerRadius}">
-                    <atom:CheckBoxItemsControl Name="{x:Static atom:CheckBoxGroupThemeConstants.CheckBoxItemsPart}"
+                    <atom:CheckBoxItemsControl Name="PART_CheckBoxItems"
                                                ItemTemplate="{TemplateBinding ItemTemplate}"
                                                ItemSpacing="{TemplateBinding ItemSpacing}"
                                                LineSpacing="{TemplateBinding LineSpacing}"
