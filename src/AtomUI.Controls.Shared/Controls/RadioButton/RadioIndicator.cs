@@ -1,5 +1,4 @@
 ﻿using AtomUI.Animations;
-using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Media;
 using AtomUI.Theme.Styling;
@@ -11,7 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal class RadioIndicator : TemplatedControl
 {
