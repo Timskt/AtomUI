@@ -5,7 +5,7 @@ using AtomUI.Controls.Utils;
 using AtomUI.Reflection;
 using Avalonia.Controls.Primitives;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal static class TextSearchUtils
 {

@@ -39,7 +39,6 @@ internal class SizeTypeAwareIconPresenter : TemplatedControl, ISizeTypeAware, IM
     }
     #endregion
     
-    
     static SizeTypeAwareIconPresenter()
     {
         AffectsMeasure<SizeTypeAwareIconPresenter>(IconProperty, PaddingProperty, SizeTypeProperty);
