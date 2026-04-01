@@ -7,10 +7,9 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Orientation="Vertical">
-                    <Svg Name="{x:Static atom:EmptyThemeConstants.SvgImagePart}"
+                    <Svg Name="PART_SvgImage"
                          HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Height="30"/>
+                         VerticalAlignment="Center"/>
                     <atom:TextBlock Name="Description"
                                     HorizontalAlignment="Center"
                                     TextWrapping="Wrap"

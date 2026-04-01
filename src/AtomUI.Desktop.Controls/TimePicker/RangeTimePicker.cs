@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Disposables;
+using AtomUI.Controls.Utils;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Utils;
@@ -114,6 +115,16 @@ public class RangeTimePicker : RangeInfoPickerInput
         AvaloniaProperty.RegisterDirect<RangeTimePicker, double>(nameof(PreferredWidth),
             o => o.PreferredWidth,
             (o, v) => o.PreferredWidth = v);
+    
+    internal static readonly DirectProperty<RangeTimePicker, string?> AmTextProperty =
+        AvaloniaProperty.RegisterDirect<RangeTimePicker, string?>(nameof(AmText),
+            o => o.AmText,
+            (o, v) => o.AmText = v);
+    
+    internal static readonly DirectProperty<RangeTimePicker, string?> PmTextProperty =
+        AvaloniaProperty.RegisterDirect<RangeTimePicker, string?>(nameof(PmText),
+            o => o.PmText,
+            (o, v) => o.PmText = v);
 
     private double _preferredWidth;
 
@@ -121,6 +132,22 @@ public class RangeTimePicker : RangeInfoPickerInput
     {
         get => _preferredWidth;
         set => SetAndRaise(PreferredWidthProperty, ref _preferredWidth, value);
+    }
+    
+    private string? _amText;
+
+    internal string? AmText
+    {
+        get => _amText;
+        set => SetAndRaise(AmTextProperty, ref _amText, value);
+    }
+    
+    private string? _pmText;
+
+    internal string? PmText
+    {
+        get => _pmText;
+        set => SetAndRaise(AmTextProperty, ref _pmText, value);
     }
 
     #endregion
@@ -235,12 +262,12 @@ public class RangeTimePicker : RangeInfoPickerInput
             if (RangeActivatedPart == RangeActivatedPart.Start)
             {
                 Text = DateTimeUtils.FormatTimeSpan(args.Time.Value,
-                    ClockIdentifier == ClockIdentifierType.HourClock12);
+                    ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             }
             else if (RangeActivatedPart == RangeActivatedPart.End)
             {
                 SecondaryText = DateTimeUtils.FormatTimeSpan(args.Time.Value,
-                    ClockIdentifier == ClockIdentifierType.HourClock12);
+                    ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             }
         }
         else
@@ -319,7 +346,7 @@ public class RangeTimePicker : RangeInfoPickerInput
                 if (RangeStartSelectedTime.HasValue)
                 {
                     Text = DateTimeUtils.FormatTimeSpan(RangeStartSelectedTime.Value,
-                        ClockIdentifier == ClockIdentifierType.HourClock12);
+                        ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
                 }
                 else
                 {
@@ -331,7 +358,7 @@ public class RangeTimePicker : RangeInfoPickerInput
                 if (RangeEndSelectedTime.HasValue)
                 {
                     SecondaryText = DateTimeUtils.FormatTimeSpan(RangeEndSelectedTime.Value,
-                        ClockIdentifier == ClockIdentifierType.HourClock12);
+                        ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
                 }
                 else
                 {
@@ -350,7 +377,7 @@ public class RangeTimePicker : RangeInfoPickerInput
         else
         {
             var text = DateTimeUtils.FormatTimeSpan(TimeSpan.Zero,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             var preferredInputWidth = TextUtils.CalculateTextSize(text, FontSize, FontFamily, FontStyle, FontWeight).Width;
             if (PlaceholderText != null)
             {
@@ -383,7 +410,7 @@ public class RangeTimePicker : RangeInfoPickerInput
             if (RangeStartDefaultTime is not null)
             {
                 InfoInputBox.Text = DateTimeUtils.FormatTimeSpan(RangeStartDefaultTime.Value,
-                    ClockIdentifier == ClockIdentifierType.HourClock12);
+                    ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             }
             else
             {
@@ -399,7 +426,7 @@ public class RangeTimePicker : RangeInfoPickerInput
             if (RangeEndDefaultTime is not null)
             {
                 SecondaryInfoInputBox.Text = DateTimeUtils.FormatTimeSpan(RangeEndDefaultTime.Value,
-                    ClockIdentifier == ClockIdentifierType.HourClock12);
+                    ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             }
             else
             {

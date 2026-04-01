@@ -1,7 +1,7 @@
 ﻿using AtomUI.Controls;
+using AtomUI.Controls.Utils;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Controls;
@@ -98,6 +98,14 @@ internal class TimeView : TemplatedControl
 
     #endregion
 
+    #region 公共事件定义
+
+    public event EventHandler<TimeSelectedEventArgs>? TimeSelected;
+    public event EventHandler<TimeSelectedEventArgs>? TempTimeSelected;
+    public event EventHandler<TimeSelectedEventArgs>? HoverTimeChanged;
+
+    #endregion
+    
     #region 内部属性定义
 
     internal static readonly DirectProperty<TimeView, double> SpacerWidthProperty =
@@ -115,7 +123,17 @@ internal class TimeView : TemplatedControl
 
     internal static readonly StyledProperty<bool> IsMotionEnabledProperty
         = MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<TimeView>();
-
+    
+    internal static readonly DirectProperty<TimeView, string?> AmTextProperty =
+        AvaloniaProperty.RegisterDirect<TimeView, string?>(nameof(AmText),
+            o => o.AmText,
+            (o, v) => o.AmText = v);
+    
+    internal static readonly DirectProperty<TimeView, string?> PmTextProperty =
+        AvaloniaProperty.RegisterDirect<TimeView, string?>(nameof(PmText),
+            o => o.PmText,
+            (o, v) => o.PmText = v);
+    
     private double _spacerWidth;
 
     internal double SpacerWidth
@@ -143,14 +161,23 @@ internal class TimeView : TemplatedControl
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
     }
+    
+    private string? _amText;
 
-    #endregion
+    internal string? AmText
+    {
+        get => _amText;
+        set => SetAndRaise(AmTextProperty, ref _amText, value);
+    }
+    
+    private string? _pmText;
 
-    #region 公共事件定义
+    internal string? PmText
+    {
+        get => _pmText;
+        set => SetAndRaise(AmTextProperty, ref _pmText, value);
+    }
 
-    public event EventHandler<TimeSelectedEventArgs>? TimeSelected;
-    public event EventHandler<TimeSelectedEventArgs>? TempTimeSelected;
-    public event EventHandler<TimeSelectedEventArgs>? HoverTimeChanged;
 
     #endregion
     
@@ -350,7 +377,7 @@ internal class TimeView : TemplatedControl
             if (_headerText is not null)
             {
                 _headerText.Text =
-                    DateTimeUtils.FormatTimeSpan(selectedValue, ClockIdentifier == ClockIdentifierType.HourClock12);
+                    DateTimeUtils.FormatTimeSpan(selectedValue, ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             }
         }
 

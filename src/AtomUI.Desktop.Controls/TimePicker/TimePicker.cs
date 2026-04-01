@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Disposables;
+using AtomUI.Controls.Utils;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Utils;
@@ -91,6 +92,36 @@ public class TimePicker : InfoPickerInput
 
     #endregion
 
+    #region 内部属性定义
+
+    internal static readonly DirectProperty<TimePicker, string?> AmTextProperty =
+        AvaloniaProperty.RegisterDirect<TimePicker, string?>(nameof(AmText),
+            o => o.AmText,
+            (o, v) => o.AmText = v);
+    
+    internal static readonly DirectProperty<TimePicker, string?> PmTextProperty =
+        AvaloniaProperty.RegisterDirect<TimePicker, string?>(nameof(PmText),
+            o => o.PmText,
+            (o, v) => o.PmText = v);
+
+    private string? _amText;
+
+    internal string? AmText
+    {
+        get => _amText;
+        set => SetAndRaise(AmTextProperty, ref _amText, value);
+    }
+    
+    private string? _pmText;
+
+    internal string? PmText
+    {
+        get => _pmText;
+        set => SetAndRaise(AmTextProperty, ref _pmText, value);
+    }
+    
+    #endregion
+    
     private TimePickerPresenter? _pickerPresenter;
     private CompositeDisposable? _flyoutBindingDisposables;
     
@@ -167,7 +198,7 @@ public class TimePicker : InfoPickerInput
     private void ClearHoverSelectedInfo()
     {
         Text = DateTimeUtils.FormatTimeSpan(SelectedTime,
-            ClockIdentifier == ClockIdentifierType.HourClock12);
+            ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
     }
 
     private void HandleHoverTimeChanged(object? sender, TimeSelectedEventArgs args)
@@ -175,7 +206,7 @@ public class TimePicker : InfoPickerInput
         if (args.Time.HasValue)
         {
             Text = DateTimeUtils.FormatTimeSpan(args.Time.Value,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
         }
         else
         {
@@ -217,7 +248,7 @@ public class TimePicker : InfoPickerInput
         if (change.Property == SelectedTimeProperty)
         {
             Text = DateTimeUtils.FormatTimeSpan(SelectedTime,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
         }
         else if (change.Property == FontSizeProperty ||
                  change.Property == FontFamilyProperty ||
@@ -261,7 +292,7 @@ public class TimePicker : InfoPickerInput
         else
         {
             var text = DateTimeUtils.FormatTimeSpan(TimeSpan.Zero,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             var preferredInputWidth = TextUtils.CalculateTextSize(text, FontSize, FontFamily, FontStyle, FontWeight).Width;
             if (PlaceholderText != null)
             {
