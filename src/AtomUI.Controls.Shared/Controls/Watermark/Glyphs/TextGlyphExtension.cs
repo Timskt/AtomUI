@@ -1,6 +1,6 @@
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class TextGlyphExtension : WatermarkGlyphExtension
 {

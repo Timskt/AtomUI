@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public abstract class WatermarkGlyph : AvaloniaObject
 {
