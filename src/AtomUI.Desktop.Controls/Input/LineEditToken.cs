@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -6,7 +7,8 @@ namespace AtomUI.Desktop.Controls;
 internal class LineEditToken : AbstractControlDesignToken
 {
     public const string ID = "LineEdit";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public LineEditToken()
         : this(ID)
     {

@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -18,8 +17,7 @@ using AvaloniaMenu = Avalonia.Controls.Menu;
 
 public class Menu : AvaloniaMenu,
                     ISizeTypeAware,
-                    IMotionAwareControl,
-                    IControlSharedTokenResourcesHost
+                    IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -60,12 +58,6 @@ public class Menu : AvaloniaMenu,
     }
 
     #endregion
-
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
-    #endregion
     
     private readonly Dictionary<MenuItem, CompositeDisposable> _itemsBindingDisposables = new();
 
@@ -75,7 +67,7 @@ public class Menu : AvaloniaMenu,
         : base(new DefaultMenuInteractionHandler(false))
     {
         LogicalChildren.CollectionChanged += HandleItemsCollectionChanged;
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
     }
 
     private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

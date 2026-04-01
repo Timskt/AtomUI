@@ -7,7 +7,6 @@ using AtomUI.Desktop.Controls.TimePickerLang;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -18,8 +17,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class RangeDatePicker : RangeInfoPickerInput,
-                               IControlSharedTokenResourcesHost
+public class RangeDatePicker : RangeInfoPickerInput
 {
     #region 公共属性定义
     
@@ -110,9 +108,6 @@ public class RangeDatePicker : RangeInfoPickerInput,
         get => _preferredWidth;
         set => SetAndRaise(PreferredWidthProperty, ref _preferredWidth, value);
     }
-
-    string IControlSharedTokenResourcesHost.TokenId => DatePickerToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
     
     #endregion
     
@@ -122,7 +117,7 @@ public class RangeDatePicker : RangeInfoPickerInput,
 
     public RangeDatePicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DatePickerToken.ScopeProvider);
     }
 
     static RangeDatePicker()

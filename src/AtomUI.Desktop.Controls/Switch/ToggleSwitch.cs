@@ -25,7 +25,6 @@ public class ToggleSwitch : ToggleButton,
                             ISizeTypeAware,
                             ICustomHitTest,
                             IWaveSpiritAwareControl,
-                            IControlSharedTokenResourcesHost,
                             IFormItemAware
 {
     #region 公共属性定义
@@ -242,9 +241,6 @@ public class ToggleSwitch : ToggleButton,
         set => SetValue(SwitchOpacityProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ToggleSwitchToken.ID;
-
     #endregion
 
     private const double STRETCH_FACTOR = 1.3d;
@@ -273,7 +269,7 @@ public class ToggleSwitch : ToggleButton,
 
     public ToggleSwitch()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ToggleSwitchToken.ScopeProvider);
     }
 
     private void ConfigureTransitions(bool force)

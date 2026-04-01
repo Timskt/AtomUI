@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class SelectToken : AbstractControlDesignToken
 {
     public const string ID = "Select";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 多选标签背景色

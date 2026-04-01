@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -16,7 +15,6 @@ namespace AtomUI.Desktop.Controls;
 using AvaloniaTextBox = Avalonia.Controls.TextBox;
 
 public class TextArea : AvaloniaTextBox,
-                        IControlSharedTokenResourcesHost,
                         IMotionAwareControl,
                         ISizeTypeAware,
                         IFormItemAware,
@@ -193,10 +191,7 @@ public class TextArea : AvaloniaTextBox,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => LineEditToken.ID;
-
+    
     #endregion
 
     private ScrollViewer? _scrollViewer;
@@ -213,7 +208,7 @@ public class TextArea : AvaloniaTextBox,
     
     public TextArea()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(LineEditToken.ScopeProvider);
     }
 
     private void UpdatePseudoClasses()

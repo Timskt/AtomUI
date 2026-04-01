@@ -239,7 +239,7 @@ internal class Theme : AvaloniaObject, ITheme
             controlToken.CalculateTokenValues(IsDarkMode);
             var controlTokenType  = controlToken.GetType();
             var tokenAttr         = controlTokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-            var qualifiedTokenKey = GenerateTokenQualifiedKey(controlToken.GetId(), tokenAttr?.ResourceCatalog);
+            var qualifiedTokenKey = GenerateTokenQualifiedKey(controlToken.Id, tokenAttr?.ResourceCatalog);
                 
             if (ThemeDefinition.ControlTokens.TryGetValue(qualifiedTokenKey, out var tokenInfo))
             {
@@ -299,7 +299,7 @@ internal class Theme : AvaloniaObject, ITheme
             {
                 var attr = tokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
                 Debug.Assert(attr != null);
-                var qualifiedKey = GenerateTokenQualifiedKey(controlToken.GetId(), attr.ResourceCatalog);
+                var qualifiedKey = GenerateTokenQualifiedKey(controlToken.Id, attr.ResourceCatalog);
                 ControlTokens.Add(qualifiedKey, controlToken);
             }
         }

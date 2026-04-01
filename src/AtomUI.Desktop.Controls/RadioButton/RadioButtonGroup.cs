@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -13,7 +12,6 @@ namespace AtomUI.Desktop.Controls;
 
 public class RadioButtonGroup : ItemsControl,
                                 IMotionAwareControl,
-                                IControlSharedTokenResourcesHost,
                                 IFormItemAware
 {
     #region 公共属性定义
@@ -69,13 +67,6 @@ public class RadioButtonGroup : ItemsControl,
     public event EventHandler<RadioButtonGroupCheckedChangedEventArgs>? CheckedChanged;
 
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => RadioButtonToken.ID;
-    
-    #endregion
 
     private readonly Dictionary<RadioButton, CompositeDisposable> _itemsBindingDisposables = new();
     private bool _ignoreSyncChecked;
@@ -89,7 +80,7 @@ public class RadioButtonGroup : ItemsControl,
     
     public RadioButtonGroup()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(RadioButtonToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
     }
     

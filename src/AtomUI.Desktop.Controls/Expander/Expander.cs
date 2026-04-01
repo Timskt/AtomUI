@@ -37,9 +37,7 @@ public enum ExpanderIconPosition
     ExpanderPseudoClass.ExpandDown,
     ExpanderPseudoClass.ExpandLeft,
     ExpanderPseudoClass.ExpandRight)]
-public class Expander : AvaloniaExpander,
-                        IMotionAwareControl,
-                        IControlSharedTokenResourcesHost
+public class Expander : AvaloniaExpander, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -190,14 +188,11 @@ public class Expander : AvaloniaExpander,
         set => SetAndRaise(EffectiveBorderThicknessProperty, ref _effectiveBorderThickness, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ExpanderToken.ID;
-    
     #endregion
 
     public Expander()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ExpanderToken.ScopeProvider);
     }
 
     private BaseMotionActor? _motionActor;

@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -28,7 +27,7 @@ internal enum AvatarContentType
     Text
 }
 
-public class Avatar : TemplatedControl, IControlSharedTokenResourcesHost, IMotionAwareControl
+public class Avatar : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -149,10 +148,6 @@ public class Avatar : TemplatedControl, IControlSharedTokenResourcesHost, IMotio
         get => _contentType;
         set => SetAndRaise(ContentTypeProperty, ref _contentType, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-
     #endregion
 
     private CustomizableSizeType? _originSizeType;
@@ -166,7 +161,7 @@ public class Avatar : TemplatedControl, IControlSharedTokenResourcesHost, IMotio
     
     public Avatar()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

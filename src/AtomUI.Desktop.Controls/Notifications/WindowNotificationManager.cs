@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -23,8 +22,7 @@ namespace AtomUI.Desktop.Controls;
     NotificationPseudoClass.BottomCenter)]
 public class WindowNotificationManager : TemplatedControl, 
                                          INotificationManager,
-                                         IMotionAwareControl,
-                                         IControlSharedTokenResourcesHost
+                                         IMotionAwareControl
 {
     private IList? _items;
     private readonly Queue<NotificationCard> _cleanupQueue;
@@ -71,13 +69,6 @@ public class WindowNotificationManager : TemplatedControl,
     }
     
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => NotificationToken.ID;
-
-    #endregion
 
     public WindowNotificationManager(TopLevel? host) : this()
     {
@@ -89,7 +80,7 @@ public class WindowNotificationManager : TemplatedControl,
 
     public WindowNotificationManager()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(NotificationToken.ScopeProvider);
         _cardExpiredTimer      =  new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50), Tag = this };
         _cardExpiredTimer.Tick += HandleCardExpiredTimer;
         _cleanupTimer          =  new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50), Tag = this };

@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.Palette;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class RateToken : AbstractControlDesignToken
 {
     public const string ID = "Rate";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 星星颜色

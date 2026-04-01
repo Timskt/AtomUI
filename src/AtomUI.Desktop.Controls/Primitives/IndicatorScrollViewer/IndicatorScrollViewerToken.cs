@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls.Primitives;
 internal class IndicatorScrollViewerToken : AbstractControlDesignToken
 {
     public const string ID = "IndicatorScrollViewer";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 滚动条滑块的粗细

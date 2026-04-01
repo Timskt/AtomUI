@@ -5,7 +5,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -21,9 +20,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class BaseTabControl : SelectingItemsControl,
-                              IMotionAwareControl,
-                              IControlSharedTokenResourcesHost
+public class BaseTabControl : SelectingItemsControl, IMotionAwareControl
 {
     private static readonly FuncTemplate<Panel?> DefaultPanel =
         new(() => new StackPanel());
@@ -257,10 +254,6 @@ public class BaseTabControl : SelectingItemsControl,
     internal ItemsPresenter? ItemsPresenterPart { get; private set; }
 
     internal ContentPresenter? ContentPart { get; private set; }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TabControlToken.ID;
-    
     #endregion
     
     private object? _selectedContent;
@@ -286,7 +279,7 @@ public class BaseTabControl : SelectingItemsControl,
 
     public BaseTabControl()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TabControlToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
     }
     

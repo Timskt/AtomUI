@@ -1,18 +1,16 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class StatisticCountUp : TemplatedControl, IControlSharedTokenResourcesHost
+public class StatisticCountUp : TemplatedControl
 {
     #region 公共属性定义
 
@@ -78,9 +76,6 @@ public class StatisticCountUp : TemplatedControl, IControlSharedTokenResourcesHo
         set => SetAndRaise(FormattedValueProperty, ref _formattedValue, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => StatisticToken.ID;
-
     #endregion
 
     static StatisticCountUp()
@@ -90,7 +85,7 @@ public class StatisticCountUp : TemplatedControl, IControlSharedTokenResourcesHo
 
     public StatisticCountUp()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(StatisticToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

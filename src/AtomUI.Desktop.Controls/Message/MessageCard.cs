@@ -2,7 +2,6 @@
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
@@ -19,9 +18,7 @@ namespace AtomUI.Desktop.Controls;
     MessageCardPseudoClass.Success, 
     MessageCardPseudoClass.Warning, 
     MessageCardPseudoClass.Loading)]
-public class MessageCard : TemplatedControl,
-                           IMotionAwareControl,
-                           IControlSharedTokenResourcesHost
+public class MessageCard : TemplatedControl, IMotionAwareControl
 {
     internal const double AnimationMaxOffsetY = 100d;
 
@@ -131,9 +128,6 @@ public class MessageCard : TemplatedControl,
         set => SetAndRaise(OpenCloseMotionDurationProperty, ref _openCloseMotionDuration, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MessageToken.ID;
-
     #endregion
 
     private bool _isClosing;
@@ -141,7 +135,7 @@ public class MessageCard : TemplatedControl,
     
     public MessageCard()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MessageToken.ScopeProvider);
     }
     
     public void Close()

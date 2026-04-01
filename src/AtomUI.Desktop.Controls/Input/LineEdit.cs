@@ -1,5 +1,5 @@
 using AtomUI.Controls;
-using AtomUI.Utils;
+using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -93,7 +93,7 @@ public class LineEdit : TextBox,
     
     public LineEdit()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(LineEditToken.ScopeProvider);
     }
     
     private void UpdatePseudoClasses()

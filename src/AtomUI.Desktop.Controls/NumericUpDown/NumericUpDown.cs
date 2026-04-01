@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -20,8 +19,7 @@ namespace AtomUI.Desktop.Controls;
 using AvaloniaNumericUpDown = Avalonia.Controls.NumericUpDown;
 
 public class NumericUpDown : AvaloniaNumericUpDown, 
-                             IMotionAwareControl, 
-                             IControlSharedTokenResourcesHost,
+                             IMotionAwareControl,
                              ICompactSpaceAware,
                              IFormItemAware,
                              IInputControlStatusAware,
@@ -255,9 +253,6 @@ public class NumericUpDown : AvaloniaNumericUpDown,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => NumericUpDownToken.ID;
-    
     #endregion
     
     private IconButton? _clearButton;
@@ -279,7 +274,7 @@ public class NumericUpDown : AvaloniaNumericUpDown,
     
     public NumericUpDown()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(NumericUpDownToken.ScopeProvider);
         _textConverter = new NumericUpDownTextConverter(this);
     }
 

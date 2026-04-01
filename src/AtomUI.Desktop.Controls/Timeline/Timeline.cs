@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -19,8 +18,7 @@ public enum TimeLineMode
     Alternate
 }
 
-public class Timeline : ItemsControl,
-                        IControlSharedTokenResourcesHost
+public class Timeline : ItemsControl
 {
     #region 公共属性定义
 
@@ -64,9 +62,6 @@ public class Timeline : ItemsControl,
 
     #region 内部属性定义
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TimelineToken.ID;
-
     internal WeakReference<TimelineItem>? PendingItemReference => _pendingItemReference;
     private WeakReference<TimelineItem>? _pendingItemReference;
 
@@ -82,7 +77,7 @@ public class Timeline : ItemsControl,
     
     public Timeline()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TimelineToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleItemsChanged;
     }
 

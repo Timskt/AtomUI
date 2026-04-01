@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ListViewToken : AbstractControlDesignToken
 {
     public const string ID = "ListView";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public ListViewToken()
         : this(ID)
     {

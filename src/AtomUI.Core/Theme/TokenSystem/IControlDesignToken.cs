@@ -4,7 +4,7 @@ namespace AtomUI.Theme.TokenSystem;
 
 public interface IControlDesignToken : IDesignToken
 {
-    string GetId();
+    public string Id { get; }
     void AssignSharedToken(DesignToken sharedToken);
     bool HasCustomTokenConfig();
     void SetHasCustomTokenConfig(bool value);

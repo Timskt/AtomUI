@@ -31,9 +31,7 @@ public enum SeparatorVariant
 }
 
 [PseudoClasses(SeparatorPseudoClass.HasTitleText)]
-public class Separator : AvaloniaSeparator,
-                         ISizeTypeAware,
-                         IControlSharedTokenResourcesHost
+public class Separator : AvaloniaSeparator, ISizeTypeAware
 {
     private const double SEPARATOR_LINE_MIN_PROPORTION = 0.25;
     
@@ -197,9 +195,6 @@ public class Separator : AvaloniaSeparator,
         set => SetValue(VerticalMarginInlineProperty, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SeparatorToken.ID;
-
     #endregion
     
     private TextBlock? _titleLabel;
@@ -220,7 +215,7 @@ public class Separator : AvaloniaSeparator,
 
     public Separator()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SeparatorToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

@@ -285,7 +285,7 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
             var controlTokenType = controlToken.GetType();
             var tokenAttr        = controlTokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
             var qualifiedTokenKey =
-                AtomUITheme.GenerateTokenQualifiedKey(controlToken.GetId(), tokenAttr?.ResourceCatalog);
+                AtomUITheme.GenerateTokenQualifiedKey(controlToken.Id, tokenAttr?.ResourceCatalog);
 
             if (controlTokenConfig.TryGetValue(qualifiedTokenKey, out var tokenConfigInfo))
             {
@@ -314,7 +314,7 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
             {
                 var attr = tokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
                 Debug.Assert(attr != null);
-                var qualifiedKey = AtomUITheme.GenerateTokenQualifiedKey(controlToken.GetId(), attr.ResourceCatalog);
+                var qualifiedKey = AtomUITheme.GenerateTokenQualifiedKey(controlToken.Id, attr.ResourceCatalog);
                 _controlTokens.Add(qualifiedKey, controlToken);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
@@ -8,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ButtonSpinnerToken : LineEditToken
 {
     public new const string ID = "ButtonSpinner";
-
+    public new static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public ButtonSpinnerToken()
         : this(ID)
     {

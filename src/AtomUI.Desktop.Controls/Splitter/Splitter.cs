@@ -13,7 +13,7 @@ namespace AtomUI.Desktop.Controls;
 
 using ControlList = Avalonia.Controls.Controls;
 
-public class Splitter : TemplatedControl, IControlSharedTokenResourcesHost
+public class Splitter : TemplatedControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<Orientation> OrientationProperty =
@@ -100,18 +100,12 @@ public class Splitter : TemplatedControl, IControlSharedTokenResourcesHost
 
     #endregion
     
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SplitterToken.ID;
-
-    #endregion
-    
     private SplitterPanel? _splitterPanel;
     
     public Splitter()
     {
         Children.CollectionChanged += ChildrenChanged;
+        this.RegisterTokenResourceScope(SplitterToken.ScopeProvider);
     }
     
     public static Dimension? GetSize(Control control)

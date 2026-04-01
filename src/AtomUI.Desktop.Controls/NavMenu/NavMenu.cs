@@ -6,7 +6,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Automation.Peers;
@@ -34,7 +33,6 @@ public class NavMenu : ItemsControl,
                        IFocusScope,
                        INavMenu,
                        IMotionAwareControl,
-                       IControlSharedTokenResourcesHost,
                        IMenuChildSelectable
 {
     #region 公共属性定义
@@ -72,7 +70,7 @@ public class NavMenu : ItemsControl,
     public static readonly StyledProperty<bool> ShouldUseOverlayLayerProperty = 
         AvaloniaProperty.Register<NavMenu, bool>(nameof (ShouldUseOverlayLayer));
     
-    public INavMenuNode? _selectedItem;
+    private INavMenuNode? _selectedItem;
 
     public INavMenuNode? SelectedItem
     {
@@ -155,9 +153,6 @@ public class NavMenu : ItemsControl,
 
     IEnumerable<INavMenuItem> INavMenuElement.SubItems => LogicalChildren.OfType<INavMenuItem>();
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => NavMenuToken.ID;
-    
     #endregion
     
     internal INavMenuInteractionHandler? InteractionHandler { get; private set; }
@@ -184,7 +179,7 @@ public class NavMenu : ItemsControl,
     
     public NavMenu()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(NavMenuToken.ScopeProvider);
         UpdatePseudoClasses();
         LogicalChildren.CollectionChanged += HandleChildrenChanged;
         Items.CollectionChanged           += HandleItemsViewCollectionChanged;

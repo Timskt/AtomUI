@@ -5,7 +5,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.DataLoad;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -29,8 +28,7 @@ public enum CascaderViewExpandTrigger
 }
 
 public partial class CascaderView : TemplatedControl, 
-                                    IMotionAwareControl,
-                                    IControlSharedTokenResourcesHost
+                                    IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<IEnumerable<ICascaderOption>?> OptionsSourceProperty =
@@ -298,9 +296,6 @@ public partial class CascaderView : TemplatedControl,
         set => SetAndRaise(IsMaxSelectReachedProperty, ref _isMaxSelectReached, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TreeViewToken.ID;
-    
     #endregion
     
     private readonly ItemCollection _options = new();
@@ -325,7 +320,7 @@ public partial class CascaderView : TemplatedControl,
     
     public CascaderView()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CascaderToken.ScopeProvider);
         _options.CollectionChanged += HandleCollectionChanged;
     }
     

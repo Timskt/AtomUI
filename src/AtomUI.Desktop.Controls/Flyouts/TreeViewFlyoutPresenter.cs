@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,10 +11,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
-public class TreeViewFlyoutPresenter : FloatableTreeView,
-                                       IShadowMaskInfoProvider,
-                                       IMotionAwareControl,
-                                       IControlSharedTokenResourcesHost
+public class TreeViewFlyoutPresenter : FloatableTreeView, IShadowMaskInfoProvider
 {
     #region 公共属性定义
 
@@ -62,9 +58,6 @@ public class TreeViewFlyoutPresenter : FloatableTreeView,
         
     #region 内部属性定义
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
-    
     private ArrowDecoratedBox? _arrowDecoratedBox;
 
     #endregion
@@ -74,14 +67,14 @@ public class TreeViewFlyoutPresenter : FloatableTreeView,
     public TreeViewFlyoutPresenter()
         : base(new DefaultTreeViewInteractionHandler(true))
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TreeFlyoutToken.ScopeProvider);
         Items.CollectionChanged += HandleCollectionChanged;
     }
 
     public TreeViewFlyoutPresenter(ITreeViewInteractionHandler menuInteractionHandler)
         : base(menuInteractionHandler)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TreeFlyoutToken.ScopeProvider);
         Items.CollectionChanged += HandleCollectionChanged;
     }
 

@@ -1,7 +1,6 @@
 ﻿using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -11,9 +10,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
-public class ToggleIconButton : ToggleButton,
-                                IControlSharedTokenResourcesHost, 
-                                IMotionAwareControl
+public class ToggleIconButton : ToggleButton, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -113,13 +110,6 @@ public class ToggleIconButton : ToggleButton,
     }
     
     #endregion
-    
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-    
-    #endregion
 
     static ToggleIconButton()
     {
@@ -129,7 +119,7 @@ public class ToggleIconButton : ToggleButton,
 
     public ToggleIconButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
     }
     
     public bool HitTest(Point point)

@@ -1,4 +1,5 @@
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ToggleSwitchToken : AbstractControlDesignToken
 {
     public const string ID = "ToggleSwitch";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public ToggleSwitchToken()
         : base(ID)
     {

@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
 namespace AtomUI.Desktop.Controls;
@@ -7,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class ArrowDecoratedBoxToken : AbstractControlDesignToken
 {
     public const string ID = "ArrowDecoratedBox";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     /// <summary>
     /// 箭头三角形大小

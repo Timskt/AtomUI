@@ -17,9 +17,7 @@ public enum CountBadgeSize
     Small
 }
 
-public class CountBadge : Control,
-                          IControlSharedTokenResourcesHost,
-                          IMotionAwareControl
+public class CountBadge : Control, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -110,13 +108,6 @@ public class CountBadge : Control,
 
     #endregion
 
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => BadgeToken.ID;
-
-    #endregion
-
     private CountBadgeAdorner? _badgeAdorner;
     private AdornerLayer? _adornerLayer;
     private CompositeDisposable? _adornerBindingDisposables;
@@ -132,7 +123,7 @@ public class CountBadge : Control,
 
     public CountBadge()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(BadgeToken.ScopeProvider);
         this.ConfigureMotionBindingStyle();
     }
 

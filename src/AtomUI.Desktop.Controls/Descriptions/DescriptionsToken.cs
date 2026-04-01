@@ -1,3 +1,4 @@
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class DescriptionsToken : AbstractControlDesignToken
 {
     public const string ID = "Descriptions";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 标签背景色
     /// Background color of label

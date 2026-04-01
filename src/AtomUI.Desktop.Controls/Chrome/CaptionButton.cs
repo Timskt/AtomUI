@@ -2,7 +2,6 @@ using System.Diagnostics;
 using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -14,7 +13,7 @@ namespace AtomUI.Desktop.Controls;
 
 using AvaloniaButton = Avalonia.Controls.Button;
 
-internal class CaptionButton : AvaloniaButton, IControlSharedTokenResourcesHost
+internal class CaptionButton : AvaloniaButton
 {
     #region 公共属性定义
 
@@ -98,10 +97,6 @@ internal class CaptionButton : AvaloniaButton, IControlSharedTokenResourcesHost
         get => _effectiveCornerRadius;
         set => SetAndRaise(EffectiveCornerRadiusProperty, ref _effectiveCornerRadius, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ChromeToken.ID;
-
     #endregion
 
     static CaptionButton()
@@ -112,7 +107,7 @@ internal class CaptionButton : AvaloniaButton, IControlSharedTokenResourcesHost
     
     public CaptionButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ChromeToken.ScopeProvider);
     }
 
     protected override void OnSizeChanged(SizeChangedEventArgs e)

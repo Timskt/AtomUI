@@ -1,4 +1,5 @@
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class ChromeToken : AbstractControlDesignToken
 {
     public const string ID = "Chrome";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// Hover 的背景色

@@ -1,7 +1,5 @@
 ﻿using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 
@@ -9,7 +7,7 @@ namespace AtomUI.Desktop.Controls;
 
 using AvaloniaSeparator = Avalonia.Controls.Separator;
 
-public class MenuSeparator : AvaloniaSeparator, IControlSharedTokenResourcesHost
+public class MenuSeparator : AvaloniaSeparator
 {
     #region 公共属性定义
     public static readonly StyledProperty<Orientation> OrientationProperty =
@@ -30,13 +28,6 @@ public class MenuSeparator : AvaloniaSeparator, IControlSharedTokenResourcesHost
         set => SetValue(OrientationProperty, value);
     }
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
-    
-    #endregion
 
     static MenuSeparator()
     {
@@ -45,7 +36,7 @@ public class MenuSeparator : AvaloniaSeparator, IControlSharedTokenResourcesHost
     
     public MenuSeparator()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
     }
 
     public override void Render(DrawingContext context)

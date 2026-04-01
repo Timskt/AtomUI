@@ -5,7 +5,6 @@ using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -21,7 +20,7 @@ public enum ClockIdentifierType
     HourClock24
 }
 
-public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
+public class TimePicker : InfoPickerInput
 {
     #region 公共属性定义
 
@@ -92,20 +91,12 @@ public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
 
     #endregion
 
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
-    string IControlSharedTokenResourcesHost.TokenId => TimePickerToken.ID;
-
-    #endregion
-
     private TimePickerPresenter? _pickerPresenter;
     private CompositeDisposable? _flyoutBindingDisposables;
     
     public TimePicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TimePickerToken.ScopeProvider);
     }
     
     static TimePicker()

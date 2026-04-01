@@ -19,7 +19,6 @@ namespace AtomUI.Desktop.Controls;
 
 public class Drawer : Control,
                       IMotionAwareControl,
-                      IControlSharedTokenResourcesHost,
                       ICustomizableSizeTypeAware
 {
     #region 公共属性定义
@@ -204,9 +203,6 @@ public class Drawer : Control,
         get => _effectiveDialogSize;
         set => SetAndRaise(EffectiveDialogSizeProperty, ref _effectiveDialogSize, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DrawerToken.ID;
 
     #endregion
 
@@ -221,7 +217,7 @@ public class Drawer : Control,
 
     public Drawer()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DrawerToken.ScopeProvider);
         this.ConfigureMotionBindingStyle();
         ConfigureInstanceStyles();
     }

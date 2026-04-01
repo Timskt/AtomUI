@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,7 +11,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
 
-public class Skeleton : AbstractSkeleton, IControlSharedTokenResourcesHost
+public class Skeleton : AbstractSkeleton
 {
     #region 公共属性定义
 
@@ -178,15 +177,12 @@ public class Skeleton : AbstractSkeleton, IControlSharedTokenResourcesHost
         get => _isContentVisible;
         set => SetAndRaise(IsContentVisibleProperty, ref _isContentVisible, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SkeletonToken.ID;
-
+    
     #endregion
 
     public Skeleton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SkeletonToken.ScopeProvider);
         ContentProperty.Changed.AddClassHandler<Skeleton>((x, e) => x.HandleContentChanged(e));
     }
 

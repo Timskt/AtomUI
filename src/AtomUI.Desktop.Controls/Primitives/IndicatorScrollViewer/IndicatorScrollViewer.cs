@@ -1,25 +1,16 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
-using Avalonia.Controls;
 using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls.Primitives;
 
-internal class IndicatorScrollViewer : ScrollViewer, IControlSharedTokenResourcesHost
+internal class IndicatorScrollViewer : ScrollViewer
 {
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-
-    #endregion
-
     public IndicatorScrollViewer()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(IndicatorScrollViewerToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

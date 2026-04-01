@@ -3,7 +3,6 @@ using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
@@ -17,9 +16,7 @@ using Avalonia.VisualTree;
 namespace AtomUI.Desktop.Controls;
 
 [PseudoClasses(StdPseudoClass.Error, StdPseudoClass.Information, StdPseudoClass.Success, StdPseudoClass.Warning)]
-public class NotificationCard : ContentControl,
-                                IMotionAwareControl,
-                                IControlSharedTokenResourcesHost
+public class NotificationCard : ContentControl, IMotionAwareControl
 {
     internal const double AnimationMaxOffsetY = 150d;
     internal const double AnimationMaxOffsetX = 500d;
@@ -142,9 +139,6 @@ public class NotificationCard : ContentControl,
         set => SetAndRaise(OpenCloseMotionDurationProperty, ref _openCloseMotionDuration, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => NotificationToken.ID;
-
     #endregion
 
     private bool _isClosing;
@@ -157,7 +151,7 @@ public class NotificationCard : ContentControl,
     /// </summary>
     public NotificationCard(WindowNotificationManager manager)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(NotificationToken.ScopeProvider);
         _notificationManager = manager;
     }
     

@@ -1,6 +1,5 @@
 ﻿using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -38,7 +37,7 @@ public enum QRCodeStatus
     Scanned,
 }
 
-public class QRCode : TemplatedControl, IControlSharedTokenResourcesHost
+public class QRCode : TemplatedControl
 {
     #region 公共属性定义
 
@@ -202,9 +201,6 @@ public class QRCode : TemplatedControl, IControlSharedTokenResourcesHost
 
     #endregion
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => OptionButtonToken.ID;
-
     private Button? _refreshButton;
 
     static QRCode()
@@ -214,7 +210,7 @@ public class QRCode : TemplatedControl, IControlSharedTokenResourcesHost
 
     public QRCode()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(OptionButtonToken.ScopeProvider);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

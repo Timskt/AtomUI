@@ -1,24 +1,14 @@
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
 
 namespace AtomUI.Desktop.Controls;
 
-public class SkeletonInput : SkeletonElement,
-                             IControlSharedTokenResourcesHost
+public class SkeletonInput : SkeletonElement
 {
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SkeletonToken.ID;
-
-    #endregion
-    
     public SkeletonInput()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SkeletonToken.ScopeProvider);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

@@ -17,9 +17,7 @@ using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
-public class AbstractImagePreviewer : TemplatedControl, 
-                                      IControlSharedTokenResourcesHost,
-                                      IMotionAwareControl
+public class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<IList<string>?> SourcesProperty =
@@ -242,9 +240,6 @@ public class AbstractImagePreviewer : TemplatedControl,
         set => SetAndRaise(EffectiveSourcesProperty, ref _effectiveSources, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ImagePreviewerToken.ID;
-    
     #endregion
     
     private bool _ignoreIsOpenChanged;
@@ -262,7 +257,7 @@ public class AbstractImagePreviewer : TemplatedControl,
     
     public AbstractImagePreviewer()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ImagePreviewerToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

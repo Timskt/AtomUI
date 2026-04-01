@@ -16,9 +16,7 @@ namespace AtomUI.Desktop.Controls;
 
 using ControlList = Avalonia.Controls.Controls;
 
-public class AvatarGroup : TemplatedControl, 
-                           IMotionAwareControl,
-                           IControlSharedTokenResourcesHost
+public class AvatarGroup : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -117,9 +115,6 @@ public class AvatarGroup : TemplatedControl,
         get => GetValue(GroupOverlappingProperty);
         set => SetValue(GroupOverlappingProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
     #endregion
     
     private Avatar? _foldCountAvatar;
@@ -137,7 +132,7 @@ public class AvatarGroup : TemplatedControl,
     public AvatarGroup()
     {
         Children.CollectionChanged += ChildrenChanged;
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(AvatarToken.ScopeProvider);
         this.ConfigureMotionBindingStyle();
     }
 

@@ -4,7 +4,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
@@ -21,8 +20,7 @@ using AvaloniaContextMenu = Avalonia.Controls.ContextMenu;
 
 public class ContextMenu : AvaloniaContextMenu,
                            ISizeTypeAware,
-                           IMotionAwareControl,
-                           IControlSharedTokenResourcesHost
+                           IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -91,10 +89,6 @@ public class ContextMenu : AvaloniaContextMenu,
         get => GetValue(MaxPopupHeightProperty);
         set => SetValue(MaxPopupHeightProperty, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
-
     #endregion
     
     private Popup? _popup;
@@ -102,7 +96,7 @@ public class ContextMenu : AvaloniaContextMenu,
 
     public ContextMenu()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
         LogicalChildren.CollectionChanged  += HandleItemsCollectionChanged;
         // 我们在这里有一次初始化的机会
         _popup = new Popup

@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -9,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class BadgeToken : AbstractControlDesignToken
 {
     public const string ID = "Badge";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public BadgeToken()
         : base(ID)
     {

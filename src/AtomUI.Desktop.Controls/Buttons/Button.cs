@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -47,7 +46,6 @@ public enum ButtonShape
 public class Button : AvaloniaButton,
                       ISizeTypeAware,
                       IWaveSpiritAwareControl,
-                      IControlSharedTokenResourcesHost,
                       ICompactSpaceAware,
                       IFormItemAware
 {
@@ -224,9 +222,6 @@ public class Button : AvaloniaButton,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-    
     #endregion
     
     private WaveSpiritDecorator? _waveSpiritDecorator;
@@ -245,7 +240,7 @@ public class Button : AvaloniaButton,
 
     public Button()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
     }
 
     protected override Size MeasureOverride(Size availableSize)

@@ -1,16 +1,13 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 
 namespace AtomUI.Desktop.Controls;
 
 using AvaloniaCheckBox = Avalonia.Controls.CheckBox;
 
 public class CheckBox : AvaloniaCheckBox, 
-                        IWaveSpiritAwareControl, 
-                        IControlSharedTokenResourcesHost,
+                        IWaveSpiritAwareControl,
                         IFormItemAware
 {
     #region 公共属性定义
@@ -34,13 +31,6 @@ public class CheckBox : AvaloniaCheckBox,
     }
 
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CheckBoxToken.ID;
-
-    #endregion
 
     static CheckBox()
     {
@@ -49,7 +39,7 @@ public class CheckBox : AvaloniaCheckBox,
 
     public CheckBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CheckBoxToken.ScopeProvider);
     }
     
     #region 实现 FormItem 接口

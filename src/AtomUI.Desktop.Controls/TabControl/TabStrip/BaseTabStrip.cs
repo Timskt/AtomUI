@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,8 +18,7 @@ using AvaloniaTabStrip = Avalonia.Controls.Primitives.TabStrip;
 
 public abstract class BaseTabStrip : AvaloniaTabStrip, 
                                      ISizeTypeAware,
-                                     IMotionAwareControl,
-                                     IControlSharedTokenResourcesHost
+                                     IMotionAwareControl
 {
     private static readonly FuncTemplate<Panel?> DefaultPanel =
         new(() => new StackPanel());
@@ -177,9 +175,6 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
     
     private protected readonly Dictionary<TabStripItem, CompositeDisposable> ItemsBindingDisposables = new();
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TabControlToken.ID;
-    
     #endregion
 
     static BaseTabStrip()
@@ -192,7 +187,7 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
 
     public BaseTabStrip()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TabControlToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
     }
     

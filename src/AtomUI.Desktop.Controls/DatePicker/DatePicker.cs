@@ -7,7 +7,6 @@ using AtomUI.Desktop.Controls.TimePickerLang;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -16,8 +15,7 @@ using Avalonia.Layout;
 
 namespace AtomUI.Desktop.Controls;
 
-public class DatePicker : InfoPickerInput,
-                          IControlSharedTokenResourcesHost
+public class DatePicker : InfoPickerInput
 {
     #region 公共属性定义
 
@@ -88,16 +86,9 @@ public class DatePicker : InfoPickerInput,
 
     #endregion
 
-    #region 内部属性定义
-
-    string IControlSharedTokenResourcesHost.TokenId => DatePickerToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
-    #endregion
-
     public DatePicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DatePickerToken.ScopeProvider);
     }
 
     static DatePicker()

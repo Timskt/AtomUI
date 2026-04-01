@@ -7,7 +7,6 @@ using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
@@ -40,9 +39,7 @@ public enum FloatButtonGroupTrigger
     Hover
 }
 
-public class FloatButtonGroup : TemplatedControl,
-                                IMotionAwareControl,
-                                IControlSharedTokenResourcesHost
+public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<FloatButtonPlacement> PlacementProperty =
@@ -204,13 +201,6 @@ public class FloatButtonGroup : TemplatedControl,
 
     #endregion
     
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FloatButtonToken.ID;
-
-    #endregion
-    
     private FloatButtonItemsControl? _itemsControl;
     private readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
     private bool _initPressed;
@@ -229,7 +219,7 @@ public class FloatButtonGroup : TemplatedControl,
 
     public FloatButtonGroup()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FloatButtonToken.ScopeProvider);
         Children.CollectionChanged += NotifyChildrenChanged;
     }
 

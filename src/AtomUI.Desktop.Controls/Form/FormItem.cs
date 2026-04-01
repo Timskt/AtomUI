@@ -5,7 +5,6 @@ using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
@@ -24,9 +23,7 @@ public enum FormItemLayout
     Vertical
 }
 
-public class FormItem : TemplatedControl,
-                        IControlSharedTokenResourcesHost,
-                        IFormItem
+public class FormItem : TemplatedControl, IFormItem
 {
     #region 公共属性定义
     
@@ -595,8 +592,6 @@ public class FormItem : TemplatedControl,
         set => SetAndRaise(IsHideItemLabelProperty, ref _isHideItemLabel, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FormToken.ID;
     #endregion
 
     #region 内部事件定义
@@ -641,7 +636,7 @@ public class FormItem : TemplatedControl,
     
     public FormItem()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FormToken.ScopeProvider);
         LayoutUpdated += HandleLayoutUpdated;
     }
 

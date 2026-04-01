@@ -1,6 +1,5 @@
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -8,7 +7,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class SkeletonParagraph : AbstractSkeleton, IControlSharedTokenResourcesHost
+public class SkeletonParagraph : AbstractSkeleton
 {
     #region 公共属性定义
 
@@ -50,18 +49,11 @@ public class SkeletonParagraph : AbstractSkeleton, IControlSharedTokenResourcesH
     
     #endregion
     
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SkeletonToken.ID;
-
-    #endregion
-    
     private StackPanel? _linesLayout;
 
     public SkeletonParagraph()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SkeletonToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

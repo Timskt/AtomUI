@@ -1,7 +1,6 @@
 using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -19,7 +18,6 @@ using ButtonSizeType = SizeType;
     ButtonPseudoClass.IsDanger)]
 public class HyperLinkButton : AvaloniaButton,
                                ISizeTypeAware,
-                               IControlSharedTokenResourcesHost,
                                IMotionAwareControl
 {
     #region 公共属性定义
@@ -101,9 +99,6 @@ public class HyperLinkButton : AvaloniaButton,
     }
 
     #endregion
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
 
     static HyperLinkButton()
     {
@@ -115,7 +110,7 @@ public class HyperLinkButton : AvaloniaButton,
 
     public HyperLinkButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

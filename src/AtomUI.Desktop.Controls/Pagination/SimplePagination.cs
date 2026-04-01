@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -10,7 +9,7 @@ using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
-public class SimplePagination : AbstractPagination, IControlSharedTokenResourcesHost
+public class SimplePagination : AbstractPagination
 {
     #region 公共属性定义
 
@@ -22,13 +21,6 @@ public class SimplePagination : AbstractPagination, IControlSharedTokenResources
         get => GetValue(IsReadOnlyProperty);
         set => SetValue(IsReadOnlyProperty, value);
     }
-
-    #endregion
-
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => PaginationToken.ID;
 
     #endregion
     
@@ -44,7 +36,7 @@ public class SimplePagination : AbstractPagination, IControlSharedTokenResources
 
     public SimplePagination()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(PaginationToken.ScopeProvider);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

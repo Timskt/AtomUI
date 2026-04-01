@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -6,6 +7,7 @@ namespace AtomUI.Desktop.Controls;
 internal class FlyoutHostToken : AbstractControlDesignToken
 {
     public const string ID = "FlyoutHost";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 默认 Popup 和 PlacementTarget 的间距

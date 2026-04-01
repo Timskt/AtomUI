@@ -1,7 +1,6 @@
 ﻿using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -28,7 +27,7 @@ public static class AlertPseudoClass
 }
 
 [PseudoClasses(AlertPseudoClass.HasDescription, AlertPseudoClass.HasExtraAction)]
-public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
+public class Alert : TemplatedControl
 {
     #region 公共属性定义
 
@@ -112,13 +111,6 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
     public event EventHandler? CloseRequest;
 
     #endregion
-
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => AlertToken.ID;
-
-    #endregion
     
     private IconButton? _closeButton;
 
@@ -137,7 +129,7 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
 
     public Alert()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(AlertToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

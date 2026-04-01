@@ -47,7 +47,6 @@ public enum TreeFilterHighlightStrategy
 [PseudoClasses(StdPseudoClass.Draggable)]
 public partial class TreeView : AvaloniaTreeView, 
                                 IMotionAwareControl,
-                                IControlSharedTokenResourcesHost,
                                 IFormItemAware
 {
     #region 公共属性定义
@@ -432,9 +431,6 @@ public partial class TreeView : AvaloniaTreeView,
         set => SetAndRaise(IsEffectiveEmptyVisibleProperty, ref _isEffectiveEmptyVisible, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TreeViewToken.ID;
-    
     protected internal ITreeViewInteractionHandler InteractionHandler { get; }
     
     #endregion
@@ -468,7 +464,7 @@ public partial class TreeView : AvaloniaTreeView,
     protected TreeView(ITreeViewInteractionHandler interactionHandler)
     {
         InteractionHandler = interactionHandler ?? throw new ArgumentNullException(nameof(interactionHandler));
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TreeViewToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleLogicalChildrenCollectionChanged;
         Items.CollectionChanged           += HandleCollectionChanged;
     }

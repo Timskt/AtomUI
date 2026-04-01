@@ -1,9 +1,7 @@
 using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
-using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -13,9 +11,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
 
-public class FloatButtonHost : TemplatedControl,
-                               IControlSharedTokenResourcesHost,
-                               IMotionAwareControl
+public class FloatButtonHost : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<FloatButtonPlacement> PlacementProperty =
@@ -181,13 +177,6 @@ public class FloatButtonHost : TemplatedControl,
         set => SetValue(BadgeOverflowCountProperty, value);
     }
     #endregion
-    
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FloatButtonToken.ID;
-
-    #endregion
 
     private protected FloatButton? FloatButton;
     private protected CompositeDisposable? Disposables;
@@ -195,7 +184,7 @@ public class FloatButtonHost : TemplatedControl,
     
     public FloatButtonHost()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FloatButtonToken.ScopeProvider);
     }
     
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

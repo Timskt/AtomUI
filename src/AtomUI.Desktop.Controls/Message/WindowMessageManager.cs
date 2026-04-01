@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -17,8 +16,7 @@ namespace AtomUI.Desktop.Controls;
 [TemplatePart(WindowNotificationManagerThemeConstants.ItemsPart, typeof(Panel))]
 public class WindowMessageManager : TemplatedControl,
                                     IMessageManager,
-                                    IMotionAwareControl,
-                                    IControlSharedTokenResourcesHost
+                                    IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -65,13 +63,6 @@ public class WindowMessageManager : TemplatedControl,
 
     #endregion
 
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MessageToken.ID;
-
-    #endregion
-
     private IList? _items;
     private IDisposable? _bindingDisposable;
 
@@ -81,7 +72,7 @@ public class WindowMessageManager : TemplatedControl,
     /// <param name="host">The TopLevel that will host the control.</param>
     public WindowMessageManager(TopLevel? host)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MessageToken.ScopeProvider);
 
         if (host is not null)
         {

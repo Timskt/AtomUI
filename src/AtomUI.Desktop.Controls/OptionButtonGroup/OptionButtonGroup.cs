@@ -5,7 +5,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -34,7 +33,6 @@ public class OptionCheckedChangedEventArgs : RoutedEventArgs
 public class OptionButtonGroup : SelectingItemsControl,
                                  ISizeTypeAware,
                                  IWaveSpiritAwareControl,
-                                 IControlSharedTokenResourcesHost,
                                  IFormItemAware
 {
     #region 公共属性定义
@@ -119,9 +117,6 @@ public class OptionButtonGroup : SelectingItemsControl,
         {
             Orientation = Orientation.Horizontal
         });
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => OptionButtonToken.ID;
 
     #endregion
 
@@ -143,7 +138,7 @@ public class OptionButtonGroup : SelectingItemsControl,
 
     public OptionButtonGroup()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(OptionButtonToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
         if (this is IChildIndexProvider childIndexProvider)
         {

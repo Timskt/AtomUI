@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -30,8 +29,7 @@ public enum FloatButtonShape
 
 [PseudoClasses(ButtonPseudoClass.IconOnly)]
 public class FloatButton : AvaloniaButton,
-                           IMotionAwareControl,
-                           IControlSharedTokenResourcesHost
+                           IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<FloatButtonPlacement> PlacementProperty =
@@ -214,9 +212,6 @@ public class FloatButton : AvaloniaButton,
         get => GetValue(BadgeEffectiveColorProperty);
         set => SetValue(BadgeEffectiveColorProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FloatButtonToken.ID;
 
     #endregion
     
@@ -226,7 +221,7 @@ public class FloatButton : AvaloniaButton,
     
     public FloatButton()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FloatButtonToken.ScopeProvider);
         UpdatePseudoClasses();
     }
 

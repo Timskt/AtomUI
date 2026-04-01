@@ -20,7 +20,6 @@ using AvaloniaComboBox = Avalonia.Controls.ComboBox;
 
 public class ComboBox : AvaloniaComboBox,
                         IMotionAwareControl,
-                        IControlSharedTokenResourcesHost,
                         ISizeTypeAware,
                         IInputControlStatusAware,
                         IInputControlStyleVariantAware,
@@ -208,9 +207,6 @@ public class ComboBox : AvaloniaComboBox,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ComboBoxToken.ID;
 
     #endregion
     
@@ -219,7 +215,7 @@ public class ComboBox : AvaloniaComboBox,
 
     public ComboBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ComboBoxToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
         SelectionBoxItemProperty.Changed.AddClassHandler<ComboBox>((box, args) => box.NotifyFormValueChanged(args.NewValue));
     }
