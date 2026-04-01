@@ -1,10 +1,5 @@
 namespace AtomUI.Desktop.Controls.Themes;
 
-internal class TimePickerFlyoutPresenterThemeConstants
-{
-    public const string TimePickerPresenterPart = "PART_TimePickerPresenter";
-}
-
 internal class TimePickerPresenterThemeConstants
 {
     public const string MainLayoutPart = "PART_MainLayout";
