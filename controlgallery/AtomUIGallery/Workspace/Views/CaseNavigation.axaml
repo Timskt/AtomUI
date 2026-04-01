@@ -42,7 +42,7 @@
                             <TextBlock atom:Flex.Grow="1"
                                        Text="{DynamicResource {x:Static lang:CaseNavigationLangResourceKey.Layout_BoxPanel}}"
                                        VerticalAlignment="Center" />
-                            <atom:Tag TagColor="red"
+                            <atom:AbstractTag TagColor="red"
                                       Bordered="False"
                                       Padding="4,0"
                                       VerticalAlignment="Center"
