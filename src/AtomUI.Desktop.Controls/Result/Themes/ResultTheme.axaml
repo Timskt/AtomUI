@@ -8,11 +8,11 @@
             <ControlTemplate>
                 <Border Name="Frame" Padding="{TemplateBinding Padding}">
                     <StackPanel Name="RootLayout">
-                        <ContentPresenter Name="{x:Static atom:ResultThemeConstants.StatusIconPresenterPart}"
+                        <ContentPresenter Name="PART_StatusIconPresenter"
                                           HorizontalAlignment="Center"
                                           IsVisible="False"
                                           Content="{TemplateBinding StatusIcon}" />
-                        <Svg Name="{x:Static atom:ResultThemeConstants.ErrorCodeImagePart}"
+                        <Svg Name="PART_ErrorCodeImage"
                              HorizontalAlignment="Center"
                              IsVisible="False" />
                         <ContentPresenter Name="Header"
