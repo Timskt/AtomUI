@@ -3,9 +3,9 @@
               xmlns:atom="https://atomui.net"
               x:ClassModifier="internal"
               x:Class="AtomUI.Desktop.Controls.Themes.TagTheme"
-              TargetType="atom:Tag">
+              TargetType="atom:AbstractTag">
     <Setter Property="Template">
-        <ControlTemplate TargetType="atom:Tag">
+        <ControlTemplate TargetType="atom:AbstractTag">
             <Panel>
                 <Border Name="Frame"
                         Background="{TemplateBinding Background}"
@@ -18,7 +18,7 @@
                                         DockPanel.Dock="Left"
                                         Icon="{TemplateBinding Icon}"
                                         IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                    <atom:IconButton Name="{x:Static atom:TagThemeConstants.CloseButtonPart}"
+                    <atom:IconButton Name="PART_CloseButton"
                                      DockPanel.Dock="Right"
                                      IsVisible="{TemplateBinding IsClosable}"
                                      Icon="{TemplateBinding CloseIcon}" 
@@ -32,7 +32,7 @@
         </ControlTemplate>
     </Setter>
 
-    <Style Selector="^:is(atom|Tag)">
+    <Style Selector="^:is(atom|AbstractTag)">
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Background" Value="{DynamicResource {x:Static atom:TagTokenKey.DefaultBg}}" />

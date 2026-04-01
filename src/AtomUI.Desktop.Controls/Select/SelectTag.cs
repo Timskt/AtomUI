@@ -4,7 +4,7 @@ using Avalonia.Controls.Primitives;
 
 namespace AtomUI.Desktop.Controls;
 
-internal class SelectTag : Tag
+internal class SelectTag : AbstractTag
 {
     public static readonly StyledProperty<SizeType> SizeTypeProperty =
         SizeTypeControlProperty.SizeTypeProperty.AddOwner<SelectTag>();
