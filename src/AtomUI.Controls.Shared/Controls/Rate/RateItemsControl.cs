@@ -1,28 +1,27 @@
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
-using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal class RateItemsControl : ItemsControl, ISizeTypeAware
 {
     #region 公共属性定义
     
     public static readonly StyledProperty<bool> IsAllowClearProperty =
-       Rate.IsAllowClearProperty.AddOwner<RateItemsControl>();
+        AbstractRate.IsAllowClearProperty.AddOwner<RateItemsControl>();
     
     public static readonly StyledProperty<bool> IsAllowHalfProperty =
-        Rate.IsAllowHalfProperty.AddOwner<RateItemsControl>();
+        AbstractRate.IsAllowHalfProperty.AddOwner<RateItemsControl>();
     
     public static readonly StyledProperty<IBrush?> StarColorProperty =
-        Rate.StarColorProperty.AddOwner<RateItemsControl>();
+        AbstractRate.StarColorProperty.AddOwner<RateItemsControl>();
     
     public static readonly StyledProperty<IBrush?> StarBgColorProperty =
-        Rate.StarBgColorProperty.AddOwner<RateItemsControl>();
+        AbstractRate.StarBgColorProperty.AddOwner<RateItemsControl>();
 
     public static readonly StyledProperty<SizeType> SizeTypeProperty =
         SizeTypeControlProperty.SizeTypeProperty.AddOwner<RateItemsControl>();
