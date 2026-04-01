@@ -2,9 +2,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:converters="clr-namespace:AtomUI.Desktop.Controls.Converters"
     x:ClassModifier="internal">
-    <converters:CheckBoxIndicatorStateConverter x:Key="CheckBoxIndicatorStateConverter"/>
+    <atom:CheckBoxIndicatorStateConverter x:Key="CheckBoxIndicatorStateConverter" />
     <ControlTheme x:Key="{x:Type atom:CheckBox}" TargetType="atom:CheckBox">
         <Setter Property="Template">
             <ControlTemplate>
@@ -12,22 +11,22 @@
                         Padding="0, 1, 0, 1">
                     <DockPanel LastChildFill="True">
                         <atom:CheckBoxIndicator Name="Indicator"
-                                                 DockPanel.Dock="Left"
-                                                 IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
-                                                 IsWaveSpiritEnabled="{TemplateBinding IsWaveSpiritEnabled}"
-                                                 IsEnabled="{TemplateBinding IsEnabled}"
-                                                 State="{TemplateBinding IsChecked, Converter={StaticResource CheckBoxIndicatorStateConverter}}" />
+                                                DockPanel.Dock="Left"
+                                                IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
+                                                IsWaveSpiritEnabled="{TemplateBinding IsWaveSpiritEnabled}"
+                                                IsEnabled="{TemplateBinding IsEnabled}"
+                                                State="{TemplateBinding IsChecked, Converter={StaticResource CheckBoxIndicatorStateConverter}}" />
                         <ContentPresenter Name="ContentPresenter"
                                           VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                          IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
                     </DockPanel>
                 </Border>
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="ClipToBounds" Value="False"/>
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -44,7 +43,7 @@
         <Style Selector="^:disabled">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
         </Style>
-        
+
         <Style Selector="^ /template/ atom|CheckBoxIndicator#Indicator">
             <Setter Property="Width" Value="{DynamicResource {x:Static atom:CheckBoxTokenKey.CheckIndicatorSize}}" />
             <Setter Property="Height" Value="{DynamicResource {x:Static atom:CheckBoxTokenKey.CheckIndicatorSize}}" />

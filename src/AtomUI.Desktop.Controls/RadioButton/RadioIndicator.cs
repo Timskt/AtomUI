@@ -1,6 +1,6 @@
 ﻿using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Media;
 using AtomUI.Theme.Styling;
 using Avalonia;

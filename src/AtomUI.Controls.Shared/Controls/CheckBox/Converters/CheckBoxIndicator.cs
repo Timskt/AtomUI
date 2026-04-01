@@ -1,6 +1,5 @@
 ﻿using AtomUI.Animations;
-using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Animation;
@@ -10,7 +9,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal enum CheckBoxIndicatorState
 {

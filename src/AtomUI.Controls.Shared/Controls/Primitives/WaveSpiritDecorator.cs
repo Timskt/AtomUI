@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
@@ -8,7 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls.Primitives;
+namespace AtomUI.Controls.Primitives;
 
 internal class WaveSpiritDecorator : Control
 {

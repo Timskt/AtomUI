@@ -1,7 +1,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace AtomUI.Desktop.Controls.Converters;
+namespace AtomUI.Controls.Converters;
 
 internal class CheckBoxIndicatorStateConverter : IValueConverter
 {
