@@ -1,5 +1,5 @@
-﻿using AtomUI.Theme.TokenSystem;
-using Avalonia;
+﻿using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -8,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class QRCodeToken : AbstractControlDesignToken
 {
     public const string ID = "QRCode";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// QRCode 文字颜色

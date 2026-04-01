@@ -14,7 +14,6 @@
 
     <ItemGroup>
         <PackageReference Include="Svg.Controls.Avalonia" />
-        <PackageReference Include="SkiaSharp.QrCode" />
         <PackageReference Include="ReactiveUI.Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
     </ItemGroup>
