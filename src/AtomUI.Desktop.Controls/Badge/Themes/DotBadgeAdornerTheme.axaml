@@ -11,7 +11,7 @@
                     LastChildFill="True"
                     ClipToBounds="False">
                     <atom:MotionActor
-                        Name="{x:Static atom:DotBadgeAdornerThemeConstants.IndicatorMotionActorPart}"
+                        Name="PART_MotionActor"
                         ClipToBounds="False"
                         DockPanel.Dock="Left">
                         <atom:DotBadgeIndicator
@@ -44,7 +44,7 @@
             <Setter Property="Margin" Value="{DynamicResource {x:Static atom:BadgeTokenKey.DotBadgeLabelMargin}}" />
         </Style>
         
-        <Style Selector="^ /template/ atom|MotionActor#PART_IndicatorMotionActor">
+        <Style Selector="^ /template/ atom|MotionActor#PART_MotionActor">
             <Setter Property="Width" Value="{DynamicResource {x:Static atom:BadgeTokenKey.DotSize}}" />
             <Setter Property="Height" Value="{DynamicResource {x:Static atom:BadgeTokenKey.DotSize}}" />
         </Style>

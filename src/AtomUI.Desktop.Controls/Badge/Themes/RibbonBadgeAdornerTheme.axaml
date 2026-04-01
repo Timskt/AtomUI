@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <atom:TextBlock Name="{x:Static atom:RibbonBadgeAdornerThemeConstants.TextPartPart}"
+                    <atom:TextBlock Name="PART_LabelPart"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Text="{TemplateBinding Text}" />
@@ -24,7 +24,7 @@
         <Setter Property="BadgeRibbonCornerDarkenAmount"
                 Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeRibbonCornerDarkenAmount}}" />
 
-        <Style Selector="^ /template/ atom|TextBlock#PART_TextPart">
+        <Style Selector="^ /template/ atom|TextBlock#PART_LabelPart">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
             <Setter Property="LineHeight"
                     Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeFontHeight}}" />
