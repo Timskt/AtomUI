@@ -2,23 +2,22 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AtomUI.Reflection;
+using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 
-namespace AtomUI.Desktop.Controls;
-
-using AvaloniaScrollBar =  Avalonia.Controls.Primitives.ScrollBar;
+namespace AtomUI.Controls;
 
 internal static class ScrollBarReflectionExtensions
 {
     #region 反射信息定义
-    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicFields, typeof(AvaloniaScrollBar))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicFields, typeof(ScrollBar))]
     private static readonly Lazy<FieldInfo> TimerFieldInfo = new Lazy<FieldInfo>(() => 
-        typeof(AvaloniaScrollBar).GetFieldInfoOrThrow("_timer",
+        typeof(ScrollBar).GetFieldInfoOrThrow("_timer",
             BindingFlags.Instance | BindingFlags.NonPublic));
     
-    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicProperties, typeof(AvaloniaScrollBar))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.NonPublicProperties, typeof(ScrollBar))]
     private static readonly Lazy<PropertyInfo> IsExpandedPropertyInfo = new Lazy<PropertyInfo>(() =>
-        typeof(AvaloniaScrollBar).GetPropertyInfoOrThrow("IsExpanded",
+        typeof(ScrollBar).GetPropertyInfoOrThrow("IsExpanded",
             BindingFlags.Instance | BindingFlags.Public));
     #endregion
     
