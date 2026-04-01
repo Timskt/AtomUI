@@ -8,12 +8,12 @@
             <ControlTemplate>
                 <atom:MotionActor Name="PART_MotionActor" ClipToBounds="False">
                     <Panel
-                        Name="{x:Static atom:CountBadgeAdornerThemeConstants.RootLayoutPart}">
-                        <Border Name="{x:Static atom:CountBadgeAdornerThemeConstants.BadgeIndicatorPart}"
+                        Name="RootLayout">
+                        <Border Name="BadgeIndicator"
                                 BoxShadow="{TemplateBinding BoxShadow}"
                                 Background="{TemplateBinding BadgeColor}" />
                         <atom:TextBlock
-                            Name="{x:Static atom:CountBadgeAdornerThemeConstants.BadgeTextPart}"
+                            Name="BadgeText"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             Text="{TemplateBinding CountText}" 
@@ -31,30 +31,30 @@
         <Setter Property="BadgeColor" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeColor}}" />
 
         <Style Selector="^[IsAdornerMode=True]">
-            <Style Selector="^ /template/ Panel#PART_RootLayout">
+            <Style Selector="^ /template/ Panel#RootLayout">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="VerticalAlignment" Value="Top" />
             </Style>
         </Style>
-        <Style Selector="^ /template/ Border#PART_BadgeIndicator">
+        <Style Selector="^ /template/ Border#BadgeIndicator">
             <Setter Property="Height" Value="{DynamicResource {x:Static atom:BadgeTokenKey.IndicatorHeight}}" />
             <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:BadgeTokenKey.IndicatorHeight}}" />
             <Setter Property="CornerRadius"
                     Value="{DynamicResource {x:Static atom:BadgeTokenKey.CountBadgeCornerRadius}}" />
         </Style>
-        <Style Selector="^ /template/ atom|TextBlock#PART_BadgeText">
+        <Style Selector="^ /template/ atom|TextBlock#BadgeText">
             <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:BadgeTokenKey.TextFontSize}}" />
             <Setter Property="Padding" Value="{DynamicResource {x:Static atom:BadgeTokenKey.CountBadgeTextPadding}}" />
         </Style>
 
         <Style Selector="^[Size=Small]">
-            <Style Selector="^ /template/ Border#PART_BadgeIndicator">
+            <Style Selector="^ /template/ Border#BadgeIndicator">
                 <Setter Property="Height" Value="{DynamicResource {x:Static atom:BadgeTokenKey.IndicatorHeightSM}}" />
                 <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:BadgeTokenKey.IndicatorHeightSM}}" />
                 <Setter Property="CornerRadius"
                         Value="{DynamicResource {x:Static atom:BadgeTokenKey.CountBadgeCornerRadiusSM}}" />
             </Style>
-            <Style Selector="^ /template/ atom|TextBlock#PART_BadgeText">
+            <Style Selector="^ /template/ atom|TextBlock#BadgeText">
                 <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:BadgeTokenKey.TextFontSizeSM}}" />
             </Style>
         </Style>

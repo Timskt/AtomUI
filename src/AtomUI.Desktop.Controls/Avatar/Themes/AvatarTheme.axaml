@@ -34,7 +34,7 @@
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"
                          Path="{TemplateBinding Src}" />
-                    <atom:TextBlock Name="{x:Static atom:AvatarThemeConstants.TextPresenterPart}"
+                    <atom:TextBlock Name="PART_TextPresenter"
                                     Text="{TemplateBinding Text}"
                                     RenderTransform="{TemplateBinding TextRenderTransform}"
                                     IsVisible="False" 
