@@ -1,17 +1,14 @@
 using System.Diagnostics;
-using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
-using Avalonia.Utilities;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal enum RateItemSelectedState
 {
@@ -27,22 +24,22 @@ internal class RateItem : TemplatedControl
         AvaloniaProperty.Register<RateItem, RateItemSelectedState>(nameof(SelectedState), RateItemSelectedState.None);
     
     public static readonly StyledProperty<bool> IsAllowClearProperty =
-        Rate.IsAllowClearProperty.AddOwner<RateItem>();
+        AbstractRate.IsAllowClearProperty.AddOwner<RateItem>();
     
     public static readonly StyledProperty<bool> IsAllowHalfProperty =
-        Rate.IsAllowHalfProperty.AddOwner<RateItem>();
+        AbstractRate.IsAllowHalfProperty.AddOwner<RateItem>();
 
     public static readonly StyledProperty<SizeType> SizeTypeProperty =
         SizeTypeControlProperty.SizeTypeProperty.AddOwner<RateItem>();
     
     public static readonly StyledProperty<object?> CharacterProperty =
-        Rate.CharacterProperty.AddOwner<RateItem>();
+        AbstractRate.CharacterProperty.AddOwner<RateItem>();
     
     public static readonly StyledProperty<IBrush?> StarColorProperty =
-        Rate.StarColorProperty.AddOwner<RateItem>();
+        AbstractRate.StarColorProperty.AddOwner<RateItem>();
     
     public static readonly StyledProperty<IBrush?> StarBgColorProperty =
-        Rate.StarBgColorProperty.AddOwner<RateItem>();
+        AbstractRate.StarBgColorProperty.AddOwner<RateItem>();
     
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<RateItem>();
@@ -234,17 +231,17 @@ internal class RateItem : TemplatedControl
             var iconType = iconChar.GetType();
             var newIcon  = Activator.CreateInstance(iconType) as Icon;
             Debug.Assert(newIcon != null);
-            charControl       = newIcon;
-            newIcon.FillBrush = brush;
+            charControl         = newIcon;
+            newIcon.FillBrush   = brush;
             newIcon.StrokeBrush = brush;
         }
         else if (Character is char character)
         {
             charControl = new RateCharacter()
             {
-                Character = character,
+                Character  = character,
                 Foreground = brush,
-                FontSize = double.IsNaN(Height) ? FontSize : Height,
+                FontSize   = double.IsNaN(Height) ? FontSize : Height,
             };
         }
         else if (Character is string str && str.Length >= 1)

@@ -11,7 +11,7 @@
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderBrush}">
-                    <atom:RateItemsControl Name="{x:Static atom:RateThemeConstants.RateItemsPart}"
+                    <atom:RateItemsControl Name="PART_RateItems"
                                            Character="{TemplateBinding Character}"
                                            StarColor="{TemplateBinding StarColor}"
                                            StarBgColor="{TemplateBinding StarBgColor}"
