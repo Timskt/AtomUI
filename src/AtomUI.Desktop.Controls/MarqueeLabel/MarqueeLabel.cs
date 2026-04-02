@@ -138,7 +138,6 @@ public class MarqueeLabel : TextBlock
     {
         base.ApplyTemplate();
         // 为了强制
-
     }
 
     protected override Size MeasureOverride(Size availableSize)
