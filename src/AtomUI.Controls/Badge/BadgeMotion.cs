@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class BadgeZoomBadgeInMotion : AbstractMotion
 {

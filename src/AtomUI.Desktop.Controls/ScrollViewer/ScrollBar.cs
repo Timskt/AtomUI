@@ -1,4 +1,4 @@
-using AtomUI.Controls;
+using AtomUI.Controls.Commons;
 using AtomUI.Theme;
 using Avalonia;
 
@@ -17,6 +17,7 @@ public class ScrollBar : AbstractScrollBar
     }
 
     #endregion
+    
     public ScrollBar()
     {
         this.RegisterTokenResourceScope(ScrollViewerToken.ScopeProvider);

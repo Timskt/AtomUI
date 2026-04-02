@@ -1,4 +1,5 @@
-﻿using AtomUI.Media;
+﻿using AtomUI.Controls.Commons;
+using AtomUI.Media;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -7,12 +8,6 @@ using Avalonia.Media;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Controls;
-
-public enum PresetEmptyImage
-{
-    Simple,
-    Default
-}
 
 [TemplatePart("PART_SvgImage", typeof(Avalonia.Svg.Svg))]
 public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware

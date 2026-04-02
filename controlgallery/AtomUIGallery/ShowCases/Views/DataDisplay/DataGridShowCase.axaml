@@ -28,7 +28,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <atom:AbstractTag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:AbstractTag>
+                                            <atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
@@ -81,7 +81,7 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <atom:AbstractTag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:AbstractTag>
+                                                <atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
@@ -173,7 +173,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <atom:AbstractTag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:AbstractTag>
+                                            <atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
@@ -871,7 +871,7 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <atom:AbstractTag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:AbstractTag>
+                                                <atom:Tag TagText="{Binding Name}" TagColor="{Binding Color}"></atom:Tag>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>

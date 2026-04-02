@@ -1,4 +1,16 @@
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
+
+public enum FloatButtonType
+{
+    Default,
+    Primary
+}
+
+public enum FloatButtonShape
+{
+    Circle,
+    Square
+}
 
 public enum FloatButtonPlacement
 {

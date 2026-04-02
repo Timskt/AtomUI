@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
 using Avalonia.Controls;

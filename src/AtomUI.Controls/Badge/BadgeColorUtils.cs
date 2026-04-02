@@ -1,7 +1,7 @@
 using AtomUI.Theme.Palette;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal static class BadgeColorUtils
 {

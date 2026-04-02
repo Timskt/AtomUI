@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using AtomUI.Controls;
 using AtomUI.Media;
 using Avalonia;
 using Avalonia.Controls;
@@ -10,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Metadata;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls.Commons;
 
 public enum AvatarShape
 {
