@@ -1,7 +1,4 @@
 using AtomUI.Animations;
-using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Theme;
 using AtomUI.Theme.Styling;
 using AtomUI.Utils;
 using Avalonia;
@@ -15,15 +12,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls;
-
-public enum ProgressStatus
-{
-    Normal,
-    Success,
-    Exception,
-    Active
-}
+namespace AtomUI.Controls.Commons;
 
 [PseudoClasses(ProgressBarPseudoClass.Indeterminate, ProgressBarPseudoClass.Completed)]
 public abstract class AbstractProgressBar : RangeBase,
@@ -283,7 +272,6 @@ public abstract class AbstractProgressBar : RangeBase,
 
     public AbstractProgressBar()
     {
-        this.RegisterTokenResourceScope(ProgressBarToken.ScopeProvider);
         _effectiveSizeType = SizeType;
     }
 
@@ -330,10 +318,10 @@ public abstract class AbstractProgressBar : RangeBase,
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        LayoutTransformLabel = e.NameScope.Find<LayoutTransformControl>(ProgressBarThemeConstants.LayoutTransformControlPart);
-        PercentageLabel = e.NameScope.Find<Label>(ProgressBarThemeConstants.PercentageLabelPart);
-        ExceptionCompletedIconPresenter = e.NameScope.Find<IconPresenter>(ProgressBarThemeConstants.ExceptionCompletedIconPresenterPart);
-        SuccessCompletedIconPresenter = e.NameScope.Find<IconPresenter>(ProgressBarThemeConstants.SuccessCompletedIconPresenterPart);
+        LayoutTransformLabel = e.NameScope.Find<LayoutTransformControl>("PART_LayoutTransformControl");
+        PercentageLabel = e.NameScope.Find<Label>("PART_PercentageLabel");
+        ExceptionCompletedIconPresenter = e.NameScope.Find<IconPresenter>("PART_ExceptionCompletedIconPresenter");
+        SuccessCompletedIconPresenter = e.NameScope.Find<IconPresenter>("PART_SuccessCompletedIconPresenter");
         // 创建完更新调用一次
         NotifyEffectSizeTypeChanged();
         UpdateProgress();

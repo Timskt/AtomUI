@@ -2,14 +2,15 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
+    xmlns:atomc="https://atomui.net/common-controls"
     x:Class="AtomUI.Desktop.Controls.Themes.AbstractProgressBarTheme"
-    TargetType="atom:AbstractProgressBar"
+    TargetType="atomc:AbstractProgressBar"
     x:ClassModifier="internal">
     <Setter Property="Template">
-        <ControlTemplate TargetType="atom:AbstractProgressBar">
+        <ControlTemplate TargetType="atomc:AbstractProgressBar">
             <Canvas>
-                <LayoutTransformControl Name="{x:Static atom:ProgressBarThemeConstants.LayoutTransformControlPart}">
-                    <Label Name="{x:Static atom:ProgressBarThemeConstants.PercentageLabelPart}"
+                <LayoutTransformControl Name="PART_LayoutTransformControl">
+                    <Label Name="PART_PercentageLabel"
                            Padding="0"
                            Margin="0"
                            VerticalContentAlignment="Center"
@@ -19,7 +20,7 @@
         </ControlTemplate>
     </Setter>
 
-    <Style Selector="^:is(atom|AbstractProgressBar)">
+    <Style Selector="^:is(atomc|AbstractProgressBar)">
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
