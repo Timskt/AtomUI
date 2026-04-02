@@ -1,8 +1,8 @@
 <atom:ControlThemesProvider xmlns="https://github.com/avaloniaui"
                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                             xmlns:atom="https://atomui.net"
-                            x:Class="AtomUI.Controls.SharedControlThemesProvider"
-                            Id="AtomUI.Controls.Shared">
+                            x:Class="AtomUI.Controls.CommonControlThemesProvider"
+                            Id="AtomUI.Controls.Common">
     <atom:ControlThemesProvider.ControlThemes>
         <ResourceInclude Source="Icon/Themes/IconThemes.axaml" />
     </atom:ControlThemesProvider.ControlThemes>
