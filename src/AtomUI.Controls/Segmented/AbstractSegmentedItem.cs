@@ -10,7 +10,7 @@ using Avalonia.Interactivity;
 namespace AtomUI.Controls.Commons;
 
 [PseudoClasses(StdPseudoClass.Pressed, StdPseudoClass.Selected, SegmentedPseudoClass.HasIcon)]
-public class AbstractSegmentedItem : ContentControl, ISelectable
+public abstract class AbstractSegmentedItem : ContentControl, ISelectable
 {
     #region 公共属性定义
 

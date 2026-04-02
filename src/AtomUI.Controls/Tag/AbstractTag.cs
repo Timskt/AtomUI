@@ -29,7 +29,7 @@ internal struct TagStatusCalcColor
 }
 
 [TemplatePart("PART_CloseButton", typeof(AbstractIconButton))]
-public class AbstractTag : TemplatedControl
+public abstract class AbstractTag : TemplatedControl
 {
     #region 公共属性定义
 

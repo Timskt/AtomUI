@@ -1,7 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using AtomUI.Data;
-using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -13,7 +12,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractSegmented : SelectingItemsControl,
+public abstract class AbstractSegmented : SelectingItemsControl,
                                  IMotionAwareControl,
                                  ISizeTypeAware,
                                  IFormItemAware
@@ -200,12 +199,7 @@ public class AbstractSegmented : SelectingItemsControl,
             }
         }
     }
-
-    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
-    {
-        return new AbstractSegmentedItem();
-    }
-
+    
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
     {
         return NeedsContainer<AbstractSegmentedItem>(item, out recycleKey);
