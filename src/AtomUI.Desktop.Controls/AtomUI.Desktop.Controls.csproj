@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../AtomUI.Controls.Shared/AtomUI.Controls.Shared.csproj" />
+        <ProjectReference Include="../AtomUI.Controls/AtomUI.Controls.csproj" />
         <ProjectReference Include="../AtomUI.Generator/AtomUI.Generator.csproj" 
                           OutputItemType="Analyzer" 
                           ReferenceOutputAssembly="false"
