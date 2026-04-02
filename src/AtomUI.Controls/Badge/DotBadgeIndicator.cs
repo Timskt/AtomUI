@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class DotBadgeIndicator : Control
 {

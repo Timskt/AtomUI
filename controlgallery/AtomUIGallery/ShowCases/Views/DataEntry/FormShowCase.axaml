@@ -460,10 +460,10 @@
                            FormLayout="Horizontal"
                            RequiredMark="{Binding FormRequiredMark}">
                     <atom:Form.CustomRequireMark>
-                        <atom:AbstractTag TagColor="Error">required</atom:AbstractTag>
+                        <atom:Tag TagColor="Error">required</atom:Tag>
                     </atom:Form.CustomRequireMark>
                     <atom:Form.CustomOptionalMark>
-                        <atom:AbstractTag TagColor="Warning">optional</atom:AbstractTag>
+                        <atom:Tag TagColor="Warning">optional</atom:Tag>
                     </atom:Form.CustomOptionalMark>
                     <atom:FormItem IsRequired="True" LabelText="Field A" FieldName="FieldA" Tooltip="This is a required field">
                         <atom:LineEdit PlaceholderText="input placeholder"/>

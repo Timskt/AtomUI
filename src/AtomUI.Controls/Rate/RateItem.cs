@@ -8,7 +8,7 @@ using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal enum RateItemSelectedState
 {

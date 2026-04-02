@@ -3,9 +3,9 @@
               xmlns:atom="https://atomui.net"
               x:ClassModifier="internal"
               x:Class="AtomUI.Desktop.Controls.Themes.TagTheme"
-              TargetType="atom:AbstractTag">
+              TargetType="atom:Tag">
     <Setter Property="Template">
-        <ControlTemplate TargetType="atom:AbstractTag">
+        <ControlTemplate TargetType="atom:Tag">
             <Panel>
                 <Border Name="Frame"
                         Background="{TemplateBinding Background}"
@@ -32,7 +32,7 @@
         </ControlTemplate>
     </Setter>
 
-    <Style Selector="^:is(atom|AbstractTag)">
+    <Style Selector="^:is(atom|Tag)">
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Background" Value="{DynamicResource {x:Static atom:TagTokenKey.DefaultBg}}" />

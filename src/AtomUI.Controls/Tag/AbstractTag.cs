@@ -11,16 +11,7 @@ using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
-
-public enum TagStatus
-{
-    // 状态
-    Success,
-    Info,
-    Error,
-    Warning
-}
+namespace AtomUI.Controls.Commons;
 
 internal struct TagCalcColor
 {

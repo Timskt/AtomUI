@@ -1,13 +1,12 @@
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
-using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls.Commons;
 
 public class AbstractRadioButtonGroup : ItemsControl,
                                         IMotionAwareControl,
