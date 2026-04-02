@@ -9,7 +9,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractSpin : ContentControl, IMotionAwareControl
+public abstract class AbstractSpin : ContentControl, IMotionAwareControl
 {
     #region 公共属性定义
 

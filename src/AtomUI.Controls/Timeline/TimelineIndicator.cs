@@ -1,13 +1,13 @@
-using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls.Commons;
 
+[TemplatePart("PART_IconPresenter", typeof(IconPresenter))]
 internal class TimelineIndicator : TemplatedControl
 {
     #region 公共属性定义
@@ -160,7 +160,7 @@ internal class TimelineIndicator : TemplatedControl
     {
         base.OnApplyTemplate(e);
         IndicatorColor ??= DefaultIndicatorColor;
-        _iconPresenter =   e.NameScope.Find<IconPresenter>(TimelineIndicatorThemeConstants.IconPresenterPart);
+        _iconPresenter =   e.NameScope.Find<IconPresenter>("PART_IconPresenter");
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

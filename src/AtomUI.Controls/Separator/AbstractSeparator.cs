@@ -14,7 +14,7 @@ namespace AtomUI.Controls.Commons;
 using AvaloniaSeparator = Avalonia.Controls.Separator;
 
 [PseudoClasses(SeparatorPseudoClass.HasTitleText)]
-public class AbstractSeparator : AvaloniaSeparator, ISizeTypeAware
+public abstract class AbstractSeparator : AvaloniaSeparator, ISizeTypeAware
 {
     private const double SEPARATOR_LINE_MIN_PROPORTION = 0.25;
     

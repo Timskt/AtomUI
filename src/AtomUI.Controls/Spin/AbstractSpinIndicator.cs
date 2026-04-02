@@ -15,7 +15,7 @@ using Avalonia.Threading;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractSpinIndicator : TemplatedControl, ISizeTypeAware
+public abstract class AbstractSpinIndicator : TemplatedControl, ISizeTypeAware
 {
     #region 公共属性定义
 
