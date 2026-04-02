@@ -33,14 +33,5 @@
         <InternalsVisibleTo Include="AtomUI.Desktop.Controls.DataGrid" />
         <InternalsVisibleTo Include="AtomUI.Desktop.Controls.ColorPicker" />
     </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Embedding\Themes\EmbeddableControlRootTheme.axaml" />
-      <AdditionalFiles Include="Icon\Themes\IconPresenterTheme.axaml" />
-      <AdditionalFiles Include="Icon\Themes\IconTheme.axaml" />
-      <AdditionalFiles Include="Icon\Themes\IconThemes.axaml" />
-      <AdditionalFiles Include="Icon\Themes\PathIconTheme.axaml" />
-      <AdditionalFiles Include="ItemsControl\Themes\ItemsControlTheme.axaml" />
-      <AdditionalFiles Include="SharedControlThemesProvider.axaml" />
-    </ItemGroup>
+    
 </Project>
