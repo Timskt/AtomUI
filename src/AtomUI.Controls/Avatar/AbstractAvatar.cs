@@ -11,12 +11,6 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Controls.Commons;
 
-public enum AvatarShape
-{
-    Circle,
-    Square
-}
-
 internal enum AvatarContentType
 {
     Icon,
