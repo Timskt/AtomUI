@@ -5,5 +5,7 @@
                             Id="AtomUI.Controls.Common">
     <atom:ControlThemesProvider.ControlThemes>
         <ResourceInclude Source="Icon/Themes/IconThemes.axaml" />
+        <ResourceInclude Source="ItemsControl/Themes/ItemsControlTheme.axaml" />
+        <ResourceInclude Source="Embedding/Themes/EmbeddableControlRootTheme.axaml" />
     </atom:ControlThemesProvider.ControlThemes>
 </atom:ControlThemesProvider>

@@ -7,10 +7,10 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <Border Name="{x:Static atom:EmbeddingThemeConstants.TransparencyFallbackPart}" IsHitTestVisible="False" />
+                    <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
                     <Border Background="{TemplateBinding Background}">
                         <atom:VisualLayerManager>
-                            <ContentPresenter Name="{x:Static atom:EmbeddingThemeConstants.ContentPresenterPart}"
+                            <ContentPresenter Name="PART_ContentPresenter"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"
                                               Content="{TemplateBinding Content}"
                                               Margin="{TemplateBinding Padding}"/>
@@ -20,10 +20,10 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultBackground}}" />
-        <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultBackground}}" />
-        <Setter Property="TopLevel.SystemBarColor" Value="{DynamicResource {x:Static atom:WindowTokenKey.SystemBarColor}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultForeground}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="TopLevel.SystemBarColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontFamily}}" />
         
