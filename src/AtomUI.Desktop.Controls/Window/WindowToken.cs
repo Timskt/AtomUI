@@ -24,7 +24,7 @@ internal class WindowToken : AbstractControlDesignToken
     /// </summary>
     public CornerRadius CornerRadius { get; set; }
     
-    public Color? SystemBarColor { get; set; }
+    public SolidColorBrush? SystemBarColor { get; set; }
 
     public WindowToken()
         : base("Window")
@@ -37,6 +37,6 @@ internal class WindowToken : AbstractControlDesignToken
         DefaultBackground = SharedToken.ColorBgContainer;
         DefaultForeground = SharedToken.ColorText;
         CornerRadius      = new CornerRadius(12);
-        SystemBarColor    = SharedToken.ColorBgContainer;
+        SystemBarColor    = new SolidColorBrush(SharedToken.ColorBgContainer);
     }
 }

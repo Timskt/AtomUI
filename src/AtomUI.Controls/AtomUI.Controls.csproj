@@ -43,8 +43,4 @@
       <AdditionalFiles Include="ItemsControl\Themes\ItemsControlTheme.axaml" />
       <AdditionalFiles Include="SharedControlThemesProvider.axaml" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="MarqueeLabel\" />
-    </ItemGroup>
 </Project>
