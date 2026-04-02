@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class SegmentedStackPanel : Panel
 {
@@ -37,7 +37,7 @@ internal class SegmentedStackPanel : Panel
         var targetHeight    = 0d;
         foreach (var child in Children)
         {
-            if (child is SegmentedItem box)
+            if (child is AbstractSegmentedItem box)
             {
                 var isVisible = box.IsVisible;
                 if (isVisible && !hasVisibleChild)
@@ -63,7 +63,7 @@ internal class SegmentedStackPanel : Panel
         var childAvailableSize = new Size(availableWidth / columns, availableSize.Height);
         foreach (var child in Children)
         {
-            if (child is SegmentedItem box)
+            if (child is AbstractSegmentedItem box)
             {
                 box.Measure(childAvailableSize);
                 if (box.DesiredSize.Height > maxHeight)
@@ -97,7 +97,7 @@ internal class SegmentedStackPanel : Panel
         var offsetY           = 0d;
         foreach (var child in Children)
         {
-            if (child is SegmentedItem box)
+            if (child is AbstractSegmentedItem box)
             {
                 if (!box.IsVisible)
                 {
@@ -126,7 +126,7 @@ internal class SegmentedStackPanel : Panel
 
         foreach (var child in Children)
         {
-            if (child is SegmentedItem box)
+            if (child is AbstractSegmentedItem box)
             {
                 if (!box.IsVisible)
                 {
