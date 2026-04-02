@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using AtomUI.Controls;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia.Interactivity;
@@ -39,7 +40,8 @@ public partial class DataGridShowCase : ReactiveUserControl<DataGridViewModel>
                 Dispatcher.UIThread.Post(() => DragColumnDataGrid1.ItemsSource = viewModel.DragColumnDataSource, DispatcherPriority.Background);
                 Dispatcher.UIThread.Post(() => DragColumnDataGrid2.ItemsSource = viewModel.DragColumnDataSource, DispatcherPriority.Background);
                 Dispatcher.UIThread.Post(() => DragColumnDataGrid3.ItemsSource = viewModel.DragColumnDataSource, DispatcherPriority.Background);
-                Dispatcher.UIThread.Post(() => DragRowDataGrid1.ItemsSource = viewModel.DragRowDataSource, DispatcherPriority.Background);
+                Dispatcher.UIThread.Post(() => DragRowDataGrid1.ItemsSource = viewModel.DragRowDataSource,
+                    DispatcherPriority.Background);
                 Dispatcher.UIThread.Post(() => DragRowDataGrid2.ItemsSource = viewModel.DragRowManyDataSource, DispatcherPriority.Background);
                 Dispatcher.UIThread.Post(() => CustomEmptyDataGrid.ItemsSource            = viewModel.CustomEmptyDataSource, DispatcherPriority.Background);
                 Dispatcher.UIThread.Post(() => EditableCellsDataGrid.ItemsSource          = viewModel.EditableCellsDataSource, DispatcherPriority.Background);
@@ -190,12 +192,12 @@ public partial class DataGridShowCase : ReactiveUserControl<DataGridViewModel>
     
     private void HandleSortAgeBtnClick(object? sender, RoutedEventArgs? eventArgs)
     {
-       ResetFilterAndSortGrid.Sort(1, ListSortDirection.Descending);
+        ResetFilterAndSortGrid.Sort(1, ListSortDirection.Descending);
     }
     
     private void HandleClearFiltersBtnClick(object? sender, RoutedEventArgs? eventArgs)
     {
-       ResetFilterAndSortGrid.ClearFilters();
+        ResetFilterAndSortGrid.ClearFilters();
     }
     
     private void HandleClearFiltersAndSortersBtnClick(object? sender, RoutedEventArgs? eventArgs)

@@ -1,4 +1,5 @@
 using AtomUI;
+using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
