@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
+    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:FloatButtonItemsControl}" TargetType="atom:FloatButtonItemsControl">
         <Style Selector="^[IsTriggerMode=True]">
@@ -15,8 +16,8 @@
                                     BoxShadow="{TemplateBinding BoxShadow}"
                                     Background="{TemplateBinding Background}">
                                 <Panel>
-                                    <atom:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
-                                                                    Lines="{TemplateBinding Lines}" />
+                                    <atomc:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
+                                                                     Lines="{TemplateBinding Lines}" />
                                     <StackPanel Name="ItemsLayout" Orientation="{TemplateBinding Orientation}" />
                                 </Panel>
                             </Border>
@@ -34,8 +35,8 @@
                             BoxShadow="{TemplateBinding BoxShadow}"
                             Background="{TemplateBinding Background}">
                         <Panel>
-                            <atom:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
-                                                            Lines="{TemplateBinding Lines}" />
+                            <atomc:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
+                                                             Lines="{TemplateBinding Lines}" />
                             <StackPanel Name="ItemsLayout" Orientation="{TemplateBinding Orientation}" />
                         </Panel>
                     </Border>
@@ -50,7 +51,7 @@
             <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
             <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
         </Style>
-        <Style Selector="^ /template/ atom|FloatButtonSeparatorLayer">
+        <Style Selector="^ /template/ atomc|FloatButtonSeparatorLayer">
             <Setter Property="SeparatorBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
         </Style>
         
@@ -58,7 +59,7 @@
             <Style Selector="^ /template/ StackPanel#ItemsLayout">
                 <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
             </Style>
-            <Style Selector="^ /template/ atom|FloatButtonSeparatorLayer">
+            <Style Selector="^ /template/ atomc|FloatButtonSeparatorLayer">
                 <Setter Property="IsVisible" Value="False" />
             </Style>
         </Style>

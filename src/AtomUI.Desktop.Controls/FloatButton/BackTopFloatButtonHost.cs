@@ -1,54 +1,11 @@
 using System.Reactive.Disposables;
-using AtomUI.Controls;
-using Avalonia;
-using Avalonia.VisualTree;
+using AtomUI.Controls.Commons;
 
 namespace AtomUI.Desktop.Controls;
 
-using AvaScrollViewer = Avalonia.Controls.ScrollViewer;
-
-public class BackTopFloatButtonHost : FloatButtonHost
+public class BackTopFloatButtonHost : AbstractBackTopFloatButtonHost
 {
-    #region 公共属性定义
-
-    public static readonly StyledProperty<TimeSpan> ToTopDurationProperty =
-        BackTopFloatButton.ToTopDurationProperty.AddOwner<BackTopFloatButtonHost>();
-    
-    public static readonly StyledProperty<AvaScrollViewer?> TargetProperty =
-        BackTopFloatButton.TargetProperty.AddOwner<BackTopFloatButtonHost>();
-    
-    public static readonly StyledProperty<double> VisibilityHeightProperty =
-        BackTopFloatButton.VisibilityHeightProperty.AddOwner<BackTopFloatButtonHost>();
-    
-    public static readonly StyledProperty<TimeSpan> MotionDurationProperty =
-        MotionAwareControlProperty.MotionDurationProperty.AddOwner<BackTopFloatButtonHost>();
-
-    public TimeSpan ToTopDuration
-    {
-        get => GetValue(ToTopDurationProperty);
-        set => SetValue(ToTopDurationProperty, value);
-    }
-    
-    public AvaScrollViewer? Target
-    {
-        get => GetValue(TargetProperty);
-        set => SetValue(TargetProperty, value);
-    }
-    
-    public double VisibilityHeight
-    {
-        get => GetValue(VisibilityHeightProperty);
-        set => SetValue(VisibilityHeightProperty, value);
-    }
-    
-    public TimeSpan MotionDuration
-    {
-        get => GetValue(MotionDurationProperty);
-        set => SetValue(MotionDurationProperty, value);
-    }
-    #endregion
-    
-    protected override FloatButton NotifyCreateFloatButton(CompositeDisposable disposables)
+    protected override AbstractFloatButton NotifyCreateFloatButton(CompositeDisposable disposables)
     {
         var floatButton = new BackTopFloatButton();
         
@@ -68,11 +25,5 @@ public class BackTopFloatButtonHost : FloatButtonHost
         floatButton[!BackTopFloatButton.MotionDurationProperty]   = this[!MotionDurationProperty];
         
         return floatButton;
-    }
-
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-        Target ??= this.FindAncestorOfType<AvaScrollViewer>();
     }
 }

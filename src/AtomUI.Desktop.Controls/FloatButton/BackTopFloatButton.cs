@@ -1,226 +1,59 @@
-using AtomUI.Controls;
-using AtomUI.Icons.AntDesign;
-using AtomUI.MotionScene;
+using AtomUI.Controls.Commons;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
-using Avalonia.Styling;
 
 namespace AtomUI.Desktop.Controls;
 
-using AvaScrollViewer = Avalonia.Controls.ScrollViewer;
+using ToolTipControl = AtomUI.Desktop.Controls.ToolTip;
 
-public class BackTopFloatButton : FloatButton
+public class BackTopFloatButton : AbstractBackTopFloatButton
 {
-    #region 公共属性定义
-
-    public static readonly StyledProperty<TimeSpan> ToTopDurationProperty =
-        AvaloniaProperty.Register<BackTopFloatButton, TimeSpan>(nameof(ToTopDuration), TimeSpan.FromMilliseconds(450));
-
-    public static readonly StyledProperty<AvaScrollViewer?> TargetProperty =
-        AvaloniaProperty.Register<BackTopFloatButton, AvaScrollViewer?>(nameof(Target));
-
-    public static readonly StyledProperty<double> VisibilityHeightProperty =
-        AvaloniaProperty.Register<BackTopFloatButton, double>(nameof(VisibilityHeight), 400d);
-
-    public static readonly StyledProperty<TimeSpan> MotionDurationProperty =
-        MotionAwareControlProperty.MotionDurationProperty.AddOwner<BackTopFloatButton>();
-
-    public TimeSpan ToTopDuration
-    {
-        get => GetValue(ToTopDurationProperty);
-        set => SetValue(ToTopDurationProperty, value);
-    }
-
-    public AvaScrollViewer? Target
-    {
-        get => GetValue(TargetProperty);
-        set => SetValue(TargetProperty, value);
-    }
-
-    public double VisibilityHeight
-    {
-        get => GetValue(VisibilityHeightProperty);
-        set => SetValue(VisibilityHeightProperty, value);
-    }
-
-    public TimeSpan MotionDuration
-    {
-        get => GetValue(MotionDurationProperty);
-        set => SetValue(MotionDurationProperty, value);
-    }
-
-    #endregion
-
-    #region 内部属性定义
-
-    internal static readonly StyledProperty<bool> IsActiveProperty =
-        AvaloniaProperty.Register<BackTopFloatButton, bool>(nameof(IsActive));
-
-    internal bool IsActive
-    {
-        get => GetValue(IsActiveProperty);
-        set => SetValue(IsActiveProperty, value);
-    }
-
-    #endregion
-
-    private BaseMotionActor? _motionActor;
-    private bool _showAnimating;
-    private bool _hideAnimating;
-    private CancellationTokenSource? _cancellationTokenSource;
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        _motionActor = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
-        if (_motionActor != null)
-        {
-            _motionActor.SetCurrentValue(IsVisibleProperty, IsActive);
-        }
-    }
-
-    protected override void ConfigureDefaultIcon()
-    {
-        if (Icon == null)
-        {
-            SetCurrentValue(IconProperty, new VerticalAlignTopOutlined());
-        }
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == TargetProperty)
+        if (change.Property == TooltipProperty)
         {
-            ConfigureTarget(change.OldValue as AvaScrollViewer, change.NewValue as AvaScrollViewer);
+            ToolTipControl.SetTip(this, Tooltip);
         }
-        else if (change.Property == IsActiveProperty)
+        else if (change.Property == TooltipColorProperty)
         {
-            if (IsActive)
+            ToolTipControl.SetColor(this, TooltipColor);
+        }
+    }
+    
+    private protected override void ConfigureBadge()
+    {
+        if (_badgeLayout != null)
+        {
+            if (IsBadgeEnabled)
             {
-                ApplyShowMotion();
-
-            }
-            else
-            {
-                ApplyHideMotion();
-            }
-        }
-    }
-
-    private void ConfigureTarget(AvaScrollViewer? oldScrollViewer, AvaScrollViewer? newScrollViewer)
-    {
-        if (oldScrollViewer != null)
-        {
-            oldScrollViewer.ScrollChanged -= HandleScrollChanged;
-        }
-
-        if (newScrollViewer != null)
-        {
-            newScrollViewer.ScrollChanged += HandleScrollChanged;
-        }
-    }
-
-    private void HandleScrollChanged(object? sender, ScrollChangedEventArgs e)
-    {
-        if (sender is AvaScrollViewer scrollViewer)
-        {
-            IsActive = scrollViewer.Offset.Y >= VisibilityHeight;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        if (Target != null)
-        {
-            IsActive = Target.Offset.Y >= VisibilityHeight;
-        }
-    }
-
-    private void ApplyShowMotion()
-    {
-        if (_motionActor is not null)
-        {
-            if (IsMotionEnabled)
-            {
-                if (_showAnimating)
+                if (IsDotBadge)
                 {
-                    return;
+                    var dotBadge = new DotBadgeAdorner();
+                    dotBadge[!DotBadgeAdorner.BadgeDotColorProperty]   = this[!BadgeEffectiveColorProperty];
+                    dotBadge[!DotBadgeAdorner.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+                    _badge                                             = dotBadge;
                 }
-
-                _showAnimating = true;
-                _motionActor.SetCurrentValue(IsVisibleProperty, false);
-                var motion = new FadeInMotion(MotionDuration, new QuadraticEaseOut());
-                motion.Run(_motionActor, () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); },
-                    () => { _showAnimating = false; });
-            }
-            else
-            {
-                _motionActor.SetCurrentValue(IsVisibleProperty, true);
-            }
-        }
-    }
-
-    private void ApplyHideMotion()
-    {
-        if (_motionActor is not null)
-        {
-            if (IsMotionEnabled)
-            {
-                if (_hideAnimating)
+                else
                 {
-                    return;
+                    var countBadge = new CountBadgeAdorner();
+                    countBadge[!CountBadgeAdorner.BadgeColorProperty]      = this[!BadgeEffectiveColorProperty];
+                    countBadge[!CountBadgeAdorner.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+                    countBadge[!CountBadgeAdorner.CountProperty]           = this[!BadgeCountProperty];
+                    countBadge[!CountBadgeAdorner.OverflowCountProperty]   = this[!BadgeOverflowCountProperty];
+                    _badge                                                 = countBadge;
                 }
-
-                _hideAnimating = true;
-                var motion =
-                    new FadeOutMotion(MotionDuration, new QuadraticEaseOut());
-                motion.Run(_motionActor, null, () =>
-                {
-                    _hideAnimating = false;
-                    _motionActor.SetCurrentValue(IsVisibleProperty, false);
-                });
+                
+                _badgeLayout.Children.Add(_badge);
+                CalculateBadgePosition();
             }
             else
             {
-                _motionActor.SetCurrentValue(IsVisibleProperty, false);
-            }
-        }
-    }
-
-    protected override void OnClick()
-    {
-        if (IsEffectivelyEnabled)
-        {
-            if (Target != null)
-            {
-                _cancellationTokenSource?.Cancel();
-                _cancellationTokenSource = new CancellationTokenSource();
-                var currentOffset = Target.Offset;
-                var animation = new Animation
+                if (_badge != null)
                 {
-                    Easing   = new CubicEaseInOut(),
-                    Duration = ToTopDuration,
-                    Children =
-                    {
-                        new KeyFrame
-                        {
-                            Setters = { new Setter(AvaScrollViewer.OffsetProperty, currentOffset) }, Cue = new Cue(0.0d)
-                        },
-                        new KeyFrame
-                        {
-                            Setters = { new Setter(AvaScrollViewer.OffsetProperty, new Vector(currentOffset.X, 0)) }, Cue = new Cue(1.0d)
-                        }
-                    }
-                };
-                animation.RunAsync(Target, _cancellationTokenSource.Token);
+                    _badgeLayout.Children.Remove(_badge);
+                }
+                _badge = null;
             }
         }
-        base.OnClick();
     }
 }
