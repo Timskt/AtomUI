@@ -1,7 +1,6 @@
-using AtomUI.Controls;
 using Avalonia.Controls;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 interface IOptionButtonData : IHeadered
 {

@@ -1,4 +1,5 @@
-﻿using AtomUI.Controls.Data;
+﻿using AtomUI.Controls;
+using AtomUI.Controls.Data;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia.Controls;

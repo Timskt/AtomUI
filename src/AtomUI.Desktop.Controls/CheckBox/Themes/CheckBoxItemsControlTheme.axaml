@@ -7,7 +7,7 @@
     <ControlTheme x:Key="{x:Type atomc:CheckBoxItemsControl}" TargetType="atomc:CheckBoxItemsControl">
         <Setter Property="Template">
             <ControlTemplate>
-                <ItemsPresenter Name="{x:Static atom:OptionButtonGroupThemeConstants.ItemsPresenterPart}"
+                <ItemsPresenter Name="PART_ItemsPresenter"
                                 ItemsPanel="{TemplateBinding ItemsPanel}" />
             </ControlTemplate>
         </Setter>

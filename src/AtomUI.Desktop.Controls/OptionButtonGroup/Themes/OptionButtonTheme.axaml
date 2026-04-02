@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <atom:WaveSpiritDecorator Name="{x:Static atom:OptionButtonThemeConstants.WaveSpiritPart}"
+                    <atom:WaveSpiritDecorator Name="PART_WaveSpirit"
                                               CornerRadius="{TemplateBinding CornerRadius}" />
                     <DockPanel Name="ContentLayout"
                                HorizontalAlignment="Center"
