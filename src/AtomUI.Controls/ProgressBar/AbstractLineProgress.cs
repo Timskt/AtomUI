@@ -1,5 +1,3 @@
-using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Utils;
@@ -11,14 +9,7 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls;
-
-public enum LinePercentAlignment
-{
-    Start,
-    Center,
-    End
-}
+namespace AtomUI.Controls.Commons;
 
 internal class SizeTypeThresholdValue
 {
@@ -160,8 +151,8 @@ public abstract class AbstractLineProgress : AbstractProgressBar
         _extraInfoSize = CalculateExtraInfoSize(FontSize);
         NotifyOrientationChanged();
         
-        ExceptionCompletedIconPresenter = e.NameScope.Find<IconPresenter>(ProgressBarThemeConstants.ExceptionCompletedIconPresenterPart);
-        SuccessCompletedIconPresenter   = e.NameScope.Find<IconPresenter>(ProgressBarThemeConstants.SuccessCompletedIconPresenterPart);
+        ExceptionCompletedIconPresenter = e.NameScope.Find<IconPresenter>("PART_ExceptionCompletedIconPresenter");
+        SuccessCompletedIconPresenter   = e.NameScope.Find<IconPresenter>("PART_SuccessCompletedIconPresenter");
         if (ExceptionCompletedIcon == null)
         {
             SetValue(ExceptionCompletedIconProperty, new CloseCircleFilled(), BindingPriority.Template);
