@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <ContentPresenter
-                    Name="{x:Static atom:SpinThemeConstants.CustomIndicatorPresenterPart}"
+                    Name="PART_CustomIndicatorPresenter"
                     Content="{TemplateBinding CustomIndicator}"
                     ContentTemplate="{TemplateBinding CustomIndicatorTemplate}"
                     HorizontalContentAlignment="Center"
