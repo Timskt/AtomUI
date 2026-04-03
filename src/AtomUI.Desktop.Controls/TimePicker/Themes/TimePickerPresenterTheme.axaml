@@ -20,7 +20,7 @@
                                 ButtonType="Link"
                                 HorizontalAlignment="Left"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static timePickerLang:TimePickerLangResourceKey.Now}}" />
+                                Content="{DynamicResource {x:Static atom:TimePickerLangResourceKey.Now}}" />
                             <atom:Button
                                 Name="{x:Static atom:TimePickerPresenterThemeConstants.ConfirmButtonPart}"
                                 ButtonType="Primary"

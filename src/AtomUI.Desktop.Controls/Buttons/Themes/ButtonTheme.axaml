@@ -543,7 +543,7 @@
         <Style Selector="^[ButtonType=Primary]">
             <Style Selector="^:not(:disabled)">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ButtonTokenKey.PrimaryColor}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+                <Setter Property="Background" Value="{atom:SharedTokenResource ColorPrimary}" />
                 <Setter Property="BorderBrush" Value="{Binding Background, RelativeSource={RelativeSource Self}}" />
                 
                 <Style Selector="^:pointerover">

@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
     xmlns:converters="clr-namespace:AtomUI.Desktop.Controls.Converters"
-    xmlns:dialogLang="clr-namespace:AtomUI.Desktop.Controls.DialogLang"
     x:ClassModifier="internal">
     <converters:OverlayDialogResizerVisibleConverter x:Key="OverlayDialogResizerVisibleConverter" />
     <ControlTheme x:Key="{x:Type atom:DialogButtonBox}" TargetType="atom:DialogButtonBox">
@@ -35,33 +34,33 @@
             <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:DialogTokenKey.ButtonGroupSpacing}}" />
         </Style>
 
-        <Setter Property="OkButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Ok}}" />
-        <Setter Property="OpenButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Open}}" />
-        <Setter Property="SaveButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Save}}" />
+        <Setter Property="OkButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Ok}}" />
+        <Setter Property="OpenButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Open}}" />
+        <Setter Property="SaveButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Save}}" />
         <Setter Property="CancelButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Cancel}}" />
-        <Setter Property="CloseButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Close}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Cancel}}" />
+        <Setter Property="CloseButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Close}}" />
         <Setter Property="DiscardButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Discard}}" />
-        <Setter Property="ApplyButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Apply}}" />
-        <Setter Property="ResetButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Reset}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Discard}}" />
+        <Setter Property="ApplyButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Apply}}" />
+        <Setter Property="ResetButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Reset}}" />
         <Setter Property="ReloadButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Reload}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Reload}}" />
         <Setter Property="RestoreDefaultsButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.RestoreDefaults}}" />
-        <Setter Property="HelpButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Help}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.RestoreDefaults}}" />
+        <Setter Property="HelpButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Help}}" />
         <Setter Property="SaveAllButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.SaveAll}}" />
-        <Setter Property="YesButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Yes}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.SaveAll}}" />
+        <Setter Property="YesButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Yes}}" />
         <Setter Property="YesToAllButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.YesToAll}}" />
-        <Setter Property="NoButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.No}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.YesToAll}}" />
+        <Setter Property="NoButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.No}}" />
         <Setter Property="NoToAllButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.NoToAll}}" />
-        <Setter Property="AbortButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Abort}}" />
-        <Setter Property="RetryButtonText" Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Retry}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.NoToAll}}" />
+        <Setter Property="AbortButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Abort}}" />
+        <Setter Property="RetryButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Retry}}" />
         <Setter Property="IgnoreButtonText"
-                Value="{DynamicResource {x:Static dialogLang:DialogLangResourceKey.Ignore}}" />
+                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Ignore}}" />
 
     </ControlTheme>
 </ResourceDictionary>

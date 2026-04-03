@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using AtomUI.Utils;
+﻿using System.Diagnostics;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -37,25 +37,57 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken,
 
     public override void BuildResourceDictionary(IResourceDictionary dictionary)
     {
-        var type = GetType();
+        var tokenKindType = GetTokenKindType();
+        var type          = GetType();
         // internal 这里也考虑进去，还是具体的 Token 自己处理？
-        var tokenProperties = type.GetProperties(BindingFlags.Public |
-                                                 BindingFlags.NonPublic |
-                                                 BindingFlags.Instance |
-                                                 BindingFlags.FlattenHierarchy);
-        var ns                     = type.Namespace;
-        var tokenResourceNamespace = GetTokenResourceCatalog();
-        foreach (var property in tokenProperties)
         {
-            var tokenName  = $"{ns}.{_id}.{property.Name}";
-            var tokenValue = property.GetValue(this);
-            if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
-                tokenValue is not null)
+            var tokenProperties = type.GetProperties(BindingFlags.Public |
+                                                     BindingFlags.NonPublic |
+                                                     BindingFlags.Instance |
+                                                     BindingFlags.FlattenHierarchy)
+                                      .ToDictionary(x => x.Name);
+            if (tokenKindType != null)
             {
-                tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                foreach (var value in Enum.GetValues(tokenKindType))
+                {
+                    var tokenName = Enum.GetName(tokenKindType, value);
+                    Debug.Assert(tokenName != null);
+                    if (tokenProperties.TryGetValue(tokenName, out var property))
+                    {
+                        var tokenValue = property.GetValue(this);
+                        if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
+                            tokenValue is not null)
+                        {
+                            tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                        }
+                        dictionary[value] = tokenValue;
+                    }
+                    else
+                    {
+                        throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
+                    }
+                } 
             }
+        }
+        {
+            var tokenProperties = type.GetProperties(BindingFlags.Public |
+                                                     BindingFlags.NonPublic |
+                                                     BindingFlags.Instance |
+                                                     BindingFlags.FlattenHierarchy);
+            var ns                     = type.Namespace;
+            var tokenResourceNamespace = GetTokenResourceCatalog();
+            foreach (var property in tokenProperties)
+            {
+                var tokenName  = $"{ns}.{_id}.{property.Name}";
+                var tokenValue = property.GetValue(this);
+                if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
+                    tokenValue is not null)
+                {
+                    tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                }
 
-            dictionary[new TokenResourceKey(tokenName, tokenResourceNamespace)] = tokenValue;
+                dictionary[new TokenResourceKey(tokenName, tokenResourceNamespace)] = tokenValue;
+            }
         }
         
     }
@@ -94,6 +126,11 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken,
 
             _sharedResourceDeltaDictionary[new TokenResourceKey(name)] = localSharedTokenValue;
         }
+    }
+
+    protected virtual Type? GetTokenKindType()
+    {
+        return null;
     }
 
     /// <summary>

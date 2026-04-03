@@ -42,4 +42,22 @@ public static class LanguageResourceBinder
 
         return null;
     }
+    
+    public static string? GetLangResource<TResourceKind>(TResourceKind resourceKey, ThemeVariant? themeVariant = null)
+        where TResourceKind : Enum
+    {
+        var application = Application.Current;
+        if (application is null)
+        {
+            throw new ApplicationException("The application instance does not exist");
+        }
+
+        themeVariant ??= (application as IThemeVariantHost).ActualThemeVariant;
+        if (application.Styles.TryGetResource(resourceKey, themeVariant, out var value))
+        {
+            return value as string;
+        }
+
+        return null;
+    }
 }

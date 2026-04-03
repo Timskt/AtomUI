@@ -22,7 +22,7 @@
                         <StackPanel Name="ContentLayout"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
-                            <TextBlock Text="{DynamicResource {x:Static uploadlang:UploadLangResourceKey.Pending}}"
+                            <TextBlock Text="{DynamicResource {x:Static atom:UploadLangResourceKey.Pending}}"
                                        HorizontalAlignment="Center" />
                         </StackPanel>
                     </Border>

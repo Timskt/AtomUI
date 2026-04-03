@@ -20,8 +20,8 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="JumpToText" Value="{DynamicResource {x:Static paginationLang:PaginationLangResourceKey.JumpToText}}"/>
-        <Setter Property="PageText" Value="{DynamicResource {x:Static paginationLang:PaginationLangResourceKey.PageText}}"/>
+        <Setter Property="JumpToText" Value="{DynamicResource {x:Static atom:PaginationLangResourceKey.JumpToText}}"/>
+        <Setter Property="PageText" Value="{DynamicResource {x:Static atom:PaginationLangResourceKey.PageText}}"/>
         
         <Style Selector="^ /template/ StackPanel#PART_RootLayout">
             <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}"/>

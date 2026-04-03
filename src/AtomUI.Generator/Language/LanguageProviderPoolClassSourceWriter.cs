@@ -67,7 +67,6 @@ internal class LanguageProviderPoolClassSourceWriter
     {
         var statements = new List<StatementSyntax>
         {
-            // var themes = new List<BaseControlTheme>();
             SyntaxFactory.LocalDeclarationStatement(
                 SyntaxFactory.VariableDeclaration(
                                  SyntaxFactory.GenericName(SyntaxFactory.Identifier("List"))
@@ -88,8 +87,7 @@ internal class LanguageProviderPoolClassSourceWriter
                                                                                            "LanguageProvider")))))
                                                                .WithArgumentList(SyntaxFactory.ArgumentList()))))))
         };
-
-        // 动态添加 themes.Add(new XXX());
+        
         foreach (var languageInfo in _languageInfos)
         {
             var addStatement = SyntaxFactory.ExpressionStatement(
@@ -107,8 +105,7 @@ internal class LanguageProviderPoolClassSourceWriter
 
             statements.Add(addStatement);
         }
-
-        // return themes;
+        
         statements.Add(
             SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("languageProviders")));
         

@@ -105,9 +105,9 @@ internal class LangResourceKeyClassSourceWriter
         return fieldSyntax;
     }
 
-    private NamespaceDeclarationSyntax BuildLanguageResourceKey(List<LanguageInfo> languages)
+    private NamespaceDeclarationSyntax BuildLanguageResourceInfo(List<LanguageInfo> languages)
     {
-        var targetNamespace = languages.First().Namespace;
+        var targetNamespace = languages.First().TargetNamespace ?? languages.First().Namespace;
         var catalog         = languages.First().ResourceCatalog;
         var languageId      = languages.First().LanguageId;
 
@@ -120,19 +120,65 @@ internal class LangResourceKeyClassSourceWriter
         var namespaceSyntax = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(targetNamespace));
 
         var className = $"{languageId}LangResourceKey";
-
         var classSyntax       = BuildClassSyntax(className);
+        
+        var enumName = $"{languageId}LangResourceKind";
+        var controlEnumDecl = SyntaxFactory.EnumDeclaration(enumName)
+                                           .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+        
         var resourceKeyFields = new List<MemberDeclarationSyntax>();
+        var resourceKindFields = new List<EnumMemberDeclarationSyntax>();
         // 排序，不然生成结果不稳定
         var sortedKeys = keys.ToList().OrderBy(key => key);
         foreach (var key in sortedKeys)
         {
             resourceKeyFields.Add(BuildResourceKeyFieldSyntax(catalog, key, $"{languageId}.{key}"));
+            resourceKindFields.Add(SyntaxFactory.EnumMemberDeclaration(key));
         }
+        
+        var lanugageMarkupExtensionClass = GenerateLanguageResourceMarkupExtensionClass($"{languageId}LangResourceKeyExtension", enumName);
 
         classSyntax     = classSyntax.AddMembers(resourceKeyFields.ToArray());
+        controlEnumDecl = controlEnumDecl.AddMembers(resourceKindFields.ToArray());
         namespaceSyntax = namespaceSyntax.AddMembers(classSyntax);
+        namespaceSyntax = namespaceSyntax.AddMembers(controlEnumDecl);
+        namespaceSyntax = namespaceSyntax.AddMembers(lanugageMarkupExtensionClass);
+        
         return namespaceSyntax;
+    }
+    
+       private static ClassDeclarationSyntax GenerateLanguageResourceMarkupExtensionClass(string className, string genericArgType)
+    {
+        var genericName = SyntaxFactory.GenericName("LanguageResourceExtension")
+                                       .WithTypeArgumentList(
+                                           SyntaxFactory.TypeArgumentList(
+                                               SyntaxFactory.SingletonSeparatedList(
+                                                   SyntaxFactory.ParseTypeName(genericArgType))));
+        
+        var ctor1 = SyntaxFactory.ConstructorDeclaration(className)
+                                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                                 .WithBody(SyntaxFactory.Block());
+        
+        var parameter = SyntaxFactory.Parameter(SyntaxFactory.Identifier("kind"))
+                                     .WithType(SyntaxFactory.ParseTypeName(genericArgType));
+    
+        var baseConstructorCall = SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
+                                               .AddArgumentListArguments(
+                                                   SyntaxFactory.Argument(SyntaxFactory.IdentifierName("kind")));
+    
+        var ctor2 = SyntaxFactory.ConstructorDeclaration(className)
+                                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                                 .AddParameterListParameters(parameter)
+                                 .WithInitializer(baseConstructorCall)
+                                 .WithBody(SyntaxFactory.Block());
+        
+        var classDeclaration = SyntaxFactory.ClassDeclaration(className)
+                                            .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                                            .AddBaseListTypes(SyntaxFactory.SimpleBaseType(genericName))
+                                            .AddMembers(ctor1, ctor2)
+                                            .NormalizeWhitespace();
+
+        return classDeclaration;
     }
 
     private CompilationUnitSyntax BuildCompilationUnitSyntax()
@@ -153,11 +199,12 @@ internal class LangResourceKeyClassSourceWriter
         {
             if (entry.Value.Count > 0)
             {
-                var namespaceDeclSyntax = BuildLanguageResourceKey(entry.Value);
+                var namespaceDeclSyntax = BuildLanguageResourceInfo(entry.Value);
                 compilationUnit = compilationUnit.AddMembers(namespaceDeclSyntax);
             }
         }
 
         return compilationUnit;
     }
+    
 }

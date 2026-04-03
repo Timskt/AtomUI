@@ -25,13 +25,13 @@
                                 ButtonType="Link"
                                 HorizontalAlignment="Left"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static datePickerLang:DatePickerLangResourceKey.Now}}" />
+                                Content="{DynamicResource {x:Static atom:DatePickerLangResourceKey.Now}}" />
                             <atom:Button
                                 Name="{x:Static atom:DatePickerPresenterThemeConstants.TodayButtonPart}"
                                 ButtonType="Link"
                                 HorizontalAlignment="Left"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static datePickerLang:DatePickerLangResourceKey.Today}}" />
+                                Content="{DynamicResource {x:Static atom:DatePickerLangResourceKey.Today}}" />
                             <atom:Button
                                 Name="{x:Static atom:DatePickerPresenterThemeConstants.ConfirmButtonPart}"
                                 ButtonType="Primary"

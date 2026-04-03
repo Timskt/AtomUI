@@ -1,4 +1,5 @@
 ﻿using AtomUI.Theme.TokenSystem;
+using AtomUI.Theme;
 
 namespace AtomUI.Controls.DesignTokens
 {
@@ -10,5 +11,26 @@ namespace AtomUI.Controls.DesignTokens
         public static readonly TokenResourceKey StrokeLineCap = new TokenResourceKey("AtomUI.Controls.Icon.StrokeLineCap");
         public static readonly TokenResourceKey StrokeLineJoin = new TokenResourceKey("AtomUI.Controls.Icon.StrokeLineJoin");
         public static readonly TokenResourceKey StrokeWidth = new TokenResourceKey("AtomUI.Controls.Icon.StrokeWidth");
+    }
+
+    public enum IconTokenKind
+    {
+        FallbackColor,
+        SecondaryFillColor,
+        SecondaryStrokeColor,
+        StrokeLineCap,
+        StrokeLineJoin,
+        StrokeWidth
+    }
+
+    public class IconTokenResourceExtension : TokenResourceExtension<IconTokenKind>
+    {
+        public IconTokenResourceExtension()
+        {
+        }
+
+        public IconTokenResourceExtension(IconTokenKind kind) : base(kind)
+        {
+        }
     }
 }
