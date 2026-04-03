@@ -24,9 +24,9 @@
             </ControlTemplate>
         </Setter>
         <Setter Property="Focusable" Value="True" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="StarColor" Value="{DynamicResource {x:Static atom:RateTokenKey.StarColor}}" />
-        <Setter Property="StarBgColor" Value="{DynamicResource {x:Static atom:RateTokenKey.StarBg}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="StarColor" Value="{atom:RateTokenResource StarColor}" />
+        <Setter Property="StarBgColor" Value="{atom:RateTokenResource StarBg}" />
         <Setter Property="ClipToBounds" Value="False" />
     </ControlTheme>
 </ResourceDictionary>

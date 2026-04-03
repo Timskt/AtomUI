@@ -111,45 +111,45 @@
         <Setter Property="atom:ScrollViewer.IsLiteMode" Value="True" />
         <Setter Property="atom:ScrollViewer.AllowAutoHide" Value="True" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
-        <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.SelectionBackground}}" />
-        <Setter Property="CaretBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
+        <Setter Property="SelectionBrush" Value="{atom:SharedTokenResource SelectionBackground}" />
+        <Setter Property="CaretBrush" Value="{atom:SharedTokenResource ColorText}" />
         <Setter Property="SelectionForegroundBrush"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.SelectionForeground}}" />
+                Value="{atom:SharedTokenResource SelectionForeground}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
     
         <Style Selector="^[SizeType=Large]">
-            <Setter Property="LineHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeightLG}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+            <Setter Property="LineHeight" Value="{atom:SharedTokenResource FontHeightLG}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
         </Style>
         <Style Selector="^[SizeType=Middle]">
-            <Setter Property="LineHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeight}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
+            <Setter Property="LineHeight" Value="{atom:SharedTokenResource FontHeight}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}" />
         </Style>
         <Style Selector="^[SizeType=Small]">
-            <Setter Property="LineHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeightSM}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+            <Setter Property="LineHeight" Value="{atom:SharedTokenResource FontHeightSM}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
         </Style>
     
         <Style Selector="^[IsCustomFontSize=False]">
             <Style Selector="^[SizeType=Large]">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:LineEditTokenKey.InputFontSizeLG}}" />
-                <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+                <Setter Property="FontSize" Value="{atom:LineEditTokenResource InputFontSizeLG}" />
+                <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
             </Style>
             <Style Selector="^[SizeType=Middle]">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:LineEditTokenKey.InputFontSize}}" />
-                <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
+                <Setter Property="FontSize" Value="{atom:LineEditTokenResource InputFontSize}" />
+                <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}" />
             </Style>
             <Style Selector="^[SizeType=Small]">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:LineEditTokenKey.InputFontSizeSM}}" />
-                <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+                <Setter Property="FontSize" Value="{atom:LineEditTokenResource InputFontSizeSM}" />
+                <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
             </Style>
         </Style>
     
-        <Setter Property="PlaceholderForeground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+        <Setter Property="PlaceholderForeground" Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
 
         <Style Selector="^ /template/ TextPresenter#PART_TextPresenter">
             <Setter Property="Margin"
@@ -158,16 +158,16 @@
     
         <Style Selector="^ /template/ StackPanel#PART_LeftAddOnLayout, ^ /template/ StackPanel#PART_RightAddOnLayout">
             <Setter Property="Spacing"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyPaddingXXS}}" />
+                    Value="{atom:SharedTokenResource UniformlyPaddingXXS}" />
         </Style>
         
         <Style Selector="^ /template/ atom|TextBlock#TextCountIndicator">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
         </Style>
         
         <Style Selector="^:disabled">
             <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
             </Style>
         </Style>
     </Style>

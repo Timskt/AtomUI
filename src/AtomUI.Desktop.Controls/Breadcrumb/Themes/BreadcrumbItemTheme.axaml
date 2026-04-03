@@ -10,7 +10,7 @@
                             CornerRadius="{TemplateBinding CornerRadius}"
                             Padding="{TemplateBinding Padding}"
                             Background="{TemplateBinding Background}">
-                        <StackPanel Orientation="Horizontal" Spacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}">
+                        <StackPanel Orientation="Horizontal" Spacing="{atom:SharedTokenResource SpacingXXS}">
                             <atom:IconPresenter Name="IconPresenter"
                                                  Icon="{TemplateBinding Icon}"
                                                  IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
@@ -22,48 +22,48 @@
                     <ContentPresenter Name="Separator"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center"
-                                      Foreground="{DynamicResource {x:Static atom:BreadcrumbTokenKey.SeparatorColor}}"
+                                      Foreground="{atom:BreadcrumbTokenResource SeparatorColor}"
                                       Content="{TemplateBinding Separator}"
-                                      Margin="{DynamicResource {x:Static atom:BreadcrumbTokenKey.SeparatorMargin}}"
+                                      Margin="{atom:BreadcrumbTokenResource SeparatorMargin}"
                                       ContentTemplate="{TemplateBinding SeparatorTemplate}"
                                       IsVisible="{TemplateBinding IsLast, Converter={x:Static BoolConverters.Not}}"/>
                 </StackPanel>
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.BreadcrumbItemContentPadding}}"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}"/>
+        <Setter Property="Padding" Value="{atom:BreadcrumbTokenResource BreadcrumbItemContentPadding}"/>
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.ItemColor}}"/>
+        <Setter Property="Foreground" Value="{atom:BreadcrumbTokenResource ItemColor}"/>
         
         <Style Selector="^[IsLast=True][IsNavigateResponsive=False]">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.LastItemColor}}"/>
+            <Setter Property="Foreground" Value="{atom:BreadcrumbTokenResource LastItemColor}"/>
         </Style>
         
         <Style Selector="^[IsNavigateResponsive=True]">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.LinkColor}}"/>
+            <Setter Property="Foreground" Value="{atom:BreadcrumbTokenResource LinkColor}"/>
             
             <Style Selector="^:pointerover">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.LinkHoverBgColor}}" />
+                        Value="{atom:BreadcrumbTokenResource LinkHoverBgColor}" />
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.LinkHoverColor}}" />
+                        Value="{atom:BreadcrumbTokenResource LinkHoverColor}" />
                 
                 <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
                     <Setter Property="IconBrush"
-                            Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.LinkHoverColor}}" />
+                            Value="{atom:BreadcrumbTokenResource LinkHoverColor}" />
                 </Style>
             </Style>
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:BreadcrumbTokenKey.ItemColor}}" />
+                    Value="{atom:BreadcrumbTokenResource ItemColor}" />
             <Setter Property="Width"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                    Value="{atom:SharedTokenResource IconSizeSM}" />
             <Setter Property="Height"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                    Value="{atom:SharedTokenResource IconSizeSM}" />
         </Style>
         
     </ControlTheme>

@@ -356,7 +356,7 @@ public class Card : HeaderedContentControl,
                 Transitions =
                 [
                     TransitionUtils.CreateTransition<BoxShadowsTransition>(BoxShadowProperty,
-                        SharedTokenKey.MotionDurationFast)
+                        SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

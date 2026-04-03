@@ -10,8 +10,8 @@
         </ControlTheme.BasedOn>
   
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeIcon}}" />
-        <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeIcon}}" />
+        <Setter Property="IconWidth" Value="{atom:SharedTokenResource FontSizeIcon}" />
+        <Setter Property="IconHeight" Value="{atom:SharedTokenResource FontSizeIcon}" />
         <Setter Property="SelectAllText" Value="{DynamicResource {x:Static atom:TransferLangResourceKey.SelectAll}}" />
         <Setter Property="DeSelectAllText" Value="{DynamicResource {x:Static atom:TransferLangResourceKey.DeSelectAll}}" />
         <Setter Property="InvertSelectCurrentPageText" Value="{DynamicResource {x:Static atom:TransferLangResourceKey.InvertSelectCurrentPage}}" />

@@ -11,13 +11,13 @@
         
         <Style Selector="^[IsCustomFontSize=False]">
             <Style Selector="^[SizeType=Large]">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:LineEditTokenKey.InputFontSizeLG}}" />
+                <Setter Property="FontSize" Value="{atom:LineEditTokenResource InputFontSizeLG}" />
             </Style>
             <Style Selector="^[SizeType=Middle]">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:LineEditTokenKey.InputFontSize}}" />
+                <Setter Property="FontSize" Value="{atom:LineEditTokenResource InputFontSize}" />
             </Style>
             <Style Selector="^[SizeType=Small]">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:LineEditTokenKey.InputFontSize}}" />
+                <Setter Property="FontSize" Value="{atom:LineEditTokenResource InputFontSize}" />
             </Style>
         </Style>
     </ControlTheme>

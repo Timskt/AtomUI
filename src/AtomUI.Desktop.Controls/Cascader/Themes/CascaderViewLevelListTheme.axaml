@@ -26,9 +26,9 @@
             <ItemsPanelTemplate>
                 <atom:VirtualizingStackPanel
                     Orientation="Vertical"
-                    Margin="{DynamicResource {x:Static atom:CascaderTokenKey.MenuPadding}}"
+                    Margin="{atom:CascaderTokenResource MenuPadding}"
                     HorizontalAlignment="Left"
-                    MinWidth="{DynamicResource {x:Static atom:CascaderTokenKey.ControlItemWidth}}" />
+                    MinWidth="{atom:CascaderTokenResource ControlItemWidth}" />
             </ItemsPanelTemplate>
         </Setter>
     </ControlTheme>

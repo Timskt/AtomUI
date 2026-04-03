@@ -86,54 +86,54 @@
 
         <Style Selector="^[ValidateStatus=Error]">
             <Style Selector="^ /template/ TextBlock#PART_ErrorMsg">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorText}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorErrorText}" />
             </Style>
         </Style>
 
         <Style Selector="^[ValidateStatus=Warning]">
             <Style Selector="^ /template/ TextBlock#PART_ErrorMsg">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningText}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorWarningText}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ TextBlock#PART_Colon">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:FormTokenKey.LabelColonMargin}}" />
+            <Setter Property="Margin" Value="{atom:FormTokenResource LabelColonMargin}" />
         </Style>
 
         <Style Selector="^ /template/ TextBlock#PART_DefaultRequireMark">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:FormTokenKey.LabelRequiredMarkColor}}" />
+            <Setter Property="Foreground" Value="{atom:FormTokenResource LabelRequiredMarkColor}" />
         </Style>
 
         <Style Selector="^[Layout=Vertical]">
             <Style Selector="^ /template/ Panel#PART_LabelLayout">
                 <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="Margin" Value="{DynamicResource {x:Static atom:FormTokenKey.VerticalLabelMargin}}" />
+                <Setter Property="Margin" Value="{atom:FormTokenResource VerticalLabelMargin}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ DockPanel#PART_RootLayout">
-            <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+            <Setter Property="HorizontalSpacing" Value="{atom:SharedTokenResource SpacingXS}" />
         </Style>
 
         <Style Selector="^ /template/ TextBlock#PART_Label">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:FormTokenKey.LabelColor}}" />
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:FormTokenKey.LabelFontSize}}" />
+            <Setter Property="Foreground" Value="{atom:FormTokenResource LabelColor}" />
+            <Setter Property="FontSize" Value="{atom:FormTokenResource LabelFontSize}" />
         </Style>
 
         <Style Selector="^ /template/ Panel#PART_LabelLayout StackPanel">
             <Setter Property="Spacing"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+                    Value="{atom:SharedTokenResource SpacingXXS}" />
         </Style>
 
         <Style Selector="^ /template/ Panel#ItemDeleteButtonLayout">
             <Setter Property="Width"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                    Value="{atom:SharedTokenResource IconSize}" />
         </Style>
         <Style Selector="^ /template/ atom|IconButton#ItemDeleteButton">
             <Setter Property="IconWidth"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                    Value="{atom:SharedTokenResource IconSize}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                    Value="{atom:SharedTokenResource IconSize}" />
         </Style>
 
         <Style Selector="^[IsValueItem=True][IsEffectiveShowItemDeleteButton=True]">
@@ -151,39 +151,39 @@
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#TooltipIconPresenter">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIcon}}" />
+            <Setter Property="Width" Value="{atom:SharedTokenResource IconSize}" />
+            <Setter Property="Height" Value="{atom:SharedTokenResource IconSize}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorIcon}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Panel#PART_LabelLayout">
                 <Setter Property="MinHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightLG}}" />
+                        Value="{atom:SharedTokenResource ControlHeightLG}" />
             </Style>
             <Style Selector="^ /template/ Panel#ItemDeleteButtonLayout">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightLG}}" />
+                        Value="{atom:SharedTokenResource ControlHeightLG}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Panel#PART_LabelLayout">
                 <Setter Property="MinHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                        Value="{atom:SharedTokenResource ControlHeight}" />
             </Style>
             <Style Selector="^ /template/ Panel#ItemDeleteButtonLayout">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                        Value="{atom:SharedTokenResource ControlHeight}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Panel#PART_LabelLayout">
                 <Setter Property="MinHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightSM}}" />
+                        Value="{atom:SharedTokenResource ControlHeightSM}" />
             </Style>
             <Style Selector="^ /template/ Panel#ItemDeleteButtonLayout">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightSM}}" />
+                        Value="{atom:SharedTokenResource ControlHeightSM}" />
             </Style>
         </Style>
 
@@ -214,7 +214,7 @@
         <Style Selector="^[HasErrorOrWarningMsg=False]">
             <Style Selector="^ /template/ StackPanel#PART_ContentLayout">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:FormTokenKey.FormItemSpacing}}" />
+                        Value="{atom:FormTokenResource FormItemSpacing}" />
             </Style>
             <Style Selector="^ /template/ StackPanel#ExtraInfoLayout">
                 <Setter Property="MaxHeight" Value="0" />
@@ -223,7 +223,7 @@
 
         <Style Selector="^[HasErrorOrWarningMsg=True]">
             <Style Selector="^ /template/ StackPanel#ExtraInfoLayout">
-                <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:FormTokenKey.FormItemSpacing}}" />
+                <Setter Property="MinHeight" Value="{atom:FormTokenResource FormItemSpacing}" />
             </Style>
 
         </Style>
@@ -231,19 +231,19 @@
         <Style Selector="^[ValidateStatus=Default],^[ValidateStatus=Success],^[ValidateStatus=Validating]">
             <Style Selector="^ /template/ TextBlock#HelpText">
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                        Value="{atom:SharedTokenResource ColorTextDescription}" />
             </Style>
         </Style>
 
         <Style Selector="^[ValidateStatus=Warning]">
             <Style Selector="^ /template/ TextBlock#HelpText">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningText}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorWarningText}" />
             </Style>
         </Style>
 
         <Style Selector="^[ValidateStatus=Error]">
             <Style Selector="^ /template/ TextBlock#HelpText">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorText}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorErrorText}" />
             </Style>
         </Style>
 

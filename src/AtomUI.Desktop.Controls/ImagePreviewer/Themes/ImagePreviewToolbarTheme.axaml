@@ -51,34 +51,34 @@
         <Style Selector="^ /template/ atom|IconButton">
             <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="IsPassthroughMouseEvent" Value="False" />
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeLG}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeLG}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeLG}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeLG}" />
         </Style>
         
         <Style Selector="^ /template/ atom|ToggleIconButton">
             <Setter Property="VerticalAlignment" Value="Stretch" />
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeLG}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeLG}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeLG}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeLG}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextHover}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextHover}" />
         </Style>
         
         <Style Selector="^ /template/ atom|ToggleIconButton:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextHover}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextHover}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton:pressed">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextActive}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextActive}" />
         </Style>
         
         <Style Selector="^ /template/ atom|ToggleIconButton:pressed">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextActive}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextActive}" />
         </Style>
 
         <Style Selector="^ /template/ StackPanel#RootLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXXS}" />
         </Style>
 
     </ControlTheme>

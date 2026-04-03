@@ -12,17 +12,17 @@
                         CornerRadius="{TemplateBinding CornerRadius}">
                     <Border.Transitions>
                         <Transitions>
-                            <atom:SolidColorBrushTransition Property="Background" Easing="LinearEasing" Duration="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}"/>
+                            <atom:SolidColorBrushTransition Property="Background" Easing="LinearEasing" Duration="{atom:SharedTokenResource MotionDurationMid}"/>
                         </Transitions>
                     </Border.Transitions>
                 </Border>
             </ControlTemplate>
         </Setter>
                 
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:IndicatorScrollViewerTokenKey.ThumbBg}}"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:IndicatorScrollViewerTokenKey.ThumbCornerRadius}}"/>
+        <Setter Property="Background" Value="{atom:IndicatorScrollViewerTokenResource ThumbBg}"/>
+        <Setter Property="CornerRadius" Value="{atom:IndicatorScrollViewerTokenResource ThumbCornerRadius}"/>
         <Setter Property="MinHeight"
-                Value="{DynamicResource {x:Static atom:IndicatorScrollViewerTokenKey.ScrollBarThickness}}" />
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:IndicatorScrollViewerTokenKey.ThumbThickness}}" />
+                Value="{atom:IndicatorScrollViewerTokenResource ScrollBarThickness}" />
+        <Setter Property="Width" Value="{atom:IndicatorScrollViewerTokenResource ThumbThickness}" />
     </ControlTheme>
 </ResourceDictionary>

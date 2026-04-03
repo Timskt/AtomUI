@@ -33,27 +33,27 @@
         </Setter>
 
         <Style Selector="^ /template/ atomc|TimelineIndicator#Indicator">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorSize}}" />
+            <Setter Property="Width" Value="{atom:TimelineTokenResource IndicatorSize}" />
         </Style>
 
         <Style Selector="^ /template/ atom|TextBlock#Label">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TimelineTokenKey.ItemPaddingBottom}}" />
+            <Setter Property="Padding" Value="{atom:TimelineTokenResource ItemPaddingBottom}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#ContentPresenter">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TimelineTokenKey.ItemPaddingBottom}}" />
+            <Setter Property="Padding" Value="{atom:TimelineTokenResource ItemPaddingBottom}" />
         </Style>
 
         <!-- 非 Reverse 状态下，下一个是 pending item 设置大内间距 -->
         <Style Selector="^[NextIsPending=True][IsReverse=False]">
             <Style Selector="^ /template/ atom|TextBlock#Label">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.ItemPaddingBottomLG}}" />
+                        Value="{atom:TimelineTokenResource ItemPaddingBottomLG}" />
             </Style>
 
             <Style Selector="^ /template/ ContentPresenter#ContentPresenter">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.ItemPaddingBottomLG}}" />
+                        Value="{atom:TimelineTokenResource ItemPaddingBottomLG}" />
             </Style>
         </Style>
 
@@ -61,40 +61,40 @@
         <Style Selector="^[IsPending=True][IsReverse=True]">
             <Style Selector="^ /template/ atom|TextBlock#Label">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.ItemPaddingBottomLG}}" />
+                        Value="{atom:TimelineTokenResource ItemPaddingBottomLG}" />
             </Style>
 
             <Style Selector="^ /template/ ContentPresenter#ContentPresenter">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.ItemPaddingBottomLG}}" />
+                        Value="{atom:TimelineTokenResource ItemPaddingBottomLG}" />
             </Style>
         </Style>
 
         <Style Selector="^[Mode=Left]">
             <Style Selector="^ /template/ atomc|TimelineIndicator#Indicator">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorLeftModeMargin}}" />
+                        Value="{atom:TimelineTokenResource IndicatorLeftModeMargin}" />
             </Style>
         </Style>
 
         <Style Selector="^[Mode=Right]">
             <Style Selector="^ /template/ atomc|TimelineIndicator#Indicator">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorRightModeMargin}}" />
+                        Value="{atom:TimelineTokenResource IndicatorRightModeMargin}" />
             </Style>
         </Style>
 
         <Style Selector="^[Mode=Alternate]">
             <Style Selector="^ /template/ atomc|TimelineIndicator#Indicator">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorMiddleModeMargin}}" />
+                        Value="{atom:TimelineTokenResource IndicatorMiddleModeMargin}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsLabelLayout=True]">
             <Style Selector="^ /template/ atomc|TimelineIndicator#Indicator">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorMiddleModeMargin}}" />
+                        Value="{atom:TimelineTokenResource IndicatorMiddleModeMargin}" />
             </Style>
         </Style>
 

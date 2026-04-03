@@ -124,7 +124,7 @@ internal class AbstractUploadPictureContent : TemplatedControl, IMotionAwareCont
             if (force || Transitions == null)
             {
                 Transitions = [
-                    TransitionUtils.CreateTransition<DoubleTransition>(MaskOpacityProperty, SharedTokenKey.MotionDurationSlow)
+                    TransitionUtils.CreateTransition<DoubleTransition>(MaskOpacityProperty, SharedTokenKind.MotionDurationSlow)
                 ];
             }
         }

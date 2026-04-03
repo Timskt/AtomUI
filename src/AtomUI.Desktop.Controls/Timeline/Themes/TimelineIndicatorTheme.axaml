@@ -13,16 +13,16 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="RelativeLineHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.RelativeLineHeight}}"/>
-        <Setter Property="IndicatorDotBorderWidth" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorDotBorderWidth}}"/>
-        <Setter Property="IndicatorDotSize" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorDotSize}}"/>
-        <Setter Property="DefaultIndicatorColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
-        <Setter Property="IndicatorTailWidth" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorTailWidth}}"/>
-        <Setter Property="IndicatorTailColor" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorTailColor}}"/>
+        <Setter Property="RelativeLineHeight" Value="{atom:SharedTokenResource RelativeLineHeight}"/>
+        <Setter Property="IndicatorDotBorderWidth" Value="{atom:TimelineTokenResource IndicatorDotBorderWidth}"/>
+        <Setter Property="IndicatorDotSize" Value="{atom:TimelineTokenResource IndicatorDotSize}"/>
+        <Setter Property="DefaultIndicatorColor" Value="{atom:SharedTokenResource ColorPrimary}"/>
+        <Setter Property="IndicatorTailWidth" Value="{atom:TimelineTokenResource IndicatorTailWidth}"/>
+        <Setter Property="IndicatorTailColor" Value="{atom:TimelineTokenResource IndicatorTailColor}"/>
         
         <Style Selector="^ /template/ atom|IconPresenter#PART_IconPresenter">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorSize}}"/>
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:TimelineTokenKey.IndicatorSize}}"/>
+            <Setter Property="Width" Value="{atom:TimelineTokenResource IndicatorSize}"/>
+            <Setter Property="Height" Value="{atom:TimelineTokenResource IndicatorSize}"/>
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter#PART_IconPresenter">

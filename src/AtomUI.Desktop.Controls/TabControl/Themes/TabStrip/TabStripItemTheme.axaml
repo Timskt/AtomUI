@@ -10,22 +10,22 @@
         </ControlTheme.BasedOn>
 
         <Style Selector="^[TabStripPlacement=Top], ^[TabStripPlacement=Bottom]">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TabControlTokenKey.HorizontalItemMargin}}" />
+            <Setter Property="Margin" Value="{atom:TabControlTokenResource HorizontalItemMargin}" />
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.HorizontalItemPaddingLG}}"/>
+                    <Setter Property="Padding" Value="{atom:TabControlTokenResource HorizontalItemPaddingLG}"/>
                 </Style>
             </Style>
             
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.HorizontalItemPadding}}"/>
+                    <Setter Property="Padding" Value="{atom:TabControlTokenResource HorizontalItemPadding}"/>
                 </Style>
             </Style>
             
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.HorizontalItemPaddingSM}}"/>
+                    <Setter Property="Padding" Value="{atom:TabControlTokenResource HorizontalItemPaddingSM}"/>
                 </Style>
             </Style>
         </Style>
@@ -33,19 +33,19 @@
         <Style Selector="^[TabStripPlacement=Left], ^[TabStripPlacement=Right]">
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.VerticalItemPadding}}"/>
+                    <Setter Property="Padding" Value="{atom:TabControlTokenResource VerticalItemPadding}"/>
                 </Style>
             </Style>
             
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.VerticalItemPadding}}"/>
+                    <Setter Property="Padding" Value="{atom:TabControlTokenResource VerticalItemPadding}"/>
                 </Style>
             </Style>
             
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.VerticalItemPadding}}"/>
+                    <Setter Property="Padding" Value="{atom:TabControlTokenResource VerticalItemPadding}"/>
                 </Style>
             </Style>
         </Style>

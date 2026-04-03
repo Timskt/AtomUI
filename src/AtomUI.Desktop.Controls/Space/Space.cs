@@ -171,22 +171,22 @@ public class Space : Control,
         {
             var middleStyle = new Style(x =>
                 x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Middle));
-            middleStyle.Add(ItemSpacingProperty, SpaceTokenKey.GapMiddleSize);
-            middleStyle.Add(LineSpacingProperty, SpaceTokenKey.GapMiddleSize);
+            middleStyle.Add(ItemSpacingProperty, SpaceTokenKind.GapMiddleSize);
+            middleStyle.Add(LineSpacingProperty, SpaceTokenKind.GapMiddleSize);
             Styles.Add(middleStyle);
         }
         {
             var smallStyle = new Style(x =>
                 x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Small));
-            smallStyle.Add(ItemSpacingProperty, SpaceTokenKey.GapSmallSize);
-            smallStyle.Add(LineSpacingProperty, SpaceTokenKey.GapSmallSize);
+            smallStyle.Add(ItemSpacingProperty, SpaceTokenKind.GapSmallSize);
+            smallStyle.Add(LineSpacingProperty, SpaceTokenKind.GapSmallSize);
             Styles.Add(smallStyle);
         }
         {
             var largeStyle = new Style(x =>
                 x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Large));
-            largeStyle.Add(ItemSpacingProperty, SpaceTokenKey.GapLargeSize);
-            largeStyle.Add(LineSpacingProperty, SpaceTokenKey.GapLargeSize);
+            largeStyle.Add(ItemSpacingProperty, SpaceTokenKind.GapLargeSize);
+            largeStyle.Add(LineSpacingProperty, SpaceTokenKind.GapLargeSize);
             Styles.Add(largeStyle);
         }
     }

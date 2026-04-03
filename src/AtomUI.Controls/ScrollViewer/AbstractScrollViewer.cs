@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using AtomUI.Controls.Utils;
 using Avalonia;
 using Avalonia.Animation;
@@ -150,8 +151,9 @@ public abstract class AbstractScrollViewer : AvaloniaScrollViewer, IMotionAwareC
     {
         if (AllowAutoHide)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
-            _pointerMoveSubscription = inputManager?.Process.Subscribe(ListenForMouseEvent);
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+            Debug.Assert(inputManager != null);
+            _pointerMoveSubscription = inputManager.Process.Subscribe(ListenForMouseEvent);
         }
     }
     

@@ -163,7 +163,7 @@ public class TabStrip : BaseTabStrip
                 Transitions =
                 [
                     TransitionUtils.CreateTransition<TransformOperationsTransition>(SelectedIndicatorRenderTransformProperty,
-                        SharedTokenKey.MotionDurationSlow, new ExponentialEaseOut())
+                        SharedTokenKind.MotionDurationSlow, new ExponentialEaseOut())
                 ];
             }
         }

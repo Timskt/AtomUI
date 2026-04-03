@@ -116,7 +116,7 @@ public class StatisticCountUp : TemplatedControl
         {
             Transitions =
             [
-                TransitionUtils.CreateTransition<DoubleTransition>(AnimatingValueProperty, SharedTokenKey.MotionDurationVerySlow, new ExponentialEaseOut())
+                TransitionUtils.CreateTransition<DoubleTransition>(AnimatingValueProperty, SharedTokenKind.MotionDurationVerySlow, new ExponentialEaseOut())
             ];
         }
     }

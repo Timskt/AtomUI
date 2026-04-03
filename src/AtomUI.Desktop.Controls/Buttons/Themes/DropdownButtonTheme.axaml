@@ -199,30 +199,30 @@
         <!-- 默认下拉按钮样式开始 -->
         <Style Selector="^[ButtonType=Default]">
             <Setter Property="MarginToAnchor"
-                    Value="{DynamicResource {x:Static atom:PopupHostTokenKey.MarginToAnchor}}" />
+                    Value="{atom:PopupHostTokenResource MarginToAnchor}" />
             <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                <Setter Property="Width" Value="{atom:SharedTokenResource IconSizeSM}" />
+                <Setter Property="Height" Value="{atom:SharedTokenResource IconSizeSM}" />
             </Style>
 
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginLG}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginLG}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMargin}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMargin}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginSM}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginSM}" />
                 </Style>
             </Style>
         </Style>
@@ -231,30 +231,30 @@
         <!-- 主要下拉按钮样式开始 -->
         <Style Selector="^[ButtonType=Primary]">
             <Setter Property="MarginToAnchor"
-                    Value="{DynamicResource {x:Static atom:PopupHostTokenKey.MarginToAnchor}}" />
+                    Value="{atom:PopupHostTokenResource MarginToAnchor}" />
             <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                <Setter Property="Width" Value="{atom:SharedTokenResource IconSizeSM}" />
+                <Setter Property="Height" Value="{atom:SharedTokenResource IconSizeSM}" />
             </Style>
 
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginLG}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginLG}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMargin}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMargin}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginSM}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginSM}" />
                 </Style>
             </Style>
         </Style>
@@ -263,32 +263,32 @@
         <!-- 链接下拉按钮样式开始 -->
         <Style Selector="^[ButtonType=Link]">
             <Setter Property="MarginToAnchor"
-                    Value="{DynamicResource {x:Static atom:PopupHostTokenKey.MarginToAnchor}}">
+                    Value="{atom:PopupHostTokenResource MarginToAnchor}">
             </Setter>
             <Setter Property="Background" Value="Transparent" />
             <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                <Setter Property="Width" Value="{atom:SharedTokenResource IconSizeSM}" />
+                <Setter Property="Height" Value="{atom:SharedTokenResource IconSizeSM}" />
             </Style>
 
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginLG}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginLG}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMargin}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMargin}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginSM}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginSM}" />
                 </Style>
             </Style>
         </Style>
@@ -297,30 +297,30 @@
         <!-- 文字下拉按钮样式开始 -->
         <Style Selector="^[ButtonType=Text]">
             <Setter Property="MarginToAnchor"
-                    Value="{DynamicResource {x:Static atom:PopupHostTokenKey.MarginToAnchor}}" />
+                    Value="{atom:PopupHostTokenResource MarginToAnchor}" />
             <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                <Setter Property="Width" Value="{atom:SharedTokenResource IconSizeSM}" />
+                <Setter Property="Height" Value="{atom:SharedTokenResource IconSizeSM}" />
             </Style>
 
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginLG}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginLG}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMargin}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMargin}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ atom|IconPresenter#PART_DropdownIndicator">
                     <Setter Property="Margin"
-                            Value="{DynamicResource {x:Static atom:ButtonTokenKey.ExtraContentMarginSM}}" />
+                            Value="{atom:ButtonTokenResource ExtraContentMarginSM}" />
                 </Style>
             </Style>
         </Style>

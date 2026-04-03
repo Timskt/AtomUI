@@ -19,7 +19,7 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="ItemSpacing" Value="{DynamicResource {x:Static atom:CarouselTokenKey.IndicatorGap}}"/>
+        <Setter Property="ItemSpacing" Value="{atom:CarouselTokenResource IndicatorGap}"/>
         
     </ControlTheme>
 </ResourceDictionary>

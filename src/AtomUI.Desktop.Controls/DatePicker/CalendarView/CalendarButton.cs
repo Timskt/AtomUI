@@ -141,7 +141,7 @@ internal sealed class CalendarButton : AvaloniaButton
                 Transitions =
                 [
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty,
-                        SharedTokenKey.MotionDurationFast)
+                        SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

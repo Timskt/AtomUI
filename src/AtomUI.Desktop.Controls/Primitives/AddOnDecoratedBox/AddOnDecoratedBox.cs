@@ -646,9 +646,9 @@ internal class AddOnDecoratedBox : ContentControl,
                 x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
                  .OfType<PathIcon>().Not(p => p.Class("skip-status"))));
             
-            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKey.ColorWarning);
-            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKey.ColorWarning);
-            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKey.ColorWarning);
+            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKind.ColorWarning);
+            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKind.ColorWarning);
+            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKind.ColorWarning);
             warningStyle.Add(iconStyle);
             Styles.Add(warningStyle);
         }
@@ -666,9 +666,9 @@ internal class AddOnDecoratedBox : ContentControl,
                 x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
                  .OfType<PathIcon>().Not(p => p.Class("skip-status"))));
             
-            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKey.ColorError);
-            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKey.ColorError);
-            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKey.ColorError);
+            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKind.ColorError);
+            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKind.ColorError);
+            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKind.ColorError);
             errorStyle.Add(iconStyle);
             Styles.Add(errorStyle);
         }
@@ -692,9 +692,9 @@ internal class AddOnDecoratedBox : ContentControl,
                 x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.RightAddOnPart).Descendant()
                  .OfType<PathIcon>().Not(p => p.Class("skip-status"))));
       
-            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKey.ColorTextDisabled);
-            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKey.ColorTextDisabled);
-            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKey.ColorTextDisabled);
+            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKind.ColorTextDisabled);
+            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKind.ColorTextDisabled);
+            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKind.ColorTextDisabled);
             disabledStyle.Add(iconStyle);
             Styles.Add(disabledStyle);
         }

@@ -419,13 +419,13 @@ internal class SplitterHandle : AtomUIThumb
 
     private double GetDragTriggerSize()
     {
-        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKey.SplitTriggerSize);
+        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKind.SplitTriggerSize);
         if (value is double size && !double.IsNaN(size) && !double.IsInfinity(size))
         {
             return Math.Max(0, size);
         }
 
-        value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKey.SplitBarSize);
+        value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKind.SplitBarSize);
         if (value is double fallback && !double.IsNaN(fallback) && !double.IsInfinity(fallback))
         {
             return Math.Max(0, fallback);

@@ -113,8 +113,8 @@ public class SelectableTextBlock : TextBlock
     public SelectableTextBlock()
     {
         var styles = new Style();
-        styles.Add(SelectionBrushProperty, SharedTokenKey.SelectionBackground);
-        styles.Add(SelectionForegroundBrushProperty, SharedTokenKey.SelectionForeground);
+        styles.Add(SelectionBrushProperty, SharedTokenKind.SelectionBackground);
+        styles.Add(SelectionForegroundBrushProperty, SharedTokenKind.SelectionForeground);
         styles.Add(CursorProperty, new Cursor(StandardCursorType.Ibeam));
         Styles.Add(styles);
     }

@@ -48,7 +48,7 @@
         <Setter Property="AvatarShape" Value="Circle"/>
         
         <Style Selector="^ /template/ atom|SkeletonAvatar">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.AvatarMarginRight}}"/>
+            <Setter Property="Margin" Value="{atom:SkeletonTokenResource AvatarMarginRight}"/>
         </Style>
         
         <Style Selector="^[IsShowTitle=True][IsShowParagraph=False]">
@@ -69,7 +69,7 @@
         
         <Style Selector="^[IsShowTitle=True]">
             <Style Selector="^ /template/ atom|SkeletonParagraph">
-                <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.ParagraphMarginTop}}"/>
+                <Setter Property="Margin" Value="{atom:SkeletonTokenResource ParagraphMarginTop}"/>
             </Style>
         </Style>
         

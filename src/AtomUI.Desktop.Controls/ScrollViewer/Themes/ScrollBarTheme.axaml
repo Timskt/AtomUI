@@ -95,17 +95,17 @@
             </Setter>
         </Style>
 
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Style Selector="^:vertical">
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ScrollBarContentVPadding}}" />
+                        Value="{atom:ScrollViewerTokenResource ScrollBarContentVPadding}" />
             </Style>
         </Style>
         <Style Selector="^:horizontal">
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ScrollBarContentHPadding}}" />
+                        Value="{atom:ScrollViewerTokenResource ScrollBarContentHPadding}" />
             </Style>
         </Style>
 

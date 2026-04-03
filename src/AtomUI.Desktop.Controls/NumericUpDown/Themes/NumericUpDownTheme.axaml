@@ -28,7 +28,7 @@
                     IsUsedInCompactSpace="{TemplateBinding IsUsedInCompactSpace}">
                     <atom:ButtonSpinner.InnerRightContent>
                         <StackPanel Orientation="Horizontal"
-                                    Spacing="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyPaddingXXS}}">
+                                    Spacing="{atom:SharedTokenResource UniformlyPaddingXXS}">
                             <atom:InputClearIconButton
                                 Name="{x:Static atom:TextBoxThemeConstants.ClearButtonPart}"
                                 Icon="{Binding ClearIcon, RelativeSource={RelativeSource AncestorType=atom:NumericUpDown}}"
@@ -66,12 +66,12 @@
         </Setter>
 
         <Setter Property="IsMotionEnabled"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+                Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="SpinnerHandleWidth"
-                Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleWidth}}" />
+                Value="{atom:ButtonSpinnerTokenResource HandleWidth}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="PlaceholderForeground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+        <Setter Property="PlaceholderForeground" Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
 
     </ControlTheme>
 </ResourceDictionary>

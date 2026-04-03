@@ -78,14 +78,14 @@
         <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="TransparencyLevelHint" Value="Transparent" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultBackground}}" />
+        <Setter Property="Background" Value="{atom:WindowTokenResource DefaultBackground}" />
         <Setter Property="TransparencyBackgroundFallback"
-                Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultBackground}}" />
+                Value="{atom:WindowTokenResource DefaultBackground}" />
         <Setter Property="TopLevel.SystemBarColor"
-                Value="{DynamicResource {x:Static atom:WindowTokenKey.SystemBarColor}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultForeground}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
-        <Setter Property="FontFamily" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontFamily}}" />
+                Value="{atom:WindowTokenResource SystemBarColor}" />
+        <Setter Property="Foreground" Value="{atom:WindowTokenResource DefaultForeground}" />
+        <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
+        <Setter Property="FontFamily" Value="{atom:SharedTokenResource FontFamily}" />
         <Setter Property="ExtendClientAreaTitleBarHeightHint" Value="-1" />
 
         <Style Selector="^[OsType=Windows]">
@@ -93,7 +93,7 @@
         </Style>
 
         <Setter Property="ExtendClientAreaToDecorationsHint" Value="True" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:WindowTokenKey.CornerRadius}}" />
+        <Setter Property="CornerRadius" Value="{atom:WindowTokenResource CornerRadius}" />
 
         <Setter Property="ExtendClientAreaChromeHints" Value="SystemChrome" />
 
@@ -117,7 +117,7 @@
                     </On>
                 </OnPlatform>
             </Setter>
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
         </Style>
 
         <Style Selector="^[WindowState=FullScreen], ^[WindowState=Maximized]">

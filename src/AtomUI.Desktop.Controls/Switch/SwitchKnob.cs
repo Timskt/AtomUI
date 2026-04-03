@@ -254,9 +254,9 @@ internal class SwitchKnob : Control
         base.OnAttachedToLogicalTree(e);
         _tokenBindingDisposables = new CompositeDisposable(2);
         _tokenBindingDisposables.Add(TokenResourceBinder.CreateTokenBinding(this, LoadingBgOpacityProperty,
-            ToggleSwitchTokenKey.SwitchDisabledOpacity));
+            ToggleSwitchTokenKind.SwitchDisabledOpacity));
         _tokenBindingDisposables.Add(TokenResourceBinder.CreateTokenBinding(this, LoadingAnimationDurationProperty,
-            ToggleSwitchTokenKey.LoadingAnimationDuration));
+            ToggleSwitchTokenKind.LoadingAnimationDuration));
     }
 
     protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)

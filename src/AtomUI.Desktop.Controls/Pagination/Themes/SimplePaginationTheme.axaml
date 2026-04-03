@@ -37,7 +37,7 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}"/>
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}"/>
         
         <Style Selector="^[Align=Start]">
             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -52,25 +52,25 @@
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayoutPart">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}" />
+                        Value="{atom:PaginationTokenResource PaginationLayoutSpacing}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayoutPart">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}" />
+                        Value="{atom:PaginationTokenResource PaginationLayoutSpacing}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayoutPart">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutMiniSpacing}}" />
+                        Value="{atom:PaginationTokenResource PaginationLayoutMiniSpacing}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ atom|LineEdit#PART_QuickJumper">
             <Setter Property="MinWidth"
-                    Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationQuickJumperInputWidth}}" />
+                    Value="{atom:PaginationTokenResource PaginationQuickJumperInputWidth}" />
         </Style>
 
     </ControlTheme>

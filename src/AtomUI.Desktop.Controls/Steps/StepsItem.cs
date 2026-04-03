@@ -353,7 +353,7 @@ public class StepsItem : HeaderedContentControl, ISelectable
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(SubTitleForegroundProperty),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(DescriptionForegroundProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(NavIndicatorLineRenderTransformProperty, SharedTokenKey.MotionDurationMid, new CubicEaseOut())
+                    TransitionUtils.CreateTransition<TransformOperationsTransition>(NavIndicatorLineRenderTransformProperty, SharedTokenKind.MotionDurationMid, new CubicEaseOut())
                 ];
             }
         }

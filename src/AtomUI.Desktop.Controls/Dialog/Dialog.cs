@@ -531,7 +531,7 @@ public partial class Dialog : TemplatedControl,
                 (x, handler) => x.Closed += handler,
                 (x, handler) => x.Closed -= handler).DisposeWith(handlerCleanup);
         } 
-        var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
+        var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
         inputManager?.Process.Subscribe(ListenForNonClientClick).DisposeWith(handlerCleanup);
 
         TaskCompletionSource? modalTsc = null;

@@ -64,11 +64,11 @@
         </Setter>
         
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorderSecondary}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgContainer}" />
 
         <Style Selector="^:headerless">
             <Style Selector="^ /template/ Border#HeaderFrame">
@@ -77,72 +77,72 @@
         </Style>
         <Setter Property="BoxShadow" Value="0 1 2 -1 #00000000, 0 3 6 0 #00000000, 0 5 12 4 #00000000" />
         <Style Selector="^[StyleVariant=Borderless]">
-            <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsTertiary}}" />
+            <Setter Property="BoxShadow" Value="{atom:SharedTokenResource BoxShadowsTertiary}" />
         </Style>
 
         <Style Selector="^ /template/ Border#HeaderFrame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderBg}}" />
+            <Setter Property="Background" Value="{atom:CardTokenResource HeaderBg}" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
+                    Value="{atom:SharedTokenResource ColorBorderSecondary}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#TitlePresenter">
             <Setter Property="TextElement.FontWeight"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.FontWeightStrong}}" />
+                    Value="{atom:SharedTokenResource FontWeightStrong}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Border#HeaderFrame">
-                <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderHeightLG}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderPaddingLG}}" />
+                <Setter Property="MinHeight" Value="{atom:CardTokenResource HeaderHeightLG}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource HeaderPaddingLG}" />
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderFontSizeLG}}" />
+                        Value="{atom:CardTokenResource HeaderFontSizeLG}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#HeaderFrame">
-                <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderHeight}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderPadding}}" />
+                <Setter Property="MinHeight" Value="{atom:CardTokenResource HeaderHeight}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource HeaderPadding}" />
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderFontSize}}" />
+                        Value="{atom:CardTokenResource HeaderFontSize}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#HeaderFrame">
-                <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderHeightSM}}" />
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderPaddingSM}}" />
+                <Setter Property="MinHeight" Value="{atom:CardTokenResource HeaderHeightSM}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource HeaderPaddingSM}" />
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:CardTokenKey.HeaderFontSizeSM}}" />
+                        Value="{atom:CardTokenResource HeaderFontSizeSM}" />
             </Style>
             <Style Selector="^ /template/ Border#CardContent">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPaddingSM}}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource BodyPaddingSM}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsInnerMode=True]">
             <Style Selector="^ /template/ Border#HeaderFrame">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFillAlter}}" />
+                <Setter Property="Background" Value="{atom:SharedTokenResource ColorFillAlter}" />
             </Style>
         </Style>
 
         <Style Selector="^[ContentType=Meta],^[ContentType=Default]">
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ Border#CardContent">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPaddingLG}}" />
+                    <Setter Property="Padding" Value="{atom:CardTokenResource BodyPaddingLG}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ Border#CardContent">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPadding}}" />
+                    <Setter Property="Padding" Value="{atom:CardTokenResource BodyPadding}" />
                 </Style>
             </Style>
 
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ Border#CardContent">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPaddingSM}}" />
+                    <Setter Property="Padding" Value="{atom:CardTokenResource BodyPaddingSM}" />
                 </Style>
             </Style>
         </Style>
@@ -150,7 +150,7 @@
         <Style Selector="^[IsHoverable=True]">
             <Setter Property="Cursor" Value="Hand" />
             <Style Selector="^:pointerover">
-                <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:CardTokenKey.CardShadows}}" />
+                <Setter Property="BoxShadow" Value="{atom:CardTokenResource CardShadows}" />
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
         </Style>

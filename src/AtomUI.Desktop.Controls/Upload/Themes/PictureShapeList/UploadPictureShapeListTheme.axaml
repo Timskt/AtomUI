@@ -17,8 +17,8 @@
         
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
-                <WrapPanel LineSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}"
-                           ItemSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}"/>
+                <WrapPanel LineSpacing="{atom:SharedTokenResource SpacingXS}"
+                           ItemSpacing="{atom:SharedTokenResource SpacingXS}"/>
             </ItemsPanelTemplate>
         </Setter>
     </ControlTheme>

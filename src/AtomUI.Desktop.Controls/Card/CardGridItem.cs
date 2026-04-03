@@ -94,7 +94,7 @@ public class CardGridItem : ContentControl
             {
                 Transitions =
                 [
-                    TransitionUtils.CreateTransition<BoxShadowsTransition>(BoxShadowProperty, SharedTokenKey.MotionDurationFast)
+                    TransitionUtils.CreateTransition<BoxShadowsTransition>(BoxShadowProperty, SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

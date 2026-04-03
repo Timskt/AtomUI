@@ -21,28 +21,28 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:CardTokenKey.CardGridItemShadows}}" />
+        <Setter Property="BoxShadow" Value="{atom:CardTokenResource CardGridItemShadows}" />
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Border#Frame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPaddingLG}}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource BodyPaddingLG}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#Frame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPadding}}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource BodyPadding}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#Frame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:CardTokenKey.BodyPaddingSM}}" />
+                <Setter Property="Padding" Value="{atom:CardTokenResource BodyPaddingSM}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsHoverable=True]">
             <Style Selector="^:pointerover">
-                <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:CardTokenKey.CardShadows}}" />
+                <Setter Property="BoxShadow" Value="{atom:CardTokenResource CardShadows}" />
             </Style>
         </Style>
     </ControlTheme>

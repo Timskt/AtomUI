@@ -18,7 +18,7 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
+        <Setter Property="BoxShadow" Value="{atom:SharedTokenResource BoxShadowsSecondary}" />
         <Setter Property="ClipToBounds" Value="False" />
     </ControlTheme>
 </ResourceDictionary>

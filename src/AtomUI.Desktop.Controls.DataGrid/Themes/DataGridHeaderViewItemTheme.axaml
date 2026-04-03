@@ -16,8 +16,8 @@
         </Setter>
 
         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
+            <Setter Property="BorderBrush" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Setter Property="ClipToBounds" Value="False" />
@@ -27,13 +27,13 @@
             <Style Selector="^[IsShowRightFrozenShadow=True]">
                 <Style Selector="^ /template/ Border#Frame">
                     <Setter Property="BoxShadow"
-                            Value="{DynamicResource {x:Static atom:DataGridTokenKey.RightFrozenShadows}}" />
+                            Value="{atom:DataGridTokenResource RightFrozenShadows}" />
                 </Style>
             </Style>
             <Style Selector="^[IsShowLeftFrozenShadow=True]">
                 <Style Selector="^ /template/ Border#Frame">
                     <Setter Property="BoxShadow"
-                            Value="{DynamicResource {x:Static atom:DataGridTokenKey.LeftFrozenShadows}}" />
+                            Value="{atom:DataGridTokenResource LeftFrozenShadows}" />
                 </Style>
             </Style>
         </Style>

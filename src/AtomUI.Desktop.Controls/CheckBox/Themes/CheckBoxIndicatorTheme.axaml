@@ -38,7 +38,7 @@
         </Setter>
 
         <Setter Property="ClipToBounds" Value="False"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Style Selector="^ /template/ atom|WaveSpiritDecorator#PART_WaveSpirit">
             <Setter Property="WaveType" Value="RoundRectWave"/>
         </Style>
@@ -46,8 +46,8 @@
         <Setter Property="CheckedMarkRenderTransform" Value="scale(0.1)"/>
         
         <Style Selector="^ /template/ atom|Icon#CheckedMark">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:CheckBoxTokenKey.CheckedMarkSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:CheckBoxTokenKey.CheckedMarkSize}}" />
+            <Setter Property="Width" Value="{atom:CheckBoxTokenResource CheckedMarkSize}" />
+            <Setter Property="Height" Value="{atom:CheckBoxTokenResource CheckedMarkSize}" />
         </Style>
         
         <Style Selector="^[State=Checked]">

@@ -28,7 +28,7 @@
         </Setter>
 
         <Setter Property="Width"
-                Value="{DynamicResource {x:Static atom:IndicatorScrollViewerTokenKey.ScrollBarThickness}}" />
+                Value="{atom:IndicatorScrollViewerTokenResource ScrollBarThickness}" />
 
     </ControlTheme>
 </ResourceDictionary>

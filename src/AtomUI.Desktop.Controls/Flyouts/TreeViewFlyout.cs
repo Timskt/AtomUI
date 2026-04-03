@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
@@ -96,7 +97,8 @@ public class TreeViewFlyout : Flyout
     protected override void OnOpened()
     {
         base.OnOpened();
-        var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+        var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+        Debug.Assert(inputManager != null);
         if (IsDetectMouseClickEnabled)
         {
             _detectMouseClickDisposable = inputManager.Process.Subscribe(HandleMouseClick);
@@ -154,7 +156,8 @@ public class TreeViewFlyout : Flyout
                     CompositeDisposable?.Remove(_detectMouseClickDisposable);
                 }
 
-                var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+                var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+                Debug.Assert(inputManager != null);
                 _detectMouseClickDisposable = inputManager.Process.Subscribe(HandleMouseClick);
                 CompositeDisposable?.Add(_detectMouseClickDisposable);
             }

@@ -15,7 +15,7 @@
                     <Border Name="ColorPreview"
                             CornerRadius="{TemplateBinding CornerRadius}"
                             Background="{TemplateBinding Background}"
-                            BoxShadow="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorBlockInnerShadows}}">
+                            BoxShadow="{atom:ColorPickerTokenResource ColorBlockInnerShadows}">
                         <antdicons:CheckBoldOutlined Name="{x:Static atom:PaletteColorItemThemeConstants.CheckedMarkPart}"
                                                      HorizontalAlignment="Center"
                                                      VerticalAlignment="Center"
@@ -29,23 +29,23 @@
 
         <Style Selector="^ /template/ Border#Frame">
             <Setter Property="Width"
-                    Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerPresetColorSize}}" />
+                    Value="{atom:ColorPickerTokenResource ColorPickerPresetColorSize}" />
             <Setter Property="Height"
-                    Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerPresetColorSize}}" />
+                    Value="{atom:ColorPickerTokenResource ColorPickerPresetColorSize}" />
         </Style>
 
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
 
         <Style Selector="^:pointerover">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFill}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorFill}" />
         </Style>
         
         <Style Selector="^ /template/ atom|Icon#PART_CheckedMark">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.CheckedMarkSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.CheckedMarkSize}}" />
+            <Setter Property="Width" Value="{atom:ColorPickerTokenResource CheckedMarkSize}" />
+            <Setter Property="Height" Value="{atom:ColorPickerTokenResource CheckedMarkSize}" />
         </Style>
         
         <Setter Property="CheckedMarkRenderTransform" Value="scale(0.1)"/>
@@ -65,7 +65,7 @@
         
         <Style Selector="^[IsLightColor=False]">
             <Style Selector="^ /template/ atom|Icon#PART_CheckedMark">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWhite}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorWhite}" />
             </Style>
         </Style>
 

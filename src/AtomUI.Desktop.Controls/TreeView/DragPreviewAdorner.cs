@@ -76,7 +76,7 @@ internal class DragPreview : Decorator
     {
         base.OnAttachedToVisualTree(e);
         _backgroundBindingDisposable =
-            TokenResourceBinder.CreateTokenBinding(this, BackgroundProperty, TreeViewTokenKey.NodeHoverBg);
+            TokenResourceBinder.CreateTokenBinding(this, BackgroundProperty, TreeViewTokenKind.NodeHoverBg);
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

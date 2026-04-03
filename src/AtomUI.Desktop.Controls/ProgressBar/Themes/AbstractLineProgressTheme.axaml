@@ -34,46 +34,46 @@
     </Setter>
     
     <Style Selector="^:is(atomc|AbstractLineProgress)">
-        <Setter Property="LineProgressPadding" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineProgressPadding}}" />
-        <Setter Property="LineExtraInfoMargin" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineExtraInfoMargin}}" />
+        <Setter Property="LineProgressPadding" Value="{atom:ProgressBarTokenResource LineProgressPadding}" />
+        <Setter Property="LineExtraInfoMargin" Value="{atom:ProgressBarTokenResource LineExtraInfoMargin}" />
         
         <Style Selector="^ /template/ atom|IconPresenter#PART_ExceptionCompletedIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorError}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter#PART_SuccessCompletedIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSuccess}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorSuccess}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter:disabled">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlItemBgActiveDisabled}}" />
+                    Value="{atom:SharedTokenResource ControlItemBgActiveDisabled}" />
         </Style>
         
         <Style Selector="^[EffectiveSizeType=Large]">
-            <Setter Property="LineInfoIconSize" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSize}}" />
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+            <Setter Property="LineInfoIconSize" Value="{atom:ProgressBarTokenResource LineInfoIconSize}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
             <Style Selector="^ /template/ atom|IconPresenter">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSize}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSize}}" />
+                <Setter Property="Width" Value="{atom:ProgressBarTokenResource LineInfoIconSize}" />
+                <Setter Property="Height" Value="{atom:ProgressBarTokenResource LineInfoIconSize}" />
             </Style>
         </Style>
         
         <Style Selector="^[EffectiveSizeType=Middle]">
-            <Setter Property="LineInfoIconSize" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSize}}" />
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
+            <Setter Property="LineInfoIconSize" Value="{atom:ProgressBarTokenResource LineInfoIconSize}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeSM}" />
             <Style Selector="^ /template/ atom|IconPresenter">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSizeSM}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSizeSM}}" />
+                <Setter Property="Width" Value="{atom:ProgressBarTokenResource LineInfoIconSizeSM}" />
+                <Setter Property="Height" Value="{atom:ProgressBarTokenResource LineInfoIconSizeSM}" />
             </Style>
         </Style>
         
         <Style Selector="^[EffectiveSizeType=Small]">
-            <Setter Property="LineInfoIconSize" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSizeSM}}" />
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
+            <Setter Property="LineInfoIconSize" Value="{atom:ProgressBarTokenResource LineInfoIconSizeSM}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeSM}" />
             <Style Selector="^ /template/ atom|IconPresenter">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSizeSM}}" />
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.LineInfoIconSizeSM}}" />
+                <Setter Property="Width" Value="{atom:ProgressBarTokenResource LineInfoIconSizeSM}" />
+                <Setter Property="Height" Value="{atom:ProgressBarTokenResource LineInfoIconSizeSM}" />
             </Style>
         </Style>
     </Style>

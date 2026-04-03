@@ -37,7 +37,7 @@
                     <Panel Name="ScrollBarsSeparator"
                            Grid.Row="1"
                            Grid.Column="1"
-                           Background="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}"
+                           Background="{atom:SharedTokenResource ColorBgContainer}"
                            Opacity="0">
                         <Panel.Transitions>
                             <Transitions>

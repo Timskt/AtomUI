@@ -461,8 +461,8 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
             {
                 Transitions = [
                     TransitionUtils.CreateTransition<TransformOperationsTransition>(ImageRenderTransformProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateXProperty, SharedTokenKey.MotionDurationFast),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateYProperty, SharedTokenKey.MotionDurationFast)
+                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateXProperty, SharedTokenKind.MotionDurationFast),
+                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateYProperty, SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

@@ -63,37 +63,37 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="MotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="MotionDuration" Value="{atom:SharedTokenResource MotionDurationSlow}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         
         <Style Selector="^ /template/ Border#PART_Frame">
             <Setter Property="CornerRadius"
-                    Value="{DynamicResource {x:Static atom:ExpanderTokenKey.ExpanderBorderRadius}}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+                    Value="{atom:ExpanderTokenResource ExpanderBorderRadius}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
         </Style>
 
         <Style Selector="^ /template/ Border#PART_HeaderDecorator">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ExpanderTokenKey.HeaderBg}}" />
+            <Setter Property="Background" Value="{atom:ExpanderTokenResource HeaderBg}" />
             <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextHeading}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextHeading}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton#PART_ExpandButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeSM}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeSM}" />
         </Style>
 
         <Style Selector="^[IsExpanded=True]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+                <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
             </Style>
         </Style>
 
@@ -101,7 +101,7 @@
             <Style Selector="^ /template/ atom|IconButton#PART_ExpandButton">
                 <Setter Property="Grid.Column" Value="0" />
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:ExpanderTokenKey.LeftExpandButtonHMargin}}" />
+                        Value="{atom:ExpanderTokenResource LeftExpandButtonHMargin}" />
             </Style>
         </Style>
 
@@ -109,7 +109,7 @@
             <Style Selector="^ /template/ atom|IconButton#PART_ExpandButton">
                 <Setter Property="Grid.Column" Value="3" />
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:ExpanderTokenKey.RightExpandButtonHMargin}}" />
+                        Value="{atom:ExpanderTokenResource RightExpandButtonHMargin}" />
             </Style>
         </Style>
 
@@ -177,20 +177,20 @@
             <Style Selector="^[SizeType=Large]">
                 <Style Selector="^ /template/ Border#PART_HeaderDecorator">
                     <Setter Property="Padding"
-                            Value="{DynamicResource {x:Static atom:ExpanderTokenKey.HeaderPaddingLG}}" />
+                            Value="{atom:ExpanderTokenResource HeaderPaddingLG}" />
                 </Style>
 
             </Style>
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ Border#PART_HeaderDecorator">
-                    <Setter Property="Padding" Value="{DynamicResource {x:Static atom:ExpanderTokenKey.HeaderPadding}}" />
+                    <Setter Property="Padding" Value="{atom:ExpanderTokenResource HeaderPadding}" />
                 </Style>
 
             </Style>
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ Border#PART_HeaderDecorator">
                     <Setter Property="Padding"
-                            Value="{DynamicResource {x:Static atom:ExpanderTokenKey.HeaderPaddingSM}}" />
+                            Value="{atom:ExpanderTokenResource HeaderPaddingSM}" />
                 </Style>
 
             </Style>
@@ -201,19 +201,19 @@
 
                 <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                     <Setter Property="Padding"
-                            Value="{DynamicResource {x:Static atom:ExpanderTokenKey.ContentPaddingLG}}" />
+                            Value="{atom:ExpanderTokenResource ContentPaddingLG}" />
                 </Style>
             </Style>
             <Style Selector="^[SizeType=Middle]">
                 <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                     <Setter Property="Padding"
-                            Value="{DynamicResource {x:Static atom:ExpanderTokenKey.ContentPadding}}" />
+                            Value="{atom:ExpanderTokenResource ContentPadding}" />
                 </Style>
             </Style>
             <Style Selector="^[SizeType=Small]">
                 <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                     <Setter Property="Padding"
-                            Value="{DynamicResource {x:Static atom:ExpanderTokenKey.ContentPaddingSM}}" />
+                            Value="{atom:ExpanderTokenResource ContentPaddingSM}" />
                 </Style>
             </Style>
         </Style>
@@ -221,9 +221,9 @@
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+                        Value="{atom:SharedTokenResource FontSizeLG}" />
                 <Setter Property="TextBlock.LineHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeightLG}}" />
+                        Value="{atom:SharedTokenResource FontHeightLG}" />
             </Style>
 
 
@@ -231,9 +231,9 @@
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+                        Value="{atom:SharedTokenResource FontSize}" />
                 <Setter Property="TextBlock.LineHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeight}}" />
+                        Value="{atom:SharedTokenResource FontHeight}" />
             </Style>
 
 
@@ -241,9 +241,9 @@
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+                        Value="{atom:SharedTokenResource FontSize}" />
                 <Setter Property="TextBlock.LineHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeight}}" />
+                        Value="{atom:SharedTokenResource FontHeight}" />
             </Style>
             
         </Style>
@@ -262,21 +262,21 @@
 
         <Style Selector="^[IsBorderless=True]">
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ExpanderTokenKey.HeaderBg}}" />
+                <Setter Property="Background" Value="{atom:ExpanderTokenResource HeaderBg}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsGhostStyle=True]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ExpanderTokenKey.ContentBg}}" />
+                <Setter Property="Background" Value="{atom:ExpanderTokenResource ContentBg}" />
             </Style>
         </Style>
 
         <Style Selector="^:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
             <Style Selector="^ /template/ Border#PART_HeaderDecorator ContentPresenter">
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+                        Value="{atom:SharedTokenResource ColorTextDisabled}" />
             </Style>
         </Style>
     </ControlTheme>

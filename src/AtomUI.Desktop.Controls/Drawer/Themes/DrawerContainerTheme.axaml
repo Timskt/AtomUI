@@ -31,11 +31,11 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
         <Setter Property="MotionDuration"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}" />
+                Value="{atom:SharedTokenResource MotionDurationSlow}" />
         <Setter Property="MaskBgColor"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
+                Value="{atom:SharedTokenResource ColorBgMask}" />
         
     </ControlTheme>
 </ResourceDictionary>

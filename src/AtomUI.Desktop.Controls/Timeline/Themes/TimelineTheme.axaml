@@ -34,9 +34,9 @@
         <Setter Property="atom:ScrollViewer.AllowAutoHide" Value="True" />
         <Setter Property="atom:ScrollViewer.IsScrollChainingEnabled" Value="False" />
         <Setter Property="TemplatedControl.BorderBrush"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+                Value="{atom:SharedTokenResource ColorBorder}" />
         <Setter Property="TemplatedControl.Background"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+                Value="{atom:SharedTokenResource ColorBgContainer}" />
 
     </ControlTheme>
 </ResourceDictionary>

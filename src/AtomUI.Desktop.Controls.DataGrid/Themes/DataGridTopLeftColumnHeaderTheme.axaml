@@ -47,8 +47,8 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
+        <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
         <Setter Property="CornerRadius"
-                Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableTopLeftColumnCornerRadius}}" />
+                Value="{atom:DataGridTokenResource TableTopLeftColumnCornerRadius}" />
     </ControlTheme>
 </ResourceDictionary>

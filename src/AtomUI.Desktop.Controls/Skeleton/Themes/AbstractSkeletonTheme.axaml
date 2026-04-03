@@ -24,10 +24,10 @@
     <Style Selector="^:is(atom|AbstractSkeleton)">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.GradientFromColor}}"/>
-        <Setter Property="MotionDuration" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.LoadingMotionDuration}}"/>
-        <Setter Property="LoadingBackgroundStart" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.LoadingBackgroundStart}}"/>
-        <Setter Property="LoadingBackgroundMiddle" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.LoadingBackgroundMiddle}}"/>
-        <Setter Property="LoadingBackgroundEnd" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.LoadingBackgroundEnd}}"/>
+        <Setter Property="Background" Value="{atom:SkeletonTokenResource GradientFromColor}"/>
+        <Setter Property="MotionDuration" Value="{atom:SkeletonTokenResource LoadingMotionDuration}"/>
+        <Setter Property="LoadingBackgroundStart" Value="{atom:SkeletonTokenResource LoadingBackgroundStart}"/>
+        <Setter Property="LoadingBackgroundMiddle" Value="{atom:SkeletonTokenResource LoadingBackgroundMiddle}"/>
+        <Setter Property="LoadingBackgroundEnd" Value="{atom:SkeletonTokenResource LoadingBackgroundEnd}"/>
     </Style>
 </ControlTheme>

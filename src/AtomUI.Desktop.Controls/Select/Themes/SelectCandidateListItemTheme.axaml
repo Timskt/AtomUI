@@ -9,10 +9,10 @@
         </ControlTheme.BasedOn>
 
         <Style Selector="^:is(atom|SelectCandidateListItem)">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SelectTokenKey.OptionFontSize}}"/>
-            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:SelectTokenKey.OptionHeight}}"/>
+            <Setter Property="FontSize" Value="{atom:SelectTokenResource OptionFontSize}"/>
+            <Setter Property="MinHeight" Value="{atom:SelectTokenResource OptionHeight}"/>
             <Style Selector="^[IsSelected=False][IsCandidateSelected=True]">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ListViewTokenKey.ItemHoverBgColor}}" />
+                <Setter Property="Background" Value="{atom:ListViewTokenResource ItemHoverBgColor}" />
             </Style>
             
             <Style Selector="^[IsHideSelectedOptions=True][IsSelected=True]">
@@ -20,9 +20,9 @@
             </Style>
             
             <Style Selector="^[IsGroupItem=False][IsSelected=True]">
-                <Setter Property="FontWeight" Value="{DynamicResource {x:Static atom:SelectTokenKey.OptionSelectedFontWeight}}"/>
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SelectTokenKey.OptionSelectedColor}}"/>
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SelectTokenKey.OptionSelectedBg}}"/>
+                <Setter Property="FontWeight" Value="{atom:SelectTokenResource OptionSelectedFontWeight}"/>
+                <Setter Property="Foreground" Value="{atom:SelectTokenResource OptionSelectedColor}"/>
+                <Setter Property="Background" Value="{atom:SelectTokenResource OptionSelectedBg}"/>
             </Style>
         </Style>
     </ControlTheme>

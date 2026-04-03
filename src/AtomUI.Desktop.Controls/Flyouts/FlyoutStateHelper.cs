@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Diagnostics;
+using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using Avalonia;
@@ -112,8 +113,8 @@ internal class FlyoutStateHelper : AvaloniaObject
                         StopMouseLeaveTimer();
                         if (_flyoutCloseDetectDisposable is null)
                         {
-                            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-                            _flyoutCloseDetectDisposable = inputManager.Process.Subscribe(DetectWhenToClosePopup);
+                            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+                            _flyoutCloseDetectDisposable = inputManager?.Process.Subscribe(DetectWhenToClosePopup);
                         }
                     };
                 }
@@ -220,7 +221,8 @@ internal class FlyoutStateHelper : AvaloniaObject
         else if (TriggerType == FlyoutTriggerType.Click ||
                  TriggerType == FlyoutTriggerType.Focus)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+            Debug.Assert(inputManager != null);
             _subscriptions.Add(inputManager.Process.Subscribe(HandleAnchorTargetClick));
             if (TriggerType == FlyoutTriggerType.Focus)
             {

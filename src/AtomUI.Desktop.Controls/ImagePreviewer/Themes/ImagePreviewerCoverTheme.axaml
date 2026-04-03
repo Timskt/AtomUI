@@ -30,11 +30,11 @@
         </Style>
       
         <Setter Property="ClipToBounds" Value="True" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Style Selector="^ /template/ Border#Mask">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.MaskBgColor}}" />
+            <Setter Property="Background" Value="{atom:ImagePreviewerTokenResource MaskBgColor}" />
             <Setter Property="TemplatedControl.Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+                    Value="{atom:SharedTokenResource ColorTextLightSolid}" />
         </Style>
 
         <Style Selector="^:pointerover">

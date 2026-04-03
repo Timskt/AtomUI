@@ -10,9 +10,9 @@
                         MinHeight="{TemplateBinding MinHeight}"
                         Padding="{TemplateBinding Padding}">
                     <DockPanel LastChildFill="True"
-                               HorizontalSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}">
+                               HorizontalSpacing="{atom:SharedTokenResource SpacingXS}">
                         <StackPanel Orientation="Horizontal"
-                                    Spacing="{DynamicResource {x:Static atom:ChromeTokenKey.LogoAndTitleSpacing}}"
+                                    Spacing="{atom:ChromeTokenResource LogoAndTitleSpacing}"
                                     DockPanel.Dock="Left">
                             <ContentPresenter Name="{x:Static atom:TitleBarThemeConstants.LogoPart}"
                                               HorizontalAlignment="Left"
@@ -63,7 +63,7 @@
                             Padding="{TemplateBinding Padding}">
                         <DockPanel LastChildFill="True">
                             <StackPanel Orientation="Horizontal"
-                                        Spacing="{DynamicResource {x:Static atom:ChromeTokenKey.LogoAndTitleSpacing}}"
+                                        Spacing="{atom:ChromeTokenResource LogoAndTitleSpacing}"
                                         DockPanel.Dock="Left">
                                 <ContentPresenter Name="{x:Static atom:TitleBarThemeConstants.LogoPart}"
                                                   HorizontalAlignment="Left"
@@ -125,7 +125,7 @@
                             <StackPanel Orientation="Horizontal"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
-                                        Spacing="{DynamicResource {x:Static atom:ChromeTokenKey.LogoAndTitleSpacing}}">
+                                        Spacing="{atom:ChromeTokenResource LogoAndTitleSpacing}">
                                 <ContentPresenter Name="{x:Static atom:TitleBarThemeConstants.LogoPart}"
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
@@ -147,23 +147,23 @@
     </Style>
 
     <Style Selector="^:is(atom|WindowTitleBar)">
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:ChromeTokenKey.TitleBarPadding}}" />
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:ChromeTokenKey.MinHeight}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="Padding" Value="{atom:ChromeTokenResource TitleBarPadding}" />
+        <Setter Property="MinHeight" Value="{atom:ChromeTokenResource MinHeight}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveColor}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:ChromeTokenKey.TitleFontSize}}" />
-        <Setter Property="FontWeight" Value="{DynamicResource {x:Static atom:ChromeTokenKey.TitleFontWeight}}" />
+        <Setter Property="Foreground" Value="{atom:ChromeTokenResource ActiveColor}" />
+        <Setter Property="FontSize" Value="{atom:ChromeTokenResource TitleFontSize}" />
+        <Setter Property="FontWeight" Value="{atom:ChromeTokenResource TitleFontWeight}" />
 
         <Style Selector="^[IsWindowActive=False]">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ChromeTokenKey.InactiveColor}}" />
+            <Setter Property="Foreground" Value="{atom:ChromeTokenResource InactiveColor}" />
         </Style>
 
         <Setter Property="Background" Value="Transparent" />
 
         <Style Selector="^ /template/ ContentPresenter#PART_Logo">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:ChromeTokenKey.LogoSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:ChromeTokenKey.LogoSize}}" />
+            <Setter Property="Width" Value="{atom:ChromeTokenResource LogoSize}" />
+            <Setter Property="Height" Value="{atom:ChromeTokenResource LogoSize}" />
         </Style>
     </Style>
 

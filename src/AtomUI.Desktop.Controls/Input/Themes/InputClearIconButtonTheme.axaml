@@ -9,22 +9,22 @@
         </ControlTheme.BasedOn>
         
         <Setter Property="IconWidth"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                Value="{atom:SharedTokenResource IconSize}" />
         
         <Setter Property="IconHeight"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                Value="{atom:SharedTokenResource IconSize}" />
 
         <Setter Property="IconBrush"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextQuaternary}}" />
+                Value="{atom:SharedTokenResource ColorTextQuaternary}" />
         
         <Style Selector="^:pointerover">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}" />
+                    Value="{atom:SharedTokenResource ColorTextTertiary}" />
         </Style>
         
         <Style Selector="^:pressed">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+                    Value="{atom:SharedTokenResource ColorText}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

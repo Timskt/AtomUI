@@ -8,7 +8,7 @@ public static class ApplicationExtensions
 {
     public static IThemeManager? GetThemeManager(this Application application)
     {
-        return AvaloniaLocator.Current.GetService<ThemeManager>();
+        return AvaloniaLocator.Current.GetService(typeof(ThemeManager)) as IThemeManager;
     }
 
     public static LanguageVariant? GetLanguageVariant(this Application application)

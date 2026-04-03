@@ -435,8 +435,8 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
         _clickTriggerDisposable?.Dispose();
         if (Trigger == FloatButtonGroupTrigger.Click)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-            _clickTriggerDisposable = inputManager.Process.Subscribe(HandleMouseClick);
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+            _clickTriggerDisposable = inputManager?.Process.Subscribe(HandleMouseClick);
         }
 
         if (_itemsControl != null)

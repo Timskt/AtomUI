@@ -41,21 +41,21 @@
 
     <Style Selector="^:is(atomc|AbstractCircleProgress)">
         <Setter Property="CircleMinimumTextFontSize"
-                Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.CircleMinimumTextFontSize}}" />
+                Value="{atom:ProgressBarTokenResource CircleMinimumTextFontSize}" />
         <Setter Property="CircleMinimumIconSize"
-                Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.CircleMinimumIconSize}}" />
+                Value="{atom:ProgressBarTokenResource CircleMinimumIconSize}" />
 
         <Style Selector="^ /template/ atom|IconPresenter#PART_ExceptionCompletedIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorError}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#PART_SuccessCompletedIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSuccess}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorSuccess}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter:disabled">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlItemBgActiveDisabled}}" />
+                    Value="{atom:SharedTokenResource ControlItemBgActiveDisabled}" />
         </Style>
 
     </Style>

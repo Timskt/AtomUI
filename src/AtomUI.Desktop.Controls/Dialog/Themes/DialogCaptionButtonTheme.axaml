@@ -40,18 +40,18 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
         
-        <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIcon}}" />
+        <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorIcon}" />
         
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextHover}}" />
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextHover}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorIconHover}" />
         </Style>
         
         <Style Selector="^:pressed">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextActive}}" />
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextActive}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorIconHover}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>
