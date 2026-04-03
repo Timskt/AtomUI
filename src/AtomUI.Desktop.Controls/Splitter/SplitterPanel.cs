@@ -1845,7 +1845,7 @@ internal class SplitterPanel : Panel
 
     private double GetHandleSpacing()
     {
-        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKey.SplitBarSize);
+        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKind.SplitBarSize);
         if (value is double size && !double.IsNaN(size) && !double.IsInfinity(size))
         {
             return Math.Max(0, size);

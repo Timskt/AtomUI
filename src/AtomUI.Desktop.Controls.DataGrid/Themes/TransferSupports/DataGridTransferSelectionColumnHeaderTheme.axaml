@@ -19,8 +19,8 @@
 
         <Setter Property="ClipToBounds" Value="False" />
         <Style Selector="^ /template/ StackPanel#RootLayout">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TransferTokenKey.DataGridSelectionHeaderMargin}}" />
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+            <Setter Property="Margin" Value="{atom:TransferTokenResource DataGridSelectionHeaderMargin}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXXS}" />
         </Style>
         
     </ControlTheme>

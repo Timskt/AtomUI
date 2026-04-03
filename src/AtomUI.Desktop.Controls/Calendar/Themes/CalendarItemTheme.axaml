@@ -92,22 +92,22 @@
         </Setter>
 
         <Style Selector="^ /template/ Grid#PART_HeaderLayout">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:CalendarTokenKey.HeaderMargin}}" />
+            <Setter Property="Margin" Value="{atom:CalendarTokenResource HeaderMargin}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeSM}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeSM}" />
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                    Value="{atom:SharedTokenResource ColorTextDescription}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton:pointerover">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorText}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton:pressed">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorText}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

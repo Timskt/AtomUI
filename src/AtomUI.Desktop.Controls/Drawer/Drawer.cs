@@ -452,19 +452,19 @@ public class Drawer : Control,
     private void ConfigureInstanceStyles()
     {
         var style = new Style();
-        style.Add(PushOffsetPercentProperty, DrawerTokenKey.PushOffsetPercent);
+        style.Add(PushOffsetPercentProperty, DrawerTokenKind.PushOffsetPercent);
         Styles.Add(style);
         
         var smallStyle = new Style(x => x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Small)); 
-        smallStyle.Add(DialogSizeProperty, DrawerTokenKey.SmallSize);
+        smallStyle.Add(DialogSizeProperty, DrawerTokenKind.SmallSize);
         Styles.Add(smallStyle);
         
         var largeStyle = new Style(x => x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Large));
-        largeStyle.Add(DialogSizeProperty, DrawerTokenKey.LargeSize);
+        largeStyle.Add(DialogSizeProperty, DrawerTokenKind.LargeSize);
         Styles.Add(largeStyle);
         
         var middleStyle = new Style(x => x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Middle)); 
-        middleStyle.Add(DialogSizeProperty, DrawerTokenKey.MiddleSize);
+        middleStyle.Add(DialogSizeProperty, DrawerTokenKind.MiddleSize);
         Styles.Add(middleStyle);
     }
 

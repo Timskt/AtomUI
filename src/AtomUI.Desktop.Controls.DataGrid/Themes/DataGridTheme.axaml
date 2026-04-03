@@ -160,27 +160,27 @@
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="SelectionMode" Value="None" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableRadius}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="CornerRadius" Value="{atom:DataGridTokenResource TableRadius}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="OperatingMsg"
                 Value="{DynamicResource {x:Static dataGridLocalization:DataGridLangResourceKey.Operating}}" />
 
         <Style Selector="^ /template/ Border#ColumnHeadersPresenterFrame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
         </Style>
 
         <Style Selector="^ /template/ Rectangle#ColumnHeadersAndRowsSeparator">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="Fill" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Style Selector="^ /template/ Border#Frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="BorderBrush" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Style Selector="^ /template/ Border#TitleFrame">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="BorderBrush" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Style Selector="^[IsShowFrameBorder=False] /template/ Border#TitleFrame">
@@ -189,60 +189,60 @@
 
         <Style Selector="^ /template/ ContentPresenter#Footer">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFooterTextColor}}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFooterBg}}" />
+                    Value="{atom:DataGridTokenResource TableFooterTextColor}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableFooterBg}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#EmptyIndicator">
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXL}}" />
+                    Value="{atom:SharedTokenResource PaddingXL}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ ContentPresenter#Title">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}" />
+                <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Footer">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}" />
+                <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}" />
             </Style>
             
             <Style Selector="^ /template/ atom|Pagination">
-                <Setter Property="Margin" Value="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMargin}}" />
+                <Setter Property="Margin" Value="{atom:DataGridTokenResource PaginationMargin}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ ContentPresenter#Title">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingMiddle}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeMiddle}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Footer">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingMiddle}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeMiddle}" />
             </Style>
             <Style Selector="^ /template/ atom|Pagination">
-                <Setter Property="Margin" Value="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMargin}}" />
+                <Setter Property="Margin" Value="{atom:DataGridTokenResource PaginationMargin}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ ContentPresenter#Title">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingSmall}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeSmall}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Footer">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingSmall}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeSmall}" />
             </Style>
             <Style Selector="^ /template/ atom|Pagination">
-                <Setter Property="Margin" Value="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMarginSM}}" />
+                <Setter Property="Margin" Value="{atom:DataGridTokenResource PaginationMarginSM}" />
             </Style>
         </Style>
     </Style>

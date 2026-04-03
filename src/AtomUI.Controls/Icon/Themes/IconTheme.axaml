@@ -13,30 +13,30 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
-        <Setter Property="FillBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
-        <Setter Property="StrokeBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
-        <Setter Property="StrokeWidth" Value="{DynamicResource {x:Static atom:IconTokenKey.StrokeWidth}}" />
-        <Setter Property="StrokeLineCap" Value="{DynamicResource {x:Static atom:IconTokenKey.StrokeLineCap}}" />
-        <Setter Property="StrokeLineJoin" Value="{DynamicResource {x:Static atom:IconTokenKey.StrokeLineJoin}}" />
+        <Setter Property="Height" Value="{atom:SharedTokenResource IconSize}" />
+        <Setter Property="Width" Value="{atom:SharedTokenResource IconSize}" />
+        <Setter Property="FillBrush" Value="{atom:SharedTokenResource ColorIconHover}" />
+        <Setter Property="StrokeBrush" Value="{atom:SharedTokenResource ColorIconHover}" />
+        <Setter Property="StrokeWidth" Value="{atom:IconTokenResource StrokeWidth}" />
+        <Setter Property="StrokeLineCap" Value="{atom:IconTokenResource StrokeLineCap}" />
+        <Setter Property="StrokeLineJoin" Value="{atom:IconTokenResource StrokeLineJoin}" />
         
         <Style Selector="^[IconTheme=TwoTone]">
-            <Setter Property="StrokeBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
-            <Setter Property="FillBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorInfoBg}}" />
+            <Setter Property="StrokeBrush" Value="{atom:SharedTokenResource ColorPrimary}" />
+            <Setter Property="FillBrush" Value="{atom:SharedTokenResource ColorInfoBg}" />
         </Style>
         
         <Style Selector="^[IconTheme=MultiColor]">
-            <Setter Property="StrokeBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorIconHover}}" />
-            <Setter Property="FillBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+            <Setter Property="StrokeBrush" Value="{atom:SharedTokenResource ColorIconHover}" />
+            <Setter Property="FillBrush" Value="{atom:SharedTokenResource ColorPrimary}" />
         </Style>
         
-        <Setter Property="SecondaryFillBrush" Value="{DynamicResource {x:Static atom:IconTokenKey.SecondaryFillColor}}" />
-        <Setter Property="SecondaryStrokeBrush" Value="{DynamicResource {x:Static atom:IconTokenKey.SecondaryStrokeColor}}" />
+        <Setter Property="SecondaryFillBrush" Value="{atom:IconTokenResource SecondaryFillColor}" />
+        <Setter Property="SecondaryStrokeBrush" Value="{atom:IconTokenResource SecondaryStrokeColor}" />
         <Setter Property="FallbackBrush" Value="White" />
-        <Setter Property="FillAnimationDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}" />
+        <Setter Property="FillAnimationDuration" Value="{atom:SharedTokenResource MotionDurationMid}" />
         
     </ControlTheme>
 </ResourceDictionary>

@@ -10,7 +10,7 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextHeading}}"/>
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:StatisticTokenKey.ContentFontSize}}"/>
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextHeading}"/>
+        <Setter Property="FontSize" Value="{atom:StatisticTokenResource ContentFontSize}"/>
     </ControlTheme>
 </ResourceDictionary>

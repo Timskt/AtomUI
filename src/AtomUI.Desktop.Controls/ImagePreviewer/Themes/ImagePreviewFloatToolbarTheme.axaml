@@ -55,58 +55,58 @@
 
         <Setter Property="CornerRadius" Value="100" />
         <Setter Property="Foreground"
-                Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationColor}}" />
+                Value="{atom:ImagePreviewerTokenResource PreviewOperationColor}" />
         <Setter Property="Background"
-                Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.NavButtonBgHoverColor}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.FloatToolbarPadding}}" />
-        <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SharedTokenKey.MarginLG}}" />
+                Value="{atom:ImagePreviewerTokenResource NavButtonBgHoverColor}" />
+        <Setter Property="Padding" Value="{atom:ImagePreviewerTokenResource FloatToolbarPadding}" />
+        <Setter Property="Margin" Value="{atom:SharedTokenResource MarginLG}" />
         <Style Selector="^ /template/ atom|IconButton">
             <Setter Property="IconWidth"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationSize}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationSize}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationSize}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationSize}" />
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationColor}}" />
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingSM}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationColor}" />
+            <Setter Property="Padding" Value="{atom:SharedTokenResource PaddingSM}" />
         </Style>
         
         <Style Selector="^ /template/ atom|ToggleIconButton">
             <Setter Property="IconWidth"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationSize}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationSize}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationSize}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationSize}" />
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationColor}}" />
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingSM}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationColor}" />
+            <Setter Property="Padding" Value="{atom:SharedTokenResource PaddingSM}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton:pointerover">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationHoverColor}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationHoverColor}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton:disabled">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationColorDisabled}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationColorDisabled}" />
         </Style>
         
         <Style Selector="^ /template/ atom|ToggleIconButton:pointerover">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationHoverColor}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationHoverColor}" />
         </Style>
 
         <Style Selector="^ /template/ atom|ToggleIconButton:disabled">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.PreviewOperationColorDisabled}}" />
+                    Value="{atom:ImagePreviewerTokenResource PreviewOperationColorDisabled}" />
         </Style>
 
         <Style Selector="^ /template/ StackPanel#RootLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXS}" />
         </Style>
 
         <Style Selector="^ /template/ Border#IndicatorFrame">
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.FloatToolbarIndicatorPadding}}" />
+                    Value="{atom:ImagePreviewerTokenResource FloatToolbarIndicatorPadding}" />
         </Style>
 
     </ControlTheme>

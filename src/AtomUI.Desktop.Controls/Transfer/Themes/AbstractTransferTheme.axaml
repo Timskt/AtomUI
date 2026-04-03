@@ -8,18 +8,18 @@
 
     <Style Selector="^:is(atom|AbstractTransfer)">
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
 
         <Style Selector="^ /template/ StackPanel#ActionsLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXXS}" />
         </Style>
 
         <Style Selector="^ /template/ Grid#RootLayout">
-            <Setter Property="ColumnSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+            <Setter Property="ColumnSpacing" Value="{atom:SharedTokenResource SpacingXS}" />
         </Style>
 
         <Style Selector="^:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
         </Style>
 
         <Setter Property="SelectionsIcon">
@@ -28,12 +28,12 @@
             </atom:IconTemplate>
         </Setter>
 
-        <Setter Property="ListHeight" Value="{DynamicResource {x:Static atom:TransferTokenKey.ListHeight}}" />
+        <Setter Property="ListHeight" Value="{atom:TransferTokenResource ListHeight}" />
 
         <Style Selector="^[IsStretchView=False]">
-            <Setter Property="ListWidth" Value="{DynamicResource {x:Static atom:TransferTokenKey.ListWidth}}" />
+            <Setter Property="ListWidth" Value="{atom:TransferTokenResource ListWidth}" />
             <Style Selector="^[IsPaginationEnabled=True]">
-                <Setter Property="ListWidth" Value="{DynamicResource {x:Static atom:TransferTokenKey.ListWidthLG}}" />
+                <Setter Property="ListWidth" Value="{atom:TransferTokenResource ListWidthLG}" />
             </Style>
         </Style>
 

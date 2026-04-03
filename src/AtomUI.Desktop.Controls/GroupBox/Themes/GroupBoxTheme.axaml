@@ -40,30 +40,30 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
-        <Setter Property="HeaderTitleColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
-        <Setter Property="HeaderFontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgContainer}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}" />
+        <Setter Property="HeaderTitleColor" Value="{atom:SharedTokenResource ColorText}" />
+        <Setter Property="HeaderFontSize" Value="{atom:SharedTokenResource FontSize}" />
 
         <Style Selector="^ /template/ Panel#PART_HeaderContainer">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:GroupBoxTokenKey.HeaderContainerMargin}}" />
+            <Setter Property="Margin" Value="{atom:GroupBoxTokenResource HeaderContainerMargin}" />
         </Style>
 
         <Style Selector="^ /template/ Decorator#PART_HeaderContent">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:GroupBoxTokenKey.HeaderContentPadding}}" />
+            <Setter Property="Padding" Value="{atom:GroupBoxTokenResource HeaderContentPadding}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#PART_HeaderIconPresenter">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:GroupBoxTokenKey.HeaderIconMargin}}" />
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeLG}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeLG}}" />
+            <Setter Property="Margin" Value="{atom:GroupBoxTokenResource HeaderIconMargin}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorText}" />
+            <Setter Property="Width" Value="{atom:SharedTokenResource IconSizeLG}" />
+            <Setter Property="Height" Value="{atom:SharedTokenResource IconSizeLG}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:GroupBoxTokenKey.ContentPadding}}" />
+        <Setter Property="Padding" Value="{atom:GroupBoxTokenResource ContentPadding}" />
 
         <Style Selector="^[HeaderTitlePosition=Left]">
             <Style Selector="^ /template/ Decorator#PART_HeaderContent">

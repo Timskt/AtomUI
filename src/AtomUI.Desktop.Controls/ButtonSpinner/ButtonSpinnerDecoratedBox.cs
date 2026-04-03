@@ -209,8 +209,8 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
         if (IsEffectivelyEnabled && IsShowHandle && IsHandleFloatable)
         {
             _mouseMoveDisposable?.Dispose();
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-            _mouseMoveDisposable = inputManager.Process.Subscribe(HandleMouseMove);
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;;
+            _mouseMoveDisposable = inputManager?.Process.Subscribe(HandleMouseMove);
         }
     }
 
@@ -317,9 +317,9 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
     {
         base.NotifyCreateTransitions(transitions);
         transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOpacityProperty));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOffsetProperty, SharedTokenKey.MotionDurationMid));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentLeftShiftProperty, SharedTokenKey.MotionDurationMid));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentRightShiftProperty, SharedTokenKey.MotionDurationMid));
+        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOffsetProperty, SharedTokenKind.MotionDurationMid));
+        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentLeftShiftProperty, SharedTokenKind.MotionDurationMid));
+        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentRightShiftProperty, SharedTokenKind.MotionDurationMid));
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

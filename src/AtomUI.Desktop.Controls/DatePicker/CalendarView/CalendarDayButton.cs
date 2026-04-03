@@ -252,9 +252,9 @@ internal sealed class CalendarDayButton : AvaloniaButton
             {
                 Transitions = [
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty,
-                        SharedTokenKey.MotionDurationFast),
+                        SharedTokenKind.MotionDurationFast),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKey.MotionDurationFast)
+                        SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

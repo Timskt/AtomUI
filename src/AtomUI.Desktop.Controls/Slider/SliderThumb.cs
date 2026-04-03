@@ -109,7 +109,7 @@ public class SliderThumb : TemplatedControl
                 Transitions = [
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(OutlineBrushProperty),
                     TransitionUtils.CreateTransition<ThicknessTransition>(OutlineThicknessProperty,
-                        SharedTokenKey.MotionDurationFast),
+                        SharedTokenKind.MotionDurationFast),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty)
                 ];
             }

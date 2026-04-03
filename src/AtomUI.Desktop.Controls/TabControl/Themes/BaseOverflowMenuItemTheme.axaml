@@ -36,29 +36,29 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemColor}}" />
+        <Setter Property="Foreground" Value="{atom:MenuTokenResource ItemColor}" />
 
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemHeight}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemPaddingInline}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemBg}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemBorderRadius}}" />
+        <Setter Property="Height" Value="{atom:MenuTokenResource ItemHeight}" />
+        <Setter Property="Padding" Value="{atom:MenuTokenResource ItemPaddingInline}" />
+        <Setter Property="Background" Value="{atom:MenuTokenResource ItemBg}" />
+        <Setter Property="CornerRadius" Value="{atom:MenuTokenResource ItemBorderRadius}" />
         
         <Style Selector="^:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemHoverColor}}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemHoverBg}}" />
+            <Setter Property="Foreground" Value="{atom:MenuTokenResource ItemHoverColor}" />
+            <Setter Property="Background" Value="{atom:MenuTokenResource ItemHoverBg}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#ItemTextPresenter">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemMargin}}" />
+            <Setter Property="Margin" Value="{atom:MenuTokenResource ItemMargin}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton#PART_ItemCloseButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeSM}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeSM}" />
         </Style>
         
         <Style Selector="^:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemDisabledColor}}" />
+            <Setter Property="Foreground" Value="{atom:MenuTokenResource ItemDisabledColor}" />
         </Style>
 
     </ControlTheme>

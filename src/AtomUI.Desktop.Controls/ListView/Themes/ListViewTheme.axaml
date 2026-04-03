@@ -62,12 +62,12 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="False" />
-        <Setter Property="ItemHoverBg" Value="{DynamicResource {x:Static atom:ListViewTokenKey.ItemHoverBgColor}}" />
-        <Setter Property="ItemSelectedBg" Value="{DynamicResource {x:Static atom:ListViewTokenKey.ItemSelectedBgColor}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:ListViewTokenKey.ContentPadding}}" />
+        <Setter Property="ItemHoverBg" Value="{atom:ListViewTokenResource ItemHoverBgColor}" />
+        <Setter Property="ItemSelectedBg" Value="{atom:ListViewTokenResource ItemSelectedBgColor}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
+        <Setter Property="Padding" Value="{atom:ListViewTokenResource ContentPadding}" />
 
         <Setter Property="SelectedIndicator">
             <atom:IconTemplate>
@@ -76,18 +76,18 @@
         </Setter>
 
         <Style Selector="^[SizeType=Large]">
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
-            <Setter Property="EmptyIndicatorPadding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXL}}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
+            <Setter Property="EmptyIndicatorPadding" Value="{atom:SharedTokenResource PaddingXL}" />
         </Style>
 
         <Style Selector="^[SizeType=Middle]">
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
-            <Setter Property="EmptyIndicatorPadding" Value="{DynamicResource {x:Static atom:SharedTokenKey.Padding}}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}" />
+            <Setter Property="EmptyIndicatorPadding" Value="{atom:SharedTokenResource Padding}" />
         </Style>
 
         <Style Selector="^[SizeType=Small]">
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
-            <Setter Property="EmptyIndicatorPadding" Value="{DynamicResource {x:Static atom:SharedTokenKey.Padding}}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
+            <Setter Property="EmptyIndicatorPadding" Value="{atom:SharedTokenResource Padding}" />
         </Style>
 
         <Setter Property="EmptyIndicatorTemplate">
@@ -109,11 +109,11 @@
         </Setter>
         
         <Style Selector="^ /template/ ContentPresenter#TopPaginationPresenter">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:ListViewTokenKey.PaginationMargin}}"/>
+            <Setter Property="Margin" Value="{atom:ListViewTokenResource PaginationMargin}"/>
         </Style>
         
         <Style Selector="^ /template/ ContentPresenter#BottomPaginationPresenter">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:ListViewTokenKey.PaginationMargin}}"/>
+            <Setter Property="Margin" Value="{atom:ListViewTokenResource PaginationMargin}"/>
         </Style>
     </Style>
 

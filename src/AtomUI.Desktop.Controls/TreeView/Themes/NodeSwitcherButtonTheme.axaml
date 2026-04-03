@@ -55,29 +55,29 @@
         
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}"/>
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}"/>
 
         <Style Selector="^ /template/ atom|IconPresenter atom|Icon">
-            <Setter Property="FillBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextSecondary}}"/>
-            <Setter Property="StrokeBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextSecondary}}"/>
+            <Setter Property="FillBrush" Value="{atom:SharedTokenResource ColorTextSecondary}"/>
+            <Setter Property="StrokeBrush" Value="{atom:SharedTokenResource ColorTextSecondary}"/>
         </Style>
         
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:TreeViewTokenKey.NodeHoverBg}}"/>
+            <Setter Property="Background" Value="{atom:TreeViewTokenResource NodeHoverBg}"/>
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"/>
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"/>
+            <Setter Property="Width" Value="{atom:SharedTokenResource IconSize}"/>
+            <Setter Property="Height" Value="{atom:SharedTokenResource IconSize}"/>
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter#RotationIconPresenter">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeXS}}"/>
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeXS}}"/>
+            <Setter Property="Width" Value="{atom:SharedTokenResource IconSizeXS}"/>
+            <Setter Property="Height" Value="{atom:SharedTokenResource IconSizeXS}"/>
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter#LoadingIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorPrimary}"/>
         </Style>
         
         <Style Selector="^:checked[IconMode=Rotation]">

@@ -17,83 +17,83 @@
         </Style>
 
         <Style Selector="^ /template/ Rectangle.IndicatorLine">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessTailColor}}" />
+            <Setter Property="Fill" Value="{atom:StepsTokenResource ProcessTailColor}" />
         </Style>
 
         <Style Selector="^[Status=Wait]">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.WaitTitleColor}}" />
+                    Value="{atom:StepsTokenResource WaitTitleColor}" />
             <Setter Property="DescriptionForeground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.WaitDescriptionColor}}" />
+                    Value="{atom:StepsTokenResource WaitDescriptionColor}" />
 
             <Style Selector="^ /template/ Rectangle.IndicatorLine">
                 <Setter Property="Fill"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.WaitTailColor}}" />
+                        Value="{atom:StepsTokenResource WaitTailColor}" />
             </Style>
         </Style>
 
         <Style Selector="^[Status=Process]">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessTitleColor}}" />
+                    Value="{atom:StepsTokenResource ProcessTitleColor}" />
             <Setter Property="DescriptionForeground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessDescriptionColor}}" />
+                    Value="{atom:StepsTokenResource ProcessDescriptionColor}" />
 
             <Style Selector="^ /template/ Rectangle.IndicatorLine">
                 <Setter Property="Fill"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessTailColor}}" />
+                        Value="{atom:StepsTokenResource ProcessTailColor}" />
             </Style>
         </Style>
 
         <Style Selector="^[Status=Finish]">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.FinishTitleColor}}" />
+                    Value="{atom:StepsTokenResource FinishTitleColor}" />
             <Setter Property="DescriptionForeground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.FinishDescriptionColor}}" />
+                    Value="{atom:StepsTokenResource FinishDescriptionColor}" />
             <Style Selector="^ /template/ Rectangle.IndicatorLine">
                 <Setter Property="Fill"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.FinishTailColor}}" />
+                        Value="{atom:StepsTokenResource FinishTailColor}" />
             </Style>
         </Style>
 
         <Style Selector="^[Status=Error]">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.ErrorTitleColor}}" />
+                    Value="{atom:StepsTokenResource ErrorTitleColor}" />
             <Setter Property="DescriptionForeground"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.ErrorDescriptionColor}}" />
+                    Value="{atom:StepsTokenResource ErrorDescriptionColor}" />
 
             <Style Selector="^ /template/ Rectangle.IndicatorLine">
                 <Setter Property="Fill"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.ErrorTailColor}}" />
+                        Value="{atom:StepsTokenResource ErrorTailColor}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsSelected=False]">
 
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                    Value="{atom:SharedTokenResource ColorTextDescription}" />
             <Setter Property="SubTitleForeground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                    Value="{atom:SharedTokenResource ColorTextDescription}" />
             <Setter Property="DescriptionForeground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                    Value="{atom:SharedTokenResource ColorTextDescription}" />
 
             <Style Selector="^[IsFinished=True]">
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+                        Value="{atom:SharedTokenResource ColorText}" />
                 <Setter Property="SubTitleForeground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                        Value="{atom:SharedTokenResource ColorTextDescription}" />
                 <Setter Property="DescriptionForeground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                        Value="{atom:SharedTokenResource ColorTextDescription}" />
             </Style>
 
             <Style Selector="^[IsClickable=True]">
                 <Style Selector="^:pointerover">
                     <Style Selector="^:not(^[Status=Process])">
                         <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessIconBorderColor}}" />
+                                Value="{atom:StepsTokenResource ProcessIconBorderColor}" />
                         <Setter Property="SubTitleForeground"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessIconBorderColor}}" />
+                                Value="{atom:StepsTokenResource ProcessIconBorderColor}" />
                         <Setter Property="DescriptionForeground"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.ProcessIconBorderColor}}" />
+                                Value="{atom:StepsTokenResource ProcessIconBorderColor}" />
                     </Style>
                 </Style>
             </Style>
@@ -102,23 +102,23 @@
 
         <Style Selector="^[IsSelected=True]">
             <Setter Property="SubTitleForeground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                    Value="{atom:SharedTokenResource ColorTextDescription}" />
         </Style>
 
         <Style Selector="^ /template/ StackPanel#HeaderLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXS}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ StackPanel#HeaderLayout">
                 <Setter Property="MinHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                        Value="{atom:SharedTokenResource ControlHeight}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ StackPanel#HeaderLayout">
                 <Setter Property="MinHeight"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                        Value="{atom:SharedTokenResource ControlHeight}" />
             </Style>
         </Style>
 
@@ -126,33 +126,33 @@
 
             <Style Selector="^ /template/ StackPanel#HeaderLayout">
                 <Setter Property="MinHeight"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.IconSizeSM}}" />
+                        Value="{atom:StepsTokenResource IconSizeSM}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#SubHeaderPresenter">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#DescriptionPresenter">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ ContentPresenter#HeaderPresenter">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+                <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeLG}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ ContentPresenter#HeaderPresenter">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+                <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeLG}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ ContentPresenter#HeaderPresenter">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+                <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
             </Style>
         </Style>
 
@@ -216,12 +216,12 @@
 
                         <Style Selector="^ /template/ DockPanel#RootLayout">
                             <Setter Property="HorizontalSpacing"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+                                    Value="{atom:SharedTokenResource SpacingXS}" />
                         </Style>
 
                         <Style Selector="^ /template/ StackPanel#HeaderLayout">
                             <Setter Property="Margin"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.HorizontalHeaderMargin}}" />
+                                    Value="{atom:StepsTokenResource HorizontalHeaderMargin}" />
                         </Style>
                     </Style>
 
@@ -296,38 +296,38 @@
 
                         <Style Selector="^ /template/ Rectangle#TailSeparatorLine">
                             <Setter Property="Height"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                                    Value="{atom:SharedTokenResource LineWidth}" />
                         </Style>
 
                         <Style Selector="^ /template/ Rectangle#BeginningSeparatorLine">
                             <Setter Property="Height"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                                    Value="{atom:SharedTokenResource LineWidth}" />
                         </Style>
 
                         <Style Selector="^ /template/ Rectangle#EndingSeparatorLine">
                             <Setter Property="Height"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                                    Value="{atom:SharedTokenResource LineWidth}" />
                         </Style>
 
                         <Style Selector="^ /template/ atom|StepsItemIndicator">
                             <Setter Property="Margin"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.HorizontalDotMargin}}" />
+                                    Value="{atom:StepsTokenResource HorizontalDotMargin}" />
                         </Style>
 
                         <Style Selector="^[Status=Process]">
                             <Style Selector="^ /template/ Rectangle#BeginningSeparatorLine">
                                 <Setter Property="Fill"
-                                        Value="{DynamicResource {x:Static atom:StepsTokenKey.FinishTailColor}}" />
+                                        Value="{atom:StepsTokenResource FinishTailColor}" />
                             </Style>
                         </Style>
                         <Style Selector="^ /template/ StackPanel#HeaderLayout">
                             <Setter Property="Margin"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalLabelContentMargin}}" />
+                                    Value="{atom:StepsTokenResource VerticalLabelContentMargin}" />
                         </Style>
 
                         <Style Selector="^ /template/ StackPanel#ContentLayout">
                             <Setter Property="MaxWidth"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.DescriptionMaxWidth}}" />
+                                    Value="{atom:StepsTokenResource DescriptionMaxWidth}" />
                         </Style>
 
                     </Style>
@@ -402,48 +402,48 @@
 
                     <Style Selector="^ /template/ Panel#TailLineLayout">
                         <Setter Property="Height"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DotCurrentSize}}" />
+                                Value="{atom:StepsTokenResource DotCurrentSize}" />
                     </Style>
 
                     <Style Selector="^ /template/ Rectangle#TailSeparatorLine">
                         <Setter Property="Height"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DotLineThickness}}" />
+                                Value="{atom:StepsTokenResource DotLineThickness}" />
                     </Style>
 
                     <Style Selector="^ /template/ Rectangle#BeginningSeparatorLine">
                         <Setter Property="Height"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DotLineThickness}}" />
+                                Value="{atom:StepsTokenResource DotLineThickness}" />
                     </Style>
 
                     <Style Selector="^ /template/ Rectangle#EndingSeparatorLine">
                         <Setter Property="Height"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DotLineThickness}}" />
+                                Value="{atom:StepsTokenResource DotLineThickness}" />
                     </Style>
 
                     <Style Selector="^ /template/ Grid#IndicatorLayout">
                         <Setter Property="Height"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DotCurrentSize}}" />
+                                Value="{atom:StepsTokenResource DotCurrentSize}" />
                     </Style>
 
                     <Style Selector="^ /template/ atom|StepsItemIndicator">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.HorizontalDotMargin}}" />
+                                Value="{atom:StepsTokenResource HorizontalDotMargin}" />
                     </Style>
 
                     <Style Selector="^[Status=Process]">
                         <Style Selector="^ /template/ Rectangle#BeginningSeparatorLine">
                             <Setter Property="Fill"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.FinishTailColor}}" />
+                                    Value="{atom:StepsTokenResource FinishTailColor}" />
                         </Style>
                     </Style>
                     <Style Selector="^ /template/ StackPanel#HeaderLayout">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalLabelContentMargin}}" />
+                                Value="{atom:StepsTokenResource VerticalLabelContentMargin}" />
                     </Style>
 
                     <Style Selector="^ /template/ StackPanel#ContentLayout">
                         <Setter Property="MaxWidth"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DescriptionMaxWidth}}" />
+                                Value="{atom:StepsTokenResource DescriptionMaxWidth}" />
                     </Style>
 
                 </Style>
@@ -506,17 +506,17 @@
 
                     <Style Selector="^ /template/ DockPanel#IndicatorLayout">
                         <Setter Property="VerticalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalItemSpacing}}" />
+                                Value="{atom:StepsTokenResource VerticalItemSpacing}" />
                     </Style>
 
                     <Style Selector="^ /template/ DockPanel#RootLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                                Value="{atom:SharedTokenResource Spacing}" />
                     </Style>
 
                     <Style Selector="^ /template/ ContentPresenter#DescriptionPresenter">
                         <Setter Property="Padding"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalDescriptionPadding}}" />
+                                Value="{atom:StepsTokenResource VerticalDescriptionPadding}" />
                     </Style>
                 </Style>
                 <!-- 点指示器类型 -->
@@ -575,37 +575,37 @@
                     </Setter>
 
                     <Style Selector="^ /template/ DockPanel#IndicatorLayout">
-                        <Setter Property="Width" Value="{DynamicResource {x:Static atom:StepsTokenKey.DotCurrentSize}}" />
+                        <Setter Property="Width" Value="{atom:StepsTokenResource DotCurrentSize}" />
                     </Style>
 
                     <Style Selector="^[SizeType=Large]">
                         <Style Selector="^ /template/ Panel#ItemIndicatorLayout">
                             <Setter Property="MinHeight"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                                    Value="{atom:SharedTokenResource ControlHeight}" />
                         </Style>
                     </Style>
                     <Style Selector="^[SizeType=Middle]">
                         <Style Selector="^ /template/ Panel#ItemIndicatorLayout">
                             <Setter Property="MinHeight"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                                    Value="{atom:SharedTokenResource ControlHeight}" />
                         </Style>
                     </Style>
 
                     <Style Selector="^[SizeType=Small]">
                         <Style Selector="^ /template/ Panel#ItemIndicatorLayout">
                             <Setter Property="MinHeight"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.IconSizeSM}}" />
+                                    Value="{atom:StepsTokenResource IconSizeSM}" />
                         </Style>
                     </Style>
 
                     <Style Selector="^ /template/ ContentPresenter#DescriptionPresenter">
                         <Setter Property="Padding"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalDescriptionPadding}}" />
+                                Value="{atom:StepsTokenResource VerticalDescriptionPadding}" />
                     </Style>
 
                     <Style Selector="^ /template/ DockPanel#RootLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                                Value="{atom:SharedTokenResource Spacing}" />
                     </Style>
 
                 </Style>
@@ -616,12 +616,12 @@
         <Style Selector="^[Style=Navigation]">
             <!-- 导航类型通用的样式 -->
             <Setter Property="NavIndicatorLineColor"
-                    Value="{DynamicResource {x:Static atom:StepsTokenKey.StepsNavActiveColor}}" />
+                    Value="{atom:StepsTokenResource StepsNavActiveColor}" />
 
             <Style Selector="^[Orientation=Horizontal]">
                 <Style Selector="^ /template/ Rectangle.NavIndicatorLine">
                     <Setter Property="Height"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidthBold}}" />
+                            Value="{atom:SharedTokenResource LineWidthBold}" />
                 </Style>
                 <Setter Property="NavIndicatorLineRenderTransform" Value="scale(0.0, 1.0)" />
 
@@ -633,7 +633,7 @@
             <Style Selector="^[Orientation=Vertical]">
                 <Style Selector="^ /template/ Rectangle.NavIndicatorLine">
                     <Setter Property="Width"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidthBold}}" />
+                            Value="{atom:SharedTokenResource LineWidthBold}" />
                 </Style>
                 <Setter Property="NavIndicatorLineRenderTransform" Value="scale(1.0, 0.0)" />
 
@@ -643,30 +643,30 @@
                 <Style Selector="^[SizeType=Large]">
                     <Style Selector="^ /template/ atom|Icon#NavArrow">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalNavArrowMargin}}" />
+                                Value="{atom:StepsTokenResource VerticalNavArrowMargin}" />
                     </Style>
                 </Style>
                 <Style Selector="^[SizeType=Middle]">
                     <Style Selector="^ /template/ atom|Icon#NavArrow">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalNavArrowMargin}}" />
+                                Value="{atom:StepsTokenResource VerticalNavArrowMargin}" />
                     </Style>
                 </Style>
                 <Style Selector="^[SizeType=Small]">
                     <Style Selector="^ /template/ atom|Icon#NavArrow">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalNavArrowMarginSM}}" />
+                                Value="{atom:StepsTokenResource VerticalNavArrowMarginSM}" />
                     </Style>
                 </Style>
             </Style>
 
             <Style Selector="^ /template/ atom|Icon#NavArrow">
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.NavArrowColor}}" />
+                        Value="{atom:StepsTokenResource NavArrowColor}" />
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.IconFontSize}}" />
+                        Value="{atom:StepsTokenResource IconFontSize}" />
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.IconFontSize}}" />
+                        Value="{atom:StepsTokenResource IconFontSize}" />
             </Style>
 
             <Style Selector="^[IsSelected=True]">
@@ -680,19 +680,19 @@
                 <Style Selector="^[SizeType=Large]">
                     <Style Selector="^ /template/ DockPanel#IndicatorLineLayout">
                         <Setter Property="VerticalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.NavItemGutter}}" />
+                                Value="{atom:StepsTokenResource NavItemGutter}" />
                     </Style>
                 </Style>
                 <Style Selector="^[SizeType=Middle]">
                     <Style Selector="^ /template/ DockPanel#IndicatorLineLayout">
                         <Setter Property="VerticalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.NavItemGutter}}" />
+                                Value="{atom:StepsTokenResource NavItemGutter}" />
                     </Style>
                 </Style>
                 <Style Selector="^[SizeType=Small]">
                     <Style Selector="^ /template/ DockPanel#IndicatorLineLayout">
                         <Setter Property="VerticalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.NavItemGutterSM}}" />
+                                Value="{atom:StepsTokenResource NavItemGutterSM}" />
                     </Style>
                 </Style>
 
@@ -762,7 +762,7 @@
 
                         <Style Selector="^ /template/ DockPanel#ItemContentLayout">
                             <Setter Property="HorizontalSpacing"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+                                    Value="{atom:SharedTokenResource SpacingXS}" />
                         </Style>
 
                         <Style Selector="^[IsClickable=True]">
@@ -773,12 +773,12 @@
 
                         <Style Selector="^ /template/ StackPanel#HeaderLayout">
                             <Setter Property="Margin"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.HorizontalHeaderMargin}}" />
+                                    Value="{atom:StepsTokenResource HorizontalHeaderMargin}" />
                         </Style>
 
                         <Style Selector="^ /template/ ContentPresenter#DescriptionPresenter">
                             <Setter Property="Padding"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalDescriptionPadding}}" />
+                                    Value="{atom:StepsTokenResource VerticalDescriptionPadding}" />
                         </Style>
 
                     </Style>
@@ -847,12 +847,12 @@
 
                         <Style Selector="^ /template/ StackPanel#HeaderLayout">
                             <Setter Property="Margin"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalLabelContentMargin}}" />
+                                    Value="{atom:StepsTokenResource VerticalLabelContentMargin}" />
                         </Style>
 
                         <Style Selector="^ /template/ StackPanel#ContentLayout">
                             <Setter Property="MaxWidth"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.DescriptionMaxWidth}}" />
+                                    Value="{atom:StepsTokenResource DescriptionMaxWidth}" />
                         </Style>
                     </Style>
                 </Style>
@@ -922,22 +922,22 @@
 
                     <Style Selector="^ /template/ Panel#IndicatorLayout">
                         <Setter Property="Height"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DotCurrentSize}}" />
+                                Value="{atom:StepsTokenResource DotCurrentSize}" />
                     </Style>
 
                     <Style Selector="^ /template/ atom|StepsItemIndicator">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.HorizontalDotMargin}}" />
+                                Value="{atom:StepsTokenResource HorizontalDotMargin}" />
                     </Style>
 
                     <Style Selector="^ /template/ StackPanel#HeaderLayout">
                         <Setter Property="Margin"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalLabelContentMargin}}" />
+                                Value="{atom:StepsTokenResource VerticalLabelContentMargin}" />
                     </Style>
 
                     <Style Selector="^ /template/ StackPanel#ContentLayout">
                         <Setter Property="MaxWidth"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.DescriptionMaxWidth}}" />
+                                Value="{atom:StepsTokenResource DescriptionMaxWidth}" />
                     </Style>
                 </Style>
             </Style>
@@ -949,19 +949,19 @@
                 <Style Selector="^[SizeType=Large]">
                     <Style Selector="^ /template/ DockPanel#RootLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.NavItemGutter}}" />
+                                Value="{atom:StepsTokenResource NavItemGutter}" />
                     </Style>
                 </Style>
                 <Style Selector="^[SizeType=Middle]">
                     <Style Selector="^ /template/ DockPanel#RootLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.NavItemGutter}}" />
+                                Value="{atom:StepsTokenResource NavItemGutter}" />
                     </Style>
                 </Style>
                 <Style Selector="^[SizeType=Small]">
                     <Style Selector="^ /template/ DockPanel#RootLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.NavItemGutterSM}}" />
+                                Value="{atom:StepsTokenResource NavItemGutterSM}" />
                     </Style>
                 </Style>
 
@@ -1030,12 +1030,12 @@
 
                     <Style Selector="^ /template/ DockPanel#ItemContentLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                                Value="{atom:SharedTokenResource Spacing}" />
                     </Style>
 
                     <Style Selector="^ /template/ ContentPresenter#DescriptionPresenter">
                         <Setter Property="Padding"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalDescriptionPadding}}" />
+                                Value="{atom:StepsTokenResource VerticalDescriptionPadding}" />
                     </Style>
                 </Style>
 
@@ -1107,36 +1107,36 @@
 
                     <Style Selector="^ /template/ DockPanel#ItemContentLayout">
                         <Setter Property="HorizontalSpacing"
-                                Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                                Value="{atom:SharedTokenResource Spacing}" />
                     </Style>
 
                     <Style Selector="^ /template/ Panel#IndicatorLayout">
-                        <Setter Property="Width" Value="{DynamicResource {x:Static atom:StepsTokenKey.DotCurrentSize}}" />
+                        <Setter Property="Width" Value="{atom:StepsTokenResource DotCurrentSize}" />
                     </Style>
 
                     <Style Selector="^[SizeType=Large]">
                         <Style Selector="^ /template/ Panel#IndicatorLayout">
                             <Setter Property="MinHeight"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                                    Value="{atom:SharedTokenResource ControlHeight}" />
                         </Style>
                     </Style>
                     <Style Selector="^[SizeType=Middle]">
                         <Style Selector="^ /template/ Panel#IndicatorLayout">
                             <Setter Property="MinHeight"
-                                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                                    Value="{atom:SharedTokenResource ControlHeight}" />
                         </Style>
                     </Style>
 
                     <Style Selector="^[SizeType=Small]">
                         <Style Selector="^ /template/ Panel#IndicatorLayout">
                             <Setter Property="MinHeight"
-                                    Value="{DynamicResource {x:Static atom:StepsTokenKey.IconSizeSM}}" />
+                                    Value="{atom:StepsTokenResource IconSizeSM}" />
                         </Style>
                     </Style>
 
                     <Style Selector="^ /template/ ContentPresenter#DescriptionPresenter">
                         <Setter Property="Padding"
-                                Value="{DynamicResource {x:Static atom:StepsTokenKey.VerticalDescriptionPadding}}" />
+                                Value="{atom:StepsTokenResource VerticalDescriptionPadding}" />
                     </Style>
                 </Style>
             </Style>
@@ -1195,52 +1195,52 @@
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
 
             <Style Selector="^:pointerover">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlItemBgHover}}" />
+                        Value="{atom:SharedTokenResource ControlItemBgHover}" />
             </Style>
             
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineItemPadding}}" />
+                        Value="{atom:StepsTokenResource InlineItemPadding}" />
             </Style>
 
             <Style Selector="^ /template/ Rectangle#InlineBeginningSeparatorLine">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                        Value="{atom:SharedTokenResource LineWidth}" />
                 <Setter Property="Fill"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineTailColor}}" />
+                        Value="{atom:StepsTokenResource InlineTailColor}" />
             </Style>
 
             <Style Selector="^ /template/ Rectangle#InlineEndingSeparatorLine">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                        Value="{atom:SharedTokenResource LineWidth}" />
                 <Setter Property="Fill"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineTailColor}}" />
+                        Value="{atom:StepsTokenResource InlineTailColor}" />
             </Style>
 
             <Style Selector="^ /template/ Grid#IndicatorLayout">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineDotSize}}" />
+                        Value="{atom:StepsTokenResource InlineDotSize}" />
             </Style>
 
             <Style Selector="^ /template/ ContentPresenter#HeaderPresenter">
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
+                        Value="{atom:SharedTokenResource FontSizeSM}" />
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineTitleColor}}" />
+                        Value="{atom:StepsTokenResource InlineTitleColor}" />
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineHeaderMargin}}" />
+                        Value="{atom:StepsTokenResource InlineHeaderMargin}" />
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:StepsTokenKey.InlineHeaderPadding}}" />
+                        Value="{atom:StepsTokenResource InlineHeaderPadding}" />
             </Style>
 
             <Style Selector="^[Status=Process]">
                 <Style Selector="^ /template/ Rectangle#BeginningSeparatorLine">
                     <Setter Property="Fill"
-                            Value="{DynamicResource {x:Static atom:StepsTokenKey.FinishTailColor}}" />
+                            Value="{atom:StepsTokenResource FinishTailColor}" />
                 </Style>
             </Style>
         </Style>

@@ -474,7 +474,7 @@ public abstract class PopupFlyoutBase : FlyoutBase, IPopupHostProvider
         }
         else if (ShowMode == FlyoutShowMode.TransientWithDismissOnPointerMoveAway)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
             _transientDisposable = inputManager?.Process.Subscribe(HandleTransientDismiss);
         }
     }

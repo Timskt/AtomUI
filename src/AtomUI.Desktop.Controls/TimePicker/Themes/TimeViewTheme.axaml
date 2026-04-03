@@ -88,42 +88,42 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="ItemHeight" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemHeight}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+        <Setter Property="ItemHeight" Value="{atom:TimePickerTokenResource ItemHeight}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
   
         <Setter Property="AmText" Value="{DynamicResource {x:Static atom:TimePickerLangResourceKey.AMText}}" />
         <Setter Property="PmText" Value="{DynamicResource {x:Static atom:TimePickerLangResourceKey.PMText}}" />
         
         <Style Selector="^ /template/ atom|TextBlock#PART_HeaderText">
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemHeight}}" />
+            <Setter Property="Height" Value="{atom:TimePickerTokenResource ItemHeight}" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.HeaderMargin}}" />
+            <Setter Property="Margin" Value="{atom:TimePickerTokenResource HeaderMargin}" />
         </Style>
         
         <Style Selector="^ /template/ atom|DateTimePickerPanel">
-            <Setter Property="ItemHeight" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemHeight}}" />
+            <Setter Property="ItemHeight" Value="{atom:TimePickerTokenResource ItemHeight}" />
         </Style>
         
         <Style Selector="^ /template/ Rectangle">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
+            <Setter Property="Fill" Value="{atom:SharedTokenResource ColorBorderSecondary}" />
         </Style>
         
         <Style Selector="^ /template/ Panel#PART_HourHost">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemWidth}}" />
+            <Setter Property="Width" Value="{atom:TimePickerTokenResource ItemWidth}" />
         </Style>
         
         <Style Selector="^ /template/ Panel#PART_MinuteHost">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemWidth}}" />
+            <Setter Property="Width" Value="{atom:TimePickerTokenResource ItemWidth}" />
         </Style>
         
         <Style Selector="^ /template/ Panel#PART_SecondHost">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemWidth}}" />
+            <Setter Property="Width" Value="{atom:TimePickerTokenResource ItemWidth}" />
         </Style>
         
         <Style Selector="^ /template/ Panel#PART_PeriodHost">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemWidth}}" />
+            <Setter Property="Width" Value="{atom:TimePickerTokenResource ItemWidth}" />
         </Style>
         
     </ControlTheme>

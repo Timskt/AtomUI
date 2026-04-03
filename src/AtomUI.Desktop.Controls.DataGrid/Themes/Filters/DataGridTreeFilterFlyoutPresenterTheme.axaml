@@ -52,26 +52,26 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFilterDropdownWidth}}" />
+        <Setter Property="MinWidth" Value="{atom:DataGridTokenResource TableFilterDropdownWidth}" />
 
         <Style Selector="^ /template/ StackPanel#ButtonLayout">
             <Setter Property="Spacing"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFilterButtonSpacing}}" />
+                    Value="{atom:DataGridTokenResource TableFilterButtonSpacing}" />
             <Setter Property="Margin"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFilterButtonContainerMargin}}" />
+                    Value="{atom:DataGridTokenResource TableFilterButtonContainerMargin}" />
         </Style>
 
         <Style Selector="^ /template/ Rectangle#ButtonLayoutSeparator">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="Fill" Value="{atom:DataGridTokenResource TableBorderColor}" />
             <Setter Property="Margin"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFilterButtonLayoutSeparatorMargin}}" />
+                    Value="{atom:DataGridTokenResource TableFilterButtonLayoutSeparatorMargin}" />
         </Style>
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFilterDropdownBg}}" />
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorText}" />
+        <Setter Property="Background" Value="{atom:DataGridTokenResource TableFilterDropdownBg}" />
         <Setter Property="Padding"
-                Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFilterDropdownPadding}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
+                Value="{atom:DataGridTokenResource TableFilterDropdownPadding}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}" />
 
     </ControlTheme>
 </ResourceDictionary>

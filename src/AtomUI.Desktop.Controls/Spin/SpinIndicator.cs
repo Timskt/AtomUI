@@ -26,8 +26,8 @@ public class SpinIndicator : AbstractSpinIndicator
                  .OfType<PathIcon>(),
                 x.Nesting().Descendant().Name("PART_CustomIndicatorPresenter").Child()
                  .OfType<Icon>()));
-            iconStyle.Add(WidthProperty, SpinTokenKey.IndicatorSize);
-            iconStyle.Add(HeightProperty, SpinTokenKey.IndicatorSize);
+            iconStyle.Add(WidthProperty, SpinTokenKind.IndicatorSize);
+            iconStyle.Add(HeightProperty, SpinTokenKind.IndicatorSize);
             middleStyle.Add(iconStyle);
             Styles.Add(middleStyle);
         }
@@ -39,8 +39,8 @@ public class SpinIndicator : AbstractSpinIndicator
                  .OfType<PathIcon>(),
                 x.Nesting().Descendant().Name("PART_CustomIndicatorPresenter").Child()
                  .OfType<Icon>()));
-            iconStyle.Add(WidthProperty, SpinTokenKey.IndicatorSizeSM);
-            iconStyle.Add(HeightProperty, SpinTokenKey.IndicatorSizeSM);
+            iconStyle.Add(WidthProperty, SpinTokenKind.IndicatorSizeSM);
+            iconStyle.Add(HeightProperty, SpinTokenKind.IndicatorSizeSM);
             smallStyle.Add(iconStyle);
             Styles.Add(smallStyle);
         }
@@ -52,8 +52,8 @@ public class SpinIndicator : AbstractSpinIndicator
                  .OfType<PathIcon>(),
                 x.Nesting().Descendant().Name("PART_CustomIndicatorPresenter").Child()
                  .OfType<Icon>()));
-            iconStyle.Add(WidthProperty, SpinTokenKey.IndicatorSizeLG);
-            iconStyle.Add(HeightProperty, SpinTokenKey.IndicatorSizeLG);
+            iconStyle.Add(WidthProperty, SpinTokenKind.IndicatorSizeLG);
+            iconStyle.Add(HeightProperty, SpinTokenKind.IndicatorSizeLG);
             largeStyle.Add(iconStyle);
             Styles.Add(largeStyle);
         }

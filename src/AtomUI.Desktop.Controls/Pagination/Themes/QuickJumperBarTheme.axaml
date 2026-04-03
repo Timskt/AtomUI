@@ -24,11 +24,11 @@
         <Setter Property="PageText" Value="{DynamicResource {x:Static atom:PaginationLangResourceKey.PageText}}"/>
         
         <Style Selector="^ /template/ StackPanel#PART_RootLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}"/>
+            <Setter Property="Spacing" Value="{atom:PaginationTokenResource PaginationLayoutSpacing}"/>
         </Style>
         
         <Style Selector="^ /template/ atom|LineEdit#PART_PageLineEdit">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationQuickJumperInputWidth}}"/>
+            <Setter Property="Width" Value="{atom:PaginationTokenResource PaginationQuickJumperInputWidth}"/>
         </Style>
     </ControlTheme>
 </ResourceDictionary>

@@ -81,19 +81,19 @@
     </Setter>
 
     <Style Selector="^:is(atom|DialogHost)">
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DialogTokenKey.ContentPadding}}" />
+        <Setter Property="Padding" Value="{atom:DialogTokenResource ContentPadding}" />
         <Setter Property="SizeToContent" Value="WidthAndHeight" />
         <Setter Property="IsFullScreenCaptionButtonEnabled" Value="False" />
 
         <Style Selector="^ /template/ DockPanel#PART_ContentLayout">
             <Setter Property="VerticalSpacing"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyMarginXS}}" />
+                    Value="{atom:SharedTokenResource UniformlyMarginXS}" />
         </Style>
 
         <Style Selector="^ /template/ Border#FooterFrame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DialogTokenKey.FooterBg}}" />
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:DialogTokenKey.FooterMarginTop}}" />
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DialogTokenKey.FooterPadding}}" />
+            <Setter Property="Background" Value="{atom:DialogTokenResource FooterBg}" />
+            <Setter Property="Margin" Value="{atom:DialogTokenResource FooterMarginTop}" />
+            <Setter Property="Padding" Value="{atom:DialogTokenResource FooterPadding}" />
         </Style>
     </Style>
 

@@ -10,9 +10,9 @@
         </ControlTheme.BasedOn>
 
         <Setter Property="ColorTextLabel"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLabel}}" />
+                Value="{atom:SharedTokenResource ColorTextLabel}" />
         <Setter Property="ColorTextLightSolid"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+                Value="{atom:SharedTokenResource ColorTextLightSolid}" />
         
         <Style Selector="^[IsShowProgressInfo=True]">
             <Style Selector="^[Orientation=Horizontal]">

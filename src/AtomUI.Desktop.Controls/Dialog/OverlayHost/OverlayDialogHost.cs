@@ -265,7 +265,7 @@ internal class OverlayDialogHost : ContentControl,
         _dialog                    = dialog;
         _dialogLayer               = dialogLayer;
         _positioner                = new ManagedDialogPositioner(this);
-        _keyboardNavigationHandler = AvaloniaLocator.Current.GetService<IKeyboardNavigationHandler>();
+        _keyboardNavigationHandler = AvaloniaLocator.Current.GetService(typeof(IKeyboardNavigationHandler)) as IKeyboardNavigationHandler;
         _keyboardNavigationHandler?.SetOwner(this);
         CustomButtons.CollectionChanged +=  new NotifyCollectionChangedEventHandler(HandleCustomButtonsChanged);
         _dialogMask                     ??= new OverlayDialogMask(_dialogLayer, _dialog);

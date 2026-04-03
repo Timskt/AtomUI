@@ -28,7 +28,7 @@ internal class HeadTextButton : AvaloniaButton
             {
                 Transitions = [
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKey.MotionDurationFast)
+                        SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

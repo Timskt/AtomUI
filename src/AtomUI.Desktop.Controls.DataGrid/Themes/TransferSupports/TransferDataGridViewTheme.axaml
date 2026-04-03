@@ -28,7 +28,7 @@
                         <DockPanel LastChildFill="True">
                             <atom:Pagination DockPanel.Dock="Top"
                                              Name="{x:Static atom:DataGridThemeConstants.TopPaginationPart}"
-                                             Margin="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMargin}}"
+                                             Margin="{atom:DataGridTokenResource PaginationMargin}"
                                              Align="{TemplateBinding TopPaginationAlign}"
                                              IsHideOnSinglePage="{TemplateBinding IsHideOnSinglePage}"
                                              IsEnabled="{TemplateBinding IsEnabled}"
@@ -45,7 +45,7 @@
                             </Border>
                             <atom:Pagination DockPanel.Dock="Bottom"
                                              Name="{x:Static atom:DataGridThemeConstants.BottomPaginationPart}"
-                                             Margin="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMargin}}"
+                                             Margin="{atom:DataGridTokenResource PaginationMargin}"
                                              Align="{TemplateBinding BottomPaginationAlign}"
                                              IsHideOnSinglePage="{TemplateBinding IsHideOnSinglePage}"
                                              IsEnabled="{TemplateBinding IsEnabled}"
@@ -167,6 +167,6 @@
         <Setter Property="SizeType" Value="Small" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="SelectionMode" Value="Extended" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
     </ControlTheme>
 </ResourceDictionary>

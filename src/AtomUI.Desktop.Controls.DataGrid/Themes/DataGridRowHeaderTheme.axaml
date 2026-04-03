@@ -40,20 +40,20 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="SeparatorBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
+        <Setter Property="SeparatorBrush" Value="{atom:DataGridTokenResource TableBorderColor}" />
+        <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
         
         <Style Selector="^[SizeType=Large]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}"/>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}"/>
+            <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}"/>
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}"/>
         </Style>
         <Style Selector="^[SizeType=Middle]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}"/>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}"/>
+            <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingMiddle}"/>
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSizeMiddle}"/>
         </Style>
         <Style Selector="^[SizeType=Small]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}"/>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}"/>
+            <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingSmall}"/>
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSizeSmall}"/>
         </Style>
         
     </ControlTheme>

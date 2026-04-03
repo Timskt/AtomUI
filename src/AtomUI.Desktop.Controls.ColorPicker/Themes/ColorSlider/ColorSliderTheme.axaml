@@ -19,9 +19,9 @@
                                 Height="{Binding ElementName=PART_Track, Path=Bounds.Height}"
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="{TemplateBinding CornerRadius}"
-                                BoxShadow="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerInsetShadow}}" />
+                                BoxShadow="{atom:ColorPickerTokenResource ColorPickerInsetShadow}" />
                         <atom:ColorPickerSliderTrack Name="PART_Track"
-                                                     Height="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerSliderTrackSize}}"
+                                                     Height="{atom:ColorPickerTokenResource ColorPickerSliderTrackSize}"
                                                      HorizontalAlignment="Stretch"
                                                      VerticalAlignment="Center"
                                                      Minimum="{TemplateBinding Minimum}"
@@ -70,11 +70,11 @@
         </Setter>
 
         <Setter Property="TransparentBgIntervalColor"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFillSecondary}}" />
+                Value="{atom:SharedTokenResource ColorFillSecondary}" />
         <Setter Property="TransparentBgSize"
-                Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.TransparentBgSize}}" />
+                Value="{atom:ColorPickerTokenResource TransparentBgSize}" />
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerSliderSize}}" />
+        <Setter Property="Height" Value="{atom:ColorPickerTokenResource ColorPickerSliderSize}" />
 
     </ControlTheme>
 </ResourceDictionary>

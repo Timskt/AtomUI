@@ -90,10 +90,10 @@
                                       Description="自定义颜色">
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <atom:QRCode Value="https://atomui.net"
-                             Color="{DynamicResource {x:Static atom:SharedTokenKey.ColorSuccessText}}" />
+                             Color="{atom:SharedTokenResource ColorSuccessText}" />
                 <atom:QRCode Value="https://atomui.net"
-                             Color="{DynamicResource {x:Static atom:SharedTokenKey.ColorInfoText}}"
-                             Background="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgLayout}}" />
+                             Color="{atom:SharedTokenResource ColorInfoText}"
+                             Background="{atom:SharedTokenResource ColorBgLayout}" />
             </StackPanel>
         </gallery:ShowCaseItem>
         <gallery:ShowCaseItem Title="纠错比例"

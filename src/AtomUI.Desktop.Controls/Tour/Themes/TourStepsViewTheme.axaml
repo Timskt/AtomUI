@@ -13,7 +13,7 @@
                         Background="{TemplateBinding Background}">
                     <DockPanel Name="RootLayout" LastChildFill="True">
                         <Border Name="FooterFrame" DockPanel.Dock="Bottom">
-                            <DockPanel LastChildFill="True" HorizontalSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}">
+                            <DockPanel LastChildFill="True" HorizontalSpacing="{atom:SharedTokenResource SpacingXS}">
                                 <ContentPresenter Name="IndicatorPresenter"
                                                   DockPanel.Dock="Left"
                                                   VerticalAlignment="Center"
@@ -50,15 +50,15 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:TourTokenKey.TourViewMinWidth}}" />
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:TourTokenKey.TourViewMinHeight}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXXS}}" />
+        <Setter Property="MinWidth" Value="{atom:TourTokenResource TourViewMinWidth}" />
+        <Setter Property="MinHeight" Value="{atom:TourTokenResource TourViewMinHeight}" />
+        <Setter Property="Padding" Value="{atom:SharedTokenResource PaddingXXS}" />
         <Style Selector="^ /template/ DockPanel#RootLayout">
-            <Setter Property="VerticalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+            <Setter Property="VerticalSpacing" Value="{atom:SharedTokenResource SpacingXXS}" />
         </Style>
         
         <Style Selector="^ /template/ StackPanel#ActionsLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXS}" />
         </Style>
         
         <Style Selector="^[IndexPosition=OnePage]">
@@ -96,23 +96,23 @@
         </Style>
 
         <Style Selector="^[StyleType=Primary]">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
             <Style Selector="^ /template/ atom|Button.previous-btn">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryPrevBtnBg}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
+                <Setter Property="Background" Value="{atom:SharedTokenResource ColorPrimary}" />
+                <Setter Property="BorderBrush" Value="{atom:TourTokenResource PrimaryPrevBtnBg}" />
             </Style>
             <Style Selector="^ /template/ atom|Button.previous-btn:pointerover">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryPrevBtnBg}}" />
+                <Setter Property="Background" Value="{atom:TourTokenResource PrimaryPrevBtnBg}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
             </Style>
             
             <Style Selector="^ /template/ atom|Button.next-btn">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWhite}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorPrimary}" />
+                <Setter Property="Background" Value="{atom:SharedTokenResource ColorWhite}" />
             </Style>
             <Style Selector="^ /template/ atom|Button.next-btn:pointerover">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:TourTokenKey.PrimaryNextBtnHoverBg}}" />
+                <Setter Property="Background" Value="{atom:TourTokenResource PrimaryNextBtnHoverBg}" />
             </Style>
             
         </Style>

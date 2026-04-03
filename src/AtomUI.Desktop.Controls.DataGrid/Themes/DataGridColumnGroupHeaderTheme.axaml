@@ -20,34 +20,34 @@
                 </Border>
             </ControlTemplate>
         </Setter>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderTextColor}}"/>
-        <Setter Property="FontWeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontWeightStrong}}"/>
+        <Setter Property="Foreground" Value="{atom:DataGridTokenResource TableHeaderTextColor}"/>
+        <Setter Property="FontWeight" Value="{atom:SharedTokenResource FontWeightStrong}"/>
         <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         
         <Style Selector="^ /template/ Border#PART_Frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}"/>
+            <Setter Property="BorderBrush" Value="{atom:DataGridTokenResource TableBorderColor}"/>
         </Style>
         
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Border#PART_Frame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}"/>
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}"/>
             </Style>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}"/>
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}"/>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#PART_Frame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}"/>
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingMiddle}"/>
             </Style>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}"/>
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSizeMiddle}"/>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#PART_Frame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}"/>
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingSmall}"/>
             </Style>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}"/>
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSizeSmall}"/>
         </Style>
         
     </ControlTheme>

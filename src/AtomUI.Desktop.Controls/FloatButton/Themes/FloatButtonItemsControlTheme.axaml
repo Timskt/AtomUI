@@ -47,17 +47,17 @@
         <Setter Property="ClipToBounds" Value="False" />
 
         <Style Selector="^[Shape=Square]">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
-            <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
+            <Setter Property="BoxShadow" Value="{atom:SharedTokenResource BoxShadowsSecondary}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
         </Style>
         <Style Selector="^ /template/ atomc|FloatButtonSeparatorLayer">
-            <Setter Property="SeparatorBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
+            <Setter Property="SeparatorBrush" Value="{atom:SharedTokenResource ColorSplit}" />
         </Style>
         
         <Style Selector="^[Shape=Circle]">
             <Style Selector="^ /template/ StackPanel#ItemsLayout">
-                <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                <Setter Property="Spacing" Value="{atom:SharedTokenResource Spacing}" />
             </Style>
             <Style Selector="^ /template/ atomc|FloatButtonSeparatorLayer">
                 <Setter Property="IsVisible" Value="False" />
@@ -68,25 +68,25 @@
             <Style Selector="^[MenuPlacement=Top]">
                 <Style Selector="^ /template/ Control#EmptyControl">
                     <Setter Property="DockPanel.Dock" Value="Bottom" />
-                    <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                    <Setter Property="Height" Value="{atom:SharedTokenResource Spacing}" />
                 </Style>
             </Style>
             <Style Selector="^[MenuPlacement=Bottom]">
                 <Style Selector="^ /template/ Control#EmptyControl">
                     <Setter Property="DockPanel.Dock" Value="Top" />
-                    <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                    <Setter Property="Height" Value="{atom:SharedTokenResource Spacing}" />
                 </Style>
             </Style>
             <Style Selector="^[MenuPlacement=Left]">
                 <Style Selector="^ /template/ Control#EmptyControl">
                     <Setter Property="DockPanel.Dock" Value="Right" />
-                    <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                    <Setter Property="Width" Value="{atom:SharedTokenResource Spacing}" />
                 </Style>
             </Style>
             <Style Selector="^[MenuPlacement=Right]">
                 <Style Selector="^ /template/ Control#EmptyControl">
                     <Setter Property="DockPanel.Dock" Value="Left" />
-                    <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.Spacing}}" />
+                    <Setter Property="Width" Value="{atom:SharedTokenResource Spacing}" />
                 </Style>
             </Style>
         </Style>

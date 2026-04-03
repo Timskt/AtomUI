@@ -202,9 +202,9 @@ public class Flyout : PopupFlyoutBase
         base.OnOpening(args);
 
         CompositeDisposable.Add(TokenResourceBinder.CreateGlobalTokenBinding(this, MotionDurationProperty,
-            SharedTokenKey.MotionDurationMid));
+            SharedTokenKind.MotionDurationMid));
         CompositeDisposable.Add(TokenResourceBinder.CreateGlobalTokenBinding(this, MaskShadowsProperty,
-            SharedTokenKey.BoxShadowsSecondary));
+            SharedTokenKind.BoxShadowsSecondary));
     }
 
     protected override void OnClosed()

@@ -209,8 +209,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     private void ConfigureInstanceStyles()
     {
         var style = new Style();
-        style.Add(MaskShadowsProperty, SharedTokenKey.BoxShadowsSecondary);
-        style.Add(MotionDurationProperty, SharedTokenKey.MotionDurationMid);
+        style.Add(MaskShadowsProperty, SharedTokenKind.BoxShadowsSecondary);
+        style.Add(MotionDurationProperty, SharedTokenKind.MotionDurationMid);
     }
     
     private void HandlePopupHostChanged(IPopupHost? popupHost)
@@ -332,8 +332,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     {
         if (!IsLightDismissEnabled)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-            _selfLightDismissDisposable = inputManager.Process.Subscribe(HandleMouseClick);
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as  IInputManager;
+            _selfLightDismissDisposable = inputManager?.Process.Subscribe(HandleMouseClick);
         }
         else
         {

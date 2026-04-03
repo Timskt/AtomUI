@@ -4,10 +4,10 @@
     xmlns:atom="https://atomui.net"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:WaveSpiritDecorator}" TargetType="atom:WaveSpiritDecorator">
-        <Setter Property="WaveBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
-        <Setter Property="OriginOpacity" Value="{DynamicResource {x:Static atom:SharedTokenKey.WaveStartOpacity}}"/>
-        <Setter Property="SizeMotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}"/>
-        <Setter Property="OpacityMotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}"/>
-        <Setter Property="WaveRange" Value="{DynamicResource {x:Static atom:SharedTokenKey.WaveAnimationRange}}"/>
+        <Setter Property="WaveBrush" Value="{atom:SharedTokenResource ColorPrimary}"/>
+        <Setter Property="OriginOpacity" Value="{atom:SharedTokenResource WaveStartOpacity}"/>
+        <Setter Property="SizeMotionDuration" Value="{atom:SharedTokenResource MotionDurationSlow}"/>
+        <Setter Property="OpacityMotionDuration" Value="{atom:SharedTokenResource MotionDurationSlow}"/>
+        <Setter Property="WaveRange" Value="{atom:SharedTokenResource WaveAnimationRange}"/>
     </ControlTheme>
 </ResourceDictionary>

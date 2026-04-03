@@ -57,18 +57,18 @@
 
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="BadgeEffectiveColor" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeColor}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="BadgeEffectiveColor" Value="{atom:BadgeTokenResource BadgeColor}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="Background" Value="Transparent" />
         <Style Selector="^[IsEmbedMode=False], ^[IsEmbedMode=True][Shape=Circle]">
             <Style Selector="^ /template/ Border#BackgroundFrame">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+                <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
             </Style>
         </Style>
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
-        <Setter Property="ZIndex" Value="{DynamicResource {x:Static atom:SharedTokenKey.ZIndexPopupBase}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXXS}}" />
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+        <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeSM}" />
+        <Setter Property="ZIndex" Value="{atom:SharedTokenResource ZIndexPopupBase}" />
+        <Setter Property="Padding" Value="{atom:SharedTokenResource PaddingXXS}" />
+        <Setter Property="Width" Value="{atom:FloatButtonTokenResource FloatButtonSize}" />
         
         <Style Selector="^[Shape=Circle][IsDotBadge=True]">
             <Setter Property="BadgeOffset" Value="-10, 4" />
@@ -84,65 +84,65 @@
         </Style>
 
         <Style Selector="^[IsEmbedMode=False]">
-            <Setter Property="BoxShadow" Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
+            <Setter Property="BoxShadow" Value="{atom:SharedTokenResource BoxShadowsSecondary}" />
         </Style>
 
         <Style Selector="^[Shape=Circle]">
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
+            <Setter Property="Height" Value="{atom:FloatButtonTokenResource FloatButtonSize}" />
         </Style>
 
         <Style Selector="^[Shape=Square]">
-            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonSize}}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+            <Setter Property="MinHeight" Value="{atom:FloatButtonTokenResource FloatButtonSize}" />
+            <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
             <Style Selector="^ /template/ StackPanel#RootLayout">
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
             <Style Selector="^ /template/ StackPanel > ContentPresenter">
                 <Setter Property="LineHeight"
-                        Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.DescriptionLineHeight}}" />
+                        Value="{atom:FloatButtonTokenResource DescriptionLineHeight}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsEmbedMode=True]">
             <Style Selector="^[Shape=Square]">
                 <Style Selector="^ /template/ Border#Frame">
-                    <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SharedTokenKey.MarginXXS}}" />
+                    <Setter Property="Margin" Value="{atom:SharedTokenResource MarginXXS}" />
                 </Style>
-                <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+                <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
             </Style>
             <Style Selector="^[Shape=Circle]">
                 <Setter Property="BoxShadow"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.BoxShadowsSecondary}}" />
+                        Value="{atom:SharedTokenResource BoxShadowsSecondary}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonIconSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.FloatButtonIconSize}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorText}" />
+            <Setter Property="Width" Value="{atom:FloatButtonTokenResource FloatButtonIconSize}" />
+            <Setter Property="Height" Value="{atom:FloatButtonTokenResource FloatButtonIconSize}" />
         </Style>
 
         <Style Selector="^[ButtonType=Default]">
             <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgTextHover}}" />
+                <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgTextHover}" />
             </Style>
         </Style>
 
         <Style Selector="^[ButtonType=Primary]">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:FloatButtonTokenKey.PrimaryColor}}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+            <Setter Property="Foreground" Value="{atom:FloatButtonTokenResource PrimaryColor}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorPrimary}" />
             <Style Selector="^:pointerover">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryHover}}" />
+                        Value="{atom:SharedTokenResource ColorPrimaryHover}" />
             </Style>
             <Style Selector="^:pressed">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryActive}}" />
+                        Value="{atom:SharedTokenResource ColorPrimaryActive}" />
             </Style>
             <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:ButtonTokenKey.PrimaryColor}}" />
+                        Value="{atom:ButtonTokenResource PrimaryColor}" />
             </Style>
         </Style>
 

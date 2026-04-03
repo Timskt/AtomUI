@@ -1,4 +1,5 @@
-﻿using AtomUI.Controls;
+﻿using System.Diagnostics;
+using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
@@ -250,10 +251,11 @@ internal class TimeView : TemplatedControl
     {
         base.OnAttachedToVisualTree(e);
         _spacerWidthDisposable =  TokenResourceBinder.CreateTokenBinding(this, SpacerWidthProperty,
-            SharedTokenKey.LineWidth,
+            SharedTokenKind.LineWidth,
             BindingPriority.Template,
             new RenderScaleAwareDoubleConfigure(this));
-        var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+        var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+        Debug.Assert(inputManager != null);
         _pointerPositionDisposable = inputManager.Process.Subscribe(DetectPointerPosition);
         SyncTimeValueToPanel(SelectedTime ?? TimeSpan.Zero);
     }

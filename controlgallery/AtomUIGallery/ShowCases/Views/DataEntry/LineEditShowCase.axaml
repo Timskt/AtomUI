@@ -289,7 +289,7 @@
                         <antdicons:AudioOutlined Width="16" Height="16" Name="AudioOutlined">
                             <antdicons:AudioOutlined.Styles>
                                 <Style Selector="atom|Icon#AudioOutlined">
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
+                                    <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorPrimary}"/>
                                 </Style>
                             </antdicons:AudioOutlined.Styles>
                         </antdicons:AudioOutlined>

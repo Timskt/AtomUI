@@ -28,10 +28,10 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="ClipToBounds" Value="False" />
         <Style Selector="^ /template/ DockPanel">
-            <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:DialogTokenKey.ButtonGroupSpacing}}" />
+            <Setter Property="HorizontalSpacing" Value="{atom:DialogTokenResource ButtonGroupSpacing}" />
         </Style>
 
         <Setter Property="OkButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Ok}}" />

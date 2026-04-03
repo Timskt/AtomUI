@@ -30,7 +30,7 @@
                 ClipToBounds="{TemplateBinding ClipToBounds}">
                 <atom:AddOnDecoratedBox.ContentRightAddOn>
                     <StackPanel Orientation="Horizontal"
-                                Spacing="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyPaddingXXS}}">
+                                Spacing="{atom:SharedTokenResource UniformlyPaddingXXS}">
                         <atom:InputClearIconButton
                             Name="{x:Static atom:TextBoxThemeConstants.ClearButtonPart}"
                             Icon="{Binding ClearIcon, RelativeSource={RelativeSource AncestorType=atom:LineEdit}}"
@@ -57,7 +57,7 @@
                             IsVisible="{Binding InnerRightContent, RelativeSource={RelativeSource AncestorType=atom:LineEdit}, Converter={x:Static ObjectConverters.IsNotNull}}" />
                         <atom:TextBlock Name="TextCountIndicator"
                                         VerticalAlignment="Center"
-                                        Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}"
+                                        Foreground="{atom:SharedTokenResource ColorTextPlaceholder}"
                                         Text="{Binding CountText, RelativeSource={RelativeSource AncestorType=atom:LineEdit}}"
                                         IsVisible="{Binding IsShowCount, RelativeSource={RelativeSource AncestorType=atom:LineEdit}}" />
                     </StackPanel>
@@ -105,20 +105,20 @@
     </Setter>
 
     <Style Selector="^:is(atom|LineEdit)">
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
         <Setter Property="ClipToBounds" Value="False" />
         <Style Selector="^[StyleVariant=Borderless]">
             <Style Selector="^:error">
                 <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorText}}" />
+                            Value="{atom:SharedTokenResource ColorErrorText}" />
                 </Style>
             </Style>
             <Style Selector="^:warning">
                 <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningText}}" />
+                            Value="{atom:SharedTokenResource ColorWarningText}" />
                 </Style>
             </Style>
         </Style>
@@ -126,13 +126,13 @@
             <Style Selector="^:error">
                 <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorText}}" />
+                            Value="{atom:SharedTokenResource ColorErrorText}" />
                 </Style>
             </Style>
             <Style Selector="^:warning">
                 <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningText}}" />
+                            Value="{atom:SharedTokenResource ColorWarningText}" />
                 </Style>
             </Style>
         </Style>

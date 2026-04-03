@@ -17,8 +17,8 @@ public class MarqueeLabel : AbstractMarqueeLabel
     private void ConfigureInstanceStyles()
     {
         var style = new Style();
-        style.Add(CycleSpaceProperty, MarqueeLabelTokenKey.CycleSpace);
-        style.Add(MoveSpeedProperty, MarqueeLabelTokenKey.DefaultSpeed);
+        style.Add(CycleSpaceProperty, MarqueeLabelTokenKind.CycleSpace);
+        style.Add(MoveSpeedProperty, MarqueeLabelTokenKind.DefaultSpeed);
         Styles.Add(style);
     }
 }

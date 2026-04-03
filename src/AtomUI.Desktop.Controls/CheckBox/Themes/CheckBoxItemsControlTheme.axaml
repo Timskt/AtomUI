@@ -21,8 +21,8 @@
             </ItemsPanelTemplate>
         </Setter>
 
-        <Setter Property="ItemSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
-        <Setter Property="LineSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+        <Setter Property="ItemSpacing" Value="{atom:SharedTokenResource SpacingXS}" />
+        <Setter Property="LineSpacing" Value="{atom:SharedTokenResource SpacingXS}" />
         <Setter Property="ClipToBounds" Value="False" />
         
     </ControlTheme>

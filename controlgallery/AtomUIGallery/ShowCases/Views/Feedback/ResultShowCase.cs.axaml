@@ -103,15 +103,15 @@
                     </TextBlock>
     
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <antdicons:CloseCircleOutlined Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}"/>
+                        <antdicons:CloseCircleOutlined Foreground="{atom:SharedTokenResource ColorError}"/>
                         <TextBlock>Your account has been frozen. </TextBlock>
-                        <TextBlock Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}">Thaw immediately ></TextBlock>
+                        <TextBlock Foreground="{atom:SharedTokenResource ColorPrimary}">Thaw immediately ></TextBlock>
                     </StackPanel>
     
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <antdicons:CloseCircleOutlined Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}"/>
+                        <antdicons:CloseCircleOutlined Foreground="{atom:SharedTokenResource ColorError}"/>
                         <TextBlock>Your account is not yet eligible to apply. </TextBlock>
-                        <TextBlock Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}">Apply Unlock ></TextBlock>
+                        <TextBlock Foreground="{atom:SharedTokenResource ColorPrimary}">Apply Unlock ></TextBlock>
                     </StackPanel>
                 </StackPanel>
             </atom:Result>

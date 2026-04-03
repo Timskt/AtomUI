@@ -30,7 +30,7 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:UploadTokenKey.PictureCardSize}}" />
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:UploadTokenKey.PictureCardSize}}" />
+        <Setter Property="Width" Value="{atom:UploadTokenResource PictureCardSize}" />
+        <Setter Property="Height" Value="{atom:UploadTokenResource PictureCardSize}" />
     </ControlTheme>
 </ResourceDictionary>

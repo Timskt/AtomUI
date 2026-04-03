@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Utils;
 using Avalonia;
@@ -213,7 +214,8 @@ public class AbstractRate : TemplatedControl,
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+        var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+        Debug.Assert(inputManager != null);
         _pointerEventHandleDisposable = inputManager.Process.Subscribe(HandleGlobalPointerEvent);
     }
 

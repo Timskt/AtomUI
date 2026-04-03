@@ -35,30 +35,30 @@
     <Style Selector="^:is(atom|Tag)">
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:TagTokenKey.DefaultBg}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:TagTokenKey.DefaultColor}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:TagTokenKey.TagFontSize}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TagTokenKey.TagPadding}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
-        <Setter Property="RenderScaleAwareBorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+        <Setter Property="Background" Value="{atom:TagTokenResource DefaultBg}" />
+        <Setter Property="Foreground" Value="{atom:TagTokenResource DefaultColor}" />
+        <Setter Property="FontSize" Value="{atom:TagTokenResource TagFontSize}" />
+        <Setter Property="Padding" Value="{atom:TagTokenResource TagPadding}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
+        <Setter Property="RenderScaleAwareBorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
         <Setter Property="TagTextPaddingInline"
-                Value="{DynamicResource {x:Static atom:TagTokenKey.TagTextPaddingInline}}" />
+                Value="{atom:TagTokenResource TagTextPaddingInline}" />
 
         <Style Selector="^:custom-color">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
             <Setter Property="Width"
-                    Value="{DynamicResource {x:Static atom:TagTokenKey.TagIconSize}}" />
+                    Value="{atom:TagTokenResource TagIconSize}" />
             <Setter Property="Height"
-                    Value="{DynamicResource {x:Static atom:TagTokenKey.TagIconSize}}" />
+                    Value="{atom:TagTokenResource TagIconSize}" />
         </Style>
         <Style Selector="^[IsColorSet=True]">
             <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+                        Value="{atom:SharedTokenResource ColorTextLightSolid}" />
             </Style>
         </Style>
         <Style Selector="^[IsPresetColorTag=True]">
@@ -70,19 +70,19 @@
 
         <Style Selector="^ /template/ atom|IconButton#PART_CloseButton">
             <Setter Property="IconWidth"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeXS}}" />
+                    Value="{atom:SharedTokenResource IconSizeXS}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeXS}}" />
+                    Value="{atom:SharedTokenResource IconSizeXS}" />
         </Style>
         <Style Selector="^[IsColorSet=True][IsPresetColorTag=False]">
             <Style Selector="^ /template/ atom|IconButton#PART_CloseButton">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+                        Value="{atom:SharedTokenResource ColorTextLightSolid}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ atom|TextBlock#TagTextLabel">
-            <Setter Property="LineHeight" Value="{DynamicResource {x:Static atom:TagTokenKey.TagLineHeight}}" />
+            <Setter Property="LineHeight" Value="{atom:TagTokenResource TagLineHeight}" />
         </Style>
     </Style>
 

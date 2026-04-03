@@ -19,85 +19,85 @@
         </Setter>
 
         <Setter Property="ClipToBounds" Value="True" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
 
         <Style Selector="^[SizeType=Large]">
             <Setter Property="FontSize"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+                    Value="{atom:SharedTokenResource FontSizeLG}" />
             <Setter Property="CornerRadius"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+                    Value="{atom:SharedTokenResource BorderRadiusLG}" />
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:SpaceTokenKey.AddOnPaddingLG}}" />
-            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightLG}}" />
+                    Value="{atom:SpaceTokenResource AddOnPaddingLG}" />
+            <Setter Property="MinHeight" Value="{atom:SharedTokenResource ControlHeightLG}" />
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Setter Property="FontSize"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+                    Value="{atom:SharedTokenResource FontSize}" />
             <Setter Property="CornerRadius"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
+                    Value="{atom:SharedTokenResource BorderRadius}" />
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:SpaceTokenKey.AddOnPadding}}" />
-            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                    Value="{atom:SpaceTokenResource AddOnPadding}" />
+            <Setter Property="MinHeight" Value="{atom:SharedTokenResource ControlHeight}" />
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Setter Property="FontSize"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeSM}}" />
+                    Value="{atom:SharedTokenResource FontSizeSM}" />
             <Setter Property="CornerRadius"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+                    Value="{atom:SharedTokenResource BorderRadiusSM}" />
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:SpaceTokenKey.AddOnPaddingSM}}" />
-            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightSM}}" />
+                    Value="{atom:SpaceTokenResource AddOnPaddingSM}" />
+            <Setter Property="MinHeight" Value="{atom:SharedTokenResource ControlHeightSM}" />
         </Style>
         
         <Style Selector="^[Status=Error]">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorText}}" />
+                    Value="{atom:SharedTokenResource ColorErrorText}" />
         </Style>
         
         <Style Selector="^[Status=Warning]">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningText}}" />
+                    Value="{atom:SharedTokenResource ColorWarningText}" />
         </Style>
         
         <Style Selector="^[StyleVariant=Outline]">
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:SpaceTokenKey.AddonBg}}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+                    Value="{atom:SpaceTokenResource AddonBg}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
             
             <Style Selector="^[Status=Error]">
                 <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+                        Value="{atom:SharedTokenResource ColorError}" />
             </Style>
         
             <Style Selector="^[Status=Warning]">
                 <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarning}}" />
+                        Value="{atom:SharedTokenResource ColorWarning}" />
             </Style>
         </Style>
 
         <Style Selector="^[StyleVariant=Filled]">
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:SpaceTokenKey.AddonBg}}" />
+                    Value="{atom:SpaceTokenResource AddonBg}" />
             
             <Style Selector="^[Status=Error]">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorBg}}" />
+                        Value="{atom:SharedTokenResource ColorErrorBg}" />
             </Style>
         
             <Style Selector="^[Status=Warning]">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningBg}}" />
+                        Value="{atom:SharedTokenResource ColorWarningBg}" />
             </Style>
         </Style>
 
         <Style Selector="^:disabled">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+                    Value="{atom:SharedTokenResource ColorTextDisabled}" />
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainerDisabled}}" />
+                    Value="{atom:SharedTokenResource ColorBgContainerDisabled}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

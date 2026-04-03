@@ -64,6 +64,6 @@
                 </ControlTemplate>
             </Setter>
         </Style>
-        <Setter Property="MotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}" />
+        <Setter Property="MotionDuration" Value="{atom:SharedTokenResource MotionDurationMid}" />
     </Style>
 </ControlTheme>

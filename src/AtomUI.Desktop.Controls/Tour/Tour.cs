@@ -750,7 +750,7 @@ public class Tour : TemplatedControl, IMotionAwareControl
     private void AdjustForGap(TourPlacementMode placement)
     {
         Debug.Assert(_popup != null);
-        var defaultMarginToAnchor  = (TokenResourceUtils.FindTokenResource(this, TourTokenKey.PopupMarginToAnchor) as double?) ?? 0.0d;
+        var defaultMarginToAnchor  = (TokenResourceUtils.FindTokenResource(this, TourTokenKind.PopupMarginToAnchor) as double?) ?? 0.0d;
         var value = placement switch
         {
             TourPlacementMode.Left => GapOffsetX,

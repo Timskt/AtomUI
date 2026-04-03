@@ -17,18 +17,18 @@
         </Setter>
 
         <Style Selector="^ /template/ atom|IconButton#PART_OpenIndicatorButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeSM}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                    Value="{atom:SharedTokenResource IconSizeSM}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton#PART_OpenIndicatorButton:pointerover">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleHoverColor}}" />
+                    Value="{atom:ButtonSpinnerTokenResource HandleHoverColor}" />
         </Style>
         <Style Selector="^ /template/ atom|IconButton#PART_OpenIndicatorButton:pressed">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryActive}}" />
+                    Value="{atom:SharedTokenResource ColorPrimaryActive}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

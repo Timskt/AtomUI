@@ -18,6 +18,6 @@
         </Setter>
 
         <Setter Property="ClipToBounds" Value="True" />
-        <Setter Property="HandleSize" Value="{DynamicResource {x:Static atom:SplitterTokenKey.SplitBarHandleSize}}" />
+        <Setter Property="HandleSize" Value="{atom:SplitterTokenResource SplitBarHandleSize}" />
     </ControlTheme>
 </ResourceDictionary>

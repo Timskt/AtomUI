@@ -10,14 +10,14 @@
             <themes:AbstractSkeletonTheme TargetType="atom:SkeletonLine" />
         </ControlTheme.BasedOn>
         
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.ParagraphLineHeight}}"/>
+        <Setter Property="Height" Value="{atom:SkeletonTokenResource ParagraphLineHeight}"/>
         
         <Style Selector="^[IsRound=True]">
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.ParagraphLineRoundCornerRadius}}"/>
+            <Setter Property="CornerRadius" Value="{atom:SkeletonTokenResource ParagraphLineRoundCornerRadius}"/>
         </Style>
         
         <Style Selector="^[IsRound=False]">
-            <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SkeletonTokenKey.BlockRadius}}"/>
+            <Setter Property="CornerRadius" Value="{atom:SkeletonTokenResource BlockRadius}"/>
         </Style>
         
     </ControlTheme>

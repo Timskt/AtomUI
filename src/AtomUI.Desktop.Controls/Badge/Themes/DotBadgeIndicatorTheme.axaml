@@ -5,7 +5,7 @@
     xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atomc:DotBadgeIndicator}" TargetType="atomc:DotBadgeIndicator">
-        <Setter Property="BadgeShadowSize" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeShadowSize}}"/>
-        <Setter Property="BadgeShadowColor" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeShadowColor}}"/>
+        <Setter Property="BadgeShadowSize" Value="{atom:BadgeTokenResource BadgeShadowSize}"/>
+        <Setter Property="BadgeShadowColor" Value="{atom:BadgeTokenResource BadgeShadowColor}"/>
     </ControlTheme>
 </ResourceDictionary>

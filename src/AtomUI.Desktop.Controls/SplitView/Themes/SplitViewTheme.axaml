@@ -5,16 +5,16 @@
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:SplitView}" TargetType="atom:SplitView">
         <Setter Property="OpenPaneLength"
-                Value="{DynamicResource {x:Static atom:SplitViewTokenKey.OpenPaneThemeLength}}" />
+                Value="{atom:SplitViewTokenResource OpenPaneThemeLength}" />
         <Setter Property="CompactPaneLength"
-                Value="{DynamicResource {x:Static atom:SplitViewTokenKey.CompactPaneThemeLength}}" />
-        <Setter Property="PaneBackground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+                Value="{atom:SplitViewTokenResource CompactPaneThemeLength}" />
+        <Setter Property="PaneBackground" Value="{atom:SharedTokenResource ColorBgContainer}" />
         <Setter Property="PaneOpenMotionDuration"
-                Value="{DynamicResource {x:Static atom:SplitViewTokenKey.PaneOpenMotionDuration}}" />
+                Value="{atom:SplitViewTokenResource PaneOpenMotionDuration}" />
         <Setter Property="PaneCloseMotionDuration"
-                Value="{DynamicResource {x:Static atom:SplitViewTokenKey.PaneCloseMotionDuration}}" />
+                Value="{atom:SplitViewTokenResource PaneCloseMotionDuration}" />
         <Setter Property="PaneMotionEasing"
-                Value="{DynamicResource {x:Static atom:SplitViewTokenKey.PaneMotionEasing}}" />
+                Value="{atom:SplitViewTokenResource PaneMotionEasing}" />
 
         <Style Selector="^:left">
             <Setter Property="Template">
@@ -36,7 +36,7 @@
                                               Content="{TemplateBinding Pane}"
                                               ContentTemplate="{TemplateBinding PaneTemplate}" />
                             <Rectangle Name="HCPaneBorder"
-                                       Fill="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"
+                                       Fill="{atom:SharedTokenResource ColorBorder}"
                                        Width="1"
                                        HorizontalAlignment="Right" />
                         </Panel>
@@ -126,7 +126,7 @@
                                               Content="{TemplateBinding Pane}"
                                               ContentTemplate="{TemplateBinding PaneTemplate}" />
                             <Rectangle Name="HCPaneBorder"
-                                       Fill="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"
+                                       Fill="{atom:SharedTokenResource ColorBorder}"
                                        Width="1" HorizontalAlignment="Left" />
                         </Panel>
 
@@ -214,7 +214,7 @@
                                               Content="{TemplateBinding Pane}"
                                               ContentTemplate="{TemplateBinding PaneTemplate}" />
                             <Rectangle Name="HCPaneBorder"
-                                       Fill="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"
+                                       Fill="{atom:SharedTokenResource ColorBorder}"
                                        Height="1"
                                        VerticalAlignment="Bottom" />
                         </Panel>
@@ -304,7 +304,7 @@
                                               Content="{TemplateBinding Pane}"
                                               ContentTemplate="{TemplateBinding PaneTemplate}" />
                             <Rectangle Name="HCPaneBorder"
-                                       Fill="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"
+                                       Fill="{atom:SharedTokenResource ColorBorder}"
                                        Height="1" VerticalAlignment="Top" />
                         </Panel>
 
@@ -421,7 +421,7 @@
         </Style>
 
         <Style Selector="^:lightDismiss /template/ Rectangle#LightDismissLayer">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
+            <Setter Property="Fill" Value="{atom:SharedTokenResource ColorBgMask}" />
         </Style>
         <Style Selector="^:overlay:open /template/ Rectangle#LightDismissLayer">
             <Setter Property="IsVisible" Value="True" />

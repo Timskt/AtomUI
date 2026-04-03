@@ -17,22 +17,22 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="RelativeLineHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.RelativeLineHeight}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="RelativeLineHeight" Value="{atom:SharedTokenResource RelativeLineHeight}"/>
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorSplit}" />
       
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:DescriptionsTokenKey.ContentColor}}"/>
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}"/>
+        <Setter Property="Foreground" Value="{atom:DescriptionsTokenResource ContentColor}"/>
+        <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}"/>
         
         <Style Selector="^[SizeType=Large]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DescriptionsTokenKey.ItemPaddingLG}}"/>
+            <Setter Property="Padding" Value="{atom:DescriptionsTokenResource ItemPaddingLG}"/>
         </Style>
         <Style Selector="^[SizeType=Middle]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DescriptionsTokenKey.ItemPadding}}"/>
+            <Setter Property="Padding" Value="{atom:DescriptionsTokenResource ItemPadding}"/>
         </Style>
         <Style Selector="^[SizeType=Small]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DescriptionsTokenKey.ItemPaddingSM}}"/>
+            <Setter Property="Padding" Value="{atom:DescriptionsTokenResource ItemPaddingSM}"/>
         </Style>
         
     </ControlTheme>

@@ -21,8 +21,8 @@ public class Result : AbstractResult
     {
         {
             var iconStyle = new Style(x => x.Is<AbstractResult>().Descendant().Name("PART_StatusIconPresenter").Child());
-            iconStyle.Add(WidthProperty, ResultTokenKey.IconSize);
-            iconStyle.Add(HeightProperty, ResultTokenKey.IconSize);
+            iconStyle.Add(WidthProperty, ResultTokenKind.IconSize);
+            iconStyle.Add(HeightProperty, ResultTokenKind.IconSize);
             Styles.Add(iconStyle);
         }
         
@@ -30,9 +30,9 @@ public class Result : AbstractResult
         
         {
             var iconStyle = new Style(x => x.Nesting().Descendant().Name("PART_StatusIconPresenter").Child());
-            iconStyle.Add(ForegroundProperty, ResultTokenKey.ResultInfoIconColor);
-            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKey.ResultInfoIconColor);
-            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKey.ResultInfoIconColor);
+            iconStyle.Add(ForegroundProperty, ResultTokenKind.ResultInfoIconColor);
+            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKind.ResultInfoIconColor);
+            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKind.ResultInfoIconColor);
             infoStyle.Add(iconStyle);
         }
         
@@ -42,9 +42,9 @@ public class Result : AbstractResult
         
         {
             var iconStyle = new Style(x => x.Nesting().Descendant().Name("PART_StatusIconPresenter").Child());
-            iconStyle.Add(ForegroundProperty, ResultTokenKey.ResultSuccessIconColor);
-            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKey.ResultSuccessIconColor);
-            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKey.ResultSuccessIconColor);
+            iconStyle.Add(ForegroundProperty, ResultTokenKind.ResultSuccessIconColor);
+            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKind.ResultSuccessIconColor);
+            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKind.ResultSuccessIconColor);
             successStyle.Add(iconStyle);
         }
         
@@ -54,9 +54,9 @@ public class Result : AbstractResult
         
         {
             var iconStyle = new Style(x => x.Nesting().Descendant().Name("PART_StatusIconPresenter").Child());
-            iconStyle.Add(ForegroundProperty, ResultTokenKey.ResultWarningIconColor);
-            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKey.ResultWarningIconColor);
-            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKey.ResultWarningIconColor);
+            iconStyle.Add(ForegroundProperty, ResultTokenKind.ResultWarningIconColor);
+            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKind.ResultWarningIconColor);
+            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKind.ResultWarningIconColor);
             warningStyle.Add(iconStyle);
         }
         
@@ -66,9 +66,9 @@ public class Result : AbstractResult
         
         {
             var iconStyle = new Style(x => x.Nesting().Descendant().Name("PART_StatusIconPresenter").Child());
-            iconStyle.Add(ForegroundProperty, ResultTokenKey.ResultErrorIconColor);
-            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKey.ResultErrorIconColor);
-            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKey.ResultErrorIconColor);
+            iconStyle.Add(ForegroundProperty, ResultTokenKind.ResultErrorIconColor);
+            iconStyle.Add(IconControl.FillBrushProperty, ResultTokenKind.ResultErrorIconColor);
+            iconStyle.Add(IconControl.StrokeBrushProperty, ResultTokenKind.ResultErrorIconColor);
             errorStyle.Add(iconStyle);
         }
         

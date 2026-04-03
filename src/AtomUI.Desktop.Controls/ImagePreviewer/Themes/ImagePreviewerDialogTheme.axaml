@@ -93,15 +93,15 @@
         <Setter Property="CanMaximize" Value="True" />
         <Setter Property="CanMinimize" Value="True" />
         <Setter Property="IsMoveEnabled" Value="True" />
-        <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.DialogMinWidth}}" />
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.DialogMinHeight}}" />
+        <Setter Property="MinWidth" Value="{atom:ImagePreviewerTokenResource DialogMinWidth}" />
+        <Setter Property="MinHeight" Value="{atom:ImagePreviewerTokenResource DialogMinHeight}" />
         <Setter Property="Background"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgLayout}}" />
+                Value="{atom:SharedTokenResource ColorBgLayout}" />
         <Setter Property="TitleBarFrameBackground"
-                Value="{DynamicResource {x:Static atom:ImagePreviewerTokenKey.TitleBarBackgroundColor}}" />
+                Value="{atom:ImagePreviewerTokenResource TitleBarBackgroundColor}" />
 
         <Style Selector="^ /template/ atom|ImagePreviewNavButton">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SharedTokenKey.MarginXS}}" />
+            <Setter Property="Margin" Value="{atom:SharedTokenResource MarginXS}" />
         </Style>
 
     </ControlTheme>

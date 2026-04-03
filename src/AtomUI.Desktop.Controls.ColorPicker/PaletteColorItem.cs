@@ -97,7 +97,7 @@ internal class PaletteColorItem : AvaloniaRadioButton
             {
                 Transitions = [
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(CheckedMarkRenderTransformProperty, SharedTokenKey.MotionDurationMid,
+                    TransitionUtils.CreateTransition<TransformOperationsTransition>(CheckedMarkRenderTransformProperty, SharedTokenKind.MotionDurationMid,
                         new BackEaseOut())
                 ];
             }
