@@ -75,52 +75,29 @@ public abstract class AbstractDesignToken : IDesignToken
     public virtual void BuildResourceDictionary(IResourceDictionary dictionary)
     {
         var type = GetType();
-        {
-            var tokenProperties = type.GetProperties(BindingFlags.Public |
-                                                     BindingFlags.NonPublic |
-                                                     BindingFlags.Instance |
-                                                     BindingFlags.FlattenHierarchy)
-                                      .ToDictionary(x => x.Name);;
+        var tokenProperties = type.GetProperties(BindingFlags.Public |
+                                                 BindingFlags.NonPublic |
+                                                 BindingFlags.Instance |
+                                                 BindingFlags.FlattenHierarchy)
+                                  .ToDictionary(x => x.Name);;
             
-            foreach (var value in Enum.GetValues<SharedTokenKind>())
-            {
-                var tokenName = Enum.GetName(value);
-                Debug.Assert(tokenName != null);
-                if (tokenProperties.TryGetValue(tokenName, out var property))
-                {
-                    var tokenValue = property.GetValue(this);
-                    if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
-                        tokenValue is not null)
-                    {
-                        tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
-                    }
-                    dictionary[value] = tokenValue;
-                }
-                else
-                {
-                    throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
-                }
-            }
-        }
-
+        foreach (var value in Enum.GetValues<SharedTokenKind>())
         {
-            // internal 这里也考虑进去，还是具体的 Token 自己处理？
-            var tokenProperties = type.GetProperties(BindingFlags.Public |
-                                                     BindingFlags.NonPublic |
-                                                     BindingFlags.Instance |
-                                                     BindingFlags.FlattenHierarchy);
-            var tokenResourceNamespace = GetTokenResourceCatalog();
-            foreach (var property in tokenProperties)
+            var tokenName = Enum.GetName(value);
+            Debug.Assert(tokenName != null);
+            if (tokenProperties.TryGetValue(tokenName, out var property))
             {
-                var tokenName  = property.Name;
                 var tokenValue = property.GetValue(this);
                 if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
                     tokenValue is not null)
                 {
                     tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
                 }
-
-                dictionary[new TokenResourceKey(tokenName, tokenResourceNamespace)] = tokenValue;
+                dictionary[value] = tokenValue;
+            }
+            else
+            {
+                throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
             }
         }
     }

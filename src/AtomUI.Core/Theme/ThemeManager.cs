@@ -491,7 +491,7 @@ internal class ThemeManager : Styles, IThemeManager
             }
             else
             {
-                if (TryGetResource(SharedTokenKey.EnableMotion, variant, out var enableMotionResource))
+                if (TryGetResource(SharedTokenKind.EnableMotion, variant, out var enableMotionResource))
                 {
                     if (enableMotionResource is bool enableMotion)
                     {
@@ -499,7 +499,7 @@ internal class ThemeManager : Styles, IThemeManager
                     }
                 }
                 
-                if (TryGetResource(SharedTokenKey.EnableWaveSpirit, variant, out var enableWaveSpiritResource))
+                if (TryGetResource(SharedTokenKind.EnableWaveSpirit, variant, out var enableWaveSpiritResource))
                 {
                     if (enableWaveSpiritResource is bool enableWaveSpirit)
                     {
@@ -537,7 +537,7 @@ internal class ThemeManager : Styles, IThemeManager
         var themeResource = Resources.ThemeDictionaries[ThemeVariant];
         if (themeResource is ResourceDictionary globalResourceDictionary)
         {
-            globalResourceDictionary[SharedTokenKey.EnableMotion] = IsMotionEnabled;
+            globalResourceDictionary[SharedTokenKind.EnableMotion] = IsMotionEnabled;
         }
     }
     
@@ -546,7 +546,7 @@ internal class ThemeManager : Styles, IThemeManager
         var themeResource = Resources.ThemeDictionaries[ThemeVariant];
         if (themeResource is ResourceDictionary globalResourceDictionary)
         {
-            globalResourceDictionary[SharedTokenKey.EnableWaveSpirit] = IsWaveSpiritEnabled;
+            globalResourceDictionary[SharedTokenKind.EnableWaveSpirit] = IsWaveSpiritEnabled;
         }
     }
 }

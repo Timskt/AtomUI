@@ -175,7 +175,7 @@ internal class RadioIndicator : TemplatedControl
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(RadioBorderBrushProperty),
                     TransitionUtils.CreateTransition<DoubleTransition>(RadioDotEffectSizeProperty),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(RadioBackgroundProperty,
-                        SharedTokenKey.MotionDurationFast)
+                        SharedTokenKind.MotionDurationFast)
                 ];
             }
         }

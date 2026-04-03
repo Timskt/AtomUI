@@ -11,8 +11,8 @@ public static class WaveSpiritAwareControlExtensions
         if (waveSpiritAwareControl is StyledElement styledElement)
         {
             var bindingStyle = new Style();
-            bindingStyle.Add(MotionAwareControlProperty.IsMotionEnabledProperty, SharedTokenKey.EnableMotion);
-            bindingStyle.Add(WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty, SharedTokenKey.EnableWaveSpirit);
+            bindingStyle.Add(MotionAwareControlProperty.IsMotionEnabledProperty, SharedTokenKind.EnableMotion);
+            bindingStyle.Add(WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty, SharedTokenKind.EnableWaveSpirit);
             styledElement.Styles.Add(bindingStyle);
         }
     }

@@ -35,95 +35,7 @@ internal class ResourceKeyClassWriter
         );
         _context.AddSource("TokenResourceConst.g.cs", sourceText);
     }
-
-    private ClassDeclarationSyntax BuildClassSyntax(string className)
-    {
-        var modifiers = new List<SyntaxToken>
-        {
-            SyntaxFactory.Token(SyntaxKind.PublicKeyword),
-            SyntaxFactory.Token(SyntaxKind.StaticKeyword)
-        };
-        var classSyntax = SyntaxFactory.ClassDeclaration(className)
-            .AddModifiers(modifiers.ToArray());
-        return classSyntax;
-    }
-
-    private FieldDeclarationSyntax BuildResourceKeyFieldSyntax(TokenName tokenName, string? value = null)
-    {
-        value ??= tokenName.Name;
-        var modifiers = new List<SyntaxToken>
-        {
-            SyntaxFactory.Token(SyntaxKind.PublicKeyword),
-            SyntaxFactory.Token(SyntaxKind.StaticKeyword),
-            SyntaxFactory.Token(SyntaxKind.ReadOnlyKeyword)
-        };
-
-        var resourceKeyType = SyntaxFactory.ParseTypeName("TokenResourceKey");
-        var argument = SyntaxFactory.Argument(
-            SyntaxFactory.LiteralExpression(
-                SyntaxKind.StringLiteralExpression,
-                SyntaxFactory.Literal($"{value}")));
-
-        var argumentTokenList = new List<SyntaxNodeOrToken>();
-        argumentTokenList.Add(argument);
-
-        if (!string.IsNullOrEmpty(tokenName.ResourceCatalog))
-        {
-            var nsArgument = SyntaxFactory.Argument(
-                SyntaxFactory.LiteralExpression(
-                    SyntaxKind.StringLiteralExpression,
-                    SyntaxFactory.Literal($"{tokenName.ResourceCatalog}")));
-            argumentTokenList.Add(SyntaxFactory.Token(SyntaxKind.CommaToken));
-            argumentTokenList.Add(nsArgument);
-        }
-
-        var resourceKeyInstanceExpr = SyntaxFactory.ObjectCreationExpression(resourceKeyType)
-            .WithArgumentList(SyntaxFactory.ArgumentList(
-                SyntaxFactory.SeparatedList<ArgumentSyntax>(
-                    argumentTokenList.ToArray())));
-
-        var fieldSyntax = SyntaxFactory.FieldDeclaration(SyntaxFactory.VariableDeclaration(resourceKeyType)
-                .WithVariables(
-                    SyntaxFactory.SingletonSeparatedList(
-                        SyntaxFactory
-                            .VariableDeclarator(tokenName.Name)
-                            .WithInitializer(
-                                SyntaxFactory.EqualsValueClause(
-                                    resourceKeyInstanceExpr)))))
-            .AddModifiers(modifiers.ToArray());
-        return fieldSyntax;
-    }
-
-    private void AddDesignResourceKeyField(ref ClassDeclarationSyntax classSyntax)
-    {
-        var resourceKeyFields = new List<MemberDeclarationSyntax>();
-        var tokenNames = _tokenInfo.Tokens.ToList().OrderBy(token => token.Name);
-        foreach (var tokenName in tokenNames)
-        {
-            resourceKeyFields.Add(BuildResourceKeyFieldSyntax(tokenName));
-        }
-
-        classSyntax = classSyntax.AddMembers(resourceKeyFields.ToArray());
-    }
-
-    private ClassDeclarationSyntax BuildControlResourceKeyClassSyntax(ControlTokenInfo controlTokenInfo)
-    {
-        var className = controlTokenInfo.ControlName;
-        var tokenId   = className.Replace("Token", "");
-        className += "Key";
-
-        var controlClassSyntax = BuildClassSyntax(className);
-        var resourceKeyFields  = new List<MemberDeclarationSyntax>();
-        var tokenNames = controlTokenInfo.Tokens.ToList().OrderBy(token => token.Name);
-        foreach (var tokenName in tokenNames)
-        {
-            resourceKeyFields.Add(BuildResourceKeyFieldSyntax(tokenName, $"{controlTokenInfo.ControlNamespace}.{tokenId}.{tokenName.Name}"));
-        }
-
-        controlClassSyntax = controlClassSyntax.AddMembers(resourceKeyFields.ToArray());
-        return controlClassSyntax;
-    }
-
+    
     private EnumDeclarationSyntax BuildControlResourceKeyEnumSyntax(ControlTokenInfo controlTokenInfo)
     {
         var enumName = $"{controlTokenInfo.ControlName}Kind";
@@ -137,14 +49,6 @@ internal class ResourceKeyClassWriter
         }
         controlEnumDecl = controlEnumDecl.AddMembers(enumMembers.ToArray());
         return controlEnumDecl;
-    }
-
-    private ClassDeclarationSyntax BuildDesignResourceKeyClassSyntax()
-    {
-        var sharedClassSyntax = BuildClassSyntax("SharedTokenKey");
-        // 添加全局的 Token 定义
-        AddDesignResourceKeyField(ref sharedClassSyntax);
-        return sharedClassSyntax;
     }
     
     private EnumDeclarationSyntax BuildDesignResourceKeyEnumSyntax()
@@ -193,7 +97,6 @@ internal class ResourceKeyClassWriter
             if (_tokenInfo.Tokens.Count != 0)
             {
                 var namespaceSyntax = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName("AtomUI.Theme.Styling"));
-                namespaceSyntax = namespaceSyntax.AddMembers(BuildDesignResourceKeyClassSyntax());
                 namespaceSyntax = namespaceSyntax.AddMembers(BuildDesignResourceKeyEnumSyntax());
                 compilationUnit = compilationUnit.AddMembers(namespaceSyntax);
             }
@@ -205,7 +108,6 @@ internal class ResourceKeyClassWriter
             if (entry.Value.Count > 0)
             {
                 var namespaceSyntax            = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(entry.Key));
-                var controlInfoClassSyntaxList = new List<MemberDeclarationSyntax>();
                 var controlTokenKindSyntaxList = new List<MemberDeclarationSyntax>();
                 var controlTokenMarkupExtensionSyntaxList = new List<MemberDeclarationSyntax>();
                 // 添加控件类成员
@@ -213,13 +115,11 @@ internal class ResourceKeyClassWriter
                 {
                     if (controlTokenInfo.Tokens.Count > 0)
                     {
-                        controlInfoClassSyntaxList.Add(BuildControlResourceKeyClassSyntax(controlTokenInfo));
                         controlTokenKindSyntaxList.Add(BuildControlResourceKeyEnumSyntax(controlTokenInfo));
                         controlTokenMarkupExtensionSyntaxList.Add(GenerateTokenResourceMarkupExtensionClass(controlTokenInfo));
                     }
                 }
-
-                namespaceSyntax = namespaceSyntax.AddMembers(controlInfoClassSyntaxList.ToArray());
+                
                 namespaceSyntax = namespaceSyntax.AddMembers(controlTokenKindSyntaxList.ToArray());
                 namespaceSyntax = namespaceSyntax.AddMembers(controlTokenMarkupExtensionSyntaxList.ToArray());
                 compilationUnit = compilationUnit.AddMembers(namespaceSyntax);

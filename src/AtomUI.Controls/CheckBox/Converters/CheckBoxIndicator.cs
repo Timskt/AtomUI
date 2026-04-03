@@ -112,7 +112,7 @@ internal class CheckBoxIndicator : TemplatedControl
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(TristateMarkBrushProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(CheckedMarkRenderTransformProperty, SharedTokenKey.MotionDurationMid,
+                    TransitionUtils.CreateTransition<TransformOperationsTransition>(CheckedMarkRenderTransformProperty, SharedTokenKind.MotionDurationMid,
                         new BackEaseOut())
                 ];
             }

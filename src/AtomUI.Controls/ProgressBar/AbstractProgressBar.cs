@@ -380,11 +380,11 @@ public abstract class AbstractProgressBar : RangeBase,
                 Transitions transitions =
                 [
                     TransitionUtils.CreateTransition<DoubleTransition>(ValueProperty,
-                        SharedTokenKey.MotionDurationVerySlow, new ExponentialEaseOut()),
+                        SharedTokenKind.MotionDurationVerySlow, new ExponentialEaseOut()),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(StrokeBrushProperty,
-                        SharedTokenKey.MotionDurationFast),
+                        SharedTokenKind.MotionDurationFast),
                     TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKey.MotionDurationFast)
+                        SharedTokenKind.MotionDurationFast)
                 ];
 
                 NotifyConfigureTransitions(ref transitions);
