@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 using AtomUI.Theme.Styling;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -237,11 +236,7 @@ internal class Theme : AvaloniaObject, ITheme
         {
             var controlToken = (token as AbstractControlDesignToken)!;
             controlToken.CalculateTokenValues(IsDarkMode);
-            var controlTokenType  = controlToken.GetType();
-            var tokenAttr         = controlTokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-            var qualifiedTokenKey = GenerateTokenQualifiedKey(controlToken.Id, tokenAttr?.ResourceCatalog);
-                
-            if (ThemeDefinition.ControlTokens.TryGetValue(qualifiedTokenKey, out var tokenInfo))
+            if (ThemeDefinition.ControlTokens.TryGetValue(controlToken.Id, out var tokenInfo))
             {
                 controlToken.LoadConfig(tokenInfo.Tokens);
             }
@@ -297,29 +292,14 @@ internal class Theme : AvaloniaObject, ITheme
             var obj = Activator.CreateInstance(tokenType);
             if (obj is AbstractControlDesignToken controlToken)
             {
-                var attr = tokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-                Debug.Assert(attr != null);
-                var qualifiedKey = GenerateTokenQualifiedKey(controlToken.Id, attr.ResourceCatalog);
-                ControlTokens.Add(qualifiedKey, controlToken);
+                ControlTokens.Add(controlToken.Id, controlToken);
             }
         }
     }
 
-    internal static string GenerateTokenQualifiedKey(string tokenId, string? catalog)
+    public IControlDesignToken? GetControlToken(string tokenId)
     {
-        var qualifiedPrefix = "";
-        if (!string.IsNullOrEmpty(catalog))
-        {
-            qualifiedPrefix += $"{catalog}:";
-        }
-
-        return $"{qualifiedPrefix}{tokenId}";
-    }
-
-    public IControlDesignToken? GetControlToken(string tokenId, string? catalog = null)
-    {
-        var qualifiedKey = GenerateTokenQualifiedKey(tokenId, catalog);
-        return ControlTokens.GetValueOrDefault(qualifiedKey);
+        return ControlTokens.GetValueOrDefault(tokenId);
     }
 
     internal virtual void NotifyAboutToActive()

@@ -1,4 +1,5 @@
-﻿using AtomUI.Media;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -179,4 +180,6 @@ internal class SliderToken : AbstractControlDesignToken
         ThumbOutlineThickness = new Thickness(SharedToken.WaveAnimationRange);
         ThumbSize = ThumbCircleSizeHover + ThumbCircleBorderThicknessHover.Left * 2 + ThumbOutlineThickness.Left * 2;
     }
+    
+    protected override Type GetTokenKindType() => typeof(SliderTokenKind);
 }

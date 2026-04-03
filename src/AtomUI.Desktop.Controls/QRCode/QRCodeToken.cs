@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
@@ -34,4 +35,6 @@ internal class QRCodeToken : AbstractControlDesignToken
         QRCodeTextColor           = SharedToken.ColorText;
         QRCodeMaskBackgroundColor = Color.FromArgb(244, colorBgContainer.R, colorBgContainer.G, colorBgContainer.B);
     }
+    
+    protected override Type GetTokenKindType() => typeof(QRCodeTokenKind);
 }

@@ -45,7 +45,7 @@
                                                     Cursor="Hand"
                                                     atom:ToolTip.Tip="{TemplateBinding Tooltip}"
                                                     IsVisible="{TemplateBinding Tooltip, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                <TextBlock Text="{DynamicResource {x:Static atom:CommonLangResourceKey.Optional}}"
+                                <TextBlock Text="{atom:CommonLangResource Optional}"
                                            Name="OptionalMark"
                                            IsVisible="False"
                                            VerticalAlignment="Center" />

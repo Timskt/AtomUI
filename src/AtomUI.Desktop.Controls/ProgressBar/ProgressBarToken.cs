@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -71,4 +72,6 @@ internal class ProgressBarToken : AbstractControlDesignToken
         LineExtraInfoMargin       = SharedToken.ControlPaddingHorizontalSM;
         LineProgressPadding       = SharedToken.UniformlyPaddingXXS / 2;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ProgressBarTokenKind);
 }

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -72,4 +73,6 @@ internal class TourToken : AbstractControlDesignToken
         HeaderColor           = SharedToken.ColorTextHeading;
         PopupMarginToAnchor   = SharedToken.SpacingXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TourTokenKind);
 }

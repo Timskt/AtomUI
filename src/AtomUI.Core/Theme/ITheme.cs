@@ -14,7 +14,7 @@ public interface ITheme
     bool IsPrimary { get; }
     bool IsBuiltIn { get; }
     List<string> ThemeResourceKeys { get; }
-    IControlDesignToken? GetControlToken(string tokenId, string? catalog = null);
+    IControlDesignToken? GetControlToken(string tokenId);
     DesignToken SharedToken { get; }
     ThemeVariant ThemeVariant { get; }
     IList<ThemeAlgorithm> Algorithms { get; }

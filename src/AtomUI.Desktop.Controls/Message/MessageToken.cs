@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -58,4 +59,6 @@ internal class MessageToken : AbstractControlDesignToken
         MessageTopMargin  = new Thickness(SharedToken.UniformlyMargin, SharedToken.UniformlyMargin, SharedToken.UniformlyMargin, 0);
         MessageIconSize   = SharedToken.FontSizeSM * SharedToken.RelativeLineHeightSM;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MessageTokenKind);
 }

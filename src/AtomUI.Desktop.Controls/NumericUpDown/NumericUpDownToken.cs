@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -13,4 +14,6 @@ internal class NumericUpDownToken : ButtonSpinnerToken
         : base(ID)
     {
     }
+    
+    protected override Type GetTokenKindType() => typeof(NumericUpDownTokenKind);
 }

@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.UploadLang;
 
@@ -8,4 +9,6 @@ internal class en_US : LanguageProvider
     public const string Uploading = "Uploading...";
     public const string Pending = "Pending...";
     public const string DragUploadHead = "Click or drag file to this area to upload";
+    
+    protected override Type GetResourceKindType() => typeof(UploadLangResourceKind);
 }

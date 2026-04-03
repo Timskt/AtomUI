@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -62,4 +63,6 @@ internal class GroupBoxToken : AbstractControlDesignToken
         HeaderContentPadding = new Thickness(SharedToken.UniformlyPaddingXXS, 0);
         HeaderIconMargin     = new Thickness(0, 0, SharedToken.UniformlyMarginXXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(GroupBoxTokenKind);
 }

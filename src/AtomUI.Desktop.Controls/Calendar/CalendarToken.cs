@@ -1,4 +1,5 @@
-﻿using AtomUI.Media;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -126,4 +127,6 @@ internal class CalendarToken : AbstractControlDesignToken
         CellLineHeight        = CellHeight - 2; // 不知道为啥设置成一样，或者不设置文字有些靠下
         RangeCalendarSpacing  = 20;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CalendarTokenKind);
 }

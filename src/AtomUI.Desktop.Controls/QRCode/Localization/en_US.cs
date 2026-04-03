@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.QRCodeLang;
 
@@ -8,4 +9,6 @@ internal class en_US : LanguageProvider
     public const string Refresh = "Refresh";
     public const string Expired = "QR code expired";
     public const string Scanned = "Scanned";
+    
+    protected override Type GetResourceKindType() => typeof(QRCodeLangResourceKind);
 }

@@ -165,7 +165,7 @@
         <Setter Property="CornerRadius" Value="{atom:DataGridTokenResource TableRadius}" />
         <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="OperatingMsg"
-                Value="{DynamicResource {x:Static dataGridLocalization:DataGridLangResourceKey.Operating}}" />
+                Value="{atom:DataGridLangResource Operating}" />
 
         <Style Selector="^ /template/ Border#ColumnHeadersPresenterFrame">
             <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />

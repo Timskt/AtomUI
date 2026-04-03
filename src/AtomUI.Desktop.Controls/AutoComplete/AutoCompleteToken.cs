@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -44,4 +45,6 @@ internal class AutoCompleteToken : AbstractControlDesignToken
         MinPopupWidth       = 120;
         MaxPopupWidth       = 200;
     }
+    
+    protected override Type GetTokenKindType() => typeof(AutoCompleteTokenKind);
 }

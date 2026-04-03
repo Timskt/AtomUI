@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:lang="clr-namespace:AtomUI.Desktop.Controls.TourLang"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:TourStepsView}" TargetType="atom:TourStepsView">
         <Setter Property="Template">
@@ -25,21 +24,21 @@
                                                      IsVisible="False"
                                                      Tag="{x:Static atom:TourStepNavType.Previous}"
                                                      Classes="previous-btn"
-                                                     Content="{DynamicResource {x:Static  atom:TourLangResourceKey.Previous}}"/>
+                                                     Content="{atom:TourLangResource Previous}"/>
                                         <atom:Button SizeType="Small" 
                                                      ButtonType="Primary" 
                                                      Name="NextButton" 
                                                      Classes="next-btn"
                                                      IsVisible="False"
                                                      Tag="{x:Static atom:TourStepNavType.Next}"
-                                                     Content="{DynamicResource {x:Static  atom:TourLangResourceKey.Next}}"/>
+                                                     Content="{atom:TourLangResource Next}"/>
                                         <atom:Button SizeType="Small"
                                                      ButtonType="Primary"
                                                      Name="FinishButton"
                                                      IsVisible="False"
                                                      Classes="next-btn"
                                                      Tag="{x:Static atom:TourStepNavType.Finished}"
-                                                     Content="{DynamicResource {x:Static  atom:TourLangResourceKey.Finish}}"/>
+                                                     Content="{atom:TourLangResource Finish}"/>
                                     </StackPanel>
                                 </Panel>
                             </DockPanel>

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -63,4 +64,6 @@ internal class RadioButtonToken : AbstractControlDesignToken
         RadioBgColor = colorPrimary;
         TextMargin   = new Thickness(SharedToken.UniformlyMarginXS, 0, SharedToken.UniformlyMarginXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(RadioButtonTokenKind);
 }

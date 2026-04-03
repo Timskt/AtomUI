@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
@@ -32,4 +33,6 @@ internal class StatisticToken : AbstractControlDesignToken
         TitleFontSize = SharedToken.FontSize;
         ContentFontSize = SharedToken.FontSizeHeading3;
     }
+    
+    protected override Type GetTokenKindType() => typeof(StatisticTokenKind);
 }

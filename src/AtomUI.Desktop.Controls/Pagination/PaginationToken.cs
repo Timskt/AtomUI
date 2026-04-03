@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -120,4 +121,6 @@ internal class PaginationToken : AbstractControlDesignToken
         PaginationMiniQuickJumperInputWidth = SharedToken.ControlHeightLG * 1.1;
         PaginationItemPaddingInline         = new Thickness(SharedToken.UniformlyMarginXXS * 1.5);
     }
+    
+    protected override Type GetTokenKindType() => typeof(PaginationTokenKind);
 }

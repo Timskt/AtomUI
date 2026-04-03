@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -379,4 +380,6 @@ internal class DataGridToken : AbstractControlDesignToken
         PaginationMargin   = new Thickness(0, SharedToken.UniformlyMargin);
         PaginationMarginSM = new Thickness(0, SharedToken.UniformlyMarginXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(DataGridTokenKind);
 }

@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -24,4 +25,6 @@ internal class FlyoutHostToken : AbstractControlDesignToken
         base.CalculateTokenValues(isDarkMode);
         MarginToAnchor = SharedToken.UniformlyMarginXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(FlyoutHostTokenKind);
 }

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -22,4 +23,6 @@ internal class MessageBoxToken : AbstractControlDesignToken
         base.CalculateTokenValues(isDarkMode);
         StyleIconSize = SharedToken.SizeLG * 1.2;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MessageBoxTokenKind);
 }

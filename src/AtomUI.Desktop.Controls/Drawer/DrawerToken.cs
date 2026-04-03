@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -200,4 +201,6 @@ internal class DrawerToken : AbstractControlDesignToken
         ContentPadding    = SharedToken.PaddingLG;
         PushOffsetPercent = 0.4;
     }
+    
+    protected override Type GetTokenKindType() => typeof(DrawerTokenKind);
 }

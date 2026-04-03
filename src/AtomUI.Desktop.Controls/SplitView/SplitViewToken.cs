@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Animation.Easings;
@@ -30,4 +31,6 @@ internal class SplitViewToken : AbstractControlDesignToken
         PaneCloseMotionDuration = TimeSpan.FromSeconds(100);
         PaneMotionEasing        = Easing.Parse("0.1,0.9,0.2,1.0");
     }
+    
+    protected override Type GetTokenKindType() => typeof(SplitViewTokenKind);
 }

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -184,4 +185,6 @@ internal class SelectToken : AbstractControlDesignToken
         PaddingSM = new Thickness(multiPaddingRightSM, multiPaddingVerticalSM);
         PaddingLG = new Thickness(multiPaddingRightLG,  multiPaddingVerticalLG);
     }
+    
+    protected override Type GetTokenKindType() => typeof(SelectTokenKind);
 }

@@ -100,9 +100,9 @@
         <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
 
-        <Setter Property="ItemUint" Value="{DynamicResource {x:Static atom:TransferLangResourceKey.Item}}" />
+        <Setter Property="ItemUint" Value="{atom:TransferLangResource Item}" />
         <Setter Property="ItemUintPlural"
-                Value="{DynamicResource {x:Static atom:TransferLangResourceKey.Items}}" />
+                Value="{atom:TransferLangResource Items}" />
 
         <Style Selector="^/template/ Border#HeaderFrame">
             <Setter Property="Height" Value="{atom:TransferTokenResource HeaderHeight}" />

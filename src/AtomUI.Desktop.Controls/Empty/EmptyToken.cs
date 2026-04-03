@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -36,4 +37,6 @@ internal class EmptyToken : AbstractControlDesignToken
         DescriptionMargin   = new Thickness(0, SharedToken.UniformlyMarginSM, 0, 0);
         DescriptionMarginSM = new Thickness(0, SharedToken.UniformlyMarginXS, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(EmptyTokenKind);
 }

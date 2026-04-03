@@ -20,13 +20,13 @@
                                 ButtonType="Link"
                                 HorizontalAlignment="Left"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static atom:TimePickerLangResourceKey.Now}}" />
+                                Content="{atom:TimePickerLangResource Now}" />
                             <atom:Button
                                 Name="{x:Static atom:TimePickerPresenterThemeConstants.ConfirmButtonPart}"
                                 ButtonType="Primary"
                                 HorizontalAlignment="Right"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static atom:CommonLangResourceKey.Ok}}" />
+                                Content="{atom:CommonLangResource Ok}" />
                         </Panel>
                     </Border>
                     <atom:TimeView Name="{x:Static atom:TimePickerPresenterThemeConstants.TimeViewPart}"

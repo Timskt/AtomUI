@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -102,4 +103,6 @@ internal class BadgeToken : AbstractControlDesignToken
         CountBadgeCornerRadius        = new CornerRadius(IndicatorHeight);
         CountBadgeCornerRadiusSM      = new CornerRadius(IndicatorHeightSM);
     }
+    
+    protected override Type GetTokenKindType() => typeof(BadgeTokenKind);
 }

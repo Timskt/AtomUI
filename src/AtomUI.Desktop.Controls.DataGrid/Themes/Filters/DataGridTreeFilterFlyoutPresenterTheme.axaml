@@ -30,14 +30,14 @@
                                 Name="{x:Static atom:DataGridFilterFlyoutPresenterThemeConstants.ResetButtonPart}"
                                 SizeType="Small"
                                 Margin="0"
-                                Content="{DynamicResource {x:Static atom:CommonLangResourceKey.Reset}}" />
+                                Content="{atom:CommonLangResource Reset}" />
 
                             <atom:Button
                                 Name="{x:Static atom:DataGridFilterFlyoutPresenterThemeConstants.OkButtonPart}"
                                 SizeType="Small"
                                 ButtonType="Primary"
                                 Margin="0"
-                                Content="{DynamicResource {x:Static atom:CommonLangResourceKey.Ok}}" />
+                                Content="{atom:CommonLangResource Ok}" />
                         </StackPanel>
 
                         <Rectangle Name="ButtonLayoutSeparator"

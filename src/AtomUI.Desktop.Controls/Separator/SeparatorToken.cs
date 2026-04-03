@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -62,4 +63,6 @@ internal class SeparatorToken : AbstractControlDesignToken
         HorizontalMarginBlockLG        = new Thickness(0, SharedToken.UniformlyMarginLG);
         HorizontalWithTextGutterMargin = new Thickness(0, SharedToken.UniformlyMargin);
     }
+    
+    protected override Type GetTokenKindType() => typeof(SeparatorTokenKind);
 }

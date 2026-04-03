@@ -1,4 +1,5 @@
 using AtomUI.Theme.Language;
+using AtomUIGallery.Localization;
 using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang;
@@ -92,4 +93,6 @@ internal class zh_CN : LanguageProvider
     public const string Feedback_Skeleton = "Skeleton 骨架屏";
     public const string Feedback_Spin = "Spin 加载提示";
     public const string Feedback_Watermark = "Watermark 水印";
+    
+    protected override Type GetResourceKindType() => typeof(CaseNavigationLangResourceKind);
 }

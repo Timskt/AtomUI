@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
@@ -24,4 +25,6 @@ internal class TreeSelectToken : AbstractControlDesignToken
         base.CalculateTokenValues(isDarkMode);
         MinPopupWidth = 300;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TreeSelectTokenKind);
 }

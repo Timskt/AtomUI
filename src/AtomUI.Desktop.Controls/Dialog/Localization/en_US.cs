@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.DialogLang;
 
@@ -24,4 +25,6 @@ internal class en_US : LanguageProvider
     public const string Abort = "Abort";
     public const string Retry = "Retry";
     public const string Ignore = "Ignore";
+    
+    protected override Type GetResourceKindType() => typeof(DialogLangResourceKind);
 }

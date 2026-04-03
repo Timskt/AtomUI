@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -90,4 +91,6 @@ internal class DescriptionsToken : AbstractControlDesignToken
         ContentColor = SharedToken.ColorText;
         ExtraColor   = SharedToken.ColorText;
     }
+    
+    protected override Type GetTokenKindType() => typeof(DescriptionsTokenKind);
 }

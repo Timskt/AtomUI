@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -172,4 +173,6 @@ internal class ChromeToken : AbstractControlDesignToken
         TitleFontSize = 13;
         TitleFontWeight = FontWeight.Bold;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ChromeTokenKind);
 }

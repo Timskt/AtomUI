@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -119,4 +120,6 @@ internal class DialogToken : AbstractControlDesignToken
         FooterBg           = Colors.Transparent;
         ButtonGroupSpacing = SharedToken.SpacingXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(DialogTokenKind);
 }

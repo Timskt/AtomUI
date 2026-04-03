@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.ImagePreviewerLang;
 
@@ -6,4 +7,6 @@ namespace AtomUI.Desktop.Controls.ImagePreviewerLang;
 internal class zh_CN : LanguageProvider
 {
     public const string Preview = "预览";
+
+    protected override Type GetResourceKindType() => typeof(ImagePreviewerLangResourceKind);
 }

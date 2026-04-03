@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -48,4 +49,6 @@ internal class TagToken : AbstractControlDesignToken
         DefaultColor         = SharedToken.ColorText;
         TagTextPaddingInline = new Thickness(SharedToken.UniformlyPaddingXXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(TagTokenKind);
 }

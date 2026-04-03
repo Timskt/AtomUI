@@ -17,7 +17,7 @@
         <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
         <Setter Property="Padding" Value="{atom:ColorPickerTokenResource TriggerPadding}" />
-        <Setter Property="EmptyColorText" Value="{DynamicResource {x:Static colorPickerLang:ColorPickerLangResourceKey.EmptyColorText}}" />
+        <Setter Property="EmptyColorText" Value="{atom:ColorPickerLangResource EmptyColorText}" />
 
         <Style Selector="^:pointerover, ^:flyout-open">
             <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorPrimaryHover}" />

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -76,4 +77,6 @@ internal class FormToken : AbstractControlDesignToken
         InlineItemSpacing      = SharedToken.Spacing;
         VerticalLabelMargin    = default;
     }
+    
+    protected override Type GetTokenKindType() => typeof(FormTokenKind);
 }

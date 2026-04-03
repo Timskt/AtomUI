@@ -18,7 +18,7 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Description" Value="{DynamicResource {x:Static atom:CommonLangResourceKey.NoData}}"/>
+        <Setter Property="Description" Value="{atom:CommonLangResource NoData}"/>
         
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Svg#PART_SvgImage">

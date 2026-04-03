@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Data;
-using AtomUI.Desktop.Controls.DataGridLocalization;
 using AtomUI.Data;
+using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
 using Avalonia.Controls;
@@ -174,7 +174,7 @@ internal class DataGridFilterIndicator : IconButton
             {
                 var selectAllTreeItem = new DataGridFilterTreeViewItem();
                 LanguageResourceBinder.CreateBinding(selectAllTreeItem, DataGridFilterTreeViewItem.HeaderProperty,
-                    DataGridLangResourceKey.SelectAllFilterItems);
+                    DataGridLangResourceKind.SelectAllFilterItems);
               
                 foreach (var treeItem in treeItems)
                 {

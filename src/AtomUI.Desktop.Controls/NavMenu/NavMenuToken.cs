@@ -1,4 +1,5 @@
-﻿using AtomUI.Media;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -461,4 +462,6 @@ internal class NavMenuToken : AbstractControlDesignToken
         InlineItemIndentUnit       = ItemHeight / 2;
         VerticalMenuContentPadding = SharedToken.PaddingXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(NavMenuTokenKind);
 }
