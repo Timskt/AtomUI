@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
@@ -63,4 +64,6 @@ internal class SplitterToken : AbstractControlDesignToken
         HandleLineThickness            = SplitBarSize;
         HandleIconSize                 = SharedToken.FontSizeSM;
     }
+    
+    protected override Type GetTokenKindType() => typeof(SplitterTokenKind);
 }

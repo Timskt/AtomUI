@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -31,4 +32,6 @@ internal class ArrowDecoratedBoxToken : AbstractControlDesignToken
         ArrowSize = SharedToken.SizePopupArrow / 1.3;
         Padding   = SharedToken.PaddingXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ArrowDecoratedBoxTokenKind);
 }

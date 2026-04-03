@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -102,4 +103,6 @@ internal class CascaderToken : AbstractControlDesignToken
         FilterHighlightColor     = SharedToken.ColorError;
         ItemHeaderSpacing        = SharedToken.SpacingXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CascaderTokenKind);
 }

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -129,4 +130,6 @@ internal class SkeletonToken : AbstractControlDesignToken
         ImageContainerSize    = imageSizeBase * 2;
         ImageContainerMaxSize = imageSizeBase * 4;
     }
+    
+    protected override Type GetTokenKindType() => typeof(SkeletonTokenKind);
 }

@@ -1,10 +1,8 @@
 using System.Diagnostics;
-using System.Reflection;
 using AtomUI.Theme.Styling;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.LogicalTree;
 using Avalonia.Metadata;
 using Avalonia.Styling;
 
@@ -201,10 +199,8 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
         var controlTokenConfig = new Dictionary<string, ControlTokenConfigInfo>();
         foreach (var controlTokenInfoSetter in ControlTokenInfoSetters)
         {
-            var key = AtomUITheme.GenerateTokenQualifiedKey(controlTokenInfoSetter.TokenId,
-                controlTokenInfoSetter.Catalog);
+            var key        = controlTokenInfoSetter.TokenId;
             var configInfo = new ControlTokenConfigInfo();
-            configInfo.Catalog         = controlTokenInfoSetter.Catalog;
             configInfo.TokenId         = controlTokenInfoSetter.TokenId;
             configInfo.EnableAlgorithm = controlTokenInfoSetter.EnableAlgorithm;
             foreach (var setter in controlTokenInfoSetter.Setters)
@@ -224,11 +220,9 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
 
         foreach (var entry in controlTokenConfig)
         {
-            var tokenId           = entry.Key;
-            var catalog           = entry.Value.Catalog;
-            var qualifiedTokenKey = AtomUITheme.GenerateTokenQualifiedKey(tokenId, catalog);
-            var controlTokenInfo  = entry.Value;
-            if (!ControlTokens.ContainsKey(qualifiedTokenKey))
+            var tokenId          = entry.Key;
+            var controlTokenInfo = entry.Value;
+            if (!ControlTokens.ContainsKey(tokenId))
             {
                 continue;
             }
@@ -272,7 +266,7 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
                 copiedSharedToken.LoadConfig(controlTokenConfigMap[DesignTokenKind.Alias]);
             }
 
-            var controlToken = (ControlTokens[qualifiedTokenKey] as AbstractControlDesignToken)!;
+            var controlToken = (ControlTokens[tokenId] as AbstractControlDesignToken)!;
             controlToken.AssignSharedToken(copiedSharedToken);
             controlToken.SetHasCustomTokenConfig(true);
             controlToken.SetCustomTokens(controlTokenInfo.Tokens.Keys.ToList());
@@ -282,12 +276,7 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
         {
             var controlToken = (token as AbstractControlDesignToken)!;
             controlToken.CalculateTokenValues(IsDarkMode);
-            var controlTokenType = controlToken.GetType();
-            var tokenAttr        = controlTokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-            var qualifiedTokenKey =
-                AtomUITheme.GenerateTokenQualifiedKey(controlToken.Id, tokenAttr?.ResourceCatalog);
-
-            if (controlTokenConfig.TryGetValue(qualifiedTokenKey, out var tokenConfigInfo))
+            if (controlTokenConfig.TryGetValue(controlToken.Id, out var tokenConfigInfo))
             {
                 controlToken.LoadConfig(tokenConfigInfo.Tokens);
             }
@@ -312,18 +301,14 @@ public class ThemeConfigProvider : Control, IThemeConfigProvider
             var obj = Activator.CreateInstance(tokenType);
             if (obj is AbstractControlDesignToken controlToken)
             {
-                var attr = tokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-                Debug.Assert(attr != null);
-                var qualifiedKey = AtomUITheme.GenerateTokenQualifiedKey(controlToken.Id, attr.ResourceCatalog);
-                _controlTokens.Add(qualifiedKey, controlToken);
+                _controlTokens.Add(controlToken.Id, controlToken);
             }
         }
     }
 
-    public IControlDesignToken? GetControlToken(string tokenId, string? catalog = null)
+    public IControlDesignToken? GetControlToken(string tokenId)
     {
-        var qualifiedKey = AtomUITheme.GenerateTokenQualifiedKey(tokenId, catalog);
-        return ControlTokens.GetValueOrDefault(qualifiedKey);
+        return ControlTokens.GetValueOrDefault(tokenId);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

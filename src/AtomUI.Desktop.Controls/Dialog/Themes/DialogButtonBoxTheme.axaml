@@ -34,33 +34,33 @@
             <Setter Property="HorizontalSpacing" Value="{atom:DialogTokenResource ButtonGroupSpacing}" />
         </Style>
 
-        <Setter Property="OkButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Ok}}" />
-        <Setter Property="OpenButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Open}}" />
-        <Setter Property="SaveButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Save}}" />
+        <Setter Property="OkButtonText" Value="{atom:DialogLangResource Ok}" />
+        <Setter Property="OpenButtonText" Value="{atom:DialogLangResource Open}" />
+        <Setter Property="SaveButtonText" Value="{atom:DialogLangResource Save}" />
         <Setter Property="CancelButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Cancel}}" />
-        <Setter Property="CloseButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Close}}" />
+                Value="{atom:DialogLangResource Cancel}" />
+        <Setter Property="CloseButtonText" Value="{atom:DialogLangResource Close}" />
         <Setter Property="DiscardButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Discard}}" />
-        <Setter Property="ApplyButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Apply}}" />
-        <Setter Property="ResetButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Reset}}" />
+                Value="{atom:DialogLangResource Discard}" />
+        <Setter Property="ApplyButtonText" Value="{atom:DialogLangResource Apply}" />
+        <Setter Property="ResetButtonText" Value="{atom:DialogLangResource Reset}" />
         <Setter Property="ReloadButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Reload}}" />
+                Value="{atom:DialogLangResource Reload}" />
         <Setter Property="RestoreDefaultsButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.RestoreDefaults}}" />
-        <Setter Property="HelpButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Help}}" />
+                Value="{atom:DialogLangResource RestoreDefaults}" />
+        <Setter Property="HelpButtonText" Value="{atom:DialogLangResource Help}" />
         <Setter Property="SaveAllButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.SaveAll}}" />
-        <Setter Property="YesButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Yes}}" />
+                Value="{atom:DialogLangResource SaveAll}" />
+        <Setter Property="YesButtonText" Value="{atom:DialogLangResource Yes}" />
         <Setter Property="YesToAllButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.YesToAll}}" />
-        <Setter Property="NoButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.No}}" />
+                Value="{atom:DialogLangResource YesToAll}" />
+        <Setter Property="NoButtonText" Value="{atom:DialogLangResource No}" />
         <Setter Property="NoToAllButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.NoToAll}}" />
-        <Setter Property="AbortButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Abort}}" />
-        <Setter Property="RetryButtonText" Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Retry}}" />
+                Value="{atom:DialogLangResource NoToAll}" />
+        <Setter Property="AbortButtonText" Value="{atom:DialogLangResource Abort}" />
+        <Setter Property="RetryButtonText" Value="{atom:DialogLangResource Retry}" />
         <Setter Property="IgnoreButtonText"
-                Value="{DynamicResource {x:Static atom:DialogLangResourceKey.Ignore}}" />
+                Value="{atom:DialogLangResource Ignore}" />
 
     </ControlTheme>
 </ResourceDictionary>

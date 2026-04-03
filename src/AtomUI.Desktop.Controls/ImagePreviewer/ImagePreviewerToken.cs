@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -119,4 +120,6 @@ internal class ImagePreviewerToken : AbstractControlDesignToken
         FloatToolbarPadding          = new Thickness(SharedToken.UniformlyPaddingLG / 2, 0);
         FloatToolbarIndicatorPadding = new Thickness(SharedToken.UniformlyPaddingXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ImagePreviewerTokenKind);
 }

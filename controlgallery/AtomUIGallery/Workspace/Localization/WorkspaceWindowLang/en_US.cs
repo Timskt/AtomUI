@@ -1,4 +1,5 @@
 using AtomUI.Theme.Language;
+using AtomUIGallery.Localization;
 using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.WorkspaceWindowLang;
@@ -22,4 +23,6 @@ internal class en_US : LanguageProvider
     public const string MenuItemCompactMode = "Compact Mode";
     public const string MenuItemEnableMotion = "Enable Motion";
     public const string MenuItemEnableWaveSpirit = "Enable WaveSpirit";
+    
+    protected override Type GetResourceKindType() => typeof(WorkspaceWindowLangResourceKind);
 }

@@ -7,7 +7,7 @@ public interface IThemeConfigProvider
 {
     DesignToken SharedToken { get; }
     Dictionary<string, IControlDesignToken> ControlTokens { get; } 
-    IControlDesignToken? GetControlToken(string tokenId, string? catalog = null);
+    IControlDesignToken? GetControlToken(string tokenId);
     List<string> Algorithms { get; }
     bool IsDarkMode { get; }
     ThemeVariant ThemeVariant { get; }

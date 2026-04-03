@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -81,4 +82,6 @@ internal class ScrollViewerToken : AbstractControlDesignToken
         ScrollBarContentHPadding = new Thickness(SharedToken.UniformlyPaddingXXS, 0d);
         ScrollBarContentVPadding = new Thickness(0d, SharedToken.UniformlyPaddingXXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ScrollViewerTokenKind);
 }

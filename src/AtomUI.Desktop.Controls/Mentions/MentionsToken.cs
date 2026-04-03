@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -38,4 +39,6 @@ internal class MentionsToken : AbstractControlDesignToken
         PopupContentPadding = new Thickness(SharedToken.UniformlyPaddingXXS / 2);
         MinPopupWidth       = 120;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MentionsTokenKind);
 }

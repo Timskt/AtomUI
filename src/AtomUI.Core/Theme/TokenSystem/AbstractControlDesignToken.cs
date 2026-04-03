@@ -110,10 +110,7 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken,
         }
     }
 
-    protected virtual Type? GetTokenKindType()
-    {
-        return null;
-    }
+    protected abstract Type GetTokenKindType();
 
     /// <summary>
     /// 一般 control token 尽量不继承, 先看看

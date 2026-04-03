@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -145,4 +146,6 @@ internal class AddOnDecoratedBoxToken : AbstractControlDesignToken
         LeftInnerAddOnMargin  = new Thickness(0, 0, SharedToken.UniformlyMarginXXS, 0);
         RightInnerAddOnMargin = new Thickness(SharedToken.UniformlyMarginXXS, 0, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(AddOnDecoratedBoxTokenKind);
 }

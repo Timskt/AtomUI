@@ -3,25 +3,19 @@ using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class DatePickerLangResourceKey
-    {
-        public static readonly LanguageResourceKey Now = new LanguageResourceKey("DatePicker.Now", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Today = new LanguageResourceKey("DatePicker.Today", "AtomUI.Lang");
-    }
-
     public enum DatePickerLangResourceKind
     {
         Now,
         Today
     }
 
-    public class DatePickerLangResourceKeyExtension : LanguageResourceExtension<DatePickerLangResourceKind>
+    public class DatePickerLangResourceExtension : LanguageResourceExtension<DatePickerLangResourceKind>
     {
-        public DatePickerLangResourceKeyExtension()
+        public DatePickerLangResourceExtension()
         {
         }
 
-        public DatePickerLangResourceKeyExtension(DatePickerLangResourceKind kind) : base(kind)
+        public DatePickerLangResourceExtension(DatePickerLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -29,29 +23,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class DialogLangResourceKey
-    {
-        public static readonly LanguageResourceKey Abort = new LanguageResourceKey("Dialog.Abort", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Apply = new LanguageResourceKey("Dialog.Apply", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Cancel = new LanguageResourceKey("Dialog.Cancel", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Close = new LanguageResourceKey("Dialog.Close", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Discard = new LanguageResourceKey("Dialog.Discard", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Help = new LanguageResourceKey("Dialog.Help", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Ignore = new LanguageResourceKey("Dialog.Ignore", "AtomUI.Lang");
-        public static readonly LanguageResourceKey No = new LanguageResourceKey("Dialog.No", "AtomUI.Lang");
-        public static readonly LanguageResourceKey NoToAll = new LanguageResourceKey("Dialog.NoToAll", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Ok = new LanguageResourceKey("Dialog.Ok", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Open = new LanguageResourceKey("Dialog.Open", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Reload = new LanguageResourceKey("Dialog.Reload", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Reset = new LanguageResourceKey("Dialog.Reset", "AtomUI.Lang");
-        public static readonly LanguageResourceKey RestoreDefaults = new LanguageResourceKey("Dialog.RestoreDefaults", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Retry = new LanguageResourceKey("Dialog.Retry", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Save = new LanguageResourceKey("Dialog.Save", "AtomUI.Lang");
-        public static readonly LanguageResourceKey SaveAll = new LanguageResourceKey("Dialog.SaveAll", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Yes = new LanguageResourceKey("Dialog.Yes", "AtomUI.Lang");
-        public static readonly LanguageResourceKey YesToAll = new LanguageResourceKey("Dialog.YesToAll", "AtomUI.Lang");
-    }
-
     public enum DialogLangResourceKind
     {
         Abort,
@@ -75,13 +46,13 @@ namespace AtomUI.Desktop.Controls.Localization
         YesToAll
     }
 
-    public class DialogLangResourceKeyExtension : LanguageResourceExtension<DialogLangResourceKind>
+    public class DialogLangResourceExtension : LanguageResourceExtension<DialogLangResourceKind>
     {
-        public DialogLangResourceKeyExtension()
+        public DialogLangResourceExtension()
         {
         }
 
-        public DialogLangResourceKeyExtension(DialogLangResourceKind kind) : base(kind)
+        public DialogLangResourceExtension(DialogLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -89,23 +60,18 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class ImagePreviewerLangResourceKey
-    {
-        public static readonly LanguageResourceKey Preview = new LanguageResourceKey("ImagePreviewer.Preview", "AtomUI.Lang");
-    }
-
     public enum ImagePreviewerLangResourceKind
     {
         Preview
     }
 
-    public class ImagePreviewerLangResourceKeyExtension : LanguageResourceExtension<ImagePreviewerLangResourceKind>
+    public class ImagePreviewerLangResourceExtension : LanguageResourceExtension<ImagePreviewerLangResourceKind>
     {
-        public ImagePreviewerLangResourceKeyExtension()
+        public ImagePreviewerLangResourceExtension()
         {
         }
 
-        public ImagePreviewerLangResourceKeyExtension(ImagePreviewerLangResourceKind kind) : base(kind)
+        public ImagePreviewerLangResourceExtension(ImagePreviewerLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -113,13 +79,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class PaginationLangResourceKey
-    {
-        public static readonly LanguageResourceKey JumpToText = new LanguageResourceKey("Pagination.JumpToText", "AtomUI.Lang");
-        public static readonly LanguageResourceKey PageText = new LanguageResourceKey("Pagination.PageText", "AtomUI.Lang");
-        public static readonly LanguageResourceKey TotalInfoFormat = new LanguageResourceKey("Pagination.TotalInfoFormat", "AtomUI.Lang");
-    }
-
     public enum PaginationLangResourceKind
     {
         JumpToText,
@@ -127,13 +86,13 @@ namespace AtomUI.Desktop.Controls.Localization
         TotalInfoFormat
     }
 
-    public class PaginationLangResourceKeyExtension : LanguageResourceExtension<PaginationLangResourceKind>
+    public class PaginationLangResourceExtension : LanguageResourceExtension<PaginationLangResourceKind>
     {
-        public PaginationLangResourceKeyExtension()
+        public PaginationLangResourceExtension()
         {
         }
 
-        public PaginationLangResourceKeyExtension(PaginationLangResourceKind kind) : base(kind)
+        public PaginationLangResourceExtension(PaginationLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -141,13 +100,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class QRCodeLangResourceKey
-    {
-        public static readonly LanguageResourceKey Expired = new LanguageResourceKey("QRCode.Expired", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Refresh = new LanguageResourceKey("QRCode.Refresh", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Scanned = new LanguageResourceKey("QRCode.Scanned", "AtomUI.Lang");
-    }
-
     public enum QRCodeLangResourceKind
     {
         Expired,
@@ -155,13 +107,13 @@ namespace AtomUI.Desktop.Controls.Localization
         Scanned
     }
 
-    public class QRCodeLangResourceKeyExtension : LanguageResourceExtension<QRCodeLangResourceKind>
+    public class QRCodeLangResourceExtension : LanguageResourceExtension<QRCodeLangResourceKind>
     {
-        public QRCodeLangResourceKeyExtension()
+        public QRCodeLangResourceExtension()
         {
         }
 
-        public QRCodeLangResourceKeyExtension(QRCodeLangResourceKind kind) : base(kind)
+        public QRCodeLangResourceExtension(QRCodeLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -169,13 +121,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class TimePickerLangResourceKey
-    {
-        public static readonly LanguageResourceKey AMText = new LanguageResourceKey("TimePicker.AMText", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Now = new LanguageResourceKey("TimePicker.Now", "AtomUI.Lang");
-        public static readonly LanguageResourceKey PMText = new LanguageResourceKey("TimePicker.PMText", "AtomUI.Lang");
-    }
-
     public enum TimePickerLangResourceKind
     {
         AMText,
@@ -183,13 +128,13 @@ namespace AtomUI.Desktop.Controls.Localization
         PMText
     }
 
-    public class TimePickerLangResourceKeyExtension : LanguageResourceExtension<TimePickerLangResourceKind>
+    public class TimePickerLangResourceExtension : LanguageResourceExtension<TimePickerLangResourceKind>
     {
-        public TimePickerLangResourceKeyExtension()
+        public TimePickerLangResourceExtension()
         {
         }
 
-        public TimePickerLangResourceKeyExtension(TimePickerLangResourceKind kind) : base(kind)
+        public TimePickerLangResourceExtension(TimePickerLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -197,13 +142,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class TourLangResourceKey
-    {
-        public static readonly LanguageResourceKey Finish = new LanguageResourceKey("Tour.Finish", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Next = new LanguageResourceKey("Tour.Next", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Previous = new LanguageResourceKey("Tour.Previous", "AtomUI.Lang");
-    }
-
     public enum TourLangResourceKind
     {
         Finish,
@@ -211,13 +149,13 @@ namespace AtomUI.Desktop.Controls.Localization
         Previous
     }
 
-    public class TourLangResourceKeyExtension : LanguageResourceExtension<TourLangResourceKind>
+    public class TourLangResourceExtension : LanguageResourceExtension<TourLangResourceKind>
     {
-        public TourLangResourceKeyExtension()
+        public TourLangResourceExtension()
         {
         }
 
-        public TourLangResourceKeyExtension(TourLangResourceKind kind) : base(kind)
+        public TourLangResourceExtension(TourLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -225,18 +163,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class TransferLangResourceKey
-    {
-        public static readonly LanguageResourceKey DeSelectAll = new LanguageResourceKey("Transfer.DeSelectAll", "AtomUI.Lang");
-        public static readonly LanguageResourceKey InvertSelectCurrentPage = new LanguageResourceKey("Transfer.InvertSelectCurrentPage", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Item = new LanguageResourceKey("Transfer.Item", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Items = new LanguageResourceKey("Transfer.Items", "AtomUI.Lang");
-        public static readonly LanguageResourceKey RemoveAll = new LanguageResourceKey("Transfer.RemoveAll", "AtomUI.Lang");
-        public static readonly LanguageResourceKey RemoveCurrentPage = new LanguageResourceKey("Transfer.RemoveCurrentPage", "AtomUI.Lang");
-        public static readonly LanguageResourceKey SelectAll = new LanguageResourceKey("Transfer.SelectAll", "AtomUI.Lang");
-        public static readonly LanguageResourceKey SelectCurrentPage = new LanguageResourceKey("Transfer.SelectCurrentPage", "AtomUI.Lang");
-    }
-
     public enum TransferLangResourceKind
     {
         DeSelectAll,
@@ -249,13 +175,13 @@ namespace AtomUI.Desktop.Controls.Localization
         SelectCurrentPage
     }
 
-    public class TransferLangResourceKeyExtension : LanguageResourceExtension<TransferLangResourceKind>
+    public class TransferLangResourceExtension : LanguageResourceExtension<TransferLangResourceKind>
     {
-        public TransferLangResourceKeyExtension()
+        public TransferLangResourceExtension()
         {
         }
 
-        public TransferLangResourceKeyExtension(TransferLangResourceKind kind) : base(kind)
+        public TransferLangResourceExtension(TransferLangResourceKind kind) : base(kind)
         {
         }
     }
@@ -263,13 +189,6 @@ namespace AtomUI.Desktop.Controls.Localization
 
 namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class UploadLangResourceKey
-    {
-        public static readonly LanguageResourceKey DragUploadHead = new LanguageResourceKey("Upload.DragUploadHead", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Pending = new LanguageResourceKey("Upload.Pending", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Uploading = new LanguageResourceKey("Upload.Uploading", "AtomUI.Lang");
-    }
-
     public enum UploadLangResourceKind
     {
         DragUploadHead,
@@ -277,13 +196,13 @@ namespace AtomUI.Desktop.Controls.Localization
         Uploading
     }
 
-    public class UploadLangResourceKeyExtension : LanguageResourceExtension<UploadLangResourceKind>
+    public class UploadLangResourceExtension : LanguageResourceExtension<UploadLangResourceKind>
     {
-        public UploadLangResourceKeyExtension()
+        public UploadLangResourceExtension()
         {
         }
 
-        public UploadLangResourceKeyExtension(UploadLangResourceKind kind) : base(kind)
+        public UploadLangResourceExtension(UploadLangResourceKind kind) : base(kind)
         {
         }
     }

@@ -8,6 +8,6 @@
         </ControlTheme.BasedOn>
         
         <Setter Property="ButtonType" Value="Default"/>
-        <Setter Property="Content" Value="{DynamicResource {x:Static atom:CommonLangResourceKey.Reset}}"/>
+        <Setter Property="Content" Value="{atom:CommonLangResource Reset}"/>
     </ControlTheme>
 </ResourceDictionary>

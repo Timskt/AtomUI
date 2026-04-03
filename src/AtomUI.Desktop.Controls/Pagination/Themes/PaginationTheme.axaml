@@ -29,8 +29,8 @@
         </Setter>
         
         <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}"/>
-        <Setter Property="PageText" Value="{DynamicResource {x:Static atom:PaginationLangResourceKey.PageText}}"/>
-        <Setter Property="TotalInfoTemplate" Value="{DynamicResource {x:Static atom:PaginationLangResourceKey.TotalInfoFormat}}"/>
+        <Setter Property="PageText" Value="{atom:PaginationLangResource PageText}"/>
+        <Setter Property="TotalInfoTemplate" Value="{atom:PaginationLangResource TotalInfoFormat}"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Style Selector="^[Align=Start]">
             <Setter Property="HorizontalAlignment" Value="Left"/>

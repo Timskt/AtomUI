@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -95,4 +96,6 @@ internal class TimelineToken : AbstractControlDesignToken
         IndicatorSize            = SharedToken.SizeMS;
         IndicatorDotSize         = 8;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TimelineTokenKind);
 }

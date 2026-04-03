@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
@@ -71,4 +72,6 @@ internal class FloatButtonToken : AbstractControlDesignToken
         SquareBadgeOffset = SharedToken.BorderRadius.BottomLeft * offsetR;
         CircleBadgeOffset = SharedToken.ControlHeight / 2 * offsetR;
     }
+    
+    protected override Type GetTokenKindType() => typeof(FloatButtonTokenKind);
 }

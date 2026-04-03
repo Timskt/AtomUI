@@ -8,17 +8,15 @@ public class ControlTokenInfoSetter
     
     [Content]
     public List<TokenSetter> Setters { get; set; } = new ();
-
-    public string? Catalog { get; set; }
+    
     public string TokenId { get; set; } = string.Empty;
 
     public ControlTokenInfoSetter()
     {
     }
 
-    public ControlTokenInfoSetter(string tokenId, string? catalog)
+    public ControlTokenInfoSetter(string tokenId)
     {
-        Catalog = catalog;
         TokenId = tokenId;
     }
 }

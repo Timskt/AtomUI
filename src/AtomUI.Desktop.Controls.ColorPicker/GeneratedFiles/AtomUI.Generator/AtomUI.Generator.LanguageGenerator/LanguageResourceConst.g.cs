@@ -1,25 +1,20 @@
 ﻿using AtomUI.Theme;
 using AtomUI.Theme.Language;
 
-namespace AtomUI.Desktop.Controls.ColorPickerLang
+namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class ColorPickerLangResourceKey
-    {
-        public static readonly LanguageResourceKey EmptyColorText = new LanguageResourceKey("ColorPicker.EmptyColorText", "AtomUI.Lang");
-    }
-
     public enum ColorPickerLangResourceKind
     {
         EmptyColorText
     }
 
-    public class ColorPickerLangResourceKeyExtension : LanguageResourceExtension<ColorPickerLangResourceKind>
+    public class ColorPickerLangResourceExtension : LanguageResourceExtension<ColorPickerLangResourceKind>
     {
-        public ColorPickerLangResourceKeyExtension()
+        public ColorPickerLangResourceExtension()
         {
         }
 
-        public ColorPickerLangResourceKeyExtension(ColorPickerLangResourceKind kind) : base(kind)
+        public ColorPickerLangResourceExtension(ColorPickerLangResourceKind kind) : base(kind)
         {
         }
     }

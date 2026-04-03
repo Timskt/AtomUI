@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
 using AtomUI.Theme.TokenSystem;
@@ -62,4 +63,6 @@ internal class RateToken : AbstractControlDesignToken
         StarHoverScale = 1.2;
         StarBg         = SharedToken.ColorFillContent;
     }
+    
+    protected override Type GetTokenKindType() => typeof(RateTokenKind);
 }

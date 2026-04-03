@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using Avalonia.Controls;
+using Avalonia.Logging;
 
 namespace AtomUI.Theme.Language;
 
@@ -28,46 +29,36 @@ public abstract class LanguageProvider : ILanguageProvider
 
     public void BuildResourceDictionary(IResourceDictionary dictionary)
     {
-        var type = GetType();
+        var type             = GetType();
         var resourceKindType = GetResourceKindType();
-        {
-            var languageFields = type.GetFields(BindingFlags.Public |
-                                                BindingFlags.Static |
-                                                BindingFlags.FlattenHierarchy);
-            foreach (var field in languageFields)
-            {
-                var languageKey  = $"{LangId}.{field.Name}";
-                var languageText = field.GetValue(this);
-                dictionary[new LanguageResourceKey(languageKey, ResourceCatalog)] = languageText;
-            }
-        }
+        try
         {
             var languageFields = type.GetFields(BindingFlags.Public |
                                                 BindingFlags.Static |
                                                 BindingFlags.FlattenHierarchy)
                                      .ToDictionary(x => x.Name);
-            if (resourceKindType != null)
+            foreach (var value in Enum.GetValues(resourceKindType))
             {
-                foreach (var value in Enum.GetValues(resourceKindType))
+                var languageKey = Enum.GetName(resourceKindType, value);
+                Debug.Assert(languageKey != null);
+                if (languageFields.TryGetValue(languageKey, out var field))
                 {
-                    var languageKey = Enum.GetName(resourceKindType, value);
-                    Debug.Assert(languageKey != null);
-                    if (languageFields.TryGetValue(languageKey, out var field))
-                    {
-                        var languageText = field.GetValue(this);
-                        dictionary[value] = languageText;
-                    }
-                    else
-                    {
-                        throw new Exception($"Language item: {languageKey} does not exist in {type.FullName}");
-                    }
-                } 
+                    var languageText = field.GetValue(this);
+                    dictionary[value] = languageText; 
+                }
+                else
+                {
+                    throw new Exception($"Language item: {languageKey} does not exist in {type.FullName}");
+                }
             }
         }
+        catch (Exception)
+        {
+            var logger = Logger.TryGet(LogEventLevel.Error, AtomUILogArea.Theme);
+            logger?.Log(this, $"Build Resource for Language {resourceKindType.FullName} error.");
+            throw;
+        }
     }
-    
-    protected virtual Type? GetResourceKindType()
-    {
-        return null;
-    }
+
+    protected abstract Type GetResourceKindType();
 }

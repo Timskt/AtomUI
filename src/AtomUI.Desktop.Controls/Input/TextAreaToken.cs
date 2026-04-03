@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -68,4 +69,6 @@ internal class TextAreaToken : AbstractControlDesignToken
         RightAddOnPaddingSM = new Thickness(0, 0, SharedToken.ControlPaddingHorizontalSM - lineWidth, 0);
         RightAddOnPaddingLG = new Thickness(0, 0, SharedToken.ControlPaddingHorizontal - lineWidth, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(TextAreaTokenKind);
 }

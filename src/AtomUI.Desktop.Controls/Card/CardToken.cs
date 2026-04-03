@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
@@ -245,4 +246,6 @@ internal class CardToken : AbstractControlDesignToken
         CardPaddingBase     = SharedToken.PaddingLG;
         CardActionsIconSize = SharedToken.FontSize;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CardTokenKind);
 }

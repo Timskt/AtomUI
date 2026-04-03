@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
 using AtomUI.Theme.TokenSystem;
@@ -155,4 +156,6 @@ internal class OptionButtonToken : AbstractControlDesignToken
         PaddingSM = new Thickness(8 - SharedToken.LineWidth,
             Math.Max((controlHeightLG - controlHeightLG * controlHeightLG) / 2 - lineWidth, 0));
     }
+    
+    protected override Type GetTokenKindType() => typeof(OptionButtonTokenKind);
 }

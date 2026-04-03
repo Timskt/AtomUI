@@ -1,6 +1,7 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
-namespace AtomUI.Desktop.Controls.Transfer;
+namespace AtomUI.Desktop.Controls.TransferLang;
 
 [LanguageProvider(LanguageCode.en_US, TransferToken.ID)]
 internal class en_US : LanguageProvider
@@ -13,4 +14,6 @@ internal class en_US : LanguageProvider
     public const string RemoveAll = "remove all data";
     public const string InvertSelectCurrentPage = "invert current page";
     public const string SelectCurrentPage = "select current page";
+
+    protected override Type GetResourceKindType() => typeof(TransferLangResourceKind);
 }

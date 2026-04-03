@@ -6,9 +6,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using AtomUI.Desktop.Controls.Data;
-using AtomUI.Desktop.Controls.DataGridLocalization;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Data;
+using AtomUI.Desktop.Controls.Localization;
 using Avalonia;
 using Avalonia.Input;
 
@@ -129,17 +129,17 @@ internal partial class DataGridColumnHeader
         if (nextDirection == null)
         {
             _showSorterTooltipDisposable =
-                LanguageResourceBinder.CreateBinding(this, ToolTip.TipProperty, DataGridLangResourceKey.CancelTooltip);
+                LanguageResourceBinder.CreateBinding(this, ToolTip.TipProperty, DataGridLangResourceKind.CancelTooltip);
         }
         else if (nextDirection == ListSortDirection.Ascending)
         {
             _showSorterTooltipDisposable =
-                LanguageResourceBinder.CreateBinding(this, ToolTip.TipProperty, DataGridLangResourceKey.AscendTooltip);
+                LanguageResourceBinder.CreateBinding(this, ToolTip.TipProperty, DataGridLangResourceKind.AscendTooltip);
         }
         else if (nextDirection == ListSortDirection.Descending)
         {
             _showSorterTooltipDisposable =
-                LanguageResourceBinder.CreateBinding(this, ToolTip.TipProperty, DataGridLangResourceKey.DescendTooltip);
+                LanguageResourceBinder.CreateBinding(this, ToolTip.TipProperty, DataGridLangResourceKind.DescendTooltip);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -94,4 +95,6 @@ internal class TreeViewToken : AbstractControlDesignToken
         FilterHighlightColor   = SharedToken.ColorError;
         DragIndicatorLineWidth = SharedToken.LineWidthFocus;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TreeViewTokenKind);
 }

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
@@ -30,4 +31,6 @@ internal class MarqueeLabelToken : AbstractControlDesignToken
         CycleSpace   = 200;
         DefaultSpeed = 150;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MarqueeLabelTokenKind);
 }

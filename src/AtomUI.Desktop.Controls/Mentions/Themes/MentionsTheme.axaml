@@ -45,7 +45,7 @@
                                 <atom:Spin Name="LoadingIndicator" SizeType="Middle" 
                                            IsShowTip="True" 
                                            IsSpinning="True"
-                                           Tip="{DynamicResource {x:Static atom:CommonLangResourceKey.Loading}}"
+                                           Tip="{atom:CommonLangResource Loading}"
                                            HorizontalAlignment="Center"
                                            IsVisible="{TemplateBinding IsLoading}"/>
                                 <atom:CandidateList

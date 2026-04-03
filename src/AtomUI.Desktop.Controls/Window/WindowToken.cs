@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -39,4 +40,6 @@ internal class WindowToken : AbstractControlDesignToken
         CornerRadius      = new CornerRadius(12);
         SystemBarColor    = new SolidColorBrush(SharedToken.ColorBgContainer);
     }
+    
+    protected override Type GetTokenKindType() => typeof(WindowTokenKind);
 }

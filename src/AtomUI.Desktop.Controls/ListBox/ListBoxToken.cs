@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -115,4 +116,6 @@ internal class ListBoxToken : AbstractControlDesignToken
 
         SelectedIndicatorMargin = new Thickness(SharedToken.UniformlyMarginXXS, 0, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ListBoxTokenKind);
 }

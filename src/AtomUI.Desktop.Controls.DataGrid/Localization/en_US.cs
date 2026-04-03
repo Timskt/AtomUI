@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.DataGridLocalization;
 
@@ -12,4 +13,6 @@ internal class en_US : LanguageProvider
     public const string DeleteConfirmText = "Sure to delete?";
     public const string CancelConfirmText = "Sure to cancel?";
     public const string Operating = "Operation in progress, please wait.";
+    
+    protected override Type GetResourceKindType() => typeof(DataGridLangResourceKind);
 }

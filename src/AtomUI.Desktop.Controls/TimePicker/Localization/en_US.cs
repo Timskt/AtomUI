@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.TimePickerLang;
 
@@ -8,4 +9,6 @@ internal class en_US : LanguageProvider
     public const string AMText = "AM";
     public const string PMText = "PM";
     public const string Now = "Now";
+    
+    protected override Type GetResourceKindType() => typeof(TimePickerLangResourceKind);
 }

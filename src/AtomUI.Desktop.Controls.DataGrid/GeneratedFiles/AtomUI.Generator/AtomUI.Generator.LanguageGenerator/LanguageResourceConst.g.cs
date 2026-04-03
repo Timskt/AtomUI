@@ -1,19 +1,8 @@
 ﻿using AtomUI.Theme;
 using AtomUI.Theme.Language;
 
-namespace AtomUI.Desktop.Controls.DataGridLocalization
+namespace AtomUI.Desktop.Controls.Localization
 {
-    internal static class DataGridLangResourceKey
-    {
-        public static readonly LanguageResourceKey AscendTooltip = new LanguageResourceKey("DataGrid.AscendTooltip", "AtomUI.Lang");
-        public static readonly LanguageResourceKey CancelConfirmText = new LanguageResourceKey("DataGrid.CancelConfirmText", "AtomUI.Lang");
-        public static readonly LanguageResourceKey CancelTooltip = new LanguageResourceKey("DataGrid.CancelTooltip", "AtomUI.Lang");
-        public static readonly LanguageResourceKey DeleteConfirmText = new LanguageResourceKey("DataGrid.DeleteConfirmText", "AtomUI.Lang");
-        public static readonly LanguageResourceKey DescendTooltip = new LanguageResourceKey("DataGrid.DescendTooltip", "AtomUI.Lang");
-        public static readonly LanguageResourceKey Operating = new LanguageResourceKey("DataGrid.Operating", "AtomUI.Lang");
-        public static readonly LanguageResourceKey SelectAllFilterItems = new LanguageResourceKey("DataGrid.SelectAllFilterItems", "AtomUI.Lang");
-    }
-
     public enum DataGridLangResourceKind
     {
         AscendTooltip,
@@ -25,13 +14,13 @@ namespace AtomUI.Desktop.Controls.DataGridLocalization
         SelectAllFilterItems
     }
 
-    public class DataGridLangResourceKeyExtension : LanguageResourceExtension<DataGridLangResourceKind>
+    public class DataGridLangResourceExtension : LanguageResourceExtension<DataGridLangResourceKind>
     {
-        public DataGridLangResourceKeyExtension()
+        public DataGridLangResourceExtension()
         {
         }
 
-        public DataGridLangResourceKeyExtension(DataGridLangResourceKind kind) : base(kind)
+        public DataGridLangResourceExtension(DataGridLangResourceKind kind) : base(kind)
         {
         }
     }

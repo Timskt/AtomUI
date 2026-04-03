@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
@@ -407,4 +408,6 @@ internal class ButtonToken : AbstractControlDesignToken
         
         GutterToFlyout = SharedToken.UniformlyMarginXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ButtonTokenKind);
 }

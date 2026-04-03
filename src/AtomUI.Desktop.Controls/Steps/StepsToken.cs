@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -243,4 +244,6 @@ internal class StepsToken : AbstractControlDesignToken
         ProgressFramePadding       = new Thickness(SharedToken.LineWidthBold * 2);
         ProgressFramePaddingSM     = new Thickness(SharedToken.LineWidthBold);
     }
+    
+    protected override Type GetTokenKindType() => typeof(StepsTokenKind);
 }

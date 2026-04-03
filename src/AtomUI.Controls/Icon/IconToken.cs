@@ -1,3 +1,4 @@
+using AtomUI.Controls.DesignTokens;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
@@ -48,4 +49,6 @@ internal class IconToken : AbstractControlDesignToken
         StrokeLineCap        = PenLineCap.Round;
         StrokeLineJoin       = PenLineJoin.Round;
     }
+    
+    protected override Type GetTokenKindType() => typeof(IconTokenKind);
 }

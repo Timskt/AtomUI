@@ -9,7 +9,7 @@
             <atom:RangeInfoPickerInputTheme TargetType="atom:RangeTimePicker" />
         </ControlTheme.BasedOn>
         
-        <Setter Property="AmText" Value="{DynamicResource {x:Static atom:TimePickerLangResourceKey.AMText}}" />
-        <Setter Property="PmText" Value="{DynamicResource {x:Static atom:TimePickerLangResourceKey.PMText}}" />
+        <Setter Property="AmText" Value="{atom:TimePickerLangResource AMText}" />
+        <Setter Property="PmText" Value="{atom:TimePickerLangResource PMText}" />
     </ControlTheme>
 </ResourceDictionary>

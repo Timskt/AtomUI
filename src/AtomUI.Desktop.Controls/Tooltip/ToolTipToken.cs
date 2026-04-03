@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -66,4 +67,6 @@ internal class ToolTipToken : AbstractControlDesignToken
         ToolTipShadows        = SharedToken.BoxShadowsSecondary;
         ToolTipMotionDuration = SharedToken.MotionDurationMid;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ToolTipTokenKind);
 }

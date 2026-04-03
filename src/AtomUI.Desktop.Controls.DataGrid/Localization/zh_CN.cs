@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.DataGridLocalization;
 
@@ -12,4 +13,5 @@ internal class zh_CN : LanguageProvider
     public const string DeleteConfirmText = "确认删除？";
     public const string CancelConfirmText = "确认取消？";
     public const string Operating = "正在操作中，请稍后";
+    protected override Type GetResourceKindType() => typeof(DataGridLangResourceKind);
 }

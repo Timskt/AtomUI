@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -77,4 +78,6 @@ internal class TransferToken : AbstractControlDesignToken
         PaginationMargin              = new Thickness(0, SharedToken.UniformlyMarginXXS);
         DataGridSelectionHeaderMargin = new Thickness(SharedToken.UniformlyPaddingXS * 2, 0, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(TransferTokenKind);
 }

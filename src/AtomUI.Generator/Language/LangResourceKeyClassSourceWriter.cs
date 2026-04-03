@@ -108,7 +108,6 @@ internal class LangResourceKeyClassSourceWriter
     private NamespaceDeclarationSyntax BuildLanguageResourceInfo(List<LanguageInfo> languages)
     {
         var targetNamespace = languages.First().TargetNamespace ?? languages.First().Namespace;
-        var catalog         = languages.First().ResourceCatalog;
         var languageId      = languages.First().LanguageId;
 
         var keys = new HashSet<string>();
@@ -118,29 +117,22 @@ internal class LangResourceKeyClassSourceWriter
         }
 
         var namespaceSyntax = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(targetNamespace));
-
-        var className = $"{languageId}LangResourceKey";
-        var classSyntax       = BuildClassSyntax(className);
         
         var enumName = $"{languageId}LangResourceKind";
         var controlEnumDecl = SyntaxFactory.EnumDeclaration(enumName)
                                            .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
         
-        var resourceKeyFields = new List<MemberDeclarationSyntax>();
         var resourceKindFields = new List<EnumMemberDeclarationSyntax>();
         // 排序，不然生成结果不稳定
         var sortedKeys = keys.ToList().OrderBy(key => key);
         foreach (var key in sortedKeys)
         {
-            resourceKeyFields.Add(BuildResourceKeyFieldSyntax(catalog, key, $"{languageId}.{key}"));
             resourceKindFields.Add(SyntaxFactory.EnumMemberDeclaration(key));
         }
         
-        var lanugageMarkupExtensionClass = GenerateLanguageResourceMarkupExtensionClass($"{languageId}LangResourceKeyExtension", enumName);
-
-        classSyntax     = classSyntax.AddMembers(resourceKeyFields.ToArray());
+        var lanugageMarkupExtensionClass = GenerateLanguageResourceMarkupExtensionClass($"{languageId}LangResourceExtension", enumName);
+        
         controlEnumDecl = controlEnumDecl.AddMembers(resourceKindFields.ToArray());
-        namespaceSyntax = namespaceSyntax.AddMembers(classSyntax);
         namespaceSyntax = namespaceSyntax.AddMembers(controlEnumDecl);
         namespaceSyntax = namespaceSyntax.AddMembers(lanugageMarkupExtensionClass);
         

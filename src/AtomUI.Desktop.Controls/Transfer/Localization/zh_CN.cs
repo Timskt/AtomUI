@@ -1,6 +1,7 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
-namespace AtomUI.Desktop.Controls.Transfer;
+namespace AtomUI.Desktop.Controls.TransferLang;
 
 [LanguageProvider(LanguageCode.zh_CN, TransferToken.ID)]
 internal class zh_CN : LanguageProvider
@@ -13,4 +14,6 @@ internal class zh_CN : LanguageProvider
     public const string RemoveAll = "删除所有";
     public const string InvertSelectCurrentPage = "反选当页";
     public const string SelectCurrentPage = "选择当页";
+    
+    protected override Type GetResourceKindType() => typeof(TransferLangResourceKind);
 }

@@ -102,25 +102,6 @@ public abstract class AbstractDesignToken : IDesignToken
         }
     }
 
-    protected string? GetTokenResourceCatalog()
-    {
-        var tokenType                   = GetType();
-        var globalDesignTokenAttributes = tokenType.GetCustomAttributes<GlobalDesignTokenAttribute>();
-        if (globalDesignTokenAttributes.Any())
-        {
-            return null;
-        }
-
-        var controlDesignTokenAttribute = tokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-        if (controlDesignTokenAttribute is not null)
-        {
-            return controlDesignTokenAttribute.ResourceCatalog;
-        }
-
-        throw new TokenResourceRegisterException(
-            $"The current Token: {tokenType.FullName} lacks the token type annotation");
-    }
-
     public virtual object? GetTokenValue(string name)
     {
         if (_tokenAccessCache.ContainsKey(name))

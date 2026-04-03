@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
@@ -67,4 +68,6 @@ internal class CarouselToken : AbstractControlDesignToken
         IndicatorGap         = SharedToken.UniformlyMarginXS;
         PaginationOffset     = 12;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CarouselTokenKind);
 }

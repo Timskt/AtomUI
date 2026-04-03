@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -71,4 +72,6 @@ internal class ResultToken : AbstractControlDesignToken
         HeaderMargin      = new Thickness(0, SharedToken.UniformlyMarginXS);
         FramePadding      = new Thickness(SharedToken.UniformlyPaddingLG * 2, SharedToken.UniformlyMarginXL);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ResultTokenKind);
 }

@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.Primitives.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -44,4 +45,6 @@ internal class IndicatorScrollViewerToken : AbstractControlDesignToken
         ScrollBarThickness = SharedToken.LineWidthBold;
         ThumbCornerRadius  = new CornerRadius(SharedToken.LineWidthBold / 2.0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(IndicatorScrollViewerTokenKind);
 }

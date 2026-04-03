@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -75,4 +76,6 @@ internal class BreadcrumbToken : AbstractControlDesignToken
         BreadcrumbItemContentPadding = new Thickness(SharedToken.UniformlyPaddingXXS, SharedToken.UniformlyPaddingXXS,
             SharedToken.UniformlyPaddingXXS, SharedToken.UniformlyPaddingXXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(BreadcrumbTokenKind);
 }

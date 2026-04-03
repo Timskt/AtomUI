@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
@@ -104,4 +105,6 @@ internal class SegmentedToken : AbstractControlDesignToken
         ItemMinHeight   = SharedToken.ControlHeight - TrackPadding.Top - TrackPadding.Bottom;
         ItemMinHeightSM = SharedToken.ControlHeightSM - TrackPadding.Top - TrackPadding.Bottom;
     }
+    
+    protected override Type GetTokenKindType() => typeof(SegmentedTokenKind);
 }

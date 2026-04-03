@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -88,4 +89,6 @@ internal class ComboBoxToken : ButtonSpinnerToken
         ItemPadding = new Thickness(SharedToken.UniformlyPaddingSM, 0);
         ItemMargin  = new Thickness(0, 0.5);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ComboBoxTokenKind);
 }

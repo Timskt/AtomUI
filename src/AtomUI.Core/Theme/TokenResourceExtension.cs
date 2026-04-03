@@ -1,14 +1,15 @@
-using System.Diagnostics;
-using Avalonia.Data;
-using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace AtomUI.Theme;
 
-public abstract class TokenResourceExtension<TTokenKind> : MarkupExtension
+public abstract class TokenResourceExtension<TTokenKind> : DynamicResourceExtension
     where TTokenKind : Enum
 {
-    public TTokenKind? Kind { get; set; }
+    public TTokenKind? Kind
+    {
+        get => (TTokenKind?)ResourceKey; 
+        set => ResourceKey = value; 
+    }
     
     public TokenResourceExtension()
     {
@@ -17,12 +18,6 @@ public abstract class TokenResourceExtension<TTokenKind> : MarkupExtension
     public TokenResourceExtension(TTokenKind kind)
     {
         Kind = kind;
-    }
-    
-    public override IBinding ProvideValue(IServiceProvider serviceProvider)
-    {
-        Debug.Assert(Kind != null);
-        return new DynamicResourceExtension(Kind);
     }
 }
 
