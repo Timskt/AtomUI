@@ -33,7 +33,7 @@
                             Spacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}">
                     <antdicons:EyeOutlined StrokeBrush="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}"/>
                     <TextBlock
-                        Text="{DynamicResource {x:Static imagepreviewlang:ImagePreviewerLangResourceKey.Preview}}" />
+                        Text="{DynamicResource {x:Static atom:ImagePreviewerLangResourceKey.Preview}}" />
                 </StackPanel>
             </DataTemplate>
         </Setter>

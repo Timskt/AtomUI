@@ -15,4 +15,6 @@ internal class en_US : LanguageProvider
     public const string NoData = "No data";
     public const string Loading = "Loading";
     public const string Optional = "(optional)";
+
+    protected override Type GetResourceKindType() => typeof(CommonLangResourceKind);
 }

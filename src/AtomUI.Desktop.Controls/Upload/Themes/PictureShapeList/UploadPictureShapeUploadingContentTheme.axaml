@@ -21,7 +21,7 @@
                             Margin="{TemplateBinding Padding}">
                         <Panel>
                             <TextBlock
-                                Text="{DynamicResource {x:Static uploadlang:UploadLangResourceKey.Uploading}}"
+                                Text="{DynamicResource {x:Static atom:UploadLangResourceKey.Uploading}}"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Top"
                                 Margin="0, 10, 0, 0"/>

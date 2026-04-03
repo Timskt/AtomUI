@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -34,8 +35,6 @@ internal class LineEditToken : AbstractControlDesignToken
     /// </summary>
     public double InputFontSizeSM { get; set; }
     
-    
-    
     public override void CalculateTokenValues(bool isDarkMode)
     {
         base.CalculateTokenValues(isDarkMode);
@@ -43,4 +42,6 @@ internal class LineEditToken : AbstractControlDesignToken
         InputFontSizeLG = SharedToken.FontSizeLG;
         InputFontSizeSM = SharedToken.FontSizeSM;
     }
+
+    protected override Type? GetTokenKindType() => typeof(LineEditTokenKind);
 }

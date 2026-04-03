@@ -25,21 +25,21 @@
                                                      IsVisible="False"
                                                      Tag="{x:Static atom:TourStepNavType.Previous}"
                                                      Classes="previous-btn"
-                                                     Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Previous}}"/>
+                                                     Content="{DynamicResource {x:Static  atom:TourLangResourceKey.Previous}}"/>
                                         <atom:Button SizeType="Small" 
                                                      ButtonType="Primary" 
                                                      Name="NextButton" 
                                                      Classes="next-btn"
                                                      IsVisible="False"
                                                      Tag="{x:Static atom:TourStepNavType.Next}"
-                                                     Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Next}}"/>
+                                                     Content="{DynamicResource {x:Static  atom:TourLangResourceKey.Next}}"/>
                                         <atom:Button SizeType="Small"
                                                      ButtonType="Primary"
                                                      Name="FinishButton"
                                                      IsVisible="False"
                                                      Classes="next-btn"
                                                      Tag="{x:Static atom:TourStepNavType.Finished}"
-                                                     Content="{DynamicResource {x:Static  lang:TourLangResourceKey.Finish}}"/>
+                                                     Content="{DynamicResource {x:Static  atom:TourLangResourceKey.Finish}}"/>
                                     </StackPanel>
                                 </Panel>
                             </DockPanel>

@@ -23,7 +23,7 @@
                                          DockPanel.Dock="Right"
                                          Tag="{x:Static atom:UploadListActions.Remove}" 
                                          VerticalAlignment="Center"/>
-                        <TextBlock Text="{DynamicResource {x:Static uploadlang:UploadLangResourceKey.Pending}}"
+                        <TextBlock Text="{DynamicResource {x:Static atom:UploadLangResourceKey.Pending}}"
                                    VerticalAlignment="Center" />
                     </DockPanel>
                 </Border>

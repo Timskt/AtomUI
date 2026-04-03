@@ -16,4 +16,29 @@ namespace AtomUI.Controls.Localization
         public static readonly LanguageResourceKey Save = new LanguageResourceKey("Common.Save", "AtomUI.Lang");
         public static readonly LanguageResourceKey Submit = new LanguageResourceKey("Common.Submit", "AtomUI.Lang");
     }
+
+    public enum CommonLangResourceKind
+    {
+        Cancel,
+        Delete,
+        Edit,
+        Loading,
+        NoData,
+        Ok,
+        Optional,
+        Reset,
+        Save,
+        Submit
+    }
+
+    public class CommonLangResourceKeyExtension : LanguageResourceExtension<CommonLangResourceKind>
+    {
+        public CommonLangResourceKeyExtension()
+        {
+        }
+
+        public CommonLangResourceKeyExtension(CommonLangResourceKind kind) : base(kind)
+        {
+        }
+    }
 }

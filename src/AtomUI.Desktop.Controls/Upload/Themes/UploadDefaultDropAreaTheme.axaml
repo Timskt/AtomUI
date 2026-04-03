@@ -32,7 +32,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}"/>
         <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.Padding}}"/>
-        <Setter Property="Header" Value="{DynamicResource {x:Static uploadlang:UploadLangResourceKey.DragUploadHead}}"/>
+        <Setter Property="Header" Value="{DynamicResource {x:Static atom:UploadLangResourceKey.DragUploadHead}}"/>
         <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}"/>
         <Setter Property="DragDrop.AllowDrop" Value="True"/>
         

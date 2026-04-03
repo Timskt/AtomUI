@@ -13,4 +13,26 @@ namespace AtomUI.Desktop.Controls.DataGridLocalization
         public static readonly LanguageResourceKey Operating = new LanguageResourceKey("DataGrid.Operating", "AtomUI.Lang");
         public static readonly LanguageResourceKey SelectAllFilterItems = new LanguageResourceKey("DataGrid.SelectAllFilterItems", "AtomUI.Lang");
     }
+
+    public enum DataGridLangResourceKind
+    {
+        AscendTooltip,
+        CancelConfirmText,
+        CancelTooltip,
+        DeleteConfirmText,
+        DescendTooltip,
+        Operating,
+        SelectAllFilterItems
+    }
+
+    public class DataGridLangResourceKeyExtension : LanguageResourceExtension<DataGridLangResourceKind>
+    {
+        public DataGridLangResourceKeyExtension()
+        {
+        }
+
+        public DataGridLangResourceKeyExtension(DataGridLangResourceKind kind) : base(kind)
+        {
+        }
+    }
 }

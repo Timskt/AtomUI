@@ -59,7 +59,7 @@ public class TokenResourceKeyGenerator : IIncrementalGenerator
             {
                 var tokenClassNames = tokenInfo.ControlTokenInfos.Select(info =>
                 {
-                    if (info.ControlNamespace is not null)
+                    if (!string.IsNullOrWhiteSpace(info.ControlNamespace))
                     {
                         return $"{info.ControlNamespace}.{info.ControlName}";
                     }

@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.CalendarView;
+using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.TimePickerLang;
 using AtomUI.Icons.AntDesign;
@@ -150,8 +151,8 @@ public class DatePicker : InfoPickerInput
         if (ClockIdentifier == ClockIdentifierType.HourClock12)
         {
             var formatInfo = new DateTimeFormatInfo();
-            formatInfo.AMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKey.AMText)!;
-            formatInfo.PMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKey.PMText)!;
+            formatInfo.AMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKind.AMText)!;
+            formatInfo.PMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKind.PMText)!;
             return dateTime.Value.ToString(format, formatInfo);
         }
 
