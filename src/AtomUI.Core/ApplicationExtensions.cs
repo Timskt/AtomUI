@@ -23,7 +23,7 @@ public static class ApplicationExtensions
             if (defaultFontFamily != null && args.Theme != null)
             {
                 var loadedTheme = args.Theme;
-                loadedTheme.ThemeResource[SharedTokenKey.FontFamily] = defaultFontFamily;
+                loadedTheme.ThemeResource[SharedTokenKind.FontFamily] = defaultFontFamily;
             }
         };
         AvaloniaLocator.CurrentMutable.BindToSelf(themeManager);

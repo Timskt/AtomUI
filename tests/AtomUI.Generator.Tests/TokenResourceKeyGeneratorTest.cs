@@ -34,7 +34,7 @@ public class TokenResourceKeyGeneratorTest
         return CSharpCompilation.Create("compilation",
             [CSharpSyntaxTree.ParseText(source)],
             [MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(TokenResourceKey).Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(AbstractDesignToken).Assembly.Location)
             ],
             new CSharpCompilationOptions(OutputKind.ConsoleApplication));
     }

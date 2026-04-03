@@ -310,7 +310,7 @@ internal class Theme : AvaloniaObject, ITheme
         var qualifiedPrefix = "";
         if (!string.IsNullOrEmpty(catalog))
         {
-            qualifiedPrefix += $"{catalog}{TokenResourceKey.CatalogSeparator}";
+            qualifiedPrefix += $"{catalog}:";
         }
 
         return $"{qualifiedPrefix}{tokenId}";

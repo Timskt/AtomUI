@@ -12,7 +12,7 @@ public static class MotionAwareControlExtensions
         if (motionAwareControl is StyledElement styledElement)
         {
             var bindingStyle = new Style();
-            bindingStyle.Add(MotionAwareControlProperty.IsMotionEnabledProperty, SharedTokenKey.EnableMotion);
+            bindingStyle.Add(MotionAwareControlProperty.IsMotionEnabledProperty, SharedTokenKind.EnableMotion);
             styledElement.Styles.Add(bindingStyle);
         }
     }

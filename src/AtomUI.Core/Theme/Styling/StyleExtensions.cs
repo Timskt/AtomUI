@@ -20,9 +20,10 @@ public static class StyleExtensions
         return style;
     }
 
-    public static StyleBase Add(this StyleBase style, AvaloniaProperty targetProperty, TokenResourceKey resourceKey)
+    public static StyleBase Add<TTokenKind>(this StyleBase style, AvaloniaProperty targetProperty, TTokenKind resourceKey)
+        where TTokenKind : Enum
     {
-        style.Add(new Setter(targetProperty, new DynamicResourceExtension(resourceKey.QualifiedKey())));
+        style.Add(new Setter(targetProperty, new DynamicResourceExtension(resourceKey)));
         return style;
     }
 }

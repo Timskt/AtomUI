@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using AtomUI.Theme.Styling;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -40,56 +41,33 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken,
         var tokenKindType = GetTokenKindType();
         var type          = GetType();
         // internal 这里也考虑进去，还是具体的 Token 自己处理？
+        var tokenProperties = type.GetProperties(BindingFlags.Public |
+                                                 BindingFlags.NonPublic |
+                                                 BindingFlags.Instance |
+                                                 BindingFlags.FlattenHierarchy)
+                                  .ToDictionary(x => x.Name);
+        if (tokenKindType != null)
         {
-            var tokenProperties = type.GetProperties(BindingFlags.Public |
-                                                     BindingFlags.NonPublic |
-                                                     BindingFlags.Instance |
-                                                     BindingFlags.FlattenHierarchy)
-                                      .ToDictionary(x => x.Name);
-            if (tokenKindType != null)
+            foreach (var value in Enum.GetValues(tokenKindType))
             {
-                foreach (var value in Enum.GetValues(tokenKindType))
+                var tokenName = Enum.GetName(tokenKindType, value);
+                Debug.Assert(tokenName != null);
+                if (tokenProperties.TryGetValue(tokenName, out var property))
                 {
-                    var tokenName = Enum.GetName(tokenKindType, value);
-                    Debug.Assert(tokenName != null);
-                    if (tokenProperties.TryGetValue(tokenName, out var property))
+                    var tokenValue = property.GetValue(this);
+                    if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
+                        tokenValue is not null)
                     {
-                        var tokenValue = property.GetValue(this);
-                        if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
-                            tokenValue is not null)
-                        {
-                            tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
-                        }
-                        dictionary[value] = tokenValue;
+                        tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
                     }
-                    else
-                    {
-                        throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
-                    }
-                } 
-            }
-        }
-        {
-            var tokenProperties = type.GetProperties(BindingFlags.Public |
-                                                     BindingFlags.NonPublic |
-                                                     BindingFlags.Instance |
-                                                     BindingFlags.FlattenHierarchy);
-            var ns                     = type.Namespace;
-            var tokenResourceNamespace = GetTokenResourceCatalog();
-            foreach (var property in tokenProperties)
-            {
-                var tokenName  = $"{ns}.{_id}.{property.Name}";
-                var tokenValue = property.GetValue(this);
-                if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
-                    tokenValue is not null)
-                {
-                    tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                    dictionary[value] = tokenValue;
                 }
-
-                dictionary[new TokenResourceKey(tokenName, tokenResourceNamespace)] = tokenValue;
-            }
+                else
+                {
+                    throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
+                }
+            } 
         }
-        
     }
 
     internal void BuildSharedResourceDeltaDictionary(DesignToken globalSharedToken)
@@ -105,6 +83,7 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken,
                                                             BindingFlags.NonPublic |
                                                             BindingFlags.Instance |
                                                             BindingFlags.FlattenHierarchy);
+        var sharedTokenKindType = typeof(SharedTokenKind);
         foreach (var property in tokenProperties)
         {
             var name                   = property.Name;
@@ -124,7 +103,10 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken,
                 }
             }
 
-            _sharedResourceDeltaDictionary[new TokenResourceKey(name)] = localSharedTokenValue;
+            if (Enum.TryParse(sharedTokenKindType, name, out var sharedTokenKind))
+            {
+                _sharedResourceDeltaDictionary[sharedTokenKind] = localSharedTokenValue;
+            }
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using AtomUI.Theme.TokenSystem;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
 
@@ -7,8 +6,9 @@ namespace AtomUI.Data;
 
 public static class TokenResourceUtils
 {
-    public static object? FindTokenResource(Control control, TokenResourceKey resourceKey,
-                                            ThemeVariant? themeVariant = null)
+    public static object? FindTokenResource<TTokenKind>(Control control, TTokenKind resourceKey,
+                                                        ThemeVariant? themeVariant = null)
+        where TTokenKind : Enum
     {
         if (themeVariant is null)
         {
@@ -23,7 +23,8 @@ public static class TokenResourceUtils
         return AvaloniaProperty.UnsetValue;
     }
 
-    public static object? FindGlobalTokenResource(TokenResourceKey resourceKey, ThemeVariant? themeVariant = null)
+    public static object? FindGlobalTokenResource<TTokenKind>(TTokenKind resourceKey, ThemeVariant? themeVariant = null)
+        where TTokenKind : Enum
     {
         var application = Application.Current;
         if (application is null)
