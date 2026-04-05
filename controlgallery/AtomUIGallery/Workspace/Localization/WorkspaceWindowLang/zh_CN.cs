@@ -4,7 +4,7 @@ using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.WorkspaceWindowLang;
 
-[LanguageProvider(LanguageCode.zh_CN, WorkspaceWindow.LanguageId, Constants.LanguageCatalog)]
+[LanguageProvider(LanguageCode.zh_CN, WorkspaceWindow.LanguageId)]
 internal class zh_CN : LanguageProvider
 {
     public const string MenuItemSettings = "设置";

@@ -9,7 +9,7 @@ namespace AtomUI.Desktop.Controls;
 
 public abstract class DataGridAbstractTextColumn :  DataGridBoundColumn
 {
-     #region 公共属性定义
+    #region 公共属性定义
 
     /// <summary>
     /// Identifies the FontFamily dependency property.

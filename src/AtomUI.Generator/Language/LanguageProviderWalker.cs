@@ -90,12 +90,6 @@ internal class LanguageProviderWalker : CSharpSyntaxWalker
                 {
                     LanguageInfo.LanguageId = languageId;
                 }
-
-                if (attribute.ConstructorArguments.Any() &&
-                    attribute.ConstructorArguments[2].Value is string resourceCatalog)
-                {
-                    LanguageInfo.ResourceCatalog = resourceCatalog;
-                }
             }
         }
 

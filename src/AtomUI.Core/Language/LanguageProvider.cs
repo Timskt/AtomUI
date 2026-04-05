@@ -11,8 +11,6 @@ public abstract class LanguageProvider : ILanguageProvider
 
     public string LangId { get; }
 
-    public string ResourceCatalog { get; }
-
     public LanguageProvider()
     {
         var type                      = GetType();
@@ -24,7 +22,6 @@ public abstract class LanguageProvider : ILanguageProvider
 
         LangCode        = languageProviderAttribute.LanguageCode;
         LangId          = languageProviderAttribute.LanguageId;
-        ResourceCatalog = languageProviderAttribute.ResourceCatalog;
     }
 
     public void BuildResourceDictionary(IResourceDictionary dictionary)

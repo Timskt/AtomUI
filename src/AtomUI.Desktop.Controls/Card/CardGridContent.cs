@@ -1,7 +1,5 @@
-using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -43,8 +41,6 @@ public class CardGridContent : ItemsControl
     internal static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<CardGridContent>();
     
-    private readonly Dictionary<CardGridItem, CompositeDisposable> _itemsBindingDisposables = new();
-    
     public SizeType SizeType
     {
         get => GetValue(SizeTypeProperty);
@@ -60,32 +56,6 @@ public class CardGridContent : ItemsControl
     #endregion
 
     private ItemsPresenter? _itemsPresenter;
-    
-    public CardGridContent()
-    {
-        Items.CollectionChanged += HandleCollectionChanged;
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is CardGridItem gridItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(gridItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(gridItem);
-                        }
-                    }
-                }
-            }
-        }
-    }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
     {
@@ -113,19 +83,12 @@ public class CardGridContent : ItemsControl
 
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, gridItem, CardGridItem.ContentTemplateProperty));
+                gridItem[!CardGridItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, gridItem, CardGridItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsEnabledProperty, gridItem, CardGridItem.IsEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, gridItem, CardGridItem.IsMotionEnabledProperty));
+            gridItem[!SizeTypeProperty]        = this[!SizeTypeProperty];
+            gridItem[!IsEnabledProperty]       = this[!IsEnabledProperty];
+            gridItem[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             PrepareCardGridItem(gridItem, item, index, disposables);
-        
-            if (_itemsBindingDisposables.TryGetValue(gridItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(gridItem);
-            }
-            _itemsBindingDisposables.Add(gridItem, disposables);
         }
         else
         {
