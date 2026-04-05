@@ -3,5 +3,6 @@
                     x:ClassModifier="internal">
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="ToggleSwitchTheme.axaml"/>
+        <ResourceInclude Source="SwitchKnobTheme.axaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

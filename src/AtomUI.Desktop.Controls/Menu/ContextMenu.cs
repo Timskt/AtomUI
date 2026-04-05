@@ -1,8 +1,5 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Reactive.Disposables;
+﻿using System.ComponentModel;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls;
@@ -92,12 +89,10 @@ public class ContextMenu : AvaloniaContextMenu,
     #endregion
     
     private Popup? _popup;
-    private readonly Dictionary<MenuItem, CompositeDisposable> _itemsBindingDisposables = new();
 
     public ContextMenu()
     {
         this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
-        LogicalChildren.CollectionChanged  += HandleItemsCollectionChanged;
         // 我们在这里有一次初始化的机会
         _popup = new Popup
         {
@@ -115,10 +110,9 @@ public class ContextMenu : AvaloniaContextMenu,
         _popup.ClickHidePredicate =  MenuPopupClosePredicate;
         _popup.CloseAction        =  MenuPopupCloseAction;
         _popup.AddClosingEventHandler(this.CreateEventHandler<CancelEventArgs>("PopupClosing")!);
-        _popup.KeyUp += this.CreateEventHandler<KeyEventArgs>("PopupKeyUp");
-
-        BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, _popup, Popup.ShouldUseOverlayLayerProperty);
-        BindUtils.RelayBind(this, MaskShadowsProperty, _popup, Popup.MaskShadowsProperty);
+        _popup.KeyUp                                 += this.CreateEventHandler<KeyEventArgs>("PopupKeyUp");
+        _popup[!Popup.ShouldUseOverlayLayerProperty] =  this[!ShouldUseOverlayLayerProperty];
+        _popup[!Popup.MaskShadowsProperty]           =  this[!MaskShadowsProperty];
         
         if (_popup is IPopupHostProvider popupHostProvider)
         {
@@ -134,27 +128,6 @@ public class ContextMenu : AvaloniaContextMenu,
             _popup.SetIgnoreIsOpenChanged(true);
             _popup.IsMotionAwareOpen = true;
         };
-    }
-    
-    private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is MenuItem menuItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(menuItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemsBindingDisposables.Remove(menuItem);
-                    }
-                }
-            }
-        }
     }
     
     private void HandlePopupHostChanged(IPopupHost? host)
@@ -220,8 +193,6 @@ public class ContextMenu : AvaloniaContextMenu,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is MenuItem menuItem)
         {
-            var disposables = new CompositeDisposable(4);
-            
             if (item != null && item is not Visual)
             {
                 if (!menuItem.IsSet(MenuItem.HeaderProperty))
@@ -253,23 +224,15 @@ public class ContextMenu : AvaloniaContextMenu,
              
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, MenuItem.HeaderTemplateProperty));
+                menuItem[!MenuItem.HeaderTemplateProperty] = this[!ItemTemplateProperty];
             }
+            menuItem[!IsMotionEnabledProperty]                = this[!IsMotionEnabledProperty];
+            menuItem[!ItemTemplateProperty]                   = this[!ItemTemplateProperty];
+            menuItem[!SizeTypeProperty]                       = this[!SizeTypeProperty];
+            menuItem[!MenuItem.DisplayPageSizeProperty]       = this[!DisplayPageSizeProperty];
+            menuItem[!MenuItem.ShouldUseOverlayLayerProperty] = this[!ShouldUseOverlayLayerProperty];
             
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuItem, MenuItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, MenuItem.ItemTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, menuItem, MenuItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, DisplayPageSizeProperty, menuItem, MenuItem.DisplayPageSizeProperty));
-            disposables.Add(BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, menuItem, MenuItem.ShouldUseOverlayLayerProperty));
-            
-            PrepareMenuItem(menuItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(menuItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(menuItem);
-            }
-            _itemsBindingDisposables.Add(menuItem, disposables);
+            PrepareMenuItem(menuItem, item, index);
         }
         else if (container is MenuSeparator menuSeparator)
         {
@@ -281,7 +244,7 @@ public class ContextMenu : AvaloniaContextMenu,
         }
     }
     
-    protected virtual void PrepareMenuItem(MenuItem menuItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareMenuItem(MenuItem menuItem, object? item, int index)
     {
     }
     

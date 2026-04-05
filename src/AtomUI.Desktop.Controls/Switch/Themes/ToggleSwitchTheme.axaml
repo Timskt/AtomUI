@@ -7,17 +7,17 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <atom:WaveSpiritDecorator Name="{x:Static atom:ToggleSwitchThemeConstants.WaveSpiritPart}"/>
-                    <Canvas Name="{x:Static atom:ToggleSwitchThemeConstants.MainContainerPart}"
+                    <atom:WaveSpiritDecorator Name="PART_WaveSpirit"/>
+                    <Canvas Name="PART_MainContainer"
                             ClipToBounds="True">
-                        <atom:SwitchKnob Name="{x:Static atom:ToggleSwitchThemeConstants.SwitchKnobPart}"
+                        <atom:SwitchKnob Name="PART_SwitchKnob"
                                          IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
                                          IsCheckedState="{TemplateBinding IsChecked}" />
-                        <ContentPresenter Name="{x:Static atom:ToggleSwitchThemeConstants.OnContentPresenterPart}"
+                        <ContentPresenter Name="PART_OnContentPresenter"
                                           Content="{TemplateBinding OnContent}"
                                           ContentTemplate="{TemplateBinding OnContentTemplate}"
                                           IsVisible="{TemplateBinding OnContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                        <ContentPresenter Name="{x:Static atom:ToggleSwitchThemeConstants.OffContentPresenterPart}"
+                        <ContentPresenter Name="PART_OffContentPresenter"
                                           Content="{TemplateBinding OffContent}"
                                           ContentTemplate="{TemplateBinding OffContentTemplate}"
                                           IsVisible="{TemplateBinding OffContent, Converter={x:Static ObjectConverters.IsNotNull}}" />

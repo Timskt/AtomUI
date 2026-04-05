@@ -1,7 +1,4 @@
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 
@@ -31,40 +28,12 @@ internal class UploadList : ItemsControl, IMotionAwareControl
     
     #endregion
     
-    protected readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
-    
-    public UploadList()
-    {
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == ListTypeProperty)
         {
             RefreshContainers();
-        }
-    }
-
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item != null)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(item, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(item);
-                        }
-                    }
-                }
-            }
         }
     }
     
@@ -91,31 +60,24 @@ internal class UploadList : ItemsControl, IMotionAwareControl
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is AbstractUploadListItem listItem)
         {
-            var disposables = new CompositeDisposable(8);
             if (item != null && item is UploadTaskInfo uploadTaskInfo)
             {
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.TaskIdProperty, listItem, AbstractUploadListItem.TaskIdProperty));
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.FileNameProperty, listItem, AbstractUploadListItem.FileNameProperty));
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.ProgressProperty, listItem, AbstractUploadListItem.ProgressProperty));
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.IsImageFileProperty, listItem, AbstractUploadListItem.IsImageFileProperty));
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.StatusProperty, listItem, AbstractUploadListItem.StatusProperty));
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.ErrorMessageProperty, listItem, AbstractUploadListItem.ErrorMessageProperty));
-                disposables.Add(BindUtils.RelayBind(uploadTaskInfo, UploadTaskInfo.FilePathProperty, listItem, AbstractUploadListItem.FilePathProperty));
+                listItem[!AbstractUploadListItem.TaskIdProperty]   = uploadTaskInfo[!UploadTaskInfo.TaskIdProperty];
+                listItem[!AbstractUploadListItem.FileNameProperty] = uploadTaskInfo[!UploadTaskInfo.FileNameProperty];
+                listItem[!AbstractUploadListItem.ProgressProperty] = uploadTaskInfo[!UploadTaskInfo.ProgressProperty];
+                listItem[!AbstractUploadListItem.IsImageFileProperty] =
+                    uploadTaskInfo[!UploadTaskInfo.IsImageFileProperty];
+                listItem[!AbstractUploadListItem.StatusProperty]       = uploadTaskInfo[!UploadTaskInfo.StatusProperty];
+                listItem[!AbstractUploadListItem.ErrorMessageProperty] = uploadTaskInfo[!UploadTaskInfo.ErrorMessageProperty];
+                listItem[!AbstractUploadListItem.FilePathProperty] = uploadTaskInfo[!UploadTaskInfo.FilePathProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, listItem, AbstractUploadListItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ListTypeProperty, listItem, AbstractUploadListItem.ListTypeProperty));
-            NotifyPrepareUploadListItem(listItem, disposables);
-            if (_itemsBindingDisposables.TryGetValue(listItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(listItem);
-            }
-            _itemsBindingDisposables.Add(listItem, disposables);
+            listItem[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            listItem[!ListTypeProperty]        = this[!ListTypeProperty];
+            NotifyPrepareUploadListItem(listItem);
         }
     }
 
-    protected virtual void NotifyPrepareUploadListItem(AbstractUploadListItem listItem, CompositeDisposable disposables)
+    protected virtual void NotifyPrepareUploadListItem(AbstractUploadListItem listItem)
     {
     }
 }
