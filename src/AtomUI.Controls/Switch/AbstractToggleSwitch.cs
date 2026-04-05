@@ -492,7 +492,7 @@ public class AbstractToggleSwitch : ToggleButton,
         }
         if (newContent is PathIcon newPathIcon)
         {
-            var disposables = new CompositeDisposable(3);
+            var disposables = new CompositeDisposable(4);
             disposables.Add(BindUtils.RelayBind(this, IconSizeProperty, newPathIcon, WidthProperty));
             disposables.Add(BindUtils.RelayBind(this, IconSizeProperty, newPathIcon, HeightProperty));
             disposables.Add(BindUtils.RelayBind(this, ForegroundProperty, newPathIcon, ForegroundProperty));

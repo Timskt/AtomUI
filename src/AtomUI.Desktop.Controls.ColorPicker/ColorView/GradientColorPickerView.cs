@@ -1,9 +1,4 @@
-using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Data;
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -53,8 +48,15 @@ public class GradientColorPickerView : AbstractColorPickerView
 
     #endregion
 
-    private GradientColorSlider? _gradientColorSlider;
-    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (Value == null)
+        {
+            SetCurrentValue(ValueProperty, DefaultValue);
+        }
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         if (IgnorePropertyChanged)
@@ -84,23 +86,6 @@ public class GradientColorPickerView : AbstractColorPickerView
     protected virtual void NotifyGradientValueChanged(GradientColorChangedEventArgs e)
     {
         GradientValueChanged?.Invoke(this, e);
-    }
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        _gradientColorSlider = e.NameScope.Find<GradientColorSlider>(ColorPickerViewThemeConstants.GradientColorSliderPart);
-     
-        if (_gradientColorSlider != null)
-        {
-            BindUtils.RelayBind(this, ValueProperty, _gradientColorSlider, GradientColorSlider.GradientValueProperty, BindingMode.TwoWay);
-            BindUtils.RelayBind(this, ActivatedStopIndexProperty, _gradientColorSlider, GradientColorSlider.ActivatedStopIndexProperty, BindingMode.TwoWay);
-        }
-
-        if (Value == null)
-        {
-            SetCurrentValue(ValueProperty, DefaultValue);
-        }
     }
     
     protected override void NotifyColorClearRequest()

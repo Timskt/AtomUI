@@ -1,5 +1,4 @@
 using AtomUI.Animations;
-using AtomUI.Data;
 using AtomUI.Media;
 using AtomUI.Utils;
 using Avalonia;
@@ -119,7 +118,6 @@ internal class SwitchKnob : TemplatedControl
     
     private bool _isLoading;
     private CancellationTokenSource? _cancellationTokenSource;
-    private IDisposable? _bindingDisposable;
     
     static SwitchKnob()
     {
@@ -164,10 +162,9 @@ internal class SwitchKnob : TemplatedControl
     {
         _cancellationTokenSource?.Cancel();
         var loadingAnimation = new Animation();
-        _bindingDisposable?.Dispose();
-        _bindingDisposable = BindUtils.RelayBind(this, LoadingAnimationDurationProperty, loadingAnimation, Animation.DurationProperty);
-        loadingAnimation.Duration       = LoadingAnimationDuration;
-        loadingAnimation.Easing         = new LinearEasing();
+        loadingAnimation[!Animation.DurationProperty] = this[!LoadingAnimationDurationProperty];
+        loadingAnimation.Duration                     = LoadingAnimationDuration;
+        loadingAnimation.Easing                       = new LinearEasing();
         loadingAnimation.Children.Add(new KeyFrame
         {
             Setters =

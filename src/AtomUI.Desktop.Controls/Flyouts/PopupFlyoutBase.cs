@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.MotionScene;
 using AtomUI.Reflection;
 using Avalonia;
@@ -204,7 +202,6 @@ public abstract class PopupFlyoutBase : FlyoutBase, IPopupHostProvider
     private PixelRect? _enlargePopupRectScreenPixelRect;
     private IDisposable? _transientDisposable;
     private Action<IPopupHost?>? _popupHostChangedHandler;
-    private CompositeDisposable? _popupBindingDisposables;
 
     static PopupFlyoutBase()
     {
@@ -248,15 +245,14 @@ public abstract class PopupFlyoutBase : FlyoutBase, IPopupHostProvider
 
     protected internal virtual void NotifyPopupCreated(Popup popup)
     {
-        _popupBindingDisposables?.Dispose();
-        _popupBindingDisposables = new CompositeDisposable(6);
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, popup));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, IsDetectMouseClickEnabledProperty, popup, Popup.IsDetectMouseClickEnabledProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, popup, Popup.IsMotionEnabledProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, MotionDurationProperty, popup, Popup.MotionDurationProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, OpenMotionProperty, popup, Popup.OpenMotionProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, CloseMotionProperty, popup, Popup.CloseMotionProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, popup, Popup.ShouldUseOverlayLayerProperty));
+        popup[!MarginToAnchorProperty]                  = this[!MarginToAnchorProperty];
+        popup[!Popup.IsDetectMouseClickEnabledProperty] = this[!IsDetectMouseClickEnabledProperty];
+        popup[!Popup.IsMotionEnabledProperty]           = this[!IsMotionEnabledProperty];
+        popup[!Popup.MotionDurationProperty]            = this[!MotionDurationProperty];
+        popup[!Popup.OpenMotionProperty]                = this[!OpenMotionProperty];
+        popup[!Popup.CloseMotionProperty]               = this[!CloseMotionProperty];
+        popup[!Popup.ShouldUseOverlayLayerProperty]     = this[!ShouldUseOverlayLayerProperty];
+        
         PopupCreated?.Invoke(this, new FlyoutPopupCreatedEventArgs(popup));
     }
 

@@ -1,7 +1,5 @@
-using System.Reactive.Disposables;
 using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Media;
 using AtomUI.Theme;
 using Avalonia;
@@ -13,7 +11,6 @@ using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -280,8 +277,6 @@ public abstract class AbstractColorPicker : AvaloniaButton,
     private readonly FlyoutStateHelper _flyoutStateHelper;
     private protected Flyout? PickerFlyout;
     private protected bool IsFlyoutOpen;
-    private CompositeDisposable? _flyoutBindingDisposables;
-    private CompositeDisposable? _flyoutHelperBindingDisposables;
     
     static AbstractColorPicker()
     {
@@ -300,25 +295,10 @@ public abstract class AbstractColorPicker : AvaloniaButton,
         _flyoutStateHelper.FlyoutClosed             += HandleFlyoutClosed;
         _flyoutStateHelper.OpenFlyoutPredicate      =  FlyoutOpenPredicate;
         _flyoutStateHelper.ClickHideFlyoutPredicate =  ClickHideFlyoutPredicate;
-    }
-
-    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToLogicalTree(e);
-        _flyoutHelperBindingDisposables?.Dispose();
-        _flyoutHelperBindingDisposables = new CompositeDisposable(3);
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, TriggerTypeProperty, _flyoutStateHelper,
-            FlyoutStateHelper.TriggerTypeProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseEnterDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseEnterDelayProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseLeaveDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseLeaveDelayProperty));
-    }
-
-    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromLogicalTree(e);
-        _flyoutHelperBindingDisposables?.Dispose();
+        
+        _flyoutStateHelper[!FlyoutStateHelper.TriggerTypeProperty]     = this[!TriggerTypeProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseEnterDelayProperty] = this[!MouseEnterDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseLeaveDelayProperty] = this[!MouseLeaveDelayProperty];
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -417,13 +397,11 @@ public abstract class AbstractColorPicker : AvaloniaButton,
     {
         if (PickerFlyout is not null)
         {
-            _flyoutBindingDisposables?.Dispose();
-            _flyoutBindingDisposables = new CompositeDisposable(5);
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, PickerFlyout, PopupFlyoutBase.PlacementProperty));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowArrowProperty, PickerFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsPointAtCenterProperty, PickerFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, PickerFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, PickerFlyout, AtomUIFlyout.IsMotionEnabledProperty));
+            PickerFlyout[!PopupFlyoutBase.PlacementProperty]    = this[!PlacementProperty];
+            PickerFlyout[!AtomUIFlyout.IsShowArrowProperty]     = this[!IsShowArrowProperty];
+            PickerFlyout[!AtomUIFlyout.IsPointAtCenterProperty] = this[!IsPointAtCenterProperty];
+            PickerFlyout[!AtomUIFlyout.MarginToAnchorProperty]  = this[!MarginToAnchorProperty];
+            PickerFlyout[!IsMotionEnabledProperty]              = this[!IsMotionEnabledProperty];
         }
     }
     

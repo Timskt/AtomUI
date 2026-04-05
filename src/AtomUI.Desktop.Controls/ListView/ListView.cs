@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Data;
 using AtomUI.Controls.Utils;
-using AtomUI.Data;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
@@ -19,9 +17,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
 
-public partial class ListView : ItemsControl,
-                                ISizeTypeAware,
-                                IMotionAwareControl
+public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -379,7 +375,6 @@ public partial class ListView : ItemsControl,
 
     #endregion
     
-    private protected readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
     private bool _areHandlersSuspended;
     private static readonly FuncTemplate<Panel?> DefaultPanel =
         new(() => new VirtualizingStackPanel());
@@ -403,8 +398,6 @@ public partial class ListView : ItemsControl,
         ((ItemCollection)ItemsView).AddSourceChangedEvent(OnItemsViewSourceChanged);
         var items = this.GetItems();
         items.CollectionChanged += HandleItemsViewCollectionChanged;
-        
-        LogicalChildren.CollectionChanged += HandleChildrenChanged;
         Items.CollectionChanged           += HandleItemCollectionChanged;
     }
     
@@ -529,20 +522,6 @@ public partial class ListView : ItemsControl,
         return null;
     }
 
-    private void HandleChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    DisposableListItem(item);
-                }
-            }
-        }
-    }
-    
     private void HandleItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         _virtualRestoreContext.Clear();
@@ -616,15 +595,6 @@ public partial class ListView : ItemsControl,
     {
         IsFiltering = Filter != null && FilterValue != null;
     }
-
-    private protected void DisposableListItem(object item)
-    {
-        if (_itemsBindingDisposables.TryGetValue(item, out var disposable))
-        {
-            disposable.Dispose();
-            _itemsBindingDisposables.Remove(item);
-        }
-    }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
     {
@@ -660,34 +630,32 @@ public partial class ListView : ItemsControl,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is ListViewItem listItem)
         {
-            var disposables = new CompositeDisposable(8);
-            
             if (item is IGroupListItemData groupListItemData)
             {
                 listItem.IsGroupItem = groupListItemData.IsGroupItem;
                 var isGroupEnabled = listItem.IsGroupItem;
                 if (GroupItemTemplate != null && isGroupEnabled)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, GroupItemTemplateProperty, listItem, ListViewItem.ContentTemplateProperty));
+                    listItem[!ListViewItem.ContentTemplateProperty] = this[!GroupItemTemplateProperty];
                 }
             }
             else
             {
                 if (ItemTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, listItem, ListViewItem.ContentTemplateProperty));
+                    listItem[!ListViewItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
                 }
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, listItem, ListViewItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, listItem, ListViewItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, SelectedIndicatorProperty, listItem, ListViewItem.SelectedIndicatorProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemHoverBgProperty, listItem, ListViewItem.ItemHoverBgProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemSelectedBgProperty, listItem, ListViewItem.ItemSelectedBgProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowSelectedIndicatorProperty, listItem, ListViewItem.IsShowSelectedIndicatorProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemClickModeProperty, listItem, ListViewItem.ItemClickModeProperty));
+            listItem[!ListViewItem.SizeTypeProperty]                = this[!SizeTypeProperty];
+            listItem[!ListViewItem.IsMotionEnabledProperty]         = this[!IsMotionEnabledProperty];
+            listItem[!ListViewItem.SelectedIndicatorProperty]       = this[!SelectedIndicatorProperty];
+            listItem[!ListViewItem.ItemHoverBgProperty]             = this[!ItemHoverBgProperty];
+            listItem[!ListViewItem.ItemSelectedBgProperty]          = this[!ItemSelectedBgProperty];
+            listItem[!ListViewItem.IsShowSelectedIndicatorProperty] = this[!IsShowSelectedIndicatorProperty];
+            listItem[!ListViewItem.ItemClickModeProperty]           = this[!ItemClickModeProperty];
             
-            PrepareListViewItem(listItem, item, index, disposables);
+            PrepareListViewItem(listItem, item, index);
 
             var originMotionEnabled = false;
             try
@@ -709,14 +677,6 @@ public partial class ListView : ItemsControl,
                         _virtualRestoreContext.Remove(index);
                     }
                 }
-
-                if (_itemsBindingDisposables.TryGetValue(listItem, out var oldDisposables))
-                {
-                    oldDisposables.Dispose();
-                    _itemsBindingDisposables.Remove(listItem);
-                }
-
-                _itemsBindingDisposables.Add(listItem, disposables);
             }
             finally
             {
@@ -729,7 +689,7 @@ public partial class ListView : ItemsControl,
         }
     }
     
-    protected virtual void PrepareListViewItem(ListViewItem listItem, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareListViewItem(ListViewItem listItem, object? item, int index)
     {
     }
     

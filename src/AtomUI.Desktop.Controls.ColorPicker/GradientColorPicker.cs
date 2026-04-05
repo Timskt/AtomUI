@@ -1,6 +1,4 @@
-using System.Reactive.Disposables;
 using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -89,11 +87,8 @@ public class GradientColorPicker : AbstractColorPicker
     #endregion
     
     private GradientColorPickerView? _presenter;
-    private CompositeDisposable? _flyoutBindingDisposables;
     private WrapPanel? _textPanel;
-    private IDisposable? _activeStopIndexChangedDisposable;
     private int? _latestActivatedStopIndex;
-    private IDisposable? _emptyTextBindingDisposable;
     private ColorBlock? _colorIndicator;
     
     static GradientColorPicker()
@@ -178,8 +173,7 @@ public class GradientColorPicker : AbstractColorPicker
         if (Value == null || Value.GradientStops.Count == 0)
         {
             var emptyTextBlock = new AvaloniaTextBlock();
-            _emptyTextBindingDisposable?.Dispose();
-            _emptyTextBindingDisposable = BindUtils.RelayBind(this, EmptyColorTextProperty, emptyTextBlock, AvaloniaTextBlock.TextProperty);
+            emptyTextBlock[!AvaloniaTextBlock.TextProperty] = this[!EmptyColorTextProperty];
             _textPanel.Children.Add(emptyTextBlock);
         }
         else
@@ -234,15 +228,14 @@ public class GradientColorPicker : AbstractColorPicker
     {
         var flyout = new GradientColorPickerFlyout();
         flyout.IsDetectMouseClickEnabled = false;
-        _flyoutBindingDisposables?.Dispose();
-        _flyoutBindingDisposables = new CompositeDisposable(6);
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, flyout, GradientColorPickerFlyout.IsMotionEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsClearEnabledProperty, flyout, GradientColorPickerFlyout.IsClearEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, FormatProperty, flyout, GradientColorPickerFlyout.FormatProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsAlphaEnabledProperty, flyout, GradientColorPickerFlyout.IsAlphaEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsFormatEnabledProperty, flyout, GradientColorPickerFlyout.IsFormatEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsPaletteGroupEnabledProperty, flyout, GradientColorPickerFlyout.IsPaletteGroupEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PaletteGroupProperty, flyout, GradientColorPickerFlyout.PaletteGroupProperty));
+
+        flyout[!GradientColorPickerFlyout.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+        flyout[!GradientColorPickerFlyout.IsClearEnabledProperty]        = this[!IsClearEnabledProperty];
+        flyout[!GradientColorPickerFlyout.FormatProperty]                = this[!FormatProperty];
+        flyout[!GradientColorPickerFlyout.IsAlphaEnabledProperty]        = this[!IsAlphaEnabledProperty];
+        flyout[!GradientColorPickerFlyout.IsFormatEnabledProperty]       = this[!IsFormatEnabledProperty];
+        flyout[!GradientColorPickerFlyout.IsPaletteGroupEnabledProperty] = this[!IsPaletteGroupEnabledProperty];
+        flyout[!GradientColorPickerFlyout.PaletteGroupProperty]          = this[!PaletteGroupProperty];
         
         return flyout;
     }
@@ -251,7 +244,7 @@ public class GradientColorPicker : AbstractColorPicker
     {
         if (control is FlyoutPresenter flyoutPresenter && flyoutPresenter.Content is GradientColorPickerView presenter)
         {
-            _presenter                      =  presenter;
+            _presenter = presenter;
         }
     }
 
@@ -270,7 +263,7 @@ public class GradientColorPicker : AbstractColorPicker
             _presenter.GradientValueChanged += HandleColorPickerViewValueChanged;
             _presenter.ColorValueCleared    += HandleColorCleared;
             var effectiveColor = Value ?? DefaultValue;
-            _activeStopIndexChangedDisposable = BindUtils.RelayBind(_presenter, GradientColorPickerView.ActivatedStopIndexProperty, this, ActivatedStopIndexProperty);
+            this[!ActivatedStopIndexProperty] = _presenter[!GradientColorPickerView.ActivatedStopIndexProperty];
             if (effectiveColor != null)
             {
                 _presenter.SetCurrentValue(GradientColorPickerView.ValueProperty, effectiveColor);
@@ -290,8 +283,6 @@ public class GradientColorPicker : AbstractColorPicker
             _latestActivatedStopIndex       =  ActivatedStopIndex;
             _presenter.GradientValueChanged -= HandleColorPickerViewValueChanged;
             _presenter.ColorValueCleared    -= HandleColorCleared;
-            _activeStopIndexChangedDisposable?.Dispose();
-            _activeStopIndexChangedDisposable = null;
             SetCurrentValue(ActivatedStopIndexProperty, null);
         }
     }
@@ -344,9 +335,8 @@ public class GradientColorPicker : AbstractColorPicker
         {
             _colorIndicator.SetCurrentValue(ColorBlock.IsEmptyColorModeProperty, true);
             _textPanel?.Children.Clear();
-            _emptyTextBindingDisposable?.Dispose();
             var emptyTextBlock = new AvaloniaTextBlock();
-            _emptyTextBindingDisposable = BindUtils.RelayBind(this, EmptyColorTextProperty, emptyTextBlock, AvaloniaTextBlock.TextProperty);
+            emptyTextBlock[!AvaloniaTextBlock.TextProperty] = this[!EmptyColorTextProperty];
             _textPanel?.Children.Add(emptyTextBlock);
         }
     }

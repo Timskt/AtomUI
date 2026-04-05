@@ -239,14 +239,11 @@ public abstract class AbstractColorPickerView : TemplatedControl, IMotionAwareCo
             }
         }
         
-        if (this.IsAttachedToVisualTree())
+        if (change.Property == IsPaletteGroupEnabledProperty)
         {
-            if (change.Property == IsPaletteGroupEnabledProperty)
+            if (IsPaletteGroupEnabled && PaletteGroup == null)
             {
-                if (IsPaletteGroupEnabled && PaletteGroup == null)
-                {
-                    ConfigureDefaultPaletteGroup();
-                }
+                ConfigureDefaultPaletteGroup();
             }
         }
     }
@@ -366,4 +363,5 @@ public abstract class AbstractColorPickerView : TemplatedControl, IMotionAwareCo
     protected virtual void NotifyPaletteColorSelected(Color color)
     {
     }
+    
 }

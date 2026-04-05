@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -19,23 +17,21 @@ internal class GradientColorPickerFlyout : AbstractColorPickerFlyout
     }
     
     internal GradientColorPickerView? Presenter { get; set; }
-    private CompositeDisposable? _presenterBindingDisposables;
     
     protected override Control CreatePresenter()
     {
         var flyoutPresenter = base.CreatePresenter() as FlyoutPresenter;
         Debug.Assert(flyoutPresenter != null);
-        _presenterBindingDisposables?.Dispose();
         Presenter                    = new GradientColorPickerView();
-        _presenterBindingDisposables = new  CompositeDisposable(6);
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, Presenter, GradientColorPickerView.IsMotionEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, ValueProperty, Presenter, GradientColorPickerView.ValueProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, FormatProperty, Presenter, GradientColorPickerView.FormatProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsClearEnabledProperty, Presenter, GradientColorPickerView.IsClearEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsAlphaEnabledProperty, Presenter, GradientColorPickerView.IsAlphaEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsFormatEnabledProperty, Presenter, GradientColorPickerView.IsFormatEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsPaletteGroupEnabledProperty, Presenter, GradientColorPickerView.IsPaletteGroupEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, PaletteGroupProperty, Presenter, GradientColorPickerView.PaletteGroupProperty));
+
+        Presenter[!GradientColorPickerView.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+        Presenter[!GradientColorPickerView.ValueProperty]                 = this[!ValueProperty];
+        Presenter[!GradientColorPickerView.FormatProperty]                = this[!FormatProperty];
+        Presenter[!GradientColorPickerView.IsClearEnabledProperty]        = this[!IsClearEnabledProperty];
+        Presenter[!GradientColorPickerView.IsAlphaEnabledProperty]        = this[!IsAlphaEnabledProperty];
+        Presenter[!GradientColorPickerView.IsFormatEnabledProperty]       = this[!IsFormatEnabledProperty];
+        Presenter[!GradientColorPickerView.IsPaletteGroupEnabledProperty] = this[!IsPaletteGroupEnabledProperty];
+        Presenter[!GradientColorPickerView.PaletteGroupProperty]          = this[!PaletteGroupProperty];
         
         flyoutPresenter.Content = Presenter;
         return flyoutPresenter;
