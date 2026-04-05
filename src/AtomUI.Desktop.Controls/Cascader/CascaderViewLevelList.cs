@@ -1,8 +1,5 @@
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -48,7 +45,6 @@ internal class CascaderViewLevelList : SelectingItemsControl, IListVirtualizingC
     
     internal CascaderView? OwnerView { get; set; }
     internal CascaderViewItem? ParentCascaderViewItem { get; set; }
-    private readonly Dictionary<CascaderViewItem, CompositeDisposable> _itemsBindingDisposables = new();
     private readonly Dictionary<object, IDictionary<object, object?>> _virtualRestoreContext = new();
     
     static CascaderViewLevelList()
@@ -56,32 +52,6 @@ internal class CascaderViewLevelList : SelectingItemsControl, IListVirtualizingC
         AutoScrollToSelectedItemProperty.OverrideDefaultValue<CascaderViewLevelList>(false);
         RequestBringIntoViewEvent.AddClassHandler<CascaderViewLevelList>((view, e) => e.Handled = true);
         CascaderViewItem.DoubleTappedEvent.AddClassHandler<CascaderViewLevelList>((view, args) => view.HandleCascaderItemDoubleClicked(args));
-    }
-    
-    public CascaderViewLevelList()
-    {
-        LogicalChildren.CollectionChanged += HandleLogicalChildrenChanged;
-    }
-    
-    private void HandleLogicalChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is CascaderViewItem cascaderViewItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(cascaderViewItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemsBindingDisposables.Remove(cascaderViewItem);
-                    }
-                }
-            }
-        }
     }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
@@ -105,8 +75,6 @@ internal class CascaderViewLevelList : SelectingItemsControl, IListVirtualizingC
         Debug.Assert(OwnerView != null);
         if (container is CascaderViewItem cascaderViewItem)
         {
-            var disposables = new CompositeDisposable(8);
-
             if (this is IListVirtualizingContextAware listVirtualizingContextAwareControl && 
                 cascaderViewItem is IListItemVirtualizingContextAware virtualListItem)
             {
@@ -134,23 +102,19 @@ internal class CascaderViewLevelList : SelectingItemsControl, IListVirtualizingC
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, cascaderViewItem, CascaderViewItem.HeaderTemplateProperty));
+                cascaderViewItem[!CascaderViewItem.HeaderTemplateProperty] = this[!ItemTemplateProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(OwnerView, CascaderView.LoadingIconProperty, cascaderViewItem, CascaderViewItem.LoadingIconProperty));
-            disposables.Add(BindUtils.RelayBind(OwnerView, CascaderView.ExpandIconProperty, cascaderViewItem, CascaderViewItem.ExpandIconProperty));
-            disposables.Add(BindUtils.RelayBind(OwnerView, CascaderView.IsMotionEnabledProperty, cascaderViewItem, CascaderViewItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(OwnerView, CascaderView.EffectiveToggleTypeProperty, cascaderViewItem, CascaderViewItem.ToggleTypeProperty));
-            disposables.Add(BindUtils.RelayBind(OwnerView, CascaderView.HasItemAsyncDataLoaderProperty, cascaderViewItem,
-                CascaderViewItem.HasItemAsyncDataLoaderProperty));
-            disposables.Add(BindUtils.RelayBind(OwnerView, CascaderView.IsMaxSelectReachedProperty, cascaderViewItem, CascaderViewItem.IsMaxSelectReachedProperty));
-            
-            if (_itemsBindingDisposables.TryGetValue(cascaderViewItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(cascaderViewItem);
-            }
-            _itemsBindingDisposables.Add(cascaderViewItem, disposables);
+
+            cascaderViewItem[!CascaderViewItem.LoadingIconProperty] = OwnerView[!CascaderView.LoadingIconProperty];
+            cascaderViewItem[!CascaderViewItem.ExpandIconProperty]  = OwnerView[!CascaderView.ExpandIconProperty];
+            cascaderViewItem[!CascaderViewItem.IsMotionEnabledProperty] =
+                OwnerView[!CascaderView.IsMotionEnabledProperty];
+            cascaderViewItem[!CascaderViewItem.ToggleTypeProperty] =
+                OwnerView[!CascaderView.EffectiveToggleTypeProperty];
+            cascaderViewItem[!CascaderViewItem.HasItemAsyncDataLoaderProperty] =
+                OwnerView[!CascaderView.HasItemAsyncDataLoaderProperty];
+            cascaderViewItem[!CascaderViewItem.IsMaxSelectReachedProperty] =
+                OwnerView[!CascaderView.IsMaxSelectReachedProperty];
         }
     }
     

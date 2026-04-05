@@ -6,10 +6,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.VisualTree;
 
 namespace AtomUI.Controls.Commons;
 
@@ -48,10 +46,7 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
         get => GetValue(ColorTextLightSolidProperty);
         set => SetValue(ColorTextLightSolidProperty, value);
     }
-
     #endregion
-
-    private IDisposable? _percentageLabelBindingDisposable;
     
     static AbstractGeneralProgressBar()
     {
@@ -162,7 +157,7 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
             range = _grooveRect.Height;
         }
 
-        deflateValue = range * (1 - _percentage / 100);
+        deflateValue = range * (1 - Percentage / 100);
         DrawIndicatorBar(context, deflateValue, StrokeBrush!);
 
         // 绘制成功阈值
@@ -214,7 +209,6 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
                 context.FillRectangle(brush, indicatorRect);
             }
         }
-    
     }
 
     protected override void CalculateStrokeThickness()
@@ -270,7 +264,6 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
         CalculateSizeTypeThresholdValue();
         CalculateMinBarThickness();
         base.OnApplyTemplate(e);
-        SetupPercentLabelForegroundBrush();
     }
 
     protected override SizeType CalculateEffectiveSizeType(double size)
@@ -591,14 +584,14 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
     protected override void NotifyPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.NotifyPropertyChanged(change);
-        if (this.IsAttachedToVisualTree())
+        if (change.Property == StrokeBrushProperty ||
+            change.Property == ForegroundProperty ||
+            change.Property == PercentPositionProperty ||
+            change.Property == ColorTextLabelProperty ||
+            change.Property == ColorTextLightSolidProperty)
         {
-            if (change.Property == StrokeBrushProperty)
-            {
-                SetupPercentLabelForegroundBrush();
-            }
+            SetupPercentLabelColor();
         }
-
         if (change.Property == PercentPositionProperty)
         {
             UpdatePseudoClasses();
@@ -628,15 +621,11 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
         }
     }
 
-    private void SetupPercentLabelForegroundBrush()
+    private void SetupPercentLabelColor()
     {
         if (!PercentPosition.IsInner)
         {
-            _percentageLabelBindingDisposable?.Dispose();
-            if (PercentageLabel != null)
-            {
-                _percentageLabelBindingDisposable = BindUtils.RelayBind(this, ForegroundProperty, PercentageLabel, ForegroundProperty);
-            }
+            SetCurrentValue(PercentageLabelColorProperty, Foreground);
         }
         else
         {
@@ -654,7 +643,7 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
                         var mostReadable = ColorUtils.MostReadable(grooveBrush.Color, colors);
                         if (mostReadable.HasValue)
                         {
-                            PercentageLabel?.SetValue(ForegroundProperty, new SolidColorBrush(mostReadable.Value), BindingPriority.Template);
+                            SetCurrentValue(PercentageLabelColorProperty, new SolidColorBrush(mostReadable.Value));
                         }
                     }
                 }
@@ -665,7 +654,7 @@ public class AbstractGeneralProgressBar : AbstractLineProgress
                         var mostReadable = ColorUtils.MostReadable(solidColorBrush.Color, colors);
                         if (mostReadable.HasValue)
                         {
-                            PercentageLabel?.SetValue(ForegroundProperty, new SolidColorBrush(mostReadable.Value), BindingPriority.Template);
+                            SetCurrentValue(PercentageLabelColorProperty, new SolidColorBrush(mostReadable.Value));
                         }
                     }
                 }

@@ -1,8 +1,4 @@
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Data;
-using AtomUI.Icons.AntDesign;
-using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -58,8 +54,6 @@ public abstract class AbstractTimeline : ItemsControl
     private WeakReference<AbstractTimelineItem>? _pendingItemReference;
 
     #endregion
-    
-    private readonly Dictionary<AbstractTimelineItem, CompositeDisposable> _itemsBindingDisposables = new();
 
     static AbstractTimeline()
     {
@@ -91,24 +85,6 @@ public abstract class AbstractTimeline : ItemsControl
             if (item is AbstractTimelineItem timelineItem)
             {
                 timelineItem.IsLabelLayout = isLabelLayout;
-            }
-        }
-        
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is AbstractTimelineItem timelineItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(timelineItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(timelineItem);
-                        }
-                    }
-                }
             }
         }
     }
@@ -149,15 +125,8 @@ public abstract class AbstractTimeline : ItemsControl
         base.PrepareContainerForItemOverride(element, item, index);
         if (element is AbstractTimelineItem timelineItem)
         {
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, ModeProperty, timelineItem, AbstractTimelineItem.ModeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsReverseProperty, timelineItem, AbstractTimelineItem.IsReverseProperty));
-            if (_itemsBindingDisposables.TryGetValue(timelineItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(timelineItem);
-            }
-            _itemsBindingDisposables.Add(timelineItem, disposables);
+            timelineItem[!AbstractTimelineItem.ModeProperty]      = this[!ModeProperty];
+            timelineItem[!AbstractTimelineItem.IsReverseProperty] = this[!IsReverseProperty];
         }
     }
 

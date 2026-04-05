@@ -130,7 +130,7 @@ public abstract class AbstractProgressBar : RangeBase,
         set => SetValue(StatusProperty, value);
     }
 
-    protected double _percentage;
+    private double _percentage;
 
     /// <summary>
     /// Gets the overall percentage complete of the progress
@@ -436,10 +436,6 @@ public abstract class AbstractProgressBar : RangeBase,
         PseudoClasses.Set(ProgressBarPseudoClass.Indeterminate, IsIndeterminate);
         PseudoClasses.Set(ProgressBarPseudoClass.Completed, MathUtils.AreClose(Value, Maximum));
     }
-
-    // protected virtual void NotifySetupUI()
-    // {
-    // }
 
     protected virtual void NotifyPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

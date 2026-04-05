@@ -1,8 +1,5 @@
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls.Utils;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -106,7 +103,6 @@ public class AbstractOptionButtonGroup : SelectingItemsControl,
     #endregion
 
     private readonly BorderRenderHelper _borderRenderHelper = new();
-    private readonly Dictionary<AbstractOptionButton, CompositeDisposable> _itemsBindingDisposables = new();
 
     static AbstractOptionButtonGroup()
     {
@@ -123,31 +119,9 @@ public class AbstractOptionButtonGroup : SelectingItemsControl,
 
     public AbstractOptionButtonGroup()
     {
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
         if (this is IChildIndexProvider childIndexProvider)
         {
             childIndexProvider.ChildIndexChanged += (sender, args) => { UpdateOptionButtonsPosition(); };
-        }
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is AbstractOptionButton optionButton)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(optionButton, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(optionButton);
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -171,8 +145,6 @@ public class AbstractOptionButtonGroup : SelectingItemsControl,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is AbstractOptionButton optionButton)
         {
-            var disposables = new CompositeDisposable(4);
-            
             if (item != null && item is not Visual)
             {
                 {
@@ -195,9 +167,9 @@ public class AbstractOptionButtonGroup : SelectingItemsControl,
                 {
                     if (item is IOptionButtonData optionButtonData)
                     {
-                        if (!optionButton.IsSet(AbstractOptionButton.IsEnabledProperty))
+                        if (!optionButton.IsSet(IsEnabledProperty))
                         {
-                            optionButton.SetCurrentValue(AbstractOptionButton.IsEnabledProperty, optionButtonData.IsEnabled);
+                            optionButton.SetCurrentValue(IsEnabledProperty, optionButtonData.IsEnabled);
                         }
                         
                         if (!optionButton.IsSet(AbstractOptionButton.IconProperty))
@@ -210,23 +182,15 @@ public class AbstractOptionButtonGroup : SelectingItemsControl,
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, optionButton, AbstractOptionButton.ContentTemplateProperty));
+                optionButton[!AbstractOptionButton.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, optionButton, AbstractOptionButton.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, ButtonStyleProperty, optionButton, AbstractOptionButton.ButtonStyleProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, optionButton, AbstractOptionButton.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsWaveSpiritEnabledProperty, optionButton,
-                AbstractOptionButton.IsWaveSpiritEnabledProperty));
+            optionButton[!IsMotionEnabledProperty]                  = this[!IsMotionEnabledProperty];
+            optionButton[!SizeTypeProperty]                         = this[!SizeTypeProperty];
+            optionButton[!IsWaveSpiritEnabledProperty]              = this[!IsWaveSpiritEnabledProperty];
+            optionButton[!AbstractOptionButton.ButtonStyleProperty] = this[!ButtonStyleProperty];
             
-            PrepareOptionButton(optionButton, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(optionButton, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(optionButton);
-            }
-            _itemsBindingDisposables.Add(optionButton, disposables);
+            PrepareOptionButton(optionButton, item, index);
             optionButton.IsCheckedChanged += HandleOptionButtonChecked;
         }  
         else
@@ -235,7 +199,7 @@ public class AbstractOptionButtonGroup : SelectingItemsControl,
         }
     }
     
-    protected virtual void PrepareOptionButton(AbstractOptionButton optionButton, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareOptionButton(AbstractOptionButton optionButton, object? item, int index)
     {
     }
 

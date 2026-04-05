@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Data;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -13,9 +10,9 @@ using Avalonia.VisualTree;
 namespace AtomUI.Controls.Commons;
 
 public abstract class AbstractSegmented : SelectingItemsControl,
-                                 IMotionAwareControl,
-                                 ISizeTypeAware,
-                                 IFormItemAware
+                                          IMotionAwareControl,
+                                          ISizeTypeAware,
+                                          IFormItemAware
 {
     #region 公共属性定义
 
@@ -99,8 +96,6 @@ public abstract class AbstractSegmented : SelectingItemsControl,
     }
     
     #endregion
-    
-    private readonly Dictionary<AbstractSegmentedItem, CompositeDisposable> _itemsBindingDisposables = new();
 
     static AbstractSegmented()
     {
@@ -117,30 +112,8 @@ public abstract class AbstractSegmented : SelectingItemsControl,
 
     public AbstractSegmented()
     {
-        SelectionChanged                  += HandleSelectionChanged;
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
-        SelectionMode                     =  SelectionMode.Single;
-    }
-
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is AbstractSegmentedItem segmentedItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(segmentedItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(segmentedItem);
-                        }
-                    }
-                }
-            }
-        }
+        SelectionChanged += HandleSelectionChanged;
+        SelectionMode    =  SelectionMode.Single;
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -210,33 +183,25 @@ public abstract class AbstractSegmented : SelectingItemsControl,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is AbstractSegmentedItem segmentedItem)
         {
-            var disposables = new CompositeDisposable(2);
             
             if (item != null && item is not Visual)
             {
                 segmentedItem.SetCurrentValue(AbstractSegmentedItem.ContentProperty, item);
                 if (ItemTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, segmentedItem, AbstractSegmentedItem.ContentTemplateProperty));
+                    segmentedItem[!AbstractSegmentedItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
                 }
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, segmentedItem, AbstractSegmentedItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, segmentedItem, AbstractSegmentedItem.IsMotionEnabledProperty));
+            segmentedItem[!SizeTypeProperty]        = this[!SizeTypeProperty];
+            segmentedItem[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
 
             if (segmentedItem.IsSelected)
             {
                 SetCurrentValue(SelectedItemProperty, ItemFromContainer(segmentedItem));
             }
             
-            PrepareSegmentedItem(segmentedItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(segmentedItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(segmentedItem);
-            }
-            _itemsBindingDisposables.Add(segmentedItem, disposables);
+            PrepareSegmentedItem(segmentedItem, item, index);
         }
         else
         {
@@ -244,7 +209,7 @@ public abstract class AbstractSegmented : SelectingItemsControl,
         }
     }
     
-    protected virtual void PrepareSegmentedItem(AbstractSegmentedItem segmentedItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareSegmentedItem(AbstractSegmentedItem segmentedItem, object? item, int index)
     {
     }
 

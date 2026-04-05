@@ -1,6 +1,4 @@
-﻿using System.Reactive.Disposables;
-using AtomUI.Data;
-using AtomUI.Utils;
+﻿using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -108,7 +106,6 @@ public abstract class AbstractCountBadge : Control, IMotionAwareControl
 
     private protected AbstractCountBadgeAdorner? _badgeAdorner;
     private protected AdornerLayer? _adornerLayer;
-    private protected CompositeDisposable? _adornerBindingDisposables;
 
     static AbstractCountBadge()
     {
@@ -190,14 +187,11 @@ public abstract class AbstractCountBadge : Control, IMotionAwareControl
     {
         if (_badgeAdorner is not null)
         {
-            _adornerBindingDisposables?.Dispose();
-            _adornerBindingDisposables = new CompositeDisposable(5);
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, OffsetProperty, _badgeAdorner, AbstractCountBadgeAdorner.OffsetProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, SizeProperty, _badgeAdorner, AbstractCountBadgeAdorner.SizeProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, OverflowCountProperty, _badgeAdorner, AbstractCountBadgeAdorner.OverflowCountProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, CountProperty, _badgeAdorner, AbstractCountBadgeAdorner.CountProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, _badgeAdorner,
-                AbstractCountBadgeAdorner.IsMotionEnabledProperty));
+            _badgeAdorner[!AbstractCountBadgeAdorner.OffsetProperty] = this[!OffsetProperty];
+            _badgeAdorner[!SizeProperty]                             = this[!SizeProperty];
+            _badgeAdorner[!OverflowCountProperty]                    = this[!OverflowCountProperty];
+            _badgeAdorner[!CountProperty]                            = this[!CountProperty];
+            _badgeAdorner[!IsMotionEnabledProperty]                  = this[!IsMotionEnabledProperty];
         }
     }
 

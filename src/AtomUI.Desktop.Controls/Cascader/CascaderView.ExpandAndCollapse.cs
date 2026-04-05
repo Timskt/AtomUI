@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
-using AtomUI.Data;
-using AtomUI.Desktop.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
@@ -199,9 +197,10 @@ public partial class CascaderView
                 ItemsSource            = attachedOption.Children,
                 ParentCascaderViewItem = cascaderViewItem
             };
-            BindUtils.RelayBind(this, OptionTemplateProperty, childLevelList, CascaderViewLevelList.ItemTemplateProperty);
-            BindUtils.RelayBind(this, IsAllowSelectParentProperty, childLevelList, CascaderViewLevelList.IsAllowSelectParentProperty);
-            BindUtils.RelayBind(this, ExpandTriggerProperty, childLevelList, CascaderViewLevelList.ExpandTriggerProperty);
+            childLevelList[!CascaderViewLevelList.ItemTemplateProperty]        = this[!OptionTemplateProperty];
+            childLevelList[!CascaderViewLevelList.IsAllowSelectParentProperty] = this[!IsAllowSelectParentProperty];
+            childLevelList[!CascaderViewLevelList.ExpandTriggerProperty]       = this[!ExpandTriggerProperty];
+            
             _itemsPanel.Children.Add(childLevelList);
         }
         cascaderViewItem.SetCurrentValue(CascaderViewItem.IsExpandedProperty, true);

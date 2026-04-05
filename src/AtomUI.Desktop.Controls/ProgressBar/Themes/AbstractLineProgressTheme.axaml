@@ -16,6 +16,7 @@
                            Padding="0"
                            Margin="0"
                            VerticalContentAlignment="Center"
+                           Foreground="{TemplateBinding PercentageLabelColor}"
                            IsEnabled="{TemplateBinding IsEnabled}" />
                 </LayoutTransformControl>
                 
