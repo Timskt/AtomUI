@@ -1,8 +1,5 @@
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Controls.Commons;
-using AtomUI.Data;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
@@ -121,9 +118,6 @@ public class AvatarGroup : TemplatedControl, IMotionAwareControl
     private Avatar? _foldCountAvatar;
     private FlyoutHost? _foldCountFlyout;
     private StackPanel? _foldCountStackPanel;
-    private readonly Dictionary<Control, CompositeDisposable> _itemBindingDisposables = new();
-    private CompositeDisposable? _foldAvatarBindingDisposables;
-    private CompositeDisposable? _flyoutBindingDisposables;
 
     static AvatarGroup()
     {
@@ -184,14 +178,6 @@ public class AvatarGroup : TemplatedControl, IMotionAwareControl
                 var items = e.OldItems!.OfType<Control>().ToList();
                 LogicalChildren.RemoveAll(items);
                 VisualChildren.RemoveAll(items);
-                foreach (var child in items)
-                {
-                    if (_itemBindingDisposables.TryGetValue(child, out var disposable))
-                    {
-                        disposable.Dispose();
-                    }
-                    _itemBindingDisposables.Remove(child);
-                }
                 break;
 
             case NotifyCollectionChangedAction.Replace:
@@ -237,13 +223,11 @@ public class AvatarGroup : TemplatedControl, IMotionAwareControl
 
     private void ConfigureAvatar(Avatar avatar)
     {
-        var disposable = new CompositeDisposable();
-        disposable.Add(BindUtils.RelayBind(this, BorderThicknessProperty, avatar, BorderThicknessProperty));
-        disposable.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, avatar, IsMotionEnabledProperty));
-        disposable.Add(BindUtils.RelayBind(this, ShapeProperty, avatar, ShapeProperty));
-        disposable.Add(BindUtils.RelayBind(this, SizeProperty, avatar, SizeProperty));
-        disposable.Add(BindUtils.RelayBind(this, SizeTypeProperty, avatar, SizeTypeProperty));
-        _itemBindingDisposables.Add(avatar, disposable);
+        avatar[!BorderThicknessProperty] = this[!BorderThicknessProperty];
+        avatar[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+        avatar[!ShapeProperty]           = this[!ShapeProperty];
+        avatar[!SizeProperty]            = this[!SizeProperty];
+        avatar[!SizeTypeProperty]        = this[!SizeTypeProperty];
     }
 
     private Avatar GetFoldCountAvatar()
@@ -251,14 +235,13 @@ public class AvatarGroup : TemplatedControl, IMotionAwareControl
         if (_foldCountAvatar == null)
         {
             _foldCountAvatar = new Avatar();
-            _foldAvatarBindingDisposables?.Dispose();
-            _foldAvatarBindingDisposables = new CompositeDisposable();
-            _foldAvatarBindingDisposables.Add(BindUtils.RelayBind(this, BorderThicknessProperty, _foldCountAvatar, BorderThicknessProperty));
-            _foldAvatarBindingDisposables.Add(BindUtils.RelayBind(this, ShapeProperty, _foldCountAvatar, ShapeProperty));
-            _foldAvatarBindingDisposables.Add(BindUtils.RelayBind(this, SizeProperty, _foldCountAvatar, SizeProperty));
-            _foldAvatarBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, _foldCountAvatar, SizeTypeProperty));
-            _foldAvatarBindingDisposables.Add(BindUtils.RelayBind(this, FoldInfoAvatarForegroundProperty, _foldCountAvatar, Avatar.ForegroundProperty));
-            _foldAvatarBindingDisposables.Add(BindUtils.RelayBind(this, FoldInfoAvatarBackgroundProperty, _foldCountAvatar, Avatar.BackgroundProperty));
+            
+            _foldCountAvatar[!BorderThicknessProperty] = this[!BorderThicknessProperty];
+            _foldCountAvatar[!ShapeProperty]           = this[!ShapeProperty];
+            _foldCountAvatar[!SizeProperty]            = this[!SizeProperty];
+            _foldCountAvatar[!SizeTypeProperty]        = this[!SizeTypeProperty];
+            _foldCountAvatar[!ForegroundProperty]      = this[!FoldInfoAvatarForegroundProperty];
+            _foldCountAvatar[!BackgroundProperty]      = this[!FoldInfoAvatarBackgroundProperty];
         }
        
         return _foldCountAvatar;
@@ -270,15 +253,15 @@ public class AvatarGroup : TemplatedControl, IMotionAwareControl
         var foldCountAvatar = GetFoldCountAvatar();
         if (_foldCountFlyout == null)
         {
-            _flyoutBindingDisposables?.Dispose();
-            _flyoutBindingDisposables        = new CompositeDisposable();
             _foldCountFlyout                 = new FlyoutHost();
             _foldCountFlyout.ZIndex          = Int32.MaxValue;
             _foldCountFlyout.Content         = foldCountAvatar;
             _foldCountStackPanel             = new StackPanel();
             _foldCountStackPanel.Orientation = Orientation.Horizontal;
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, GroupSpaceProperty, _foldCountStackPanel, StackPanel.SpacingProperty));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, FoldAvatarFlyoutTriggerTypeProperty, _foldCountFlyout, FlyoutHost.TriggerProperty));
+            
+            _foldCountStackPanel[!StackPanel.SpacingProperty] = this[!GroupSpaceProperty];
+            _foldCountFlyout[!FlyoutHost.TriggerProperty]     = this[!FoldAvatarFlyoutTriggerTypeProperty];
+            
             _foldCountFlyout.Flyout = new Flyout
             {
                 Content = _foldCountStackPanel

@@ -4,7 +4,7 @@ using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.WorkspaceWindowLang;
 
-[LanguageProvider(LanguageCode.en_US, WorkspaceWindow.LanguageId, Constants.LanguageCatalog)]
+[LanguageProvider(LanguageCode.en_US, WorkspaceWindow.LanguageId)]
 internal class en_US : LanguageProvider
 {
     public const string MenuItemSettings = "Settings";

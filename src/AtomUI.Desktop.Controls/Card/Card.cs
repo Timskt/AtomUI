@@ -1,7 +1,5 @@
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Styling;
@@ -212,7 +210,6 @@ public class Card : HeaderedContentControl,
     #endregion
 
     private CardActionPanel? _cardActionPanel;
-    private CompositeDisposable? _contentBindingDisposables;
     
     static Card()
     {
@@ -262,7 +259,6 @@ public class Card : HeaderedContentControl,
 
     private void ConfigureContentType()
     {
-        _contentBindingDisposables?.Dispose();
         // 暂时只能探测 Content 直接指定的情况
         if (Content is CardMetaContent)
         {
@@ -271,16 +267,14 @@ public class Card : HeaderedContentControl,
         else if (Content is CardTabsContent cardTabsContent)
         {
             SetCurrentValue(ContentTypeProperty, CardContentType.Tabs);
-            _contentBindingDisposables = new CompositeDisposable();
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, cardTabsContent, CardTabsContent.IsMotionEnabledProperty));
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, cardTabsContent, CardTabsContent.SizeTypeProperty));
+            cardTabsContent[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            cardTabsContent[!SizeTypeProperty]        = this[!SizeTypeProperty];
         }
         else if (Content is CardGridContent cardGridContent)
         {
             SetCurrentValue(ContentTypeProperty, CardContentType.Grid);
-            _contentBindingDisposables = new CompositeDisposable();
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, cardGridContent, CardGridContent.IsMotionEnabledProperty));
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, cardGridContent, CardGridContent.SizeTypeProperty));
+            cardGridContent[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            cardGridContent[!SizeTypeProperty]        = this[!SizeTypeProperty];
         }
     }
     

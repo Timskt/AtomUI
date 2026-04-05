@@ -4,7 +4,7 @@ using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang;
 
-[LanguageProvider(LanguageCode.en_US, CaseNavigation.LanguageId, Constants.LanguageCatalog)]
+[LanguageProvider(LanguageCode.en_US, CaseNavigation.LanguageId)]
 internal class en_US : LanguageProvider
 {
     public const string General = "General";
