@@ -8,7 +8,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -161,9 +160,7 @@ public class DropdownButton : Button
     
     private MenuFlyoutPresenter? _menuFlyoutPresenter;
     private readonly FlyoutStateHelper _flyoutStateHelper;
-    private CompositeDisposable? _flyoutHelperBindingDisposables;
     private CompositeDisposable? _flyoutBindingDisposables;
-    
     static DropdownButton()
     {
         PlacementProperty.OverrideDefaultValue<DropdownButton>(PlacementMode.BottomEdgeAlignedLeft);
@@ -176,7 +173,11 @@ public class DropdownButton : Button
         {
             AnchorTarget = this
         };
-        _flyoutStateHelper.ClickHideFlyoutPredicate = ClickHideFlyoutPredicate;
+        _flyoutStateHelper.ClickHideFlyoutPredicate                    = ClickHideFlyoutPredicate;
+        _flyoutStateHelper[!FlyoutStateHelper.FlyoutProperty]          = this[!DropdownFlyoutProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseEnterDelayProperty] = this[!MouseEnterDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseLeaveDelayProperty] = this[!MouseLeaveDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.TriggerTypeProperty]     = this[!TriggerTypeProperty];
     }
 
     protected override void OnInitialized()
@@ -186,27 +187,6 @@ public class DropdownButton : Button
         {
             SetCurrentValue(OpenIndicatorProperty, new DownOutlined());
         }
-    }
-
-    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToLogicalTree(e);
-        _flyoutHelperBindingDisposables?.Dispose();
-        _flyoutHelperBindingDisposables = new CompositeDisposable(4);
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, DropdownFlyoutProperty, _flyoutStateHelper, FlyoutStateHelper.FlyoutProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseEnterDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseEnterDelayProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseLeaveDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseLeaveDelayProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, TriggerTypeProperty, _flyoutStateHelper, FlyoutStateHelper.TriggerTypeProperty));
-        SetupFlyoutProperties();
-    }
-
-    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromLogicalTree(e);
-        _flyoutHelperBindingDisposables?.Dispose();
-        _flyoutBindingDisposables?.Dispose();
     }
     
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -221,20 +201,16 @@ public class DropdownButton : Button
         _flyoutStateHelper.NotifyDetachedFromVisualTree();
     }
     
-    private void SetupFlyoutProperties()
+    private void SetupFlyoutProperties(MenuFlyout menuFlyout)
     {
-        if (DropdownFlyout is not null)
-        {
-            _flyoutBindingDisposables?.Dispose();
-            _flyoutBindingDisposables = new CompositeDisposable(8);
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, DropdownFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementAnchorProperty, DropdownFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementGravityProperty, DropdownFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowArrowProperty, DropdownFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsPointAtCenterProperty, DropdownFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, DropdownFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, DropdownFlyout));
-        }
+        _flyoutBindingDisposables = new CompositeDisposable(8);
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, menuFlyout));
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementAnchorProperty, menuFlyout));
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementGravityProperty, menuFlyout));
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowArrowProperty, menuFlyout));
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsPointAtCenterProperty, menuFlyout));
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, menuFlyout));
+        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuFlyout));
     }
     
     private bool ClickHideFlyoutPredicate(IPopupHostProvider hostProvider, RawPointerEventArgs args)
@@ -297,6 +273,7 @@ public class DropdownButton : Button
         {
             if (change.OldValue is MenuFlyout oldMenuFlyout)
             {
+                _flyoutBindingDisposables?.Dispose();
                 oldMenuFlyout.Opened -= HandleFlyoutOpened;
                 oldMenuFlyout.Closed -= HandleFlyoutClosed;
             }
@@ -305,6 +282,7 @@ public class DropdownButton : Button
             {
                 newMenuFlyout.Opened += HandleFlyoutOpened;
                 newMenuFlyout.Closed += HandleFlyoutClosed;
+                SetupFlyoutProperties(newMenuFlyout);
             }
         }
 

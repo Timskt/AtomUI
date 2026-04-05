@@ -1,7 +1,5 @@
 ﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls;
@@ -53,8 +51,6 @@ public class Breadcrumb : ItemsControl, IMotionAwareControl
     public event EventHandler<BreadcrumbNavigateEventArgs>? NavigateRequest;
 
     #endregion
-    
-    private Dictionary<BreadcrumbItem, CompositeDisposable> _itemBindingDisposables = new();
 
     public Breadcrumb()
     {
@@ -75,24 +71,6 @@ public class Breadcrumb : ItemsControl, IMotionAwareControl
                 }
             }
         }
-
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is BreadcrumbItem breadcrumbItem)
-                    {
-                        if (_itemBindingDisposables.TryGetValue(breadcrumbItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemBindingDisposables.Remove(breadcrumbItem);
-                    }
-                }
-            }
-        }
     }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
@@ -110,8 +88,6 @@ public class Breadcrumb : ItemsControl, IMotionAwareControl
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is BreadcrumbItem breadcrumbItem)
         {
-            var disposables = new CompositeDisposable(1);
-
             if (item != null && item is not Visual)
             {
                 if (!breadcrumbItem.IsSet(BreadcrumbItem.ContentProperty))
@@ -150,19 +126,10 @@ public class Breadcrumb : ItemsControl, IMotionAwareControl
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, breadcrumbItem, BreadcrumbItem.ContentTemplateProperty));
+                breadcrumbItem[!BreadcrumbItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, breadcrumbItem, BreadcrumbItem.IsMotionEnabledProperty));
-            
-            PrepareBreadcrumbItem(breadcrumbItem, item, index, disposables);
-            
-            if (_itemBindingDisposables.TryGetValue(breadcrumbItem, out var disposable))
-            {
-                disposable.Dispose();
-                _itemBindingDisposables.Remove(breadcrumbItem);
-            }
-            _itemBindingDisposables.Add(breadcrumbItem, disposables);
+            breadcrumbItem[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            PrepareBreadcrumbItem(breadcrumbItem, item, index);
             ConfigureItemSeparator(breadcrumbItem);
         }
         else
@@ -171,7 +138,7 @@ public class Breadcrumb : ItemsControl, IMotionAwareControl
         }
     }
     
-    protected virtual void PrepareBreadcrumbItem(BreadcrumbItem breadcrumbItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareBreadcrumbItem(BreadcrumbItem breadcrumbItem, object? item, int index)
     {
     }
 
