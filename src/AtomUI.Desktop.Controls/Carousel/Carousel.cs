@@ -1,5 +1,4 @@
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using Avalonia;
@@ -8,7 +7,6 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -182,6 +180,12 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
             o => o.IsEffectiveShowTransitionProgress,
             (o, v) => o.IsEffectiveShowTransitionProgress = v);
     
+    internal static readonly DirectProperty<Carousel, IList<object>?> IndicatorItemsProperty =
+        AvaloniaProperty.RegisterDirect<Carousel, IList<object>?>(
+            nameof(IndicatorItems),
+            o => o.IndicatorItems,
+            (o, v) => o.IndicatorItems = v);
+    
     private static readonly FuncTemplate<Panel?> DefaultPanel =
         new(() => new VirtualizingCarouselPanel());
     
@@ -244,6 +248,14 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
         get => GetValue(PaginationOffsetProperty);
         set => SetValue(PaginationOffsetProperty, value);
     }
+    
+    private IList<object>? _indicatorItems;
+
+    internal IList<object>? IndicatorItems
+    {
+        get => _indicatorItems;
+        set => SetAndRaise(IndicatorItemsProperty, ref _indicatorItems, value);
+    }
 
     #endregion
     
@@ -263,17 +275,22 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
         ItemsPanelProperty.OverrideDefaultValue<Carousel>(DefaultPanel);
         AffectsArrange<Carousel>(SelectedIndexProperty);
         AutoScrollToSelectedItemProperty.OverrideDefaultValue<Carousel>(false);
+        ItemCountProperty.Changed.AddClassHandler<Carousel>((carousel, args) => carousel.HandleItemCountChanged(args.GetNewValue<int>()));
     }
 
     public Carousel()
     {
         this.RegisterTokenResourceScope(CarouselToken.ScopeProvider);
-        SelectionChanged += HandleSelectionChanged;
     }
     
-    private void HandleSelectionChanged(object? sender, SelectionChangedEventArgs args)
+    private void HandleItemCountChanged(int count)
     {
-        SyncPagination();
+        var items = new List<object>();
+        for (var i = 0; i < count; i++)
+        {
+            items.Add(new object());
+        }
+        SetCurrentValue(IndicatorItemsProperty, items);
     }
     
     public void Next()
@@ -322,11 +339,6 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
         _pagination     = e.NameScope.Find<CarouselPagination>(CarouselThemeConstants.PaginationPart);
         _previousButton = e.NameScope.Find<IconButton>(CarouselThemeConstants.PreviousButtonPart);
         _nextButton     = e.NameScope.Find<IconButton>(CarouselThemeConstants.NextButtonPart);
-        SyncPagination();
-        if (_pagination != null)
-        {
-            BindUtils.RelayBind(this, SelectedIndexProperty, _pagination, SelectedIndexProperty, BindingMode.TwoWay);
-        }
         BuildEffectivePageTransition(false);
         ConfigureNavButtons();
         if (_previousButton != null)
@@ -610,34 +622,6 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
         }
     }
 
-    private void SyncPagination()
-    {
-        if (_pagination != null)
-        {
-            var paginationCount = _pagination.ItemCount;
-            var pageCount       = ItemCount;
-            if (paginationCount != pageCount)
-            {
-                if (pageCount < paginationCount)
-                {
-                    var delta = paginationCount - pageCount;
-                    for (var i = 0; i < delta; ++i)
-                    {
-                        _pagination.Items.RemoveAt(_pagination.Items.Count - 1);
-                    }
-                }
-                else if (pageCount > paginationCount)
-                {
-                    var delta = pageCount - paginationCount;
-                    for (var i = 0; i < delta; ++i)
-                    {
-                        _pagination.Items.Add(new CarouselPageIndicator());
-                    }
-                }
-            }
-        }
-    }
-
     private void ConfigurePaginationMargin()
     {
         if (PaginationPosition == CarouselPaginationPosition.Bottom)
@@ -735,7 +719,7 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
     {
         Next();
     }
-    
+
     private void ConfigureAutoPlayTimer()
     {
         if (_autoPlayTimer != null)
