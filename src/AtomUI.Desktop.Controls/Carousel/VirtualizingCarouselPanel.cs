@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
+using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -38,7 +39,7 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
         get => _offset;
         set
         {
-            if ((int)_offset.X != value.X)
+            if (!MathUtils.AreClose(_offset.X, value.X))
             {
                 InvalidateMeasure();
             }

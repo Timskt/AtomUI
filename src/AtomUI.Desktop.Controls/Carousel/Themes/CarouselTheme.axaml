@@ -31,7 +31,9 @@
                         <atom:CarouselPagination Name="{x:Static atom:CarouselThemeConstants.PaginationPart}"
                                                  IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
                                                  IsShowTransitionProgress="{TemplateBinding IsEffectiveShowTransitionProgress}"
-                                                 AutoPlaySpeed="{TemplateBinding AutoPlaySpeed}" />
+                                                 AutoPlaySpeed="{TemplateBinding AutoPlaySpeed}" 
+                                                 SelectedIndex="{TemplateBinding SelectedIndex, Mode=TwoWay}"
+                                                 ItemsSource="{TemplateBinding IndicatorItems}"/>
                     </LayoutTransformControl>
                 </Panel>
             </ControlTemplate>
