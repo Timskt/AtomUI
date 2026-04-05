@@ -1,6 +1,3 @@
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -65,8 +62,7 @@ public class AbstractRadioButtonGroup : ItemsControl,
     public event EventHandler<RadioButtonGroupCheckedChangedEventArgs>? CheckedChanged;
 
     #endregion
-
-    private readonly Dictionary<AbstractRadioButton, CompositeDisposable> _itemsBindingDisposables = new();
+    
     private bool _ignoreSyncChecked;
 
     static AbstractRadioButtonGroup()
@@ -74,32 +70,6 @@ public class AbstractRadioButtonGroup : ItemsControl,
         OrientationProperty.OverrideDefaultValue<AbstractRadioButtonGroup>(Orientation.Horizontal);
         AbstractRadioButton.IsCheckedChangedEvent.AddClassHandler<AbstractRadioButtonGroup>((group, args) => group.HandleRadioButtonCheckedChanged(args));
         CheckedItemProperty.Changed.AddClassHandler<AbstractRadioButtonGroup>((group, args) => group.HandleCheckedItemChanged(args));
-    }
-    
-    public AbstractRadioButtonGroup()
-    {
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is AbstractRadioButton radioButton)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(radioButton, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(radioButton);
-                        }
-                    }
-                }
-            }
-        }
     }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
@@ -117,8 +87,6 @@ public class AbstractRadioButtonGroup : ItemsControl,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is AbstractRadioButton radioButton)
         {
-            var disposables = new CompositeDisposable(4);
-            
             if (item != null && item is not Visual)
             {
                 {
@@ -144,19 +112,12 @@ public class AbstractRadioButtonGroup : ItemsControl,
                 }
                 if (ItemTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, radioButton, AbstractRadioButton.ContentTemplateProperty));
+                    radioButton[!AbstractRadioButton.ContentTemplateProperty] = this[!ItemTemplateProperty];
                 }
             }
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, radioButton, AbstractRadioButton.IsMotionEnabledProperty));
+            radioButton[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             
-            PrepareRadioButton(radioButton, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(radioButton, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(radioButton);
-            }
-            _itemsBindingDisposables.Add(radioButton, disposables);
+            PrepareRadioButton(radioButton, item, index);
         }  
         else
         {
@@ -164,7 +125,7 @@ public class AbstractRadioButtonGroup : ItemsControl,
         }
     }
     
-    protected virtual void PrepareRadioButton(AbstractRadioButton radioButton, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareRadioButton(AbstractRadioButton radioButton, object? item, int index)
     {
     }
     

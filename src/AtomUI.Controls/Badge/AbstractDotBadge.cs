@@ -1,6 +1,4 @@
-﻿using System.Reactive.Disposables;
-using AtomUI.Data;
-using AtomUI.Utils;
+﻿using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -93,7 +91,6 @@ public abstract class AbstractDotBadge : Control, IMotionAwareControl
 
     private protected AbstractDotBadgeAdorner? _dotBadgeAdorner;
     private protected AdornerLayer? _adornerLayer;
-    private protected CompositeDisposable? _adornerBindingDisposables;
 
     static AbstractDotBadge()
     {
@@ -171,12 +168,10 @@ public abstract class AbstractDotBadge : Control, IMotionAwareControl
     {
         if (_dotBadgeAdorner is not null)
         {
-            _adornerBindingDisposables?.Dispose();
-            _adornerBindingDisposables = new CompositeDisposable(4);
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, StatusProperty, _dotBadgeAdorner, AbstractDotBadgeAdorner.StatusProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, TextProperty, _dotBadgeAdorner, AbstractDotBadgeAdorner.TextProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, OffsetProperty, _dotBadgeAdorner, AbstractDotBadgeAdorner.OffsetProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, _dotBadgeAdorner, AbstractDotBadgeAdorner.IsMotionEnabledProperty));
+            _dotBadgeAdorner[!AbstractDotBadgeAdorner.StatusProperty] = this[!StatusProperty];
+            _dotBadgeAdorner[!AbstractDotBadgeAdorner.TextProperty]   = this[!TextProperty];
+            _dotBadgeAdorner[!AbstractDotBadgeAdorner.OffsetProperty] = this[!OffsetProperty];
+            _dotBadgeAdorner[!IsMotionEnabledProperty]                = this[!IsMotionEnabledProperty];
         }
     }
 

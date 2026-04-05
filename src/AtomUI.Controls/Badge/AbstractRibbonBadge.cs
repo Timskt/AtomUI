@@ -1,6 +1,4 @@
-﻿using System.Reactive.Disposables;
-using AtomUI.Data;
-using AtomUI.Theme.Palette;
+﻿using AtomUI.Theme.Palette;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -88,7 +86,6 @@ public abstract class AbstractRibbonBadge : Control
     
     private protected AbstractRibbonBadgeAdorner? _ribbonBadgeAdorner;
     private protected AdornerLayer? _adornerLayer;
-    private protected CompositeDisposable? _adornerBindingDisposables;
 
     private protected void HandleDecoratedTargetChanged()
     {
@@ -134,11 +131,9 @@ public abstract class AbstractRibbonBadge : Control
     {
         if (_ribbonBadgeAdorner is not null)
         {
-            _adornerBindingDisposables?.Dispose();
-            _adornerBindingDisposables = new CompositeDisposable(3);
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, TextProperty, _ribbonBadgeAdorner, AbstractRibbonBadgeAdorner.TextProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, OffsetProperty, _ribbonBadgeAdorner, AbstractRibbonBadgeAdorner.OffsetProperty));
-            _adornerBindingDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, _ribbonBadgeAdorner, AbstractRibbonBadgeAdorner.PlacementProperty));
+            _ribbonBadgeAdorner[!AbstractRibbonBadgeAdorner.TextProperty]      = this[!TextProperty];
+            _ribbonBadgeAdorner[!AbstractRibbonBadgeAdorner.OffsetProperty]    = this[!OffsetProperty];
+            _ribbonBadgeAdorner[!AbstractRibbonBadgeAdorner.PlacementProperty] = this[!PlacementProperty];
         }
     }
 

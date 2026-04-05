@@ -7,6 +7,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Controls.Commons;
@@ -50,6 +51,9 @@ public abstract class AbstractLineProgress : AbstractProgressBar
     internal static readonly StyledProperty<double> LineInfoIconSizeProperty =
         AvaloniaProperty.Register<AbstractLineProgress, double>(
             nameof(LineInfoIconSize));
+    
+    internal static readonly StyledProperty<IBrush?> PercentageLabelColorProperty =
+        AvaloniaProperty.Register<AbstractLineProgress, IBrush?>(nameof(PercentageLabelColor));
 
     internal double LineProgressPadding
     {
@@ -67,6 +71,12 @@ public abstract class AbstractLineProgress : AbstractProgressBar
     {
         get => GetValue(LineInfoIconSizeProperty);
         set => SetValue(LineInfoIconSizeProperty, value);
+    }
+    
+    internal IBrush? PercentageLabelColor
+    {
+        get => GetValue(PercentageLabelColorProperty);
+        set => SetValue(PercentageLabelColorProperty, value);
     }
 
     #endregion

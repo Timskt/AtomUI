@@ -1,7 +1,6 @@
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using Avalonia;
@@ -205,8 +204,7 @@ public class Steps : SelectingItemsControl,
     }
 
     #endregion
-
-    private readonly Dictionary<StepsItem, CompositeDisposable> _itemsBindingDisposables = new();
+    
     private Grid? _grid;
     private CompositeDisposable? _currentItemSubscriptions;
     
@@ -240,23 +238,6 @@ public class Steps : SelectingItemsControl,
     
     private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is StepsItem stepsItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(stepsItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(stepsItem);
-                        }
-                    }
-                }
-            }
-        }
         ConfigureItemsPanel();
         ConfigureCurrentStepsItem();
     }
@@ -276,8 +257,6 @@ public class Steps : SelectingItemsControl,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is StepsItem stepsItem)
         {
-            var disposables = new CompositeDisposable(2);
-            
             if (item != null && item is not Visual)
             {
                 if (!stepsItem.IsSet(StepsItem.ContentProperty))
@@ -288,27 +267,20 @@ public class Steps : SelectingItemsControl,
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, stepsItem, StepsItem.ContentTemplateProperty));
+                stepsItem[!StepsItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, stepsItem, StepsItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, StyleProperty, stepsItem, StepsItem.StyleProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemIndicatorTypeProperty, stepsItem, StepsItem.IndicatorTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsItemClickableProperty, stepsItem, StepsItem.IsClickableProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, stepsItem, StepsItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, OrientationProperty, stepsItem, StepsItem.OrientationProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowItemProgressProperty, stepsItem, StepsItem.IsShowProgressProperty));
-            disposables.Add(BindUtils.RelayBind(this, ProgressValueProperty, stepsItem, StepsItem.ProgressValueProperty));
-            disposables.Add(BindUtils.RelayBind(this, LabelPlacementProperty, stepsItem, StepsItem.LabelPlacementProperty));
+            stepsItem[!StepsItem.SizeTypeProperty]        = this[!SizeTypeProperty];
+            stepsItem[!StepsItem.StyleProperty]           = this[!StyleProperty];
+            stepsItem[!StepsItem.IndicatorTypeProperty]   = this[!ItemIndicatorTypeProperty];
+            stepsItem[!StepsItem.IsClickableProperty]     = this[!IsItemClickableProperty];
+            stepsItem[!StepsItem.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            stepsItem[!StepsItem.OrientationProperty]     = this[!OrientationProperty];
+            stepsItem[!StepsItem.IsShowProgressProperty]  = this[!IsShowItemProgressProperty];
+            stepsItem[!StepsItem.ProgressValueProperty]   = this[!ProgressValueProperty];
+            stepsItem[!StepsItem.LabelPlacementProperty]  = this[!LabelPlacementProperty];
             
-            PrepareStepsItem(stepsItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(stepsItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(stepsItem);
-            }
-            _itemsBindingDisposables.Add(stepsItem, disposables);
+            PrepareStepsItem(stepsItem, item, index);
         }
         else
         {
@@ -316,7 +288,7 @@ public class Steps : SelectingItemsControl,
         }
     }
     
-    protected virtual void PrepareStepsItem(StepsItem stepsItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareStepsItem(StepsItem stepsItem, object? item, int index)
     {
     }
     

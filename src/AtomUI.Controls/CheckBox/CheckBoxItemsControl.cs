@@ -47,39 +47,11 @@ internal class CheckBoxItemsControl : SelectingItemsControl
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
     }
-    
-    private readonly Dictionary<AbstractCheckBox, CompositeDisposable> _itemsBindingDisposables = new();
 
     static CheckBoxItemsControl()
     {
         SelectionModeProperty.OverrideDefaultValue<CheckBoxItemsControl>(SelectionMode.Multiple | SelectionMode.Toggle);
         AbstractCheckBox.IsCheckedChangedEvent.AddClassHandler<CheckBoxItemsControl>((group, args) => group.HandleCheckBoxCheckedChanged(args));
-    }
-    
-    public CheckBoxItemsControl()
-    {
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is AbstractCheckBox checkbox)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(checkbox, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(checkbox);
-                        }
-                    }
-                }
-            }
-        }
     }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
@@ -97,8 +69,6 @@ internal class CheckBoxItemsControl : SelectingItemsControl
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is AbstractCheckBox checkbox)
         {
-            var disposables = new CompositeDisposable(4);
-            
             if (item != null && item is not Visual)
             {
                 {
@@ -128,19 +98,12 @@ internal class CheckBoxItemsControl : SelectingItemsControl
                 }
                 if (ItemTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, checkbox, AbstractCheckBox.ContentTemplateProperty));
+                    checkbox[!AbstractCheckBox.ContentTemplateProperty] = this[!ItemTemplateProperty];
                 }
             }
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, checkbox, AbstractCheckBox.IsMotionEnabledProperty));
+            checkbox[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             
-            PrepareRadioButton(checkbox, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(checkbox, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(checkbox);
-            }
-            _itemsBindingDisposables.Add(checkbox, disposables);
+            PrepareRadioButton(checkbox, item, index);
         }  
         else
         {
@@ -148,7 +111,7 @@ internal class CheckBoxItemsControl : SelectingItemsControl
         }
     }
     
-    protected virtual void PrepareRadioButton(AbstractCheckBox checkbox, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareRadioButton(AbstractCheckBox checkbox, object? item, int index)
     {
     }
     

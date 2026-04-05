@@ -1,6 +1,3 @@
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -85,56 +82,19 @@ internal class RateItemsControl : ItemsControl, ISizeTypeAware
     
     #endregion
     
-    private readonly Dictionary<RateItem, CompositeDisposable> _itemsBindingDisposables = new();
-
-    public RateItemsControl()
-    {
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is RateItem rateItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(rateItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(rateItem);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     protected override void PrepareContainerForItemOverride(Control container, object? item, int index)
     {
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is RateItem rateItem)
         {
-            var disposables = new CompositeDisposable(2);
-            
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, rateItem, RateItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, rateItem, RateItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, CharacterProperty, rateItem, RateItem.CharacterProperty));
-            disposables.Add(BindUtils.RelayBind(this, StarColorProperty, rateItem, RateItem.StarColorProperty));
-            disposables.Add(BindUtils.RelayBind(this, StarBgColorProperty, rateItem, RateItem.StarBgColorProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsAllowClearProperty, rateItem, RateItem.IsAllowClearProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsAllowHalfProperty, rateItem, RateItem.IsAllowHalfProperty));
-            disposables.Add(BindUtils.RelayBind(this, FontSizeProperty, rateItem, RateItem.FontSizeProperty));
-            
-            if (_itemsBindingDisposables.TryGetValue(rateItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(rateItem);
-            }
-            _itemsBindingDisposables.Add(rateItem, disposables);
+            rateItem[!SizeTypeProperty]              = this[!SizeTypeProperty];
+            rateItem[!IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+            rateItem[!RateItem.CharacterProperty]    = this[!CharacterProperty];
+            rateItem[!RateItem.StarColorProperty]    = this[!StarColorProperty];
+            rateItem[!RateItem.StarBgColorProperty]  = this[!StarBgColorProperty];
+            rateItem[!RateItem.IsAllowClearProperty] = this[!IsAllowClearProperty];
+            rateItem[!RateItem.IsAllowHalfProperty]  = this[!IsAllowHalfProperty];
+            rateItem[!RateItem.FontSizeProperty]     = this[!FontSizeProperty];
         }
         else
         {
