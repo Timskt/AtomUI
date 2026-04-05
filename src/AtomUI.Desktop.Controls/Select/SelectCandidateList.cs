@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Data;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using Avalonia;
 using Avalonia.Controls;
@@ -148,10 +146,10 @@ internal class SelectCandidateList : ListView, ICandidateList
         return NeedsContainer<SelectCandidateListItem>(item, out recycleKey);
     }
     
-    protected override void PrepareListViewItem(ListViewItem listItem, object? item, int index, CompositeDisposable disposables)
+    protected override void PrepareListViewItem(ListViewItem listItem, object? item, int index)
     {
-        base.PrepareListViewItem(listItem, item, index, disposables);
-        disposables.Add(BindUtils.RelayBind(this, IsHideSelectedOptionsProperty, listItem, SelectCandidateListItem.IsHideSelectedOptionsProperty));
+        base.PrepareListViewItem(listItem, item, index);
+        listItem[!SelectCandidateListItem.IsHideSelectedOptionsProperty] = this[!IsHideSelectedOptionsProperty];
     }
     
     private void ResetScrollViewer()

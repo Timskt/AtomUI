@@ -33,7 +33,9 @@
                         Content="{TemplateBinding SearchButtonText}"
                         SizeType="{TemplateBinding SizeType}"
                         Status="{TemplateBinding Status}"
-                        StyleVariant="{TemplateBinding StyleVariant}"/>
+                        StyleVariant="{TemplateBinding StyleVariant}"
+                        BorderThickness="{Binding RightAddOnBorderThickness, RelativeSource={RelativeSource TemplatedParent}, Priority=LocalValue}"
+                        CornerRadius="{Binding RightAddOnCornerRadius, RelativeSource={RelativeSource TemplatedParent}, Priority=LocalValue}"/>
 
                     <Border Name="{x:Static atom:AddOnDecoratedBoxThemeConstants.ContentFramePart}"
                             BorderThickness="{TemplateBinding InnerBoxBorderThickness}"

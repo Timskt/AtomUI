@@ -11,7 +11,6 @@ using Avalonia.Utilities;
 using System.Diagnostics;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
@@ -121,7 +120,7 @@ public partial class DataGridRow
                     IsVisible = false,
                     OwningRow = this
                 };
-                BindUtils.RelayBind(OwningGrid, DataGrid.SizeTypeProperty, _fillerCell, DataGridCell.SizeTypeProperty);
+                _fillerCell[SizeTypeProperty] = OwningGrid[!DataGrid.SizeTypeProperty];
                 if (_cellsElement != null)
                 {
                     _cellsElement.Children.Add(_fillerCell);

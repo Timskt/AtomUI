@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme.Language;
 using AtomUI.Theme.Styling;
 using Avalonia;
@@ -111,7 +109,6 @@ internal class ThemeManager : Styles, IThemeManager
     
     private readonly Dictionary<LanguageVariant, ResourceDictionary> _languages;
     private List<ILanguageProvider>? _languageProviders;
-    private CompositeDisposable? _applicationDisposables;
     
     internal ThemeManager()
     {
@@ -467,9 +464,7 @@ internal class ThemeManager : Styles, IThemeManager
 
     public void AttachApplication(Application application)
     {
-        _applicationDisposables?.Dispose();
-        _applicationDisposables = new CompositeDisposable();
-        _applicationDisposables.Add(BindUtils.RelayBind(application, Application.ActualThemeVariantProperty, this, ThemeVariantProperty));
+        this[!ThemeVariantProperty] = application[!Application.ActualThemeVariantProperty];
         // TODO 需要审查
         ConfigureThemeVariant(application.ActualThemeVariant);
         application.Styles.Add(this);

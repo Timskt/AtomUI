@@ -107,6 +107,7 @@ public class FormItemDecorator : TemplatedControl,
         if (e.OldValue is IFormItemAware oldFormItemAware)
         {
             _disposables?.Dispose();
+            _disposables                  =  null;
             oldFormItemAware.ValueChanged -= HandleContentValueChanged;
         }
         if (e.NewValue is IFormItemAware newFormItemAware)

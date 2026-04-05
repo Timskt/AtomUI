@@ -1,6 +1,5 @@
 using System.Collections;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -79,7 +78,6 @@ internal class SelectTagAwareTextBox : TemplatedControl
     private SelectMaxTagAwarePanel? _maxCountAwarePanel;
     private SelectFilterTextBox? _searchTextBox;
     private SelectRemainInfoTag? _collapsedInfoTag;
-    private protected readonly Dictionary<object, IDisposable> TagsBindingDisposables = new();
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -140,7 +138,7 @@ internal class SelectTagAwareTextBox : TemplatedControl
         {
             IsClosable = false
         };
-        BindUtils.RelayBind(this, SizeTypeProperty, _searchTextBox, SizeTypeProperty);
+        _searchTextBox[!SizeTypeProperty] = this[!SizeTypeProperty];
         if (IsFilterEnabled)
         {
             if (!IsResponsiveTagMode)
@@ -162,11 +160,6 @@ internal class SelectTagAwareTextBox : TemplatedControl
             {
                 _searchTextBox?.Clear();
                 _defaultPanel.Children.Clear();
-                foreach (var entry in TagsBindingDisposables)
-                {
-                    entry.Value.Dispose();
-                }
-                TagsBindingDisposables.Clear();
                 if (_selectedItems != null)
                 {
                     for (var i = 0; i < _selectedItems.Count; i++)
@@ -179,7 +172,7 @@ internal class SelectTagAwareTextBox : TemplatedControl
                                 TagText = tagTextProvider.TagText,
                                 Item    = item
                             };
-                            TagsBindingDisposables.Add(tag, BindUtils.RelayBind(this, SizeTypeProperty, tag, SizeTypeProperty));
+                            tag[!SizeTypeProperty] = this[!SizeTypeProperty];
                             _defaultPanel.Children.Add(tag);
                         }
                     }
@@ -197,12 +190,6 @@ internal class SelectTagAwareTextBox : TemplatedControl
             {
                 _searchTextBox?.Clear();
                 _maxCountAwarePanel.Children.Clear();
-                foreach (var entry in TagsBindingDisposables)
-                {
-                    entry.Value.Dispose();
-                }
-                
-                TagsBindingDisposables.Clear();
                 if (_selectedItems != null)
                 {
                     foreach (var item in _selectedItems)
@@ -214,7 +201,7 @@ internal class SelectTagAwareTextBox : TemplatedControl
                                 TagText = tagTextProvider.TagText,
                                 Item    = item
                             };
-                            TagsBindingDisposables.Add(tag, BindUtils.RelayBind(this, SizeTypeProperty, tag, SizeTypeProperty));
+                            tag[!SizeTypeProperty] = this[!SizeTypeProperty];
                             _maxCountAwarePanel.Children.Add(tag);
                         }
                     }

@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Data;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -117,12 +115,12 @@ public class TransferListView : ListView, ITransferView
         return NeedsContainer<TransferListItem>(item, out recycleKey);
     }
     
-    protected override void PrepareListViewItem(ListViewItem listItem, object? item, int index, CompositeDisposable disposables)
+    protected override void PrepareListViewItem(ListViewItem listItem, object? item, int index)
     {
-        base.PrepareListViewItem(listItem, item, index, disposables);
+        base.PrepareListViewItem(listItem, item, index);
         if (listItem is TransferListItem transferListItem)
         {
-            disposables.Add(BindUtils.RelayBind(this, IsSelectableProperty, transferListItem, TransferListItem.IsCheckableProperty));
+            transferListItem[!TransferListItem.IsCheckableProperty] = this[!IsSelectableProperty];
         }
     }
 

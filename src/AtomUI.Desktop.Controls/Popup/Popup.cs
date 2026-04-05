@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Controls.Utils;
-using AtomUI.Data;
 using AtomUI.MotionScene;
 using AtomUI.Theme.Styling;
 using AtomUI.Utils;
@@ -164,7 +162,6 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     private IDisposable? _selfLightDismissDisposable;
     private IManagedPopupPositionerPopup? _managedPopupPositioner;
     private bool _ignoreIsOpenChanged;
-    private CompositeDisposable? _hostDecoratorDisposable;
 
     // 在翻转之后或者恢复正常，会有属性的变动，在变动之后捕捉动画需要等一个事件循环，保证布局已经生效
     private bool _openAnimating;
@@ -215,7 +212,6 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     
     private void HandlePopupHostChanged(IPopupHost? popupHost)
     {
-        _hostDecoratorDisposable?.Dispose();
         _placementAwareDecorator = null;
         if (popupHost is PopupRoot popupRoot)
         {
@@ -228,13 +224,13 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
             _placementAwareDecorator = overlayPopupHost.FindDescendantOfType<PlacementAwareDecorator>();
             var popupContent = overlayPopupHost.FindDescendantOfType<OverlayPopupContent>();
             Debug.Assert(popupContent != null);
-            BindUtils.RelayBind(this, IsFlippedProperty, popupContent, OverlayPopupContent.IsFlippedProperty);
+            
+            popupContent[!OverlayPopupContent.IsFlippedProperty] = this[!IsFlippedProperty];
         }
         if (_placementAwareDecorator != null)
         {
-            _hostDecoratorDisposable = new CompositeDisposable(2);
-            _hostDecoratorDisposable.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, _placementAwareDecorator, PlacementAwareDecorator.MarginToAnchorProperty));
-            _hostDecoratorDisposable.Add(BindUtils.RelayBind(this, HostDecoratorDirectionProperty, _placementAwareDecorator, PlacementAwareDecorator.MarginPlacementProperty));
+            _placementAwareDecorator[!PlacementAwareDecorator.MarginToAnchorProperty]  = this[!MarginToAnchorProperty];
+            _placementAwareDecorator[!PlacementAwareDecorator.MarginPlacementProperty] = this[!HostDecoratorDirectionProperty];
         }
     }
     
