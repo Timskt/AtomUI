@@ -295,7 +295,6 @@ public class SplitButton : ContentControl,
     private readonly FlyoutStateHelper _flyoutStateHelper;
     
     private CompositeDisposable? _flyoutBindingDisposables;
-    private CompositeDisposable? _flyoutHelperBindingDisposables;
 
     static SplitButton()
     {
@@ -310,6 +309,10 @@ public class SplitButton : ContentControl,
     {
         _flyoutStateHelper = new FlyoutStateHelper();
         this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
+        _flyoutStateHelper[!FlyoutStateHelper.FlyoutProperty]          = this[!FlyoutProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseEnterDelayProperty] = this[!MouseEnterDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseLeaveDelayProperty] = this[!MouseLeaveDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.TriggerTypeProperty]     = this[!TriggerTypeProperty];
     }
 
     internal virtual bool InternalIsChecked => false;
@@ -473,15 +476,6 @@ public class SplitButton : ContentControl,
             Command.CanExecuteChanged += CanExecuteChanged;
             CanExecuteChanged(this, EventArgs.Empty);
         }
-
-        _flyoutHelperBindingDisposables?.Dispose();
-        _flyoutHelperBindingDisposables = new CompositeDisposable();
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, FlyoutProperty, _flyoutStateHelper, FlyoutStateHelper.FlyoutProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseEnterDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseEnterDelayProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseLeaveDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseLeaveDelayProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, TriggerTypeProperty, _flyoutStateHelper, FlyoutStateHelper.TriggerTypeProperty));
     }
     
     protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
@@ -496,7 +490,6 @@ public class SplitButton : ContentControl,
         {
             Command.CanExecuteChanged -= CanExecuteChanged;
         }
-        _flyoutHelperBindingDisposables?.Dispose();
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
