@@ -1,5 +1,3 @@
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
@@ -66,23 +64,16 @@ internal class UploadPictureShapeList : UploadList
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is UploadTriggerContent listItem)
         {
-            var disposables = new CompositeDisposable(6);
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, listItem, UploadTriggerContent.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowUploadTriggerProperty, listItem, IsVisibleProperty));
-            disposables.Add(BindUtils.RelayBind(this, ListTypeProperty, listItem, UploadTriggerContent.ListTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, TriggerContentProperty, listItem, UploadTriggerContent.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, TriggerContentTemplateProperty, listItem, UploadTriggerContent.ContentTemplateProperty));
-            if (_itemsBindingDisposables.TryGetValue(listItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(listItem);
-            }
-            _itemsBindingDisposables.Add(listItem, disposables);
+            listItem[!IsMotionEnabledProperty]                      = this[!IsMotionEnabledProperty];
+            listItem[!IsVisibleProperty]                            = this[!IsShowUploadTriggerProperty];
+            listItem[!ListTypeProperty]                             = this[!ListTypeProperty];
+            listItem[!UploadTriggerContent.ContentProperty]         = this[!TriggerContentProperty];
+            listItem[!UploadTriggerContent.ContentTemplateProperty] = this[!TriggerContentTemplateProperty];
         }
     }
     
-    protected override void NotifyPrepareUploadListItem(AbstractUploadListItem listItem, CompositeDisposable disposables)
+    protected override void NotifyPrepareUploadListItem(AbstractUploadListItem listItem)
     {
-        disposables.Add(BindUtils.RelayBind(this, IsShowUploadListProperty, listItem, IsVisibleProperty));
+        listItem[!IsVisibleProperty] = this[!IsShowUploadListProperty];
     }
 }

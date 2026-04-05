@@ -1,10 +1,8 @@
 // Referenced from https://github.com/kikipoulet/SukiUI project
 
-using System.Reactive.Disposables;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Native;
 using Avalonia;
@@ -349,7 +347,6 @@ public class Window : AvaloniaWindow,
     private Point? _lastMousePressedPoint;
     private PointerPressedEventArgs? _lastMousePressedEventArgs;
     private bool _isDragging;
-    private CompositeDisposable? _titleBarDisposable;
 
     protected bool CloseByClickCloseCaptionButton;
 
@@ -453,10 +450,8 @@ public class Window : AvaloniaWindow,
             _titleBar.PointerReleased         -= HandleTitleBarPointerReleased;
             _titleBar.PointerMoved            -= HandleTitleBarPointerMoved;
         }
-        _titleBarDisposable?.Dispose();
-        _titleBarDisposable = new CompositeDisposable(8);
 
-        var titleBar = NotifyCreateTitleBar(_titleBar, _titleBarDisposable);
+        var titleBar = NotifyCreateTitleBar(_titleBar);
         
         if (titleBar != null)
         {
@@ -465,22 +460,22 @@ public class Window : AvaloniaWindow,
             titleBar.PointerReleased         += HandleTitleBarPointerReleased;
             titleBar.PointerMoved            += HandleTitleBarPointerMoved;
 
-            NotifyConfigureTitleBar(titleBar, _titleBarDisposable);
+            NotifyConfigureTitleBar(titleBar);
         }
         
         TitleBar = titleBar;
     }
 
-    protected virtual void NotifyConfigureTitleBar(WindowTitleBar titleBar, CompositeDisposable disposables)
+    protected virtual void NotifyConfigureTitleBar(WindowTitleBar titleBar)
     {
-        disposables.Add(BindUtils.RelayBind(this, TitleProperty, titleBar, WindowTitleBar.TitleProperty));
-        disposables.Add(BindUtils.RelayBind(this, LogoProperty, titleBar, WindowTitleBar.LogoProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleFontSizeProperty, titleBar, WindowTitleBar.FontSizeProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleFontWeightProperty, titleBar, WindowTitleBar.FontWeightProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleBarContextMenuProperty, titleBar, WindowTitleBar.ContextMenuProperty));
+        titleBar[!WindowTitleBar.TitleProperty]       = this[!TitleProperty];
+        titleBar[!WindowTitleBar.LogoProperty]        = this[!LogoProperty];
+        titleBar[!WindowTitleBar.FontSizeProperty]    = this[!TitleFontSizeProperty];
+        titleBar[!WindowTitleBar.FontWeightProperty]  = this[!TitleFontWeightProperty];
+        titleBar[!WindowTitleBar.ContextMenuProperty] = this[!TitleBarContextMenuProperty];
     }
 
-    protected virtual WindowTitleBar? NotifyCreateTitleBar(WindowTitleBar? oldTitleBar, CompositeDisposable disposables)
+    protected virtual WindowTitleBar? NotifyCreateTitleBar(WindowTitleBar? oldTitleBar)
     {
         return new WindowTitleBar
         {

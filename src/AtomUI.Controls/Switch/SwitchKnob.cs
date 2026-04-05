@@ -1,24 +1,20 @@
-using System.Reactive.Disposables;
 using AtomUI.Animations;
-using AtomUI.Controls;
-using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Data;
 using AtomUI.Media;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
-using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
-internal class SwitchKnob : Control
+internal class SwitchKnob : TemplatedControl
 {
     #region 公共属性定义
     
@@ -124,7 +120,6 @@ internal class SwitchKnob : Control
     private bool _isLoading;
     private CancellationTokenSource? _cancellationTokenSource;
     private IDisposable? _bindingDisposable;
-    private CompositeDisposable? _tokenBindingDisposables;
     
     static SwitchKnob()
     {
@@ -247,22 +242,6 @@ internal class SwitchKnob : Control
                 ConfigureTransitions(true);
             }
         }
-    }
-
-    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToLogicalTree(e);
-        _tokenBindingDisposables = new CompositeDisposable(2);
-        _tokenBindingDisposables.Add(TokenResourceBinder.CreateTokenBinding(this, LoadingBgOpacityProperty,
-            ToggleSwitchTokenKind.SwitchDisabledOpacity));
-        _tokenBindingDisposables.Add(TokenResourceBinder.CreateTokenBinding(this, LoadingAnimationDurationProperty,
-            ToggleSwitchTokenKind.LoadingAnimationDuration));
-    }
-
-    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromLogicalTree(e);
-        _tokenBindingDisposables?.Dispose();
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

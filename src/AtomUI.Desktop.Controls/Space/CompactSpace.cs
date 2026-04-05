@@ -1,8 +1,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Reflection;
 using AtomUI.Theme;
@@ -91,7 +89,6 @@ public class CompactSpace : TemplatedControl,
 
     private Grid? _contentLayout;
     private readonly Dictionary<object, NotifyCollectionChangedEventHandler> _childClassesChangedHandlers = new();
-    private readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
 
     static CompactSpace()
     {
@@ -214,9 +211,7 @@ public class CompactSpace : TemplatedControl,
 
             if (target is ISizeTypeAware)
             {
-                var disposables = new CompositeDisposable(2);
-                disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, target, SizeTypeProperty));
-                _itemsBindingDisposables.Add(target, disposables);
+                target[!SizeTypeProperty] = this[!SizeTypeProperty];
             }
             target.SetTemplatedParent(TemplatedParent);
         }
@@ -240,12 +235,6 @@ public class CompactSpace : TemplatedControl,
             {
                 target.Classes.CollectionChanged -= childClassesChangedHandler;
                 _childClassesChangedHandlers.Remove(target);
-            }
-
-            if (_itemsBindingDisposables.TryGetValue(target, out var disposables))
-            {
-                disposables.Dispose();
-                _itemsBindingDisposables.Remove(target);
             }
             target.SetTemplatedParent(null);
         }

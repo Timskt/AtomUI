@@ -1,7 +1,5 @@
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.DialogPositioning;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -835,16 +833,18 @@ internal class ImagePreviewerDialog : Window,
         SwitchImage(-1, useTransformPolicy);
     }
     
-    protected override WindowTitleBar? NotifyCreateTitleBar(WindowTitleBar? oldTitleBar, CompositeDisposable disposables)
+    protected override WindowTitleBar? NotifyCreateTitleBar(WindowTitleBar? oldTitleBar)
     {
         var imagePreviewToolbar = new ImagePreviewToolbar();
-        disposables.Add(BindUtils.RelayBind(this, CurrentIndexProperty, imagePreviewToolbar, ImagePreviewToolbar.CurrentIndexProperty));
-        disposables.Add(BindUtils.RelayBind(this, CountProperty, imagePreviewToolbar, ImagePreviewToolbar.CountProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsScaleDownEnabledProperty, imagePreviewToolbar, ImagePreviewToolbar.IsScaleDownEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsScaleUpEnabledProperty, imagePreviewToolbar, ImagePreviewToolbar.IsScaleUpEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsImageFitToWindowProperty, imagePreviewToolbar, ImagePreviewToolbar.IsImageFitToWindowProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsFirstImageProperty, imagePreviewToolbar, ImagePreviewToolbar.IsFirstImageProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsLastImageProperty, imagePreviewToolbar, ImagePreviewToolbar.IsLastImageProperty));
+
+        imagePreviewToolbar[!ImagePreviewToolbar.CurrentIndexProperty]       = this[!CurrentIndexProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.CountProperty]              = this[!CountProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsScaleDownEnabledProperty] = this[!IsScaleDownEnabledProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsScaleUpEnabledProperty]   = this[!IsScaleUpEnabledProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsImageFitToWindowProperty] = this[!IsImageFitToWindowProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsFirstImageProperty]       = this[!IsFirstImageProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsLastImageProperty]        = this[!IsLastImageProperty];
+        
         return new WindowTitleBar
         {
             Name = WindowThemeConstants.TitleBarPart,
@@ -852,11 +852,11 @@ internal class ImagePreviewerDialog : Window,
         };
     }
     
-    protected override void NotifyConfigureTitleBar(WindowTitleBar titleBar, CompositeDisposable disposables)
+    protected override void NotifyConfigureTitleBar(WindowTitleBar titleBar)
     {
-        disposables.Add(BindUtils.RelayBind(this, TitleFontSizeProperty, titleBar, WindowTitleBar.FontSizeProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleFontWeightProperty, titleBar, WindowTitleBar.FontWeightProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleBarContextMenuProperty, titleBar, WindowTitleBar.ContextMenuProperty));
+        titleBar[!WindowTitleBar.FontSizeProperty]    = this[!TitleFontSizeProperty];
+        titleBar[!WindowTitleBar.FontWeightProperty]  = this[!TitleFontWeightProperty];
+        titleBar[!WindowTitleBar.ContextMenuProperty] = this[!TitleBarContextMenuProperty];
     }
     
     private enum ImageTransformRetentionMode
