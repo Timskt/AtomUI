@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Controls;
-using AtomUI.Data;
+﻿using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using Avalonia;
@@ -138,8 +135,6 @@ public class Collapse : SelectingItemsControl, IMotionAwareControl
         });
 
     #endregion
-    
-    private readonly Dictionary<CollapseItem, CompositeDisposable> _itemsBindingDisposables = new();
 
     static Collapse()
     {
@@ -151,30 +146,8 @@ public class Collapse : SelectingItemsControl, IMotionAwareControl
 
     public Collapse()
     {
-        SelectionChanged                  += HandleSelectionChanged;
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
+        SelectionChanged += HandleSelectionChanged;
         this.RegisterTokenResourceScope(CollapseToken.ScopeProvider);
-    }
-
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is CollapseItem collapseItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(collapseItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(collapseItem);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void HandleSelectionChanged(object? sender, SelectionChangedEventArgs args)
@@ -210,8 +183,6 @@ public class Collapse : SelectingItemsControl, IMotionAwareControl
     {
         if (container is CollapseItem collapseItem)
         {
-            var disposables = new CompositeDisposable(8);
-            
             if (item != null && item is not Visual)
             {
                 if (!collapseItem.IsSet(CollapseItem.ContentProperty))
@@ -238,27 +209,17 @@ public class Collapse : SelectingItemsControl, IMotionAwareControl
 
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, collapseItem, CollapseItem.ContentTemplateProperty));
+                collapseItem[!CollapseItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, collapseItem, CollapseItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, EffectiveBorderThicknessProperty, collapseItem, BorderThicknessProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsGhostStyleProperty, collapseItem, CollapseItem.IsGhostStyleProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsBorderlessProperty, collapseItem, CollapseItem.IsBorderlessProperty));
-            disposables.Add(BindUtils.RelayBind(this, TriggerTypeProperty, collapseItem, CollapseItem.TriggerTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, ExpandIconPositionProperty, collapseItem,
-                CollapseItem.ExpandIconPositionProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, collapseItem, CollapseItem.IsMotionEnabledProperty));
-
-            PrepareCollapseItem(collapseItem, item, index, disposables);
-        
-            if (_itemsBindingDisposables.TryGetValue(collapseItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(collapseItem);
-            }
-            _itemsBindingDisposables.Add(collapseItem, disposables);
-            
+            collapseItem[!CollapseItem.SizeTypeProperty]           = this[!SizeTypeProperty];
+            collapseItem[!CollapseItem.BorderThicknessProperty]    = this[!EffectiveBorderThicknessProperty];
+            collapseItem[!CollapseItem.IsGhostStyleProperty]       = this[!IsGhostStyleProperty];
+            collapseItem[!CollapseItem.IsBorderlessProperty]       = this[!IsBorderlessProperty];
+            collapseItem[!CollapseItem.TriggerTypeProperty]        = this[!TriggerTypeProperty];
+            collapseItem[!CollapseItem.ExpandIconPositionProperty] = this[!ExpandIconPositionProperty];
+            collapseItem[!CollapseItem.IsMotionEnabledProperty]    = this[!IsMotionEnabledProperty];
+            PrepareCollapseItem(collapseItem, item, index);
             SetupCollapseBorderThickness(collapseItem, index);
             ConfigureItemPaddings(collapseItem);
         }
@@ -268,7 +229,7 @@ public class Collapse : SelectingItemsControl, IMotionAwareControl
         }
     }
 
-    protected virtual void PrepareCollapseItem(CollapseItem collapseItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareCollapseItem(CollapseItem collapseItem, object? item, int index)
     {
     }
 

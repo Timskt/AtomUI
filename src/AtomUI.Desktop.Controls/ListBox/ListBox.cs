@@ -1,8 +1,6 @@
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Data;
-using AtomUI.Data;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
@@ -230,7 +228,6 @@ public class ListBox : AvaloniaListBox,
 
     #endregion
     
-    private protected readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
     private protected readonly Dictionary<object, bool> _filterContext = new();
     private protected readonly Dictionary<object, IDictionary<object, object?>> _virtualRestoreContext = new();
 
@@ -244,7 +241,6 @@ public class ListBox : AvaloniaListBox,
     public ListBox()
     {
         this.RegisterTokenResourceScope(ListBoxToken.ScopeProvider);
-        LogicalChildren.CollectionChanged += HandleChildrenChanged;
         Items.CollectionChanged += HandleItemCollectionChanged;
     }
 
@@ -258,20 +254,6 @@ public class ListBox : AvaloniaListBox,
 
         ConfigureEmptyIndicator();
         ConfigureIsFiltering();
-    }
-
-    private void HandleChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    DisposableListItem(item);
-                }
-            }
-        }
     }
     
     private void HandleItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -317,15 +299,6 @@ public class ListBox : AvaloniaListBox,
     {
         IsFiltering = ItemFilter != null && ItemFilterValue != null;
     }
-
-    private protected void DisposableListItem(object item)
-    {
-        if (_itemsBindingDisposables.TryGetValue(item, out var disposable))
-        {
-            disposable.Dispose();
-            _itemsBindingDisposables.Remove(item);
-        }
-    }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
     {
@@ -355,23 +328,20 @@ public class ListBox : AvaloniaListBox,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is ListBoxItem listBoxItem)
         {
-            var disposables = new CompositeDisposable(8);
-      
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, listBoxItem, ListBoxItem.ContentTemplateProperty));
+                listBoxItem[!ListBoxItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, listBoxItem, ListBoxItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, listBoxItem, ListBoxItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, SelectedIndicatorProperty, listBoxItem, ListBoxItem.SelectedIndicatorProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemHoverBgProperty, listBoxItem, ListBoxItem.ItemHoverBgProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemSelectedBgProperty, listBoxItem, ListBoxItem.ItemSelectedBgProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowSelectedIndicatorProperty, listBoxItem, ListBoxItem.IsShowSelectedIndicatorProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemFilterHighlightStrategyProperty, listBoxItem, ListBoxItem.FilterHighlightStrategyProperty));
-            disposables.Add(BindUtils.RelayBind(this, FilterHighlightForegroundProperty, listBoxItem, ListBoxItem.FilterHighlightForegroundProperty));
-            
-            PrepareListBoxItem(listBoxItem, item, index, disposables);
+            listBoxItem[!ListBoxItem.SizeTypeProperty]                  = this[!SizeTypeProperty];
+            listBoxItem[!ListBoxItem.IsMotionEnabledProperty]           = this[!IsMotionEnabledProperty];
+            listBoxItem[!ListBoxItem.SelectedIndicatorProperty]         = this[!SelectedIndicatorProperty];
+            listBoxItem[!ListBoxItem.ItemHoverBgProperty]               = this[!ItemHoverBgProperty];
+            listBoxItem[!ListBoxItem.ItemSelectedBgProperty]            = this[!ItemSelectedBgProperty];
+            listBoxItem[!ListBoxItem.IsShowSelectedIndicatorProperty]   = this[!IsShowSelectedIndicatorProperty];
+            listBoxItem[!ListBoxItem.FilterHighlightStrategyProperty]   = this[!ItemFilterHighlightStrategyProperty];
+            listBoxItem[!ListBoxItem.FilterHighlightForegroundProperty] = this[!FilterHighlightForegroundProperty];
+           
+            PrepareListBoxItem(listBoxItem, item, index);
 
             var originMotionEnabled = false;
             try
@@ -393,14 +363,6 @@ public class ListBox : AvaloniaListBox,
                         _virtualRestoreContext.Remove(index);
                     }
                 }
-
-                if (_itemsBindingDisposables.TryGetValue(listBoxItem, out var oldDisposables))
-                {
-                    oldDisposables.Dispose();
-                    _itemsBindingDisposables.Remove(listBoxItem);
-                }
-
-                _itemsBindingDisposables.Add(listBoxItem, disposables);
             }
             finally
             {
@@ -413,7 +375,7 @@ public class ListBox : AvaloniaListBox,
         }
     }
     
-    protected virtual void PrepareListBoxItem(ListBoxItem listBoxItem, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareListBoxItem(ListBoxItem listBoxItem, object? item, int index)
     {
     }
     

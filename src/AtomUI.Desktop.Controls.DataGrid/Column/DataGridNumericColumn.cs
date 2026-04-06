@@ -69,11 +69,11 @@ public class DataGridNumericColumn : DataGridAbstractTextColumn
         {                
             Name  = "CellNumberUpDown",
         };
-        
-        BindUtils.RelayBind(this, NumberFormatProperty, numericUpDown, NumericUpDown.NumberFormatProperty);
-        BindUtils.RelayBind(this, FormatStringProperty, numericUpDown, NumericUpDown.FormatStringProperty);
-        BindUtils.RelayBind(this, MaximumProperty, numericUpDown, NumericUpDown.MaximumProperty);
-        BindUtils.RelayBind(this, MinimumProperty, numericUpDown, NumericUpDown.MinimumProperty);
+        numericUpDown[!NumericUpDown.NumberFormatProperty] = this[!NumberFormatProperty];
+        numericUpDown[!NumericUpDown.FormatStringProperty] = this[!FormatStringProperty];
+        numericUpDown[!NumericUpDown.MaximumProperty]      = this[!MaximumProperty];
+        numericUpDown[!NumericUpDown.MinimumProperty]      = this[!MinimumProperty];
+      
         SyncProperties(numericUpDown);
         return numericUpDown;
     }

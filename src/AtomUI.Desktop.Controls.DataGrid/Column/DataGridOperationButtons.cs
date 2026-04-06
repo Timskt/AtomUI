@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using AtomUI.Controls;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -59,7 +58,6 @@ internal class DataGridOperationButtons : TemplatedControl
     private PopupConfirm? _deleteAction;
     private HyperLinkTextBlock? _saveAction;
     private PopupConfirm? _cancelAction;
-    private IDisposable? _disposable;
     
     internal DataGrid? OwningGrid { get; set; }
     internal DataGridRow? OwningRow { get; set; }
@@ -134,13 +132,12 @@ internal class DataGridOperationButtons : TemplatedControl
 
     internal void NotifyLoadingRow(DataGridRow row)
     {
-        OwningRow   = row;
-        _disposable = BindUtils.RelayBind(row, DataGridRow.IsEditingModeProperty, this, IsEditingProperty);
+        OwningRow                = row;
+        this[!IsEditingProperty] = row[!DataGridRow.IsEditingModeProperty];
     }
     
     internal void NotifyUnLoadingRow(DataGridRow row)
     {
-        _disposable?.Dispose();
         OwningRow = null;
     }
 }

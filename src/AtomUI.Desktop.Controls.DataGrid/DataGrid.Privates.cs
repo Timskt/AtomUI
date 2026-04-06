@@ -11,8 +11,6 @@ using System.Diagnostics;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Data;
 using AtomUI.Desktop.Controls.Utils;
-using AtomUI.Data;
-using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
@@ -1583,7 +1581,7 @@ public partial class DataGrid
         {
             newCell.OwningColumn       = column;
             newCell.IsVisible          = column.IsVisible;
-            BindUtils.RelayBind(this, SizeTypeProperty, newCell, DataGridCell.SizeTypeProperty);
+            newCell[!DataGridCell.SizeTypeProperty] = this[!SizeTypeProperty];
         }
 
         row.Cells.Insert(column.Index, newCell);

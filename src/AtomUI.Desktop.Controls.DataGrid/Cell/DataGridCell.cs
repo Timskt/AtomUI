@@ -5,7 +5,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
@@ -193,7 +192,6 @@ public class DataGridCell : ContentControl
     #endregion
 
     private Rectangle? _rightGridLine;
-    private CompositeDisposable? _bindingDisposables;
 
     static DataGridCell()
     {
@@ -211,6 +209,7 @@ public class DataGridCell : ContentControl
     /// </summary>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        base.OnApplyTemplate(e);
         UpdatePseudoClasses();
         _rightGridLine = e.NameScope.Find<Rectangle>(DataGridCellThemeConstants.RightGridLinePart);
         if (_rightGridLine != null && OwningColumn == null)
@@ -221,6 +220,38 @@ public class DataGridCell : ContentControl
         else
         {
             EnsureGridLine(null);
+        }
+        // 可能会影响性能
+        if (OwningGrid != null && OwningColumn != null && OwningGrid.DataConnection.AllowSort)
+        {
+            BindUtils.RelayBind(OwningColumn.HeaderCell,
+                DataGridColumnHeader.CurrentSortingStateProperty,
+                this,
+                IsSortingProperty,
+                (v) =>
+                {
+                    if (v is not null && OwningColumn is not DataGridFillerColumn)
+                    {
+                        return v == ListSortDirection.Ascending || v == ListSortDirection.Descending;
+                    }
+
+                    return false;
+                },
+                BindingPriority.Template);
+            BindUtils.RelayBind(OwningColumn.HeaderCell,
+                DataGridColumnHeader.HeaderDragModeProperty,
+                this,
+                OwningColumnDraggingProperty,
+                (v) =>
+                {
+                    if (OwningColumn is not DataGridFillerColumn)
+                    {
+                        return v == DataGridColumnHeader.DragMode.Reorder;
+                    }
+
+                    return false;
+                },
+                BindingPriority.Template);
         }
     }
 
@@ -358,51 +389,5 @@ public class DataGridCell : ContentControl
 
             Classes.Replace(column.CellStyleClasses);
         }
-    }
-
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-        // 可能会影响性能
-        if (OwningGrid != null && OwningColumn != null && OwningGrid.DataConnection.AllowSort)
-        {
-            _bindingDisposables?.Dispose();
-            _bindingDisposables = new CompositeDisposable(2);
-            _bindingDisposables.Add(BindUtils.RelayBind(OwningColumn.HeaderCell,
-                DataGridColumnHeader.CurrentSortingStateProperty,
-                this,
-                IsSortingProperty,
-                (v) =>
-                {
-                    if (v is not null && OwningColumn is not DataGridFillerColumn)
-                    {
-                        return v == ListSortDirection.Ascending || v == ListSortDirection.Descending;
-                    }
-
-                    return false;
-                },
-                BindingPriority.Template));
-            _bindingDisposables.Add(BindUtils.RelayBind(OwningColumn.HeaderCell,
-                DataGridColumnHeader.HeaderDragModeProperty,
-                this,
-                OwningColumnDraggingProperty,
-                (v) =>
-                {
-                    if (OwningColumn is not DataGridFillerColumn)
-                    {
-                        return v == DataGridColumnHeader.DragMode.Reorder;
-                    }
-
-                    return false;
-                },
-                BindingPriority.Template));
-        }
-    }
-
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromVisualTree(e);
-        _bindingDisposables?.Dispose();
-        _bindingDisposables = null;
     }
 }

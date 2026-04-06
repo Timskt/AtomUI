@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
@@ -14,7 +13,6 @@ public class DataGridTransferSelectionColumn : DataGridColumn
 {
     private DataGrid? _owningGrid;
     private DataGridTransferSelectionColumnHeader? _selectionHeader;
-    private CompositeDisposable? _headerBindingDisposables;
 
     public override bool IsReadOnly => true;
     
@@ -221,22 +219,25 @@ public class DataGridTransferSelectionColumn : DataGridColumn
                 IndicatorLayoutVisible  = false,
                 SupportedSortDirections = DataGridSortDirections.None
             };
-            
-            _headerBindingDisposables?.Dispose();
-            _headerBindingDisposables = new CompositeDisposable();
-            _headerBindingDisposables.Add(BindUtils.RelayBind(OwningGrid, DataGrid.SizeTypeProperty, header, DataGridColumnHeader.SizeTypeProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(this, HeaderContentHorizontalAlignmentProperty, header, DataGridColumnHeader.HorizontalContentAlignmentProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(this, HeaderContentVerticalAlignmentProperty, header, DataGridColumnHeader.VerticalContentAlignmentProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(OwningGrid, DataGrid.IsMotionEnabledProperty, header, DataGridColumnHeader.IsMotionEnabledProperty));
-            
-            _selectionHeader      =  new DataGridTransferSelectionColumnHeader();
+            header[!DataGridColumnHeader.SizeTypeProperty]                   = OwningGrid[!DataGrid.SizeTypeProperty];
+            header[!DataGridColumnHeader.IsMotionEnabledProperty] = OwningGrid[!DataGrid.IsMotionEnabledProperty];
+            header[!DataGridColumnHeader.HorizontalContentAlignmentProperty] = this[!HeaderContentHorizontalAlignmentProperty];
+            header[!DataGridColumnHeader.VerticalContentAlignmentProperty] =
+                this[!HeaderContentVerticalAlignmentProperty];
+
+            _selectionHeader = new DataGridTransferSelectionColumnHeader();
             if (OwningGrid is TransferDataGridView transferDataGridView)
             {
-                _headerBindingDisposables.Add(BindUtils.RelayBind(transferDataGridView, TransferDataGridView.SelectionsIconProperty, _selectionHeader, DataGridTransferSelectionColumnHeader.SelectionsIconProperty));
-                _headerBindingDisposables.Add(BindUtils.RelayBind(transferDataGridView, TransferDataGridView.IsMotionEnabledProperty, _selectionHeader, DataGridTransferSelectionColumnHeader.IsMotionEnabledProperty));
-                _headerBindingDisposables.Add(BindUtils.RelayBind(transferDataGridView, TransferDataGridView.IsEmptyDataSourceProperty, _selectionHeader, DataGridTransferSelectionColumnHeader.IsEnabledProperty, converter: (v) => !v));
-                _headerBindingDisposables.Add(BindUtils.RelayBind(transferDataGridView, TransferDataGridView.IsPaginationEnabledProperty, _selectionHeader, DataGridTransferSelectionColumnHeader.IsPaginationEnabledProperty));
-                _headerBindingDisposables.Add(BindUtils.RelayBind(transferDataGridView, TransferDataGridView.IsOneWayProperty, _selectionHeader, DataGridTransferSelectionColumnHeader.IsOneWayProperty));
+                _selectionHeader[!DataGridTransferSelectionColumnHeader.SelectionsIconProperty] =
+                    transferDataGridView[!TransferDataGridView.SelectionsIconProperty];
+                _selectionHeader[!DataGridTransferSelectionColumnHeader.IsMotionEnabledProperty] =
+                    transferDataGridView[!TransferDataGridView.IsMotionEnabledProperty];
+                BindUtils.RelayBind(transferDataGridView, TransferDataGridView.IsEmptyDataSourceProperty,
+                    _selectionHeader, DataGridTransferSelectionColumnHeader.IsEnabledProperty, converter: (v) => !v);
+                _selectionHeader[!DataGridTransferSelectionColumnHeader.IsPaginationEnabledProperty] =
+                    transferDataGridView[!TransferDataGridView.IsPaginationEnabledProperty];
+                _selectionHeader[!DataGridTransferSelectionColumnHeader.IsOneWayProperty] =
+                    transferDataGridView[!TransferDataGridView.IsOneWayProperty];
             }
             _selectionHeader.NotifyDataGridAttached(dataGridView);
             // _headerCheckBox.Click += HandleSelectedAllChanged;

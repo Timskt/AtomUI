@@ -66,7 +66,6 @@ internal class DataGridRowExpander : ToggleButton
 
     private Rectangle? _horizontalIndicator;
     private Rectangle? _verticalIndicator;
-    private IDisposable? _disposable;
 
     protected override Size ArrangeOverride(Size finalSize)
     {
@@ -151,11 +150,10 @@ internal class DataGridRowExpander : ToggleButton
 
     internal void NotifyLoadingRow(DataGridRow row)
     {
-        _disposable = BindUtils.RelayBind(this, IsCheckedProperty, row, DataGridRow.IsDetailsVisibleProperty, BindingMode.TwoWay);
+        BindUtils.RelayBind(this, IsCheckedProperty, row, DataGridRow.IsDetailsVisibleProperty, BindingMode.TwoWay);
     }
     
     internal void NotifyUnLoadingRow(DataGridRow row)
     {
-        _disposable?.Dispose();
     }
 }
