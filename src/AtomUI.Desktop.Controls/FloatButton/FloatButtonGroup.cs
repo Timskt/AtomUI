@@ -203,7 +203,6 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
     #endregion
     
     private FloatButtonItemsControl? _itemsControl;
-    private readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
     private bool _initPressed;
     private IDisposable? _clickTriggerDisposable;
     private FloatButton? _triggerButton;
@@ -352,11 +351,6 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
                         if (item is FloatButton floatButton)
                         {
                             floatButton.SetCurrentValue(FloatButton.IsEmbedModeProperty, false);
-                            if (_itemsBindingDisposables.TryGetValue(floatButton, out var disposable))
-                            {
-                                disposable.Dispose();
-                                _itemsBindingDisposables.Remove(floatButton);
-                            }
                         }
                     }
                     _itemsControl.Children.RemoveAll(oldItems);
@@ -379,17 +373,9 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
 
     protected void NotifyAddItem(FloatButton floatButton)
     {
-        var disposables = new CompositeDisposable(4);
-        
-        disposables.Add(BindUtils.RelayBind(this, ShapeProperty, floatButton, FloatButton.ShapeProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, floatButton, FloatButton.IsMotionEnabledProperty));
+        floatButton[!FloatButton.ShapeProperty]           = this[!ShapeProperty];
+        floatButton[!FloatButton.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
         floatButton.SetCurrentValue(FloatButton.IsEmbedModeProperty, true);
-        if (_itemsBindingDisposables.TryGetValue(floatButton, out var oldDisposables))
-        {
-            oldDisposables.Dispose();
-            _itemsBindingDisposables.Remove(floatButton);
-        }
-        _itemsBindingDisposables.Add(floatButton, disposables);
     }
 
     private void HandlePointerEntered(object? sender, PointerEventArgs? e)

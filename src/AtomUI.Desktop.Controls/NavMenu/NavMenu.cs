@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Data;
@@ -160,7 +159,6 @@ public class NavMenu : ItemsControl,
     private static readonly FuncTemplate<Panel?> DefaultPanel =
         new(() => new StackPanel { Orientation = Orientation.Vertical });
     
-    private readonly Dictionary<NavMenuItem, CompositeDisposable> _itemsBindingDisposables = new();
     private bool _defaultOpenPathsApplied;
     private int _motionContextLevel;
     private bool _originIsMotionEnabled;
@@ -181,29 +179,7 @@ public class NavMenu : ItemsControl,
     {
         this.RegisterTokenResourceScope(NavMenuToken.ScopeProvider);
         UpdatePseudoClasses();
-        LogicalChildren.CollectionChanged += HandleChildrenChanged;
-        Items.CollectionChanged           += HandleItemsViewCollectionChanged;
-    }
-    
-    private void HandleChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is NavMenuItem menuItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(menuItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemsBindingDisposables.Remove(menuItem);
-                    }
-                }
-            }
-        }
+        Items.CollectionChanged += HandleItemsViewCollectionChanged;
     }
     
     private protected virtual void HandleItemsViewCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -281,16 +257,16 @@ public class NavMenu : ItemsControl,
         if (container is NavMenuItem menuItem)
         {
             menuItem.OwnerMenu = this;
-            var disposables = new CompositeDisposable(6);
 
             {
                 if (item is INavMenuNode menuNode)
                 {
                     menuItem.SetCurrentValue(NavMenuItem.HeaderProperty, menuNode);
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Icon), menuItem, NavMenuItem.IconProperty));
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.IsEnabled), menuItem, NavMenuItem.IsEnabledProperty));
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Command), menuItem, NavMenuItem.CommandProperty));
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.CommandParameter), menuItem, NavMenuItem.CommandParameterProperty));
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Icon), menuItem, NavMenuItem.IconProperty);
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.IsEnabled), menuItem,
+                        NavMenuItem.IsEnabledProperty);
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Command), menuItem, NavMenuItem.CommandProperty);
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.CommandParameter), menuItem, NavMenuItem.CommandParameterProperty);
                     menuItem.ItemKey = menuNode.ItemKey;
                 }
             }
@@ -298,27 +274,21 @@ public class NavMenu : ItemsControl,
             {
                 if (item is INavMenuNode menuNode && menuNode.HeaderTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.HeaderTemplate), menuItem, NavMenuItem.HeaderTemplateProperty));
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.HeaderTemplate), menuItem,
+                        NavMenuItem.HeaderTemplateProperty);
                 }
                 else if (ItemTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, NavMenuItem.HeaderTemplateProperty));
+                    BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, NavMenuItem.HeaderTemplateProperty);
                 }
             }
             
-            disposables.Add(BindUtils.RelayBind(this, ModeProperty, menuItem, NavMenuItem.ModeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsDarkStyleProperty, menuItem, NavMenuItem.IsDarkStyleProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuItem, NavMenuItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, menuItem, NavMenuItem.ShouldUseOverlayLayerProperty));
-            
-            PrepareNavMenuItem(menuItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(menuItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(menuItem);
-            }
-            _itemsBindingDisposables.Add(menuItem, disposables);
+            menuItem[!NavMenuItem.ModeProperty]                  = this[!ModeProperty];
+            menuItem[!NavMenuItem.IsDarkStyleProperty]           = this[!IsDarkStyleProperty];
+            menuItem[!NavMenuItem.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+            menuItem[!NavMenuItem.ShouldUseOverlayLayerProperty] = this[!ShouldUseOverlayLayerProperty];
+           
+            PrepareNavMenuItem(menuItem, item, index);
         }
         else
         {
@@ -326,7 +296,7 @@ public class NavMenu : ItemsControl,
         }
     }
     
-    internal virtual void PrepareNavMenuItem(NavMenuItem menuItem, object? item, int index, CompositeDisposable compositeDisposable)
+    internal virtual void PrepareNavMenuItem(NavMenuItem menuItem, object? item, int index)
     {
     }
     

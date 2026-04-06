@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Controls;
-using AtomUI.Data;
+﻿using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Utils;
@@ -211,34 +208,11 @@ public class ComboBox : AvaloniaComboBox,
     #endregion
     
     private Popup? _popup;
-    private readonly Dictionary<ComboBoxItem, CompositeDisposable> _itemsBindingDisposables = new();
 
     public ComboBox()
     {
         this.RegisterTokenResourceScope(ComboBoxToken.ScopeProvider);
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
         SelectionBoxItemProperty.Changed.AddClassHandler<ComboBox>((box, args) => box.NotifyFormValueChanged(args.NewValue));
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is ComboBoxItem comboBoxItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(comboBoxItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(comboBoxItem);
-                        }
-                    }
-                }
-            }
-        }
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -354,8 +328,6 @@ public class ComboBox : AvaloniaComboBox,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is ComboBoxItem comboBoxItem)
         {
-            var disposables = new CompositeDisposable(4);
-            
             if (item != null && item is not Visual)
             {
                 if (!comboBoxItem.IsSet(ComboBoxItem.ContentProperty))
@@ -366,20 +338,13 @@ public class ComboBox : AvaloniaComboBox,
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, comboBoxItem, ComboBoxItem.ContentTemplateProperty));
+                comboBoxItem[!ComboBoxItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, comboBoxItem, ComboBoxItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, OptionFontSizeProperty, comboBoxItem, ComboBoxItem.FontSizeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, comboBoxItem, ComboBoxItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemHeightProperty, comboBoxItem, ComboBoxItem.HeightProperty));
-            
-            if (_itemsBindingDisposables.TryGetValue(comboBoxItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(comboBoxItem);
-            }
-            _itemsBindingDisposables.Add(comboBoxItem, disposables);
+            comboBoxItem[!ComboBoxItem.SizeTypeProperty]        = this[!SizeTypeProperty];
+            comboBoxItem[!ComboBoxItem.FontSizeProperty]        = this[!OptionFontSizeProperty];
+            comboBoxItem[!ComboBoxItem.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            comboBoxItem[!ComboBoxItem.HeightProperty]          = this[!ItemHeightProperty];
         }
     }
 

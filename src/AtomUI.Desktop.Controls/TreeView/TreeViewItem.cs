@@ -1,8 +1,6 @@
 ﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.MotionScene;
 using Avalonia;
@@ -389,7 +387,6 @@ public class TreeViewItem : AvaloniaTreeItem, IRadioButton, ITreeItemNode
     private BaseMotionActor? _itemsPresenterMotionActor;
     private readonly BorderRenderHelper _borderRenderHelper;
     private TreeViewItemHeader? _header;
-    private readonly Dictionary<TreeViewItem, CompositeDisposable> _itemsBindingDisposables = new();
     internal bool AsyncLoaded;
     private FilterContextBackup? _filterContextBackup;
 
@@ -408,9 +405,8 @@ public class TreeViewItem : AvaloniaTreeItem, IRadioButton, ITreeItemNode
 
     public TreeViewItem()
     {
-        _borderRenderHelper               =  new BorderRenderHelper();
-        LogicalChildren.CollectionChanged += HandleLogicalChildrenChanged;
-        Items.CollectionChanged           += HandleCollectionChanged;
+        _borderRenderHelper     =  new BorderRenderHelper();
+        Items.CollectionChanged += HandleCollectionChanged;
     }
     
     private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -432,27 +428,6 @@ public class TreeViewItem : AvaloniaTreeItem, IRadioButton, ITreeItemNode
             case NotifyCollectionChangedAction.Reset:
                 OwnerTreeView.CheckedItems.Clear();
                 break;
-        }
-    }
-    
-    private void HandleLogicalChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is TreeViewItem treeViewItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(treeViewItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemsBindingDisposables.Remove(treeViewItem);
-                    }
-                }
-            }
         }
     }
     
@@ -799,41 +774,30 @@ public class TreeViewItem : AvaloniaTreeItem, IRadioButton, ITreeItemNode
         if (container is TreeViewItem treeViewItem)
         {
             treeViewItem.OwnerTreeView = OwnerTreeView;
-            var disposables = new CompositeDisposable(8);
             
             if (item != null && item is not Visual && item is ITreeItemNode treeViewItemData)
             {
-                ApplyNodeData(treeViewItem, treeViewItemData, disposables);
+                ApplyNodeData(treeViewItem, treeViewItemData);
             }
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, treeViewItem, HeaderTemplateProperty));
+                treeViewItem[!HeaderTemplateProperty] = this[!ItemTemplateProperty];
             }
-            disposables.Add(BindUtils.RelayBind(this, FilterHighlightStrategyProperty, treeViewItem, FilterHighlightStrategyProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, treeViewItem, IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, NodeHoverModeProperty, treeViewItem, NodeHoverModeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowLineProperty, treeViewItem, IsShowLineProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowIconProperty, treeViewItem, IsShowIconProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowLeafIconProperty, treeViewItem,
-                    IsShowLeafIconProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsSwitcherRotationProperty, treeViewItem, IsSwitcherRotationProperty));
-            disposables.Add(BindUtils.RelayBind(this, ToggleTypeProperty, treeViewItem, ToggleTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsSelectableProperty, treeViewItem, IsSelectableProperty));
-            disposables.Add(BindUtils.RelayBind(this, FilterHighlightForegroundProperty, treeViewItem, FilterHighlightForegroundProperty));
-            disposables.Add(BindUtils.RelayBind(this, HasTreeItemDataLoaderProperty, treeViewItem,
-                HasTreeItemDataLoaderProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsAutoExpandParentProperty, treeViewItem,
-                IsAutoExpandParentProperty));
+            treeViewItem[!FilterHighlightStrategyProperty]   = this[!FilterHighlightStrategyProperty];
+            treeViewItem[!IsMotionEnabledProperty]           = this[!IsMotionEnabledProperty];
+            treeViewItem[!NodeHoverModeProperty]             = this[!NodeHoverModeProperty];
+            treeViewItem[!IsShowLineProperty]                = this[!IsShowLineProperty];
+            treeViewItem[!IsShowIconProperty]                = this[!IsShowIconProperty];
+            treeViewItem[!IsShowLeafIconProperty]            = this[!IsShowLeafIconProperty];
+            treeViewItem[!IsSwitcherRotationProperty]        = this[!IsSwitcherRotationProperty];
+            treeViewItem[!ToggleTypeProperty]                = this[!ToggleTypeProperty];
+            treeViewItem[!IsSelectableProperty]              = this[!IsSelectableProperty];
+            treeViewItem[!FilterHighlightForegroundProperty] = this[!FilterHighlightForegroundProperty];
+            treeViewItem[!HasTreeItemDataLoaderProperty]     = this[!HasTreeItemDataLoaderProperty];
+            treeViewItem[!IsAutoExpandParentProperty]        = this[!IsAutoExpandParentProperty];
             
-            PrepareTreeViewItem(treeViewItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(treeViewItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(treeViewItem);
-            }
-            _itemsBindingDisposables.Add(treeViewItem, disposables);
+            PrepareTreeViewItem(treeViewItem, item, index);
         }
         else
         {
@@ -841,11 +805,11 @@ public class TreeViewItem : AvaloniaTreeItem, IRadioButton, ITreeItemNode
         }
     }
     
-    protected virtual void PrepareTreeViewItem(TreeViewItem treeViewItem, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareTreeViewItem(TreeViewItem treeViewItem, object? item, int index)
     {
     }
 
-    internal static void ApplyNodeData(TreeViewItem treeViewItem, ITreeItemNode treeItemData, CompositeDisposable disposables)
+    internal static void ApplyNodeData(TreeViewItem treeViewItem, ITreeItemNode treeItemData)
     {
         treeViewItem.SetCurrentValue(IconProperty, treeItemData.Icon);
         treeViewItem.SetCurrentValue(IsCheckedProperty, treeItemData.IsChecked);

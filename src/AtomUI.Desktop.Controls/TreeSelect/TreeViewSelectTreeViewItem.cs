@@ -1,5 +1,3 @@
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 
@@ -20,10 +18,11 @@ internal class TreeViewSelectTreeViewItem : TreeViewItem
         set => SetAndRaise(IsMaxSelectReachedProperty, ref _isMaxSelectReached, value);
     }
     
-    protected override void PrepareTreeViewItem(TreeViewItem treeViewItem, object? item, int index, CompositeDisposable disposables)
+    protected override void PrepareTreeViewItem(TreeViewItem treeViewItem, object? item, int index)
     {
-        base.PrepareTreeViewItem(treeViewItem, item, index, disposables);
-        disposables.Add(BindUtils.RelayBind(this, TreeViewSelectTreeViewItem.IsMaxSelectReachedProperty, treeViewItem, TreeViewSelectTreeViewItem.IsMaxSelectReachedProperty));
+        base.PrepareTreeViewItem(treeViewItem, item, index);
+        treeViewItem[!TreeViewSelectTreeViewItem.IsMaxSelectReachedProperty] =
+            this[!TreeViewSelectTreeViewItem.IsMaxSelectReachedProperty];
     }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
