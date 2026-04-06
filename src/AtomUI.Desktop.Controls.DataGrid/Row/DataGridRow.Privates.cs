@@ -120,7 +120,7 @@ public partial class DataGridRow
                     IsVisible = false,
                     OwningRow = this
                 };
-                _fillerCell[SizeTypeProperty] = OwningGrid[!DataGrid.SizeTypeProperty];
+                _fillerCell[!SizeTypeProperty] = OwningGrid[!DataGrid.SizeTypeProperty];
                 if (_cellsElement != null)
                 {
                     _cellsElement.Children.Add(_fillerCell);

@@ -14,7 +14,6 @@ public class DataGridSelectionColumn : DataGridColumn
 {
     private DataGrid? _owningGrid;
     private CheckBox? _headerCheckBox;
-    private CompositeDisposable? _headerBindingDisposables;
 
     public override bool IsReadOnly => true;
     
@@ -262,14 +261,12 @@ public class DataGridSelectionColumn : DataGridColumn
                 OwningColumn           = this,
                 IndicatorLayoutVisible = false
             };
-            
-            _headerBindingDisposables?.Dispose();
-            _headerBindingDisposables = new CompositeDisposable();
-            _headerBindingDisposables.Add(BindUtils.RelayBind(OwningGrid, DataGrid.SizeTypeProperty, header, DataGridColumnHeader.SizeTypeProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(this, SupportedSortDirectionsProperty, header, DataGridColumnHeader.SupportedSortDirectionsProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(this, HeaderContentHorizontalAlignmentProperty, header, DataGridColumnHeader.HorizontalContentAlignmentProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(this, HeaderContentVerticalAlignmentProperty, header, DataGridColumnHeader.VerticalContentAlignmentProperty));
-            _headerBindingDisposables.Add(BindUtils.RelayBind(OwningGrid, DataGrid.IsMotionEnabledProperty, header, DataGridColumnHeader.IsMotionEnabledProperty));
+
+            header[!DataGridColumnHeader.SizeTypeProperty]                   = OwningGrid[!DataGrid.SizeTypeProperty];
+            header[!DataGridColumnHeader.SupportedSortDirectionsProperty]    = this[!SupportedSortDirectionsProperty];
+            header[!DataGridColumnHeader.HorizontalContentAlignmentProperty] = this[!HeaderContentHorizontalAlignmentProperty];
+            header[!DataGridColumnHeader.VerticalContentAlignmentProperty] = this[!HeaderContentVerticalAlignmentProperty];
+            header[!DataGridColumnHeader.IsMotionEnabledProperty] = OwningGrid[!DataGrid.IsMotionEnabledProperty];
             
             _headerCheckBox       =  new CheckBox();
             _headerCheckBox.Click += HandleSelectedAllChanged;

@@ -91,24 +91,10 @@ internal class DataGridHeaderViewItem : ContentControl
     
     #endregion
     
-    private IDisposable? _bindingDisposable;
-    
     public DataGridHeaderViewItem(DataGrid owningGrid)
     {
-        OwningGrid = owningGrid;
-    }
-
-    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToLogicalTree(e);
-        _bindingDisposable?.Dispose();
-        _bindingDisposable = BindUtils.RelayBind(OwningGrid, BorderThicknessProperty, this, BorderThicknessProperty);
-    }
-
-    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromLogicalTree(e);
-        _bindingDisposable?.Dispose();
+        OwningGrid                     = owningGrid;
+        this[!BorderThicknessProperty] = OwningGrid[!BorderThicknessProperty];
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

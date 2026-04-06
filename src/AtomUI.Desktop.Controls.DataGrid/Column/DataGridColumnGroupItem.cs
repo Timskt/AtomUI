@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
@@ -100,7 +98,6 @@ public class DataGridColumnGroupItem : AvaloniaObject,
     #endregion
     
     private DataGridColumnGroupHeader? _headerCell;
-    private CompositeDisposable? _headerBindingDisposables;
 
     static DataGridColumnGroupItem()
     {
@@ -160,13 +157,11 @@ public class DataGridColumnGroupItem : AvaloniaObject,
         var result = new DataGridColumnGroupHeader();
         result.OwningGroupItem = this;
         Debug.Assert(OwningGrid != null);
-        _headerBindingDisposables?.Dispose();
-        _headerBindingDisposables = new CompositeDisposable(5);
-        _headerBindingDisposables.Add(BindUtils.RelayBind(this, HeaderProperty, result, DataGridColumnGroupHeader.HeaderProperty));
-        _headerBindingDisposables.Add(BindUtils.RelayBind(this, HeaderTemplateProperty, result, DataGridColumnGroupHeader.HeaderTemplateProperty));
-        _headerBindingDisposables.Add(BindUtils.RelayBind(this, HorizontalAlignmentProperty, result, DataGridColumnGroupHeader.HorizontalContentAlignmentProperty));
-        _headerBindingDisposables.Add(BindUtils.RelayBind(this, VerticalAlignmentProperty, result, DataGridColumnGroupHeader.VerticalContentAlignmentProperty));
-        _headerBindingDisposables.Add(BindUtils.RelayBind(OwningGrid, DataGrid.SizeTypeProperty, result, DataGridColumnGroupHeader.SizeTypeProperty));
+        result[!DataGridColumnGroupHeader.HeaderProperty]                     = this[!HeaderProperty];
+        result[!DataGridColumnGroupHeader.HeaderTemplateProperty]             = this[!HeaderTemplateProperty];
+        result[!DataGridColumnGroupHeader.HorizontalContentAlignmentProperty] = this[!HorizontalAlignmentProperty];
+        result[!DataGridColumnGroupHeader.VerticalContentAlignmentProperty]   = this[!VerticalAlignmentProperty];
+        result[!DataGridColumnGroupHeader.SizeTypeProperty]                   = OwningGrid[!DataGrid.SizeTypeProperty];
         
         result.PointerPressed  += (s, e) => { HeaderPointerPressed?.Invoke(this, e); };
         result.PointerReleased += (s, e) => { HeaderPointerReleased?.Invoke(this, e); };

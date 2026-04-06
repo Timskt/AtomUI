@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Data;
 using AtomUI.Data;
@@ -57,7 +56,6 @@ internal class DataGridFilterIndicator : IconButton
     private DataGridColumn? _owningColumn;
     private static int _indicatorSeed = 0;
     private readonly string _treeRadioCheckGroupName;
-    private CompositeDisposable? _bindingDisposables;
 
     internal DataGridColumn? OwningColumn
     {
@@ -131,8 +129,6 @@ internal class DataGridFilterIndicator : IconButton
        
         if (FilterMode == DataGridFilterMode.Menu && Flyout is not DataGridMenuFilterFlyout)
         {
-            _bindingDisposables?.Dispose();
-            _bindingDisposables = new CompositeDisposable();
             var menuFlyout = new DataGridMenuFilterFlyout
             {
                 IsShowArrow               = false,
@@ -140,8 +136,8 @@ internal class DataGridFilterIndicator : IconButton
                 IsDetectMouseClickEnabled = false,
                 ShouldUseOverlayLayer = true,
             };
-            _bindingDisposables.Add(BindUtils.RelayBind(owningGrid, MotionAwareControlProperty.IsMotionEnabledProperty, menuFlyout,
-                MotionAwareControlProperty.IsMotionEnabledProperty));
+            menuFlyout[!MotionAwareControlProperty.IsMotionEnabledProperty] =
+                owningGrid[!MotionAwareControlProperty.IsMotionEnabledProperty];
             var menuItems = BuildMenuItems(OwningColumn.Filters.ToList());
             foreach (var menuItem in menuItems)
             {
@@ -154,8 +150,6 @@ internal class DataGridFilterIndicator : IconButton
         }
         else if (FilterMode == DataGridFilterMode.Tree && Flyout is not DataGridTreeFilterFlyout)
         {
-            _bindingDisposables?.Dispose();
-            _bindingDisposables = new CompositeDisposable();
             var treeFlyout = new DataGridTreeFilterFlyout
             {
                 IsShowArrow               = false,
@@ -163,13 +157,13 @@ internal class DataGridFilterIndicator : IconButton
                 IsDetectMouseClickEnabled = false,
                 ShouldUseOverlayLayer         = true
             };
-            _bindingDisposables.Add(BindUtils.RelayBind(this, FilterMultipleProperty, treeFlyout, DataGridTreeFilterFlyout.ToggleTypeProperty, (v) =>
-            {
-                return v ? ItemToggleType.CheckBox : ItemToggleType.Radio;
-            }));
-            _bindingDisposables.Add(BindUtils.RelayBind(owningGrid, MotionAwareControlProperty.IsMotionEnabledProperty, treeFlyout,
-                MotionAwareControlProperty.IsMotionEnabledProperty));
-            var treeItems         = BuildTreeItems(OwningColumn.Filters.ToList());
+            BindUtils.RelayBind(this, FilterMultipleProperty, treeFlyout, DataGridTreeFilterFlyout.ToggleTypeProperty,
+                (v) =>
+                {
+                    return v ? ItemToggleType.CheckBox : ItemToggleType.Radio;
+                });
+            treeFlyout[!MotionAwareControlProperty.IsMotionEnabledProperty] = owningGrid[!MotionAwareControlProperty.IsMotionEnabledProperty];
+            var treeItems = BuildTreeItems(OwningColumn.Filters.ToList());
             if (FilterMultiple)
             {
                 var selectAllTreeItem = new DataGridFilterTreeViewItem();
@@ -207,10 +201,10 @@ internal class DataGridFilterIndicator : IconButton
                 FilterValue      = item.Value,
                 StaysOpenOnClick = true
             };
-            _bindingDisposables?.Add(BindUtils.RelayBind(this, FilterMultipleProperty, menuItem, MenuItem.ToggleTypeProperty, (v) =>
+            BindUtils.RelayBind(this, FilterMultipleProperty, menuItem, MenuItem.ToggleTypeProperty, (v) =>
             {
                 return v ? MenuItemToggleType.CheckBox : MenuItemToggleType.Radio;
-            }, BindingPriority.Template));
+            }, BindingPriority.Template);
             menuItems.Add(menuItem);
             if (item.Children.Count > 0)
             {

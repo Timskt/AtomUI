@@ -1,6 +1,4 @@
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.MotionScene;
 using Avalonia;
 using Avalonia.Controls;
@@ -22,8 +20,6 @@ internal class DataGridTreeFilterFlyout : TreeViewFlyout
     }
 
     public event EventHandler<DataGridFilterValuesSelectedEventArgs>? FilterValuesSelected;
-    
-    private CompositeDisposable? _presenterBindingDisposables;
 
     public DataGridTreeFilterFlyout()
     {
@@ -47,13 +43,11 @@ internal class DataGridTreeFilterFlyout : TreeViewFlyout
                 control.SetVisualParent(null);
             }
         }
-        _presenterBindingDisposables?.Dispose();
-        _presenterBindingDisposables = new CompositeDisposable(4);
-        
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, presenter, DataGridTreeFilterFlyoutPresenter.IsMotionEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsShowArrowEffectiveProperty, presenter, DataGridTreeFilterFlyoutPresenter.IsShowArrowProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, ArrowPositionProperty, presenter, DataGridTreeFilterFlyoutPresenter.ArrowPositionProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, ToggleTypeProperty, presenter, DataGridTreeFilterFlyoutPresenter.ToggleTypeProperty));
+
+        presenter[!DataGridTreeFilterFlyoutPresenter.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+        presenter[!DataGridTreeFilterFlyoutPresenter.IsShowArrowProperty]     = this[!IsShowArrowEffectiveProperty];
+        presenter[!DataGridTreeFilterFlyoutPresenter.ArrowPositionProperty]   = this[!ArrowPositionProperty];
+        presenter[!DataGridTreeFilterFlyoutPresenter.ToggleTypeProperty]      = this[!ToggleTypeProperty];
         
         ConfigureShowArrowEffective();
         ConfigureArrowPosition();

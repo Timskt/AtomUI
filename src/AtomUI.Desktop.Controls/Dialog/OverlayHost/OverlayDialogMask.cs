@@ -1,5 +1,4 @@
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using Avalonia;
 using Avalonia.Animation;
@@ -35,7 +34,7 @@ internal class OverlayDialogMask : TemplatedControl
     public OverlayDialogMask(DialogLayer dialogLayer, Dialog dialog)
     {
         _dialogLayer = dialogLayer;
-        BindUtils.RelayBind(dialog, IsMotionEnabledProperty, this, IsMotionEnabledProperty);
+        this[!IsMotionEnabledProperty] = dialog[!IsMotionEnabledProperty];
     }
 
     public void Show(OverlayDialogHost maskTarget)
