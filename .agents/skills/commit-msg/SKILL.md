@@ -222,6 +222,7 @@ If the changes include a breaking API change:
 - Breaking from established repository style just to fit a template
 - Writing headers longer than 72 characters unless truly unavoidable
 - Wrapping the final output in backticks, quotes, or code blocks
+- Do not push to the remote end unless explicitly requested
 
 ## Reference
 
