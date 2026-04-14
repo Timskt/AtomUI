@@ -29,17 +29,12 @@ public class GalleryApplication : BaseGalleryApplication
 
     public override void OnFrameworkInitializationCompleted()
     {
-        RegisterShowCases();
-
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
                 desktop.MainWindow       = CreateWorkspaceWindow();
                 desktop.MainWindow.Title = Name;
                 break;
-            // case ISingleViewApplicationLifetime singleView:
-            //     singleView.MainView = new MainView();
-            //     break;
         }
 
         base.OnFrameworkInitializationCompleted();

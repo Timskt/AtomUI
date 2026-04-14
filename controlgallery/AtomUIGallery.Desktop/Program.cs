@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Media;
+using AtomUIGallery.ShowCases;
 using ReactiveUI.Avalonia;
 
 namespace AtomUIGallery.Desktop;
@@ -48,7 +49,8 @@ internal class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         return AppBuilder.Configure<GalleryApplication>()
-                         .UseReactiveUI(_ => { })
+                         .UseReactiveUI(build =>
+                             build.ConfigureViewLocator(locator => new ShowCaseViewModule().RegisterViews(locator)))
                          .UsePlatformDetect()
                          .With(new Win32PlatformOptions())
                          .LogToTrace();
