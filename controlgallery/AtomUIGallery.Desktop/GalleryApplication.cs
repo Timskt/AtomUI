@@ -26,9 +26,11 @@ public class GalleryApplication : BaseGalleryApplication
     {
         Name = "AtomUI Desktop Gallery";
     }
-    
+
     public override void OnFrameworkInitializationCompleted()
     {
+        RegisterShowCases();
+
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:

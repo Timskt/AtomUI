@@ -7,6 +7,12 @@ namespace AtomUIGallery.ShowCases;
 
 internal static class ShowCaseRegister
 {
+    /// <summary>
+    /// 将所有 ShowCase View 注册到 <see cref="AppLocator.CurrentMutable"/>，
+    /// 供 <see cref="ReactiveUI.RoutingState"/> 路由时解析对应的视图。
+    /// 应在 <see cref="Avalonia.Application.OnFrameworkInitializationCompleted"/> 中调用，
+    /// 确保在 ReactiveUI 通过 UseReactiveUI() 完成初始化之后、主窗口创建之前执行。
+    /// </summary>
     public static void Register()
     {
         RegisterGeneralCases();
@@ -19,98 +25,98 @@ internal static class ShowCaseRegister
 
     private static void RegisterGeneralCases()
     {
-        Locator.CurrentMutable.Register(() => new AboutUsPage(), typeof(IViewFor<AboutUsViewModel>));
-        Locator.CurrentMutable.Register(() => new ButtonShowCase(), typeof(IViewFor<ButtonViewModel>));
-        Locator.CurrentMutable.Register(() => new FloatButtonShowCase(), typeof(IViewFor<FloatButtonViewModel>));
-        Locator.CurrentMutable.Register(() => new CustomizeThemeShowCase(), typeof(IViewFor<CustomizeThemeViewModel>));
-        Locator.CurrentMutable.Register(() => new IconShowCase(), typeof(IViewFor<IconViewModel>));
-        Locator.CurrentMutable.Register(() => new OsInfoPage(), typeof(IViewFor<OsInfoViewModel>));
-        Locator.CurrentMutable.Register(() => new PaletteShowCase(), typeof(IViewFor<PaletteViewModel>));
-        Locator.CurrentMutable.Register(() => new SeparatorShowCase(), typeof(IViewFor<SeparatorViewModel>));
-        Locator.CurrentMutable.Register(() => new SplitButtonShowCase(), typeof(IViewFor<SplitButtonViewModel>));
+        AppLocator.CurrentMutable.Register(() => new AboutUsPage(), typeof(IViewFor<AboutUsViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ButtonShowCase(), typeof(IViewFor<ButtonViewModel>));
+        AppLocator.CurrentMutable.Register(() => new FloatButtonShowCase(), typeof(IViewFor<FloatButtonViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CustomizeThemeShowCase(), typeof(IViewFor<CustomizeThemeViewModel>));
+        AppLocator.CurrentMutable.Register(() => new IconShowCase(), typeof(IViewFor<IconViewModel>));
+        AppLocator.CurrentMutable.Register(() => new OsInfoPage(), typeof(IViewFor<OsInfoViewModel>));
+        AppLocator.CurrentMutable.Register(() => new PaletteShowCase(), typeof(IViewFor<PaletteViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SeparatorShowCase(), typeof(IViewFor<SeparatorViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SplitButtonShowCase(), typeof(IViewFor<SplitButtonViewModel>));
     }
-    
+
     private static void RegisterLayoutCases()
     {
-        Locator.CurrentMutable.Register(() => new BoxPanelShowCase(), typeof(IViewFor<BoxPanelViewModel>));
-        Locator.CurrentMutable.Register(() => new FlexPanelShowCase(), typeof(IViewFor<FlexPanelViewModel>));
-        Locator.CurrentMutable.Register(() => new GridShowCase(), typeof(IViewFor<GridViewModel>));
-        Locator.CurrentMutable.Register(() => new SpaceShowCase(), typeof(IViewFor<SpaceViewModel>));
-        Locator.CurrentMutable.Register(() => new SplitterShowCase(), typeof(IViewFor<SplitterViewModel>));
+        AppLocator.CurrentMutable.Register(() => new BoxPanelShowCase(), typeof(IViewFor<BoxPanelViewModel>));
+        AppLocator.CurrentMutable.Register(() => new FlexPanelShowCase(), typeof(IViewFor<FlexPanelViewModel>));
+        AppLocator.CurrentMutable.Register(() => new GridShowCase(), typeof(IViewFor<GridViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SpaceShowCase(), typeof(IViewFor<SpaceViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SplitterShowCase(), typeof(IViewFor<SplitterViewModel>));
     }
-    
+
     private static void RegisterDataDisplayCases()
     {
-        Locator.CurrentMutable.Register(() => new AvatarShowCase(), typeof(IViewFor<AvatarViewModel>));
-        Locator.CurrentMutable.Register(() => new BadgeShowCase(), typeof(IViewFor<BadgeViewModel>));
-        Locator.CurrentMutable.Register(() => new CalendarShowCase(), typeof(IViewFor<CalendarViewModel>));
-        Locator.CurrentMutable.Register(() => new CollapseShowCase(), typeof(IViewFor<CollapseViewModel>));
-        Locator.CurrentMutable.Register(() => new CardShowCase(), typeof(IViewFor<CardViewModel>));
-        Locator.CurrentMutable.Register(() => new CarouselShowCase(), typeof(IViewFor<CarouselViewModel>));
-        Locator.CurrentMutable.Register(() => new DataGridShowCase(), typeof(IViewFor<DataGridViewModel>));
-        Locator.CurrentMutable.Register(() => new DescriptionsShowCase(), typeof(IViewFor<DescriptionsViewModel>));
-        Locator.CurrentMutable.Register(() => new EmptyShowCase(), typeof(IViewFor<EmptyViewModel>));
-        Locator.CurrentMutable.Register(() => new ImagePreviewerShowCase(), typeof(IViewFor<ImagePreviewerViewModel>));
-        Locator.CurrentMutable.Register(() => new ExpanderShowCase(), typeof(IViewFor<ExpanderViewModel>));
-        Locator.CurrentMutable.Register(() => new GroupBoxShowCase(), typeof(IViewFor<GroupBoxViewModel>));
-        Locator.CurrentMutable.Register(() => new InfoFlyoutShowCase(), typeof(IViewFor<InfoFlyoutViewModel>));
-        Locator.CurrentMutable.Register(() => new ListShowCase(), typeof(IViewFor<ListViewModel>));
-        Locator.CurrentMutable.Register(() => new QRCodeShowCase(), typeof(IViewFor<QRCodeViewModel>));
-        Locator.CurrentMutable.Register(() => new SegmentedShowCase(), typeof(IViewFor<SegmentedViewModel>));
-        Locator.CurrentMutable.Register(() => new StatisticShowCase(), typeof(IViewFor<StatisticViewModel>));
-        Locator.CurrentMutable.Register(() => new TagShowCase(), typeof(IViewFor<TagViewModel>));
-        Locator.CurrentMutable.Register(() => new TimelineShowCase(), typeof(IViewFor<TimelineViewModel>));
-        Locator.CurrentMutable.Register(() => new TooltipShowCase(), typeof(IViewFor<TooltipViewModel>));
-        Locator.CurrentMutable.Register(() => new TourShowCase(), typeof(IViewFor<TourViewModel>));
-        Locator.CurrentMutable.Register(() => new TreeViewShowCase(), typeof(IViewFor<TreeViewViewModel>));
+        AppLocator.CurrentMutable.Register(() => new AvatarShowCase(), typeof(IViewFor<AvatarViewModel>));
+        AppLocator.CurrentMutable.Register(() => new BadgeShowCase(), typeof(IViewFor<BadgeViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CalendarShowCase(), typeof(IViewFor<CalendarViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CollapseShowCase(), typeof(IViewFor<CollapseViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CardShowCase(), typeof(IViewFor<CardViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CarouselShowCase(), typeof(IViewFor<CarouselViewModel>));
+        AppLocator.CurrentMutable.Register(() => new DataGridShowCase(), typeof(IViewFor<DataGridViewModel>));
+        AppLocator.CurrentMutable.Register(() => new DescriptionsShowCase(), typeof(IViewFor<DescriptionsViewModel>));
+        AppLocator.CurrentMutable.Register(() => new EmptyShowCase(), typeof(IViewFor<EmptyViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ImagePreviewerShowCase(), typeof(IViewFor<ImagePreviewerViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ExpanderShowCase(), typeof(IViewFor<ExpanderViewModel>));
+        AppLocator.CurrentMutable.Register(() => new GroupBoxShowCase(), typeof(IViewFor<GroupBoxViewModel>));
+        AppLocator.CurrentMutable.Register(() => new InfoFlyoutShowCase(), typeof(IViewFor<InfoFlyoutViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ListShowCase(), typeof(IViewFor<ListViewModel>));
+        AppLocator.CurrentMutable.Register(() => new QRCodeShowCase(), typeof(IViewFor<QRCodeViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SegmentedShowCase(), typeof(IViewFor<SegmentedViewModel>));
+        AppLocator.CurrentMutable.Register(() => new StatisticShowCase(), typeof(IViewFor<StatisticViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TagShowCase(), typeof(IViewFor<TagViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TimelineShowCase(), typeof(IViewFor<TimelineViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TooltipShowCase(), typeof(IViewFor<TooltipViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TourShowCase(), typeof(IViewFor<TourViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TreeViewShowCase(), typeof(IViewFor<TreeViewViewModel>));
     }
-    
+
     private static void RegisterDataEntryCases()
     {
-        Locator.CurrentMutable.Register(() => new AutoCompleteShowCase(), typeof(IViewFor<AutoCompleteViewModel>));
-        Locator.CurrentMutable.Register(() => new CascaderShowCase(), typeof(IViewFor<CascaderViewModel>));
-        Locator.CurrentMutable.Register(() => new CheckBoxShowCase(), typeof(IViewFor<CheckBoxViewModel>));
-        Locator.CurrentMutable.Register(() => new ColorPickerShowCase(), typeof(IViewFor<ColorPickerViewModel>));
-        Locator.CurrentMutable.Register(() => new DatePickerShowCase(), typeof(IViewFor<DatePickerViewModel>));
-        Locator.CurrentMutable.Register(() => new FormShowCase(), typeof(IViewFor<FormViewModel>));
-        Locator.CurrentMutable.Register(() => new LineEditShowCase(), typeof(IViewFor<LineEditViewModel>));
-        Locator.CurrentMutable.Register(() => new MentionsShowCase(), typeof(IViewFor<MentionsViewModel>));
-        Locator.CurrentMutable.Register(() => new NumberUpDownShowCase(), typeof(IViewFor<NumberUpDownViewModel>));
-        Locator.CurrentMutable.Register(() => new RadioButtonShowCase(), typeof(IViewFor<RadioButtonViewModel>));
-        Locator.CurrentMutable.Register(() => new RateShowCase(), typeof(IViewFor<RateViewModel>));
-        Locator.CurrentMutable.Register(() => new SelectShowCase(), typeof(IViewFor<SelectViewModel>));
-        Locator.CurrentMutable.Register(() => new SliderShowCase(), typeof(IViewFor<SliderViewModel>));
-        Locator.CurrentMutable.Register(() => new TimePickerShowCase(), typeof(IViewFor<TimePickerViewModel>));
-        Locator.CurrentMutable.Register(() => new ToggleSwitchShowCase(), typeof(IViewFor<ToggleSwitchViewModel>));
-        Locator.CurrentMutable.Register(() => new TransferShowCase(), typeof(IViewFor<TransferViewModel>));
-        Locator.CurrentMutable.Register(() => new TreeSelectShowCase(), typeof(IViewFor<TreeSelectViewModel>));
-        Locator.CurrentMutable.Register(() => new UploadShowCase(), typeof(IViewFor<UploadViewModel>));
+        AppLocator.CurrentMutable.Register(() => new AutoCompleteShowCase(), typeof(IViewFor<AutoCompleteViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CascaderShowCase(), typeof(IViewFor<CascaderViewModel>));
+        AppLocator.CurrentMutable.Register(() => new CheckBoxShowCase(), typeof(IViewFor<CheckBoxViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ColorPickerShowCase(), typeof(IViewFor<ColorPickerViewModel>));
+        AppLocator.CurrentMutable.Register(() => new DatePickerShowCase(), typeof(IViewFor<DatePickerViewModel>));
+        AppLocator.CurrentMutable.Register(() => new FormShowCase(), typeof(IViewFor<FormViewModel>));
+        AppLocator.CurrentMutable.Register(() => new LineEditShowCase(), typeof(IViewFor<LineEditViewModel>));
+        AppLocator.CurrentMutable.Register(() => new MentionsShowCase(), typeof(IViewFor<MentionsViewModel>));
+        AppLocator.CurrentMutable.Register(() => new NumberUpDownShowCase(), typeof(IViewFor<NumberUpDownViewModel>));
+        AppLocator.CurrentMutable.Register(() => new RadioButtonShowCase(), typeof(IViewFor<RadioButtonViewModel>));
+        AppLocator.CurrentMutable.Register(() => new RateShowCase(), typeof(IViewFor<RateViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SelectShowCase(), typeof(IViewFor<SelectViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SliderShowCase(), typeof(IViewFor<SliderViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TimePickerShowCase(), typeof(IViewFor<TimePickerViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ToggleSwitchShowCase(), typeof(IViewFor<ToggleSwitchViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TransferShowCase(), typeof(IViewFor<TransferViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TreeSelectShowCase(), typeof(IViewFor<TreeSelectViewModel>));
+        AppLocator.CurrentMutable.Register(() => new UploadShowCase(), typeof(IViewFor<UploadViewModel>));
     }
-    
+
     private static void RegisterFeedbackCases()
     {
-        Locator.CurrentMutable.Register(() => new AlertShowCase(), typeof(IViewFor<AlertViewModel>));
-        Locator.CurrentMutable.Register(() => new DrawerShowCase(), typeof(IViewFor<DrawerViewModel>));
-        Locator.CurrentMutable.Register(() => new SpinShowCase(), typeof(IViewFor<SpinViewModel>));
-        Locator.CurrentMutable.Register(() => new MessageShowCase(), typeof(IViewFor<MessageViewModel>));
-        Locator.CurrentMutable.Register(() => new ModalShowCase(), typeof(IViewFor<ModalViewModel>));
-        Locator.CurrentMutable.Register(() => new NotificationShowCase(), typeof(IViewFor<NotificationViewModel>));
-        Locator.CurrentMutable.Register(() => new PopupConfirmShowCase(), typeof(IViewFor<PopupConfirmViewModel>));
-        Locator.CurrentMutable.Register(() => new ProgressBarShowCase(), typeof(IViewFor<ProgressBarViewModel>));
-        Locator.CurrentMutable.Register(() => new ResultShowCase(), typeof(IViewFor<ResultViewModel>));
-        Locator.CurrentMutable.Register(() => new SkeletonShowCase(), typeof(IViewFor<SkeletonViewModel>));
-        Locator.CurrentMutable.Register(() => new WatermarkShowCase(), typeof(IViewFor<WatermarkViewModel>));
+        AppLocator.CurrentMutable.Register(() => new AlertShowCase(), typeof(IViewFor<AlertViewModel>));
+        AppLocator.CurrentMutable.Register(() => new DrawerShowCase(), typeof(IViewFor<DrawerViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SpinShowCase(), typeof(IViewFor<SpinViewModel>));
+        AppLocator.CurrentMutable.Register(() => new MessageShowCase(), typeof(IViewFor<MessageViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ModalShowCase(), typeof(IViewFor<ModalViewModel>));
+        AppLocator.CurrentMutable.Register(() => new NotificationShowCase(), typeof(IViewFor<NotificationViewModel>));
+        AppLocator.CurrentMutable.Register(() => new PopupConfirmShowCase(), typeof(IViewFor<PopupConfirmViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ProgressBarShowCase(), typeof(IViewFor<ProgressBarViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ResultShowCase(), typeof(IViewFor<ResultViewModel>));
+        AppLocator.CurrentMutable.Register(() => new SkeletonShowCase(), typeof(IViewFor<SkeletonViewModel>));
+        AppLocator.CurrentMutable.Register(() => new WatermarkShowCase(), typeof(IViewFor<WatermarkViewModel>));
     }
-    
+
     private static void RegisterNavigationCases()
     {
-        Locator.CurrentMutable.Register(() => new BreadcrumbShowCase(), typeof(IViewFor<BreadcrumbViewModel>));
-        Locator.CurrentMutable.Register(() => new ButtonSpinnerShowCase(), typeof(IViewFor<ButtonSpinnerViewModel>));
-        Locator.CurrentMutable.Register(() => new ComboBoxShowCase(), typeof(IViewFor<ComboBoxViewModel>));
-        Locator.CurrentMutable.Register(() => new DropdownButtonShowCase(), typeof(IViewFor<DropdownButtonViewModel>));
-        Locator.CurrentMutable.Register(() => new MenuShowCase(), typeof(IViewFor<MenuViewModel>));
-        Locator.CurrentMutable.Register(() => new PaginationShowCase(), typeof(IViewFor<PaginationViewModel>));
-        Locator.CurrentMutable.Register(() => new StepsShowCase(), typeof(IViewFor<StepsViewModel>));
-        Locator.CurrentMutable.Register(() => new TabControlShowCase(), typeof(IViewFor<TabControlViewModel>));
+        AppLocator.CurrentMutable.Register(() => new BreadcrumbShowCase(), typeof(IViewFor<BreadcrumbViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ButtonSpinnerShowCase(), typeof(IViewFor<ButtonSpinnerViewModel>));
+        AppLocator.CurrentMutable.Register(() => new ComboBoxShowCase(), typeof(IViewFor<ComboBoxViewModel>));
+        AppLocator.CurrentMutable.Register(() => new DropdownButtonShowCase(), typeof(IViewFor<DropdownButtonViewModel>));
+        AppLocator.CurrentMutable.Register(() => new MenuShowCase(), typeof(IViewFor<MenuViewModel>));
+        AppLocator.CurrentMutable.Register(() => new PaginationShowCase(), typeof(IViewFor<PaginationViewModel>));
+        AppLocator.CurrentMutable.Register(() => new StepsShowCase(), typeof(IViewFor<StepsViewModel>));
+        AppLocator.CurrentMutable.Register(() => new TabControlShowCase(), typeof(IViewFor<TabControlViewModel>));
     }
 }

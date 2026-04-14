@@ -48,12 +48,10 @@ internal class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         return AppBuilder.Configure<GalleryApplication>()
-                         .UseReactiveUI(build =>
-                         {
-                         })
+                         .UseReactiveUI(_ => { })
                          .UsePlatformDetect()
                          .With(new Win32PlatformOptions())
                          .LogToTrace();
-        
+
     }
 }
