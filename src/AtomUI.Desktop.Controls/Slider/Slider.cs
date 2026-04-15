@@ -121,7 +121,7 @@ public class Slider : RangeBase,
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<Slider>();
 
-    public static readonly StyledProperty<bool> IsWaveAnimationEnabledProperty =
+    public static readonly StyledProperty<bool> IsWaveSpiritEnabledProperty =
         WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty.AddOwner<Slider>();
     
     public Orientation Orientation
@@ -187,10 +187,10 @@ public class Slider : RangeBase,
         set => SetValue(IsMotionEnabledProperty, value);
     }
 
-    public bool IsWaveAnimationEnabled
+    public bool IsWaveSpiritEnabled
     {
-        get => GetValue(IsWaveAnimationEnabledProperty);
-        set => SetValue(IsWaveAnimationEnabledProperty, value);
+        get => GetValue(IsWaveSpiritEnabledProperty);
+        set => SetValue(IsWaveSpiritEnabledProperty, value);
     }
 
     #endregion

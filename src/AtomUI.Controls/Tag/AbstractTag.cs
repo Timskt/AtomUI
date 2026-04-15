@@ -49,9 +49,9 @@ public abstract class AbstractTag : TemplatedControl
     public static readonly StyledProperty<PathIcon?> CloseIconProperty =
         AvaloniaProperty.Register<AbstractTag, PathIcon?>(nameof(CloseIcon));
 
-    public static readonly StyledProperty<string?> TagTextProperty =
+    public static readonly StyledProperty<string?> TextProperty =
         AvaloniaProperty.Register<AbstractTag, string?>(
-            nameof(TagText));
+            nameof(Text));
 
     public string? TagColor
     {
@@ -84,10 +84,20 @@ public abstract class AbstractTag : TemplatedControl
     }
 
     [Content]
+    public string? Text
+    {
+        get => GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
+    }
+
+    /// <summary>
+    /// 已弃用：使用 <see cref="Text"/> 属性代替。
+    /// </summary>
+    [Obsolete("Use Text property instead.", false)]
     public string? TagText
     {
-        get => GetValue(TagTextProperty);
-        set => SetValue(TagTextProperty, value);
+        get => Text;
+        set => Text = value;
     }
 
     #endregion
@@ -168,7 +178,7 @@ public abstract class AbstractTag : TemplatedControl
         AffectsMeasure<AbstractTag>(IsBorderedProperty,
             IconProperty,
             IsClosableProperty,
-            TagTextProperty);
+            TextProperty);
         AffectsRender<AbstractTag>(TagColorProperty,
             ForegroundProperty,
             BackgroundProperty,

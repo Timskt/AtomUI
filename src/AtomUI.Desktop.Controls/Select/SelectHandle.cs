@@ -18,8 +18,8 @@ internal class SelectHandle : TemplatedControl
     public static readonly StyledProperty<bool> IsFilterEnabledProperty =
         AvaloniaProperty.Register<SelectHandle, bool>(nameof(IsFilterEnabled));
         
-    public static readonly StyledProperty<bool> IsClearableProperty =
-        AvaloniaProperty.Register<SelectHandle, bool>(nameof(IsClearable));
+    public static readonly StyledProperty<bool> IsAllowClearProperty =
+        AvaloniaProperty.Register<SelectHandle, bool>(nameof(IsAllowClear));
     
     public static readonly StyledProperty<bool> IsMotionEnabledProperty = 
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<SelectHandle>();
@@ -60,10 +60,10 @@ internal class SelectHandle : TemplatedControl
         set => SetValue(IsFilterEnabledProperty, value);
     }
     
-    public bool IsClearable
+    public bool IsAllowClear
     {
-        get => GetValue(IsClearableProperty);
-        set => SetValue(IsClearableProperty, value);
+        get => GetValue(IsAllowClearProperty);
+        set => SetValue(IsAllowClearProperty, value);
     }
     
     public bool IsMotionEnabled

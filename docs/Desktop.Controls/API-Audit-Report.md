@@ -382,8 +382,13 @@ public static readonly StyledProperty<string?> ImageSourceProperty = ...
 
 ### 3. **版本迭代中逐步调整** (🔵 低严重度)
 
-- ⏳ `TagText` → `Text` (Redundant prefix)
-- ⏳ `CardStyleVariant.Outline` → `Outlined` (Enum value alignment)
+- ✅ **[已完成]** `TagText` → `Text` (Redundant prefix)  
+  *Severity: Low, File: AbstractTag.cs*
+
+- ✅ **[已完成]** `CardStyleVariant.Outline` → `Outlined` (Enum value alignment)  
+  *Severity: Low, File: Card.cs*  
+  *Changes: Card.cs, Card.md, CardAPI.md*
+
 - ⏳ 颜色属性命名统一 (TagColor, BadgeColor, RibbonColor)
 - ⏳ `ImagePath` vs `ImageSource` vs `PresetImage` API 设计优化
 - ⏳ `AbstractPagination` 位置整理 (Desktop → Base Layer)

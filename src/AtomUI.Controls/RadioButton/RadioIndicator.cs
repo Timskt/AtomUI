@@ -115,7 +115,7 @@ internal class RadioIndicator : TemplatedControl
     internal static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<RadioIndicator>();
 
-    internal static readonly StyledProperty<bool> IsWaveAnimationEnabledProperty =
+    internal static readonly StyledProperty<bool> IsWaveSpiritEnabledProperty =
         WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty.AddOwner<RadioIndicator>();
 
     internal bool IsMotionEnabled
@@ -124,10 +124,10 @@ internal class RadioIndicator : TemplatedControl
         set => SetValue(IsMotionEnabledProperty, value);
     }
 
-    internal bool IsWaveAnimationEnabled
+    internal bool IsWaveSpiritEnabled
     {
-        get => GetValue(IsWaveAnimationEnabledProperty);
-        set => SetValue(IsWaveAnimationEnabledProperty, value);
+        get => GetValue(IsWaveSpiritEnabledProperty);
+        set => SetValue(IsWaveSpiritEnabledProperty, value);
     }
     
     #endregion
@@ -195,7 +195,7 @@ internal class RadioIndicator : TemplatedControl
             UpdatePseudoClasses();
 
             if (change.Property == IsCheckedProperty &&
-                IsWaveAnimationEnabled &&
+                IsWaveSpiritEnabled &&
                 !PseudoClasses.Contains(StdPseudoClass.Disabled) &&
                 PseudoClasses.Contains(StdPseudoClass.Checked))
             {

@@ -48,7 +48,7 @@
                                     IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=atom:Select}}"
                                     IsMotionEnabled="{Binding IsMotionEnabled, RelativeSource={RelativeSource AncestorType=atom:Select}}"
                                     IsLoading="{Binding IsLoading, RelativeSource={RelativeSource AncestorType=atom:Select}}"
-                                    IsClearable="{Binding IsAllowClear, RelativeSource={RelativeSource AncestorType=atom:Select}}"
+                                    IsAllowClear="{Binding IsAllowClear, RelativeSource={RelativeSource AncestorType=atom:Select}}"
                                     IsSelectionEmpty="{Binding IsSelectionEmpty, RelativeSource={RelativeSource AncestorType=atom:Select}}"
                                     IsDropDownOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource AncestorType=atom:Select}}"
                                     IsInputHover="{Binding IsInnerBoxHover, RelativeSource={RelativeSource AncestorType=atom:AddOnDecoratedBox}}"

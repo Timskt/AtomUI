@@ -75,7 +75,7 @@ AtomUI `Card` 在 Avalonia `HeaderedContentControl` 的基础上，遵循 Ant De
 | **额外区域（Extra）** | `Extra` + `ExtraTemplate` 属性 | 标题行右侧附加操作入口（如 "More" 链接） |
 | **封面图片** | `Cover` + `CoverTemplate` 属性 | 卡片顶部全宽封面图片/媒体 |
 | **操作区** | `Actions` 集合（`CardActionButton`） | 卡片底部等分操作按钮区 |
-| **风格变体** | `CardStyleVariant` 枚举（Outline / Borderless） | 有边框/无边框两种视觉风格 |
+| **风格变体** | `CardStyleVariant` 枚举（Outlined / Borderless） | 有边框/无边框两种视觉风格 |
 | **三种尺寸** | `ISizeTypeAware` 接口 + `SizeType` | Large / Middle / Small 影响头部高度、字号、内间距 |
 | **悬浮阴影** | `IsHoverable` + `BoxShadow` 过渡动画 | 鼠标悬浮时投影加深，卡片「升起」 |
 | **内嵌模式** | `IsInnerMode` 属性 | 嵌套卡片场景，内层卡片头部背景变色 |
@@ -90,11 +90,11 @@ AtomUI `Card` 在 Avalonia `HeaderedContentControl` 的基础上，遵循 Ant De
 
 ### 风格变体（StyleVariant）
 
-卡片风格通过 `StyleVariant` 属性设置，默认为 `Outline`。
+卡片风格通过 `StyleVariant` 属性设置，默认为 `Outlined`。
 
 | 风格 | 视觉表现 | 适用场景 |
 |---|---|---|
-| `Outline` | 有边框（`ColorBorderSecondary`），无阴影 | 白色/浅色背景 |
+| `Outlined` | 有边框（`ColorBorderSecondary`），无阴影 | 白色/浅色背景 |
 | `Borderless` | 无边框，使用三级阴影（`BoxShadowsTertiary`） | 灰色/有色背景 |
 
 当 `StyleVariant = Borderless` 时，`EffectiveBorderThickness` 设为 0，阴影使用 `SharedToken.BoxShadowsTertiary`。

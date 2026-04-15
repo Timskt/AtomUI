@@ -15,7 +15,7 @@ namespace AtomUI.Desktop.Controls;
 
 public enum CardStyleVariant
 {
-    Outline,
+    Outlined,
     Borderless
 }
 
@@ -286,7 +286,7 @@ public class Card : HeaderedContentControl,
     
     private void ConfigureContentBorderThickness()
     {
-        if (StyleVariant == CardStyleVariant.Outline)
+        if (StyleVariant == CardStyleVariant.Outlined)
         {
             SetCurrentValue(EffectiveBorderThicknessProperty, BorderThickness);
         }

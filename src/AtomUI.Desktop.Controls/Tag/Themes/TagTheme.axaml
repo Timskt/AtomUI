@@ -25,7 +25,7 @@
                                      VerticalAlignment="Center"/>
                     <atom:TextBlock Name="TagTextLabel"
                                     VerticalAlignment="Center"
-                                    Text="{TemplateBinding TagText}"
+                                    Text="{TemplateBinding Text}"
                                     Padding="{TemplateBinding TagTextPaddingInline}" />
                 </DockPanel>
             </Panel>

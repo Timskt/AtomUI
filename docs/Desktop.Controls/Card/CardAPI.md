@@ -18,7 +18,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 
 | 值 | 说明 |
 |---|---|
-| `Outline` | 有边框风格（默认），适用于白色/浅色背景 |
+| `Outlined` | 有边框风格（默认），适用于白色/浅色背景 |
 | `Borderless` | 无边框风格，使用阴影代替，适用于灰色/有色背景 |
 
 ### CardContentType（内部枚举）
@@ -51,7 +51,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 | `BoxShadow` | `BoxShadows` | 无阴影（Outline）/ `BoxShadowsTertiary`（Borderless） | 卡片阴影效果，悬浮时自动切换为 `CardShadows` |
 | `Extra` | `object?` | `null` | 头部右侧额外区域内容（如 "More" 链接） |
 | `ExtraTemplate` | `IDataTemplate?` | `null` | 额外区域数据模板 |
-| `StyleVariant` | `CardStyleVariant` | `Outline` | 卡片风格变体（有边框 / 无边框） |
+| `StyleVariant` | `CardStyleVariant` | `Outlined` | 卡片风格变体（有边框 / 无边框） |
 | `SizeType` | `SizeType` | `SizeType.Middle` | 卡片尺寸（共享属性，通过 `AddOwner` 注册） |
 | `IsLoading` | `bool` | `false` | 加载中状态，显示骨架屏占位 |
 | `IsInnerMode` | `bool` | `false` | 内嵌模式，头部背景变为 `ColorFillAlter` 以区分嵌套层级 |
