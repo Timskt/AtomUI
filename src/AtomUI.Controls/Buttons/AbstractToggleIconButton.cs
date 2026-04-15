@@ -6,7 +6,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public class AbstractToggleIconButton : ToggleButton, IMotionAwareControl
 {

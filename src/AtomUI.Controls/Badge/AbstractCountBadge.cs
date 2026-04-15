@@ -5,7 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public enum CountBadgeSize
 {

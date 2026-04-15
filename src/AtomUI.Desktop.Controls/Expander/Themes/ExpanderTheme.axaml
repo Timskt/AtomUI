@@ -225,8 +225,6 @@
                 <Setter Property="TextBlock.LineHeight"
                         Value="{atom:SharedTokenResource FontHeightLG}" />
             </Style>
-
-
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">
@@ -235,8 +233,6 @@
                 <Setter Property="TextBlock.LineHeight"
                         Value="{atom:SharedTokenResource FontHeight}" />
             </Style>
-
-
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#PART_HeaderDecorator">

@@ -8,7 +8,3 @@ using Avalonia.Metadata;
 [assembly: XmlnsDefinition("https://atomui.net", "AtomUI.Controls.DesignTokens")]
 [assembly: XmlnsDefinition("https://atomui.net", "AtomUI.Controls.Themes")]
 [assembly: XmlnsDefinition("https://atomui.net", "AtomUI.Controls.Localization")]
-
-
-[assembly: XmlnsPrefix("https://atomui.net/common-controls", "atom.commons")]
-[assembly: XmlnsDefinition("https://atomui.net/common-controls", "AtomUI.Controls.Commons")]

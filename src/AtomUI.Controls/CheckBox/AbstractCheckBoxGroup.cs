@@ -12,7 +12,7 @@ using Avalonia.Metadata;
 
 using ItemCollection = AtomUI.Collections.ItemCollection;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 [TemplatePart("PART_CheckBoxItems", typeof(SelectingItemsControl))]
 public class AbstractCheckBoxGroup: TemplatedControl,

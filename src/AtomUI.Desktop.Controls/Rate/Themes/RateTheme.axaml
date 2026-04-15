@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:Rate}" TargetType="atom:Rate">
         <Setter Property="Template">
@@ -12,7 +11,7 @@
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderBrush}">
-                    <atomc:RateItemsControl Name="PART_RateItems"
+                    <atom:RateItemsControl Name="PART_RateItems"
                                             Character="{TemplateBinding Character}"
                                             StarColor="{TemplateBinding StarColor}"
                                             StarBgColor="{TemplateBinding StarBgColor}"

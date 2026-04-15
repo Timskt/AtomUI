@@ -16,6 +16,7 @@ public class ColorPicker : AbstractColorPicker
     public static readonly StyledProperty<Color?> ValueProperty =
         AvaloniaProperty.Register<ColorPicker, Color?>(nameof(Value));
     
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Func<Color, ColorFormat, string>?> ColorTextFormatterProperty =
         AvaloniaProperty.RegisterAttached<ColorPicker, Control, Func<Color, ColorFormat, string>?>("ColorTextFormatter");
     

@@ -2,12 +2,11 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:Class="AtomUI.Desktop.Controls.Themes.AbstractProgressBarTheme"
-    TargetType="atomc:AbstractProgressBar"
+    TargetType="atom:AbstractProgressBar"
     x:ClassModifier="internal">
     <Setter Property="Template">
-        <ControlTemplate TargetType="atomc:AbstractProgressBar">
+        <ControlTemplate TargetType="atom:AbstractProgressBar">
             <Canvas>
                 <LayoutTransformControl Name="PART_LayoutTransformControl">
                     <Label Name="PART_PercentageLabel"

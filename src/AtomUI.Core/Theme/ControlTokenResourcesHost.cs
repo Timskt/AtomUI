@@ -64,9 +64,11 @@ public static class ControlTokenResourcesScopeHostExtensions
 
 public class ControlTokenResourceScopeHost
 {
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<IControlTokenResourceScopeProvider?> TokenResourceScopeProviderProperty =
         AvaloniaProperty.RegisterAttached<ControlTokenResourceScopeHost, Control, IControlTokenResourceScopeProvider?>("TokenResourceScopeProvider");
     
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     internal static readonly AttachedProperty<ResourceDictionary?> ScopedTokenResourcesProperty =
         AvaloniaProperty.RegisterAttached<ControlTokenResourceScopeHost, Control, ResourceDictionary?>("ScopedTokenResources");
 

@@ -138,7 +138,7 @@ public class AbstractToggleSwitch : ToggleButton,
     internal static readonly StyledProperty<Rect> KnobRectProperty = 
         AvaloniaProperty.Register<AbstractToggleSwitch, Rect>(nameof(KnobRect));
 
-    public static readonly StyledProperty<Size> KnobSizeProperty =
+    internal static readonly StyledProperty<Size> KnobSizeProperty =
         AvaloniaProperty.Register<AbstractToggleSwitch, Size>(nameof(KnobSize));
 
     internal static readonly StyledProperty<Rect> KnobMovingRectProperty = 
@@ -195,7 +195,7 @@ public class AbstractToggleSwitch : ToggleButton,
         set => SetValue(KnobRectProperty, value);
     }
 
-    public Size KnobSize
+    internal Size KnobSize
     {
         get => GetValue(KnobSizeProperty);
         set => SetValue(KnobSizeProperty, value);

@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public abstract class AbstractTimeline : ItemsControl
 {

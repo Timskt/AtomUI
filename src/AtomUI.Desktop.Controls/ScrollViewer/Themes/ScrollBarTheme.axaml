@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:ScrollBar}" TargetType="atom:ScrollBar">
         <Style Selector="^:vertical">
@@ -26,7 +25,7 @@
                                                          IsExpanded="{TemplateBinding IsEffectiveExpanded, Mode=TwoWay}" />
                                 </Track.Thumb>
                                 <Track.DecreaseButton>
-                                    <atomc:ScrollBarRepeatButton
+                                    <atom:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageUpButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -35,7 +34,7 @@
                                         Focusable="False" />
                                 </Track.DecreaseButton>
                                 <Track.IncreaseButton>
-                                    <atomc:ScrollBarRepeatButton
+                                    <atom:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageDownButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -71,7 +70,7 @@
                                                          IsExpanded="{TemplateBinding IsEffectiveExpanded, Mode=TwoWay}" />
                                 </Track.Thumb>
                                 <Track.DecreaseButton>
-                                    <atomc:ScrollBarRepeatButton
+                                    <atom:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageUpButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -80,7 +79,7 @@
                                         Focusable="False" />
                                 </Track.DecreaseButton>
                                 <Track.IncreaseButton>
-                                    <atomc:ScrollBarRepeatButton
+                                    <atom:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageDownButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"

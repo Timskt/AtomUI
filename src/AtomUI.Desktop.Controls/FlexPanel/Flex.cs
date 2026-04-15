@@ -8,18 +8,21 @@ public static class Flex
     /// <summary>
     /// Defines an attached property to control the cross-axis alignment of a specific child in a flex layout.
     /// </summary>
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<AlignItems?> AlignSelfProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, AlignItems?>("AlignSelf", typeof(Flex));
 
     /// <summary>
     /// Defines an attached property to control the order of a specific child in a flex layout.
     /// </summary>
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<int> OrderProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, int>("Order", typeof(Flex));
 
     /// <summary>
     /// Defines an attached property to control the initial main-axis size of a specific child in a flex layout.
     /// </summary>
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<FlexBasis> BasisProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, FlexBasis>("Basis", typeof(Flex), FlexBasis.Auto);
 
@@ -27,6 +30,7 @@ public static class Flex
     /// Defines an attached property to control the factor by which a specific child can shrink
     /// along the main-axis in a flex layout.
     /// </summary>
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<double> ShrinkProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, double>("Shrink", typeof(Flex), 1.0,
             validate: v => v >= 0.0);
@@ -35,16 +39,20 @@ public static class Flex
     /// Defines an attached property to control the factor by which a specific child can grow
     /// along the main-axis in a flex layout.
     /// </summary>
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<double> GrowProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, double>("Grow", typeof(Flex), 0.0,
             validate: v => v >= 0.0);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     internal static readonly AttachedProperty<double> BaseLengthProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, double>("BaseLength", typeof(Flex), 0.0);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     internal static readonly AttachedProperty<double> MinLengthProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, double>("MinLength", typeof(Flex), 0.0);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     internal static readonly AttachedProperty<double> CurrentLengthProperty =
         AvaloniaProperty.RegisterAttached<Layoutable, double>("CurrentLength", typeof(Flex), 0.0);
 

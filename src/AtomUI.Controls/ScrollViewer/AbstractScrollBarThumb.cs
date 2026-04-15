@@ -5,7 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public abstract class AbstractScrollBarThumb : Thumb, IMotionAwareControl
 {

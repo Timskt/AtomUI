@@ -24,59 +24,75 @@ public class ToolTip : ContentControl,
 {
     #region 公共属性定义
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<object?> TipProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, object?>("Tip");
     
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<double> TipHostWidthProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, double>("TipHostWidth", double.NaN);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> IsOpenProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, bool>("IsOpen");
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<PresetColorType?> PresetColorProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, PresetColorType?>("PresetColor");
 
     public static readonly AttachedProperty<Color?> ColorProperty =
-        AvaloniaProperty.RegisterAttached<ToolTip, Control, Color?>("Color");
+        AvaloniaProperty.RegisterAttached<ToolTip, Control, Color?>(nameof(Color));
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> IsShowArrowProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, bool>("IsShowArrow", true);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> IsPointAtCenterProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, bool>("IsPointAtCenter");
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<PlacementMode> PlacementProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, PlacementMode>(
             "Placement", PlacementMode.Top);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<double> HorizontalOffsetProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, double>("HorizontalOffset");
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<double> VerticalOffsetProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, double>("VerticalOffset");
 
     /// <summary>
     /// 距离 anchor 的边距，根据垂直和水平进行设置
     /// </summary>
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<double> MarginToAnchorProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, double>("MarginToAnchor", 4);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<int> ShowDelayProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, int>("ShowDelay", 400);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<int> BetweenShowDelayProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, int>("BetweenShowDelay", 100);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> ShowOnDisabledProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, bool>("ShowOnDisabled", false, true);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> ServiceEnabledProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, bool>("ServiceEnabled", true, true);
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<CustomPopupPlacementCallback?> CustomPopupPlacementCallbackProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, CustomPopupPlacementCallback?>(
             "CustomPopupPlacementCallback");
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> IsCustomShowAndHideProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, bool>("IsCustomShowAndHide");
 
@@ -276,9 +292,11 @@ public class ToolTip : ContentControl,
 
     #region 公共事件定义
 
+    // RoutedEvent 没有对应的 CLR 事件声明，只能使用硬编码字符串注册
     public static readonly RoutedEvent<CancelRoutedEventArgs> ToolTipOpeningEvent =
         RoutedEvent.Register<ToolTip, CancelRoutedEventArgs>("ToolTipOpening", RoutingStrategies.Direct);
 
+    // RoutedEvent 没有对应的 CLR 事件声明，只能使用硬编码字符串注册
     public static readonly RoutedEvent ToolTipClosingEvent =
         RoutedEvent.Register<ToolTip, RoutedEventArgs>("ToolTipClosing", RoutingStrategies.Direct);
 
@@ -312,6 +330,8 @@ public class ToolTip : ContentControl,
 
     #region 内部属性定义
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
+    // 注意: 这里 nameof(ToolTip) 会解析为类名而非属性概念名，结果恰好正确但仍应显式标注
     internal static readonly AttachedProperty<ToolTip?> ToolTipProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, ToolTip?>("ToolTip");
 

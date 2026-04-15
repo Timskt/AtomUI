@@ -11,7 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 [TemplatePart("PART_RateItems", typeof(ItemsControl))]
 public class AbstractRate : TemplatedControl, 

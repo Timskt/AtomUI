@@ -11,6 +11,7 @@ namespace AtomUI.Desktop.Controls;
 
 internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
 {
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     private static readonly AttachedProperty<object?> RecycleKeyProperty =
         AvaloniaProperty.RegisterAttached<VirtualizingStackPanel, Control, object?>("RecycleKey");
 

@@ -52,10 +52,12 @@ public abstract class PopupFlyoutBase : FlyoutBase, IPopupHostProvider
     public static readonly StyledProperty<PlacementMode> PlacementProperty =
         Popup.PlacementProperty.AddOwner<PopupFlyoutBase>();
     
-    public static readonly AttachedProperty<double> HorizontalOffsetProperty = 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
+    public static readonly AttachedProperty<double> HorizontalOffsetProperty =
         AvaloniaProperty.RegisterAttached<PopupFlyoutBase, Control, double>("HorizontalOffset");
     
-    public static readonly AttachedProperty<double> VerticalOffsetProperty = 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
+    public static readonly AttachedProperty<double> VerticalOffsetProperty =
         AvaloniaProperty.RegisterAttached<PopupFlyoutBase, Control, double>("VerticalOffset");
     
     public static readonly StyledProperty<PopupAnchor> PlacementAnchorProperty =

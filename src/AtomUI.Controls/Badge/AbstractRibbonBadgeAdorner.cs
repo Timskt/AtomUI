@@ -8,7 +8,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 [TemplatePart("PART_LabelPart",  typeof(TextBlock))]
 internal abstract class AbstractRibbonBadgeAdorner : TemplatedControl

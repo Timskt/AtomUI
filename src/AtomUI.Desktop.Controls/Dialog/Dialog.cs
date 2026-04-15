@@ -71,7 +71,7 @@ public partial class Dialog : TemplatedControl,
         AvaloniaProperty.Register<Dialog, Control?>(nameof(PlacementTarget));
     
     public static readonly StyledProperty<CustomDialogPlacementCallback?> CustomPopupPlacementCallbackProperty =
-        AvaloniaProperty.Register<Dialog, CustomDialogPlacementCallback?>(nameof(CustomDialogPlacementCallback));
+        AvaloniaProperty.Register<Dialog, CustomDialogPlacementCallback?>(nameof(CustomPopupPlacementCallback));
     
     public static readonly StyledProperty<bool> OverlayDismissEventPassThroughProperty =
         AvaloniaProperty.Register<Dialog, bool>(nameof(OverlayDismissEventPassThrough), false);
@@ -212,7 +212,7 @@ public partial class Dialog : TemplatedControl,
         set => SetValue(PlacementTargetProperty, value);
     }
     
-    public CustomDialogPlacementCallback? CustomDialogPlacementCallback
+    public CustomDialogPlacementCallback? CustomPopupPlacementCallback
     {
         get => GetValue(CustomPopupPlacementCallbackProperty);
         set => SetValue(CustomPopupPlacementCallbackProperty, value);
@@ -1002,7 +1002,7 @@ public partial class Dialog : TemplatedControl,
             OffsetX,
             OffsetY,
             new Rect(default, placementTarget.Bounds.Size),
-            CustomDialogPlacementCallback));
+            CustomPopupPlacementCallback));
     }
     
     private void UpdateHostSizing(IDialogHost dialogHost, TopLevel topLevel, Control placementTarget)

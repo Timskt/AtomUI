@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 internal class RateCharacter : Control
 {

@@ -115,7 +115,7 @@ public class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
         AvaloniaProperty.Register<AbstractImagePreviewer, Dimension?>(nameof(DialogVerticalOffset));
     
     public static readonly StyledProperty<CustomDialogPlacementCallback?> CustomPopupPlacementCallbackProperty =
-        AvaloniaProperty.Register<AbstractImagePreviewer, CustomDialogPlacementCallback?>(nameof(CustomDialogPlacementCallback));
+        AvaloniaProperty.Register<AbstractImagePreviewer, CustomDialogPlacementCallback?>(nameof(CustomPopupPlacementCallback));
     
     public static readonly StyledProperty<bool> IsDialogTopmostProperty =
         AvaloniaProperty.Register<AbstractImagePreviewer, bool>(nameof(IsDialogTopmost));
@@ -174,7 +174,7 @@ public class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
         set => SetValue(DialogVerticalOffsetProperty, value);
     }
     
-    public CustomDialogPlacementCallback? CustomDialogPlacementCallback
+    public CustomDialogPlacementCallback? CustomPopupPlacementCallback
     {
         get => GetValue(CustomPopupPlacementCallbackProperty);
         set => SetValue(CustomPopupPlacementCallbackProperty, value);
@@ -515,7 +515,7 @@ public class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
             PreviewDialogOffsetX,
             PreviewDialogOffsetY,
             new Rect(default, placementTarget.Bounds.Size),
-            CustomDialogPlacementCallback));
+            CustomPopupPlacementCallback));
     }
     
     private void RootTemplateApplied(object? sender, TemplateAppliedEventArgs e)

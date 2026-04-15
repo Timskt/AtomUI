@@ -13,7 +13,7 @@ using Avalonia.Metadata;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public abstract class AbstractSpinIndicator : TemplatedControl, ISizeTypeAware
 {

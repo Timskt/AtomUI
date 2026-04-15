@@ -40,7 +40,7 @@ public class MessageCard : TemplatedControl, IMotionAwareControl
     /// Defines the <see cref="NotificationType" /> property
     /// </summary>
     public static readonly StyledProperty<MessageType> MessageTypeProperty =
-        AvaloniaProperty.Register<MessageCard, MessageType>(nameof(NotificationType));
+        AvaloniaProperty.Register<MessageCard, MessageType>(nameof(MessageType));
 
     /// <summary>
     /// Defines the <see cref="MessageClosed" /> event.

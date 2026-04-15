@@ -6,7 +6,7 @@ using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public enum RibbonBadgePlacement
 {
@@ -32,7 +32,7 @@ public abstract class AbstractRibbonBadge : Control
 
     public static readonly StyledProperty<RibbonBadgePlacement> PlacementProperty =
         AvaloniaProperty.Register<AbstractRibbonBadge, RibbonBadgePlacement>(
-            nameof(Text),
+            nameof(Placement),
             RibbonBadgePlacement.End);
 
     public static readonly StyledProperty<bool> BadgeIsVisibleProperty =

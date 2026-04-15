@@ -8,7 +8,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 internal class CheckBoxItemsControl : SelectingItemsControl
 {

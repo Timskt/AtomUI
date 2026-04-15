@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomcommons="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:DotBadgeAdorner}" TargetType="atom:DotBadgeAdorner">
         <Setter Property="Template">
@@ -15,7 +14,7 @@
                         Name="PART_MotionActor"
                         ClipToBounds="False"
                         DockPanel.Dock="Left">
-                        <atomcommons:DotBadgeIndicator
+                        <atom:DotBadgeIndicator
                             Name="Indicator"
                             BadgeDotColor="{TemplateBinding BadgeDotColor}" />
                     </atom:MotionActor>

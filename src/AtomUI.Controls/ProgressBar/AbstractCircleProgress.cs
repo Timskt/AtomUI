@@ -8,7 +8,7 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public abstract class AbstractCircleProgress : AbstractProgressBar
 {

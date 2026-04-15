@@ -53,7 +53,7 @@ public class Alert : TemplatedControl
         AvaloniaProperty.Register<Alert, string?>(nameof(Description));
 
     public static readonly StyledProperty<Control?> ExtraActionProperty =
-        AvaloniaProperty.Register<Alert, Control?>(nameof(Description));
+        AvaloniaProperty.Register<Alert, Control?>(nameof(ExtraAction));
 
     public AlertType Type
     {

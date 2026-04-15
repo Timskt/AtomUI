@@ -6,7 +6,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 [TemplatePart("PART_MotionActor", typeof(BaseMotionActor))]
 internal abstract class AbstractDotBadgeAdorner : TemplatedControl

@@ -6,7 +6,7 @@ using Avalonia.Layout;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public enum DotBadgeStatus
 {

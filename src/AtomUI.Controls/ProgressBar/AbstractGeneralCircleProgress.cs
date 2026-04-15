@@ -2,7 +2,7 @@ using AtomUI.Media;
 using Avalonia;
 using Avalonia.Media;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public class AbstractGeneralCircleProgress : AbstractCircleProgress
 {

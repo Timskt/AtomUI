@@ -807,7 +807,7 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
             SetValue(EmptyIndicatorProperty, new Empty()
             {
                 SizeType    = SizeType.Small,
-                PresetImage = PresetEmptyImage.Simple
+                PresetEmptyImage = PresetEmptyImage.Simple
             }, BindingPriority.Template);
         }
         

@@ -5,7 +5,7 @@ using AtomUI.Reflection;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 internal static class ScrollBarReflectionExtensions
 {

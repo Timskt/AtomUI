@@ -1,4 +1,4 @@
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 internal partial class ResultIndicator
 {

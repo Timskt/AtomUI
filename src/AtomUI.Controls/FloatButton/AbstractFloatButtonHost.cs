@@ -7,7 +7,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Media;
 using Avalonia.Metadata;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public abstract class AbstractFloatButtonHost : TemplatedControl, IMotionAwareControl
 {

@@ -11,7 +11,7 @@ using SkiaSharp;
 using SkiaSharp.QrCode;
 using static System.Enum;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 [TemplatePart("PART_RefreshButton", typeof(Button))]
 public class AbstractQRCode : TemplatedControl

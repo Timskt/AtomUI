@@ -8,7 +8,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 using AvaScrollViewer = Avalonia.Controls.ScrollViewer;
 

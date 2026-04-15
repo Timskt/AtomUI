@@ -14,7 +14,7 @@ internal sealed class BindingEvaluator<T> : StyledElement, IDisposable
         "AVP1002:AvaloniaProperty objects should not be owned by a generic type",
         Justification = "This property is not supposed to be used from XAML.")]
     public static readonly StyledProperty<T> ValueProperty =
-        AvaloniaProperty.Register<BindingEvaluator<T>, T>("Value");
+        AvaloniaProperty.Register<BindingEvaluator<T>, T>(nameof(Value));
 
     /// <summary>
     /// Gets or sets the data item value.

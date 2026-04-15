@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 internal class ScrollBarRepeatButton : RepeatButton
 {

@@ -222,7 +222,5 @@
             <Setter Property="CardBorderRadius"
                     Value="{atom:SharedTokenResource BorderRadiusSM}" />
         </Style>
-        
-        
     </ControlTheme>
 </ResourceDictionary>

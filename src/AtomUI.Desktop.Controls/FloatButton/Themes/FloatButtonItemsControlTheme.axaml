@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:FloatButtonItemsControl}" TargetType="atom:FloatButtonItemsControl">
         <Style Selector="^[IsTriggerMode=True]">
@@ -16,7 +15,7 @@
                                     BoxShadow="{TemplateBinding BoxShadow}"
                                     Background="{TemplateBinding Background}">
                                 <Panel>
-                                    <atomc:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
+                                    <atom:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
                                                                      Lines="{TemplateBinding Lines}" />
                                     <StackPanel Name="ItemsLayout" Orientation="{TemplateBinding Orientation}" />
                                 </Panel>
@@ -35,7 +34,7 @@
                             BoxShadow="{TemplateBinding BoxShadow}"
                             Background="{TemplateBinding Background}">
                         <Panel>
-                            <atomc:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
+                            <atom:FloatButtonSeparatorLayer Orientation="{TemplateBinding Orientation}"
                                                              Lines="{TemplateBinding Lines}" />
                             <StackPanel Name="ItemsLayout" Orientation="{TemplateBinding Orientation}" />
                         </Panel>

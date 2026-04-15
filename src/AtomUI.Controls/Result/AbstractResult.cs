@@ -6,7 +6,7 @@ using Avalonia.Metadata;
 using Avalonia.VisualTree;
 using AtomUI.Icons.AntDesign;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 using SvgControl = Avalonia.Svg.Svg;
 

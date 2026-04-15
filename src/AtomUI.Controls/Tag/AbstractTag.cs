@@ -11,7 +11,7 @@ using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 internal struct TagCalcColor
 {
@@ -35,7 +35,7 @@ public abstract class AbstractTag : TemplatedControl
 
     public static readonly StyledProperty<string?> TagColorProperty =
         AvaloniaProperty.Register<AbstractTag, string?>(
-            nameof(Color));
+            nameof(TagColor));
 
     public static readonly StyledProperty<bool> IsClosableProperty =
         AvaloniaProperty.Register<AbstractTag, bool>(nameof(IsClosable));

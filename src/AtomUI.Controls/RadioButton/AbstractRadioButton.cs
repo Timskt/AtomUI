@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Input;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 using AvaloniaRadioButton = Avalonia.Controls.RadioButton;
 

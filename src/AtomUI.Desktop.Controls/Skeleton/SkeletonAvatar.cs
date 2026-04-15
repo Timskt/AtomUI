@@ -1,5 +1,5 @@
 using AtomUI.Controls;
-using AtomUI.Controls.Commons;
+using AtomUI.Controls;
 using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls.Primitives;
@@ -11,7 +11,7 @@ public class SkeletonAvatar : AbstractSkeleton, ICustomizableSizeTypeAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<AvatarShape> ShapeProperty =
-        AvaloniaProperty.Register<SkeletonAvatar, AvatarShape>(nameof(AvatarShape), AvatarShape.Circle);
+        AvaloniaProperty.Register<SkeletonAvatar, AvatarShape>(nameof(Shape), AvatarShape.Circle);
     
     public static readonly StyledProperty<CustomizableSizeType> SizeTypeProperty =
         CustomizableSizeTypeControlProperty.SizeTypeProperty.AddOwner<SkeletonAvatar>();

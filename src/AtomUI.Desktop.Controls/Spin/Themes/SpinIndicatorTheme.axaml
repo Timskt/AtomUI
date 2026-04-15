@@ -52,7 +52,5 @@
                 <Setter Property="Height" Value="{atom:SpinTokenResource IndicatorSizeSM}" />
             </Style>
         </Style>
-        
-        
     </ControlTheme>
 </ResourceDictionary>

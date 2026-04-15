@@ -7,7 +7,7 @@
         <gallery:ShowCaseItem
             Title="Basic"
             Description="Simplest Usage.">
-            <atom:Empty PresetImage="Default" />
+            <atom:Empty PresetEmptyImage="Default" />
         </gallery:ShowCaseItem>
 
         <gallery:ShowCaseItem
@@ -15,9 +15,9 @@
             Description="AtomUI supports three sizes of buttons: small, default and large.">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Spacing="10">
-                    <atom:Empty PresetImage="Simple" SizeType="Small" />
-                    <atom:Empty PresetImage="Simple" SizeType="Middle" />
-                    <atom:Empty PresetImage="Simple" SizeType="Large" />
+                    <atom:Empty PresetEmptyImage="Simple" SizeType="Small" />
+                    <atom:Empty PresetEmptyImage="Simple" SizeType="Middle" />
+                    <atom:Empty PresetEmptyImage="Simple" SizeType="Large" />
                 </StackPanel>
             </StackPanel>
         </gallery:ShowCaseItem>
@@ -36,7 +36,7 @@
         <gallery:ShowCaseItem
             Title="No description"
             Description="Simplest Usage with no description.">
-            <atom:Empty PresetImage="Default" IsShowDescription="False" />
+            <atom:Empty PresetEmptyImage="Default" IsShowDescription="False" />
         </gallery:ShowCaseItem>
     </gallery:ShowCasePanel>
 </UserControl>

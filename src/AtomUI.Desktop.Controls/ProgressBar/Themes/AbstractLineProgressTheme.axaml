@@ -1,15 +1,14 @@
 <ControlTheme xmlns="https://github.com/avaloniaui"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:atom="https://atomui.net"
-              xmlns:atomc="https://atomui.net/common-controls"
+    xmlns:atom="https://atomui.net"
               x:Class="AtomUI.Desktop.Controls.Themes.AbstractLineProgressTheme"
-              TargetType="atomc:AbstractLineProgress"
+              TargetType="atom:AbstractLineProgress"
               x:ClassModifier="internal">
     <ControlTheme.BasedOn>
-        <atom:AbstractProgressBarTheme TargetType="atomc:AbstractLineProgress"/>
+        <atom:AbstractProgressBarTheme TargetType="atom:AbstractLineProgress"/>
     </ControlTheme.BasedOn>
     <Setter Property="Template">
-        <ControlTemplate TargetType="atomc:AbstractLineProgress">
+        <ControlTemplate TargetType="atom:AbstractLineProgress">
             <Canvas IsVisible="{TemplateBinding IsShowProgressInfo}">
                 <LayoutTransformControl Name="PART_LayoutTransformControl">
                     <Label Name="PART_PercentageLabel"

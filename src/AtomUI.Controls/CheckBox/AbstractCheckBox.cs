@@ -1,6 +1,6 @@
 using Avalonia;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 using AvaloniaCheckBox = Avalonia.Controls.CheckBox;
 

@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
-namespace AtomUI.Controls.Commons;
+namespace AtomUI.Controls;
 
 public class AbstractGeneralDashboardProgress : AbstractCircleProgress
 {
@@ -19,7 +19,7 @@ public class AbstractGeneralDashboardProgress : AbstractCircleProgress
 
     public static readonly StyledProperty<double> GapDegreeProperty =
         AvaloniaProperty.Register<AbstractGeneralDashboardProgress, double>(
-            nameof(DashboardGapPosition), DEFAULT_GAP_DEGREE,
+            nameof(GapDegree), DEFAULT_GAP_DEGREE,
             coerce: (o, value) => Math.Clamp(value, MIN_GAP_DEGREE, MAX_GAP_DEGREE));
 
     public DashboardGapPosition DashboardGapPosition

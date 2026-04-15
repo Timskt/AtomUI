@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:Segmented}" TargetType="atom:Segmented">
         <Setter Property="Template">
@@ -14,7 +13,7 @@
                     <ItemsPresenter Name="PART_ItemsPresenter">
                         <ItemsPresenter.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <atomc:SegmentedStackPanel IsExpanding="{Binding IsExpanding, RelativeSource={RelativeSource AncestorType=atom:Segmented}}"/>
+                                <atom:SegmentedStackPanel IsExpanding="{Binding IsExpanding, RelativeSource={RelativeSource AncestorType=atom:Segmented}}"/>
                             </ItemsPanelTemplate>
                         </ItemsPresenter.ItemsPanel>
                     </ItemsPresenter>
