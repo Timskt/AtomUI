@@ -52,7 +52,7 @@
                                 Name="MarqueeLabel"
                                 HorizontalAlignment="Stretch"
                                 Padding="0"
-                                IsVisible="{TemplateBinding IsMessageMarqueEnabled}"
+                                IsVisible="{TemplateBinding IsMessageMarqueeEnabled}"
                                 Text="{TemplateBinding Message}" />
                             <Label Name="DescriptionLabel"
                                    HorizontalAlignment="Stretch"
@@ -123,12 +123,12 @@
         <Style Selector="^ /template/ Label#MessageLabel">
             <Setter Property="TextBox.LineHeight" Value="{atom:SharedTokenResource FontHeight}" />
         </Style>
-        <!-- 根据是否显示 MarqueeLabel 是指对应的样式 -->
-        <Style Selector="^[IsMessageMarqueEnabled=True]">
-            <Style Selector="^ /template/ Label#MessageLabel">
-                <Setter Property="IsVisible" Value="False" />
-            </Style>
-        </Style>
+         <!-- 根据是否显示 MarqueeLabel 是指对应的样式 -->
+         <Style Selector="^[IsMessageMarqueeEnabled=True]">
+             <Style Selector="^ /template/ Label#MessageLabel">
+                 <Setter Property="IsVisible" Value="False" />
+             </Style>
+         </Style>
         
         <Style Selector="^ /template/ Label#DescriptionLabel">
             <Setter Property="TextBox.LineHeight" Value="{atom:SharedTokenResource FontHeight}" />

@@ -35,8 +35,8 @@ public abstract class AbstractCountBadge : Control, IMotionAwareControl
         AvaloniaProperty.Register<AbstractCountBadge, int>(nameof(OverflowCount), 99,
             coerce: (o, v) => Math.Max(0, v));
 
-    public static readonly StyledProperty<bool> ShowZeroProperty =
-        AvaloniaProperty.Register<AbstractCountBadge, bool>(nameof(ShowZero));
+    public static readonly StyledProperty<bool> IsShowZeroProperty =
+        AvaloniaProperty.Register<AbstractCountBadge, bool>(nameof(IsShowZero));
 
     public static readonly StyledProperty<CountBadgeSize> SizeProperty =
         AvaloniaProperty.Register<AbstractCountBadge, CountBadgeSize>(nameof(Size));
@@ -78,10 +78,10 @@ public abstract class AbstractCountBadge : Control, IMotionAwareControl
         set => SetValue(OverflowCountProperty, value);
     }
 
-    public bool ShowZero
+    public bool IsShowZero
     {
-        get => GetValue(ShowZeroProperty);
-        set => SetValue(ShowZeroProperty, value);
+        get => GetValue(IsShowZeroProperty);
+        set => SetValue(IsShowZeroProperty, value);
     }
 
     public CountBadgeSize Size
@@ -246,7 +246,7 @@ public abstract class AbstractCountBadge : Control, IMotionAwareControl
         }
 
         if (change.Property == CountProperty ||
-            change.Property == ShowZeroProperty)
+            change.Property == IsShowZeroProperty)
         {
             SetupShowZero();
         }
@@ -254,7 +254,7 @@ public abstract class AbstractCountBadge : Control, IMotionAwareControl
 
     private void SetupShowZero()
     {
-        if (Count == 0 && !ShowZero)
+        if (Count == 0 && !IsShowZero)
         {
             BadgeIsVisible = false;
         }

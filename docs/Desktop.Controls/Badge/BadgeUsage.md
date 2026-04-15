@@ -36,7 +36,7 @@ using AtomUI.Controls.Commons;    // CountBadgeSize, DotBadgeStatus, RibbonBadge
         <Border Width="40" Height="40"
                 Background="rgb(191,191,191)" CornerRadius="8" />
     </atom:CountBadge>
-    <atom:CountBadge Count="0" ShowZero="True">
+    <atom:CountBadge Count="0" IsShowZero="True">
         <Border Width="40" Height="40"
                 Background="rgb(191,191,191)" CornerRadius="8" />
     </atom:CountBadge>
@@ -45,7 +45,7 @@ using AtomUI.Controls.Commons;    // CountBadgeSize, DotBadgeStatus, RibbonBadge
 
 **要点**：
 - `Count > 0` 时自动显示数字气泡
-- `Count == 0` 时默认隐藏，设置 `ShowZero="True"` 可强制显示
+- `Count == 0` 时默认隐藏，设置 `IsShowZero="True"` 可强制显示
 
 ### 封顶数字
 

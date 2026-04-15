@@ -149,7 +149,7 @@
         <gallery:ShowCaseItem
             Title="Loop Banner"
             Description="Show a loop banner.">
-            <atom:Alert Type="Warning" IsShowIcon="True" IsMessageMarqueEnabled="True">
+            <atom:Alert Type="Warning" IsShowIcon="True" IsMessageMarqueeEnabled="True">
                 I can be a React component, multiple React components, or just some text, Info Description Info Description Info Description Info Description
             </atom:Alert>
         </gallery:ShowCaseItem>

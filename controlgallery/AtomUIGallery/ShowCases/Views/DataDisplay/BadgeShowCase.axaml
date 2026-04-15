@@ -14,7 +14,7 @@
                             Background="rgb(191,191,191)"
                             CornerRadius="8" />
                 </atom:CountBadge>
-                <atom:CountBadge Count="0" ShowZero="True">
+                <atom:CountBadge Count="0" IsShowZero="True">
                     <Border Width="40"
                             Height="40"
                             Background="rgb(191,191,191)"
@@ -87,7 +87,7 @@
                 <atom:ToggleSwitch IsChecked="{Binding StandaloneSwitchChecked}" />
                 <atom:CountBadge BadgeColor="#faad14"
                                  Count="{Binding StandaloneBadgeCount1}"
-                                 ShowZero="True" />
+                                 IsShowZero="True" />
                 <atom:CountBadge Count="{Binding StandaloneBadgeCount2}" />
                 <atom:CountBadge BadgeColor="#52c41a" Count="{Binding StandaloneBadgeCount3}" />
             </StackPanel>

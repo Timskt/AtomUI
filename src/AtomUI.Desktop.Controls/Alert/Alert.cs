@@ -37,8 +37,8 @@ public class Alert : TemplatedControl
     public static readonly StyledProperty<bool> IsShowIconProperty =
         AvaloniaProperty.Register<Alert, bool>(nameof(IsShowIcon));
 
-    public static readonly StyledProperty<bool> IsMessageMarqueEnabledProperty =
-        AvaloniaProperty.Register<Alert, bool>(nameof(IsMessageMarqueEnabled));
+    public static readonly StyledProperty<bool> IsMessageMarqueeEnabledProperty =
+        AvaloniaProperty.Register<Alert, bool>(nameof(IsMessageMarqueeEnabled));
 
     public static readonly StyledProperty<bool> IsClosableProperty =
         AvaloniaProperty.Register<Alert, bool>(nameof(IsClosable));
@@ -67,10 +67,10 @@ public class Alert : TemplatedControl
         set => SetValue(IsShowIconProperty, value);
     }
 
-    public bool IsMessageMarqueEnabled
+    public bool IsMessageMarqueeEnabled
     {
-        get => GetValue(IsMessageMarqueEnabledProperty);
-        set => SetValue(IsMessageMarqueEnabledProperty, value);
+        get => GetValue(IsMessageMarqueeEnabledProperty);
+        set => SetValue(IsMessageMarqueeEnabledProperty, value);
     }
 
     public bool IsClosable
@@ -120,10 +120,10 @@ public class Alert : TemplatedControl
             IsShowIconProperty,
             MessageProperty,
             DescriptionProperty,
-            IsMessageMarqueEnabledProperty,
+            IsMessageMarqueeEnabledProperty,
             PaddingProperty,
             ExtraActionProperty,
-            IsMessageMarqueEnabledProperty);
+            IsMessageMarqueeEnabledProperty);
         AffectsRender<Alert>(TypeProperty);
     }
 

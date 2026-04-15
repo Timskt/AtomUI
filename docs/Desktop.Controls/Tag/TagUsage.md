@@ -153,14 +153,14 @@ private void HandleTagClosed(object? sender, RoutedEventArgs e)
 
 ## 7. 无边框标签
 
-通过 `Bordered="False"` 隐藏边框：
+通过 `IsBordered="False"` 隐藏边框：
 
 ```xml
 <WrapPanel>
-    <atom:Tag Bordered="False" TagColor="blue">blue</atom:Tag>
-    <atom:Tag Bordered="False" TagColor="green">green</atom:Tag>
-    <atom:Tag Bordered="False" TagColor="orange">orange</atom:Tag>
-    <atom:Tag Bordered="False" TagColor="red">red</atom:Tag>
+    <atom:Tag IsBordered="False" TagColor="blue">blue</atom:Tag>
+    <atom:Tag IsBordered="False" TagColor="green">green</atom:Tag>
+    <atom:Tag IsBordered="False" TagColor="orange">orange</atom:Tag>
+    <atom:Tag IsBordered="False" TagColor="red">red</atom:Tag>
 </WrapPanel>
 ```
 

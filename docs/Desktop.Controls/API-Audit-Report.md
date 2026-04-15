@@ -339,14 +339,14 @@ public static readonly StyledProperty<string?> ImageSourceProperty = ...
 
 ## 汇总
 
-=| 严重度 | 数量 | 已修复 | 待修复 | 核心关键词 |
+| 严重度 | 数量 | 已修复 | 待修复 | 核心关键词 |
 |--------|------|--------|--------|-----------|
-| 🔴 高 | 4 | 1 | 3 | Abstract 非 abstract ✅、拼写错误、Bool 缺 Is 前缀 |
+| 🔴 高 | 4 | 4 | 0 | Abstract 非 abstract ✅、拼写错误 ✅、Bool 缺 Is 前缀 ✅ |
 | 🟡 中 | 8 | 0 | 8 | 命名分裂、事件类型不一致、属性名不匹配类型名 |
 | 🔵 低 | 6 | 0 | 6 | 枚举命名对齐、属性冗余前缀、架构层级 |
-| **合计** | **18** | **1** | **17** | |
+| **合计** | **18** | **4** | **14** | |
 
-**修复进度**: 🟢 1/18 (5.5%)
+**修复进度**: 🟢 4/18 (22.2%)
 
 ---
 
@@ -357,14 +357,17 @@ public static readonly StyledProperty<string?> ImageSourceProperty = ...
 - ✅ **[已完成]** 为所有 `Abstract` 前缀类加上 `abstract` 关键字  
   *Commit: 2a3a87c5 (2026-04-15)*
 
-- ⏳ `IsMessageMarqueEnabled` → `IsMessageMarqueeEnabled` (拼写修复)  
-  *Severity: Critical, File: Alert.cs*
+- ✅ **[已完成]** `IsMessageMarqueEnabled` → `IsMessageMarqueeEnabled` (拼写修复)  
+  *Severity: Critical, File: Alert.cs*  
+  *Changes: Alert.cs, AlertTheme.axaml, AlertShowCase.axaml, docs/*
 
-- ⏳ `Bordered` → `IsBordered` (Tag)  
-  *Severity: High, File: AbstractTag.cs*
+- ✅ **[已完成]** `Bordered` → `IsBordered` (Tag)  
+  *Severity: High, File: AbstractTag.cs*  
+  *Changes: AbstractTag.cs, SelectTagTheme.axaml, TagShowCase.axaml, CaseNavigation.axaml, docs/*
 
-- ⏳ `ShowZero` → `IsShowZero` (CountBadge)  
-  *Severity: High, File: AbstractCountBadge.cs*
+- ✅ **[已完成]** `ShowZero` → `IsShowZero` (CountBadge)  
+  *Severity: High, File: AbstractCountBadge.cs*  
+  *Changes: AbstractCountBadge.cs, BadgeShowCase.axaml, docs/*
 
 ### 2. **近期统一** (🟡 中严重度)
 

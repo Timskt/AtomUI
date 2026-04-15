@@ -44,7 +44,7 @@
                                        Text="{gallery:CaseNavigationLangResource Layout_BoxPanel}"
                                        VerticalAlignment="Center" />
                             <atom:Tag TagColor="red"
-                                      Bordered="False"
+                                      IsBordered="False"
                                       Padding="4,0"
                                       VerticalAlignment="Center"
                                       Margin="8,0,0,0"

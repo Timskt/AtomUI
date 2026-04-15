@@ -100,7 +100,7 @@ Avalonia.Controls.Primitives.TemplatedControl
 | 层级 | 提供的能力 |
 |---|---|
 | `TemplatedControl` | 模板化控件基础设施、`Background`/`Foreground`/`BorderBrush` 等外观属性 |
-| `AbstractTag`（基类层） | `TagColor` 颜色系统、`IsClosable` 关闭功能、`Icon`/`CloseIcon` 图标支持、`Bordered` 边框控制、`Closed` 事件、预设色/状态色/自定义色解析逻辑 |
+| `AbstractTag`（基类层） | `TagColor` 颜色系统、`IsClosable` 关闭功能、`Icon`/`CloseIcon` 图标支持、`IsBordered` 边框控制、`Closed` 事件、预设色/状态色/自定义色解析逻辑 |
 | `Tag`（桌面层） | 注册 `TagToken.ScopeProvider`，由主题控制视觉表现 |
 
 ---

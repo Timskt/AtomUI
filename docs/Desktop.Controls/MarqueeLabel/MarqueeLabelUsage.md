@@ -130,21 +130,21 @@ MarqueeLabel 继承自 `TextBlock`，支持所有文本样式属性：
 
 ## 6. 在 Alert 中使用（主要使用场景）
 
-MarqueeLabel 当前最主要的使用场景是通过 Alert 控件的 `IsMessageMarqueEnabled` 属性间接使用。当 Alert 消息文本较长时，启用跑马灯可以在不增加 Alert 高度的情况下展示完整消息：
+MarqueeLabel 当前最主要的使用场景是通过 Alert 控件的 `IsMessageMarqueeEnabled` 属性间接使用。当 Alert 消息文本较长时，启用跑马灯可以在不增加 Alert 高度的情况下展示完整消息：
 
 ```xml
 <!-- 基本用法：Alert 中启用跑马灯 -->
-<atom:Alert Type="Warning" IsShowIcon="True" IsMessageMarqueEnabled="True">
+<atom:Alert Type="Warning" IsShowIcon="True" IsMessageMarqueeEnabled="True">
     I can be a React component, multiple React components, or just some text,
     Info Description Info Description Info Description Info Description
 </atom:Alert>
 
 <!-- 不同类型的 Alert 均可启用 -->
-<atom:Alert Type="Info" IsShowIcon="True" IsMessageMarqueEnabled="True">
+<atom:Alert Type="Info" IsShowIcon="True" IsMessageMarqueeEnabled="True">
     系统维护公告：本系统将于今晚 22:00-次日 02:00 进行例行维护升级，届时服务可能暂时不可用
 </atom:Alert>
 
-<atom:Alert Type="Error" IsShowIcon="True" IsMessageMarqueEnabled="True">
+<atom:Alert Type="Error" IsShowIcon="True" IsMessageMarqueeEnabled="True">
     错误信息：连接超时，请检查网络连接后重试。如果问题持续存在，请联系系统管理员获取帮助
 </atom:Alert>
 ```

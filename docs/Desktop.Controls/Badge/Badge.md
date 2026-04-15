@@ -74,7 +74,7 @@ Control Tree
 **核心行为：**
 - 当 `Count > 0` 时显示数字
 - 当 `Count > OverflowCount` 时显示 `{OverflowCount}+`（如 `99+`）
-- 当 `Count == 0` 时默认隐藏，设置 `ShowZero = true` 可强制显示
+- 当 `Count == 0` 时默认隐藏，设置 `IsShowZero = true` 可强制显示
 - 支持 `Default` 和 `Small` 两种尺寸（通过 `Size` 属性控制）
 
 **装饰模式 vs 独立模式：**
@@ -126,7 +126,7 @@ CountBadge 和 DotBadge 支持显隐动画（通过 `IMotionAwareControl` 接口
 |---|---|---|---|
 | 数字徽标 `count` | ✅ `count` | ✅ `CountBadge.Count` | ✅ 完全对齐 |
 | 封顶数字 `overflowCount` | ✅ `overflowCount` | ✅ `CountBadge.OverflowCount` | ✅ 完全对齐 |
-| 显示零值 `showZero` | ✅ `showZero` | ✅ `CountBadge.ShowZero` | ✅ 完全对齐 |
+| 显示零值 `showZero` | ✅ `showZero` | ✅ `CountBadge.IsShowZero` | ✅ 完全对齐 |
 | 小号尺寸 `size` | ✅ `size="small"` | ✅ `CountBadge.Size="Small"` | ✅ 完全对齐 |
 | 小红点 `dot` | ✅ `dot` 属性 | ✅ `DotBadge` 独立控件 | ✅ 完全对齐（实现方式不同，效果一致） |
 | 状态圆点 `status` | ✅ `status` | ✅ `DotBadge.Status` | ✅ 完全对齐 |

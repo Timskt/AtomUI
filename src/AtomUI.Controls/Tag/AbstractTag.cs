@@ -40,8 +40,8 @@ public abstract class AbstractTag : TemplatedControl
     public static readonly StyledProperty<bool> IsClosableProperty =
         AvaloniaProperty.Register<AbstractTag, bool>(nameof(IsClosable));
 
-    public static readonly StyledProperty<bool> BorderedProperty =
-        AvaloniaProperty.Register<AbstractTag, bool>(nameof(Bordered), true);
+    public static readonly StyledProperty<bool> IsBorderedProperty =
+        AvaloniaProperty.Register<AbstractTag, bool>(nameof(IsBordered), true);
 
     public static readonly StyledProperty<PathIcon?> IconProperty =
         AvaloniaProperty.Register<AbstractTag, PathIcon?>(nameof(Icon));
@@ -65,10 +65,10 @@ public abstract class AbstractTag : TemplatedControl
         set => SetValue(IsClosableProperty, value);
     }
 
-    public bool Bordered
+    public bool IsBordered
     {
-        get => GetValue(BorderedProperty);
-        set => SetValue(BorderedProperty, value);
+        get => GetValue(IsBorderedProperty);
+        set => SetValue(IsBorderedProperty, value);
     }
 
     public PathIcon? Icon
@@ -165,7 +165,7 @@ public abstract class AbstractTag : TemplatedControl
     {
         PresetColorMap = new Dictionary<PresetColorType, TagCalcColor>();
         StatusColorMap = new Dictionary<TagStatus, TagStatusCalcColor>();
-        AffectsMeasure<AbstractTag>(BorderedProperty,
+        AffectsMeasure<AbstractTag>(IsBorderedProperty,
             IconProperty,
             IsClosableProperty,
             TagTextProperty);
@@ -233,37 +233,37 @@ public abstract class AbstractTag : TemplatedControl
         base.OnPropertyChanged(change);
 
         if (change.Property == CloseIconProperty)
-        {
-            SetupDefaultCloseIcon();
-        }
-
-        if (this.IsAttachedToVisualTree())
-        {
-            if (change.Property == TagColorProperty)
             {
-                if (TagColor is not null)
+                SetupDefaultCloseIcon();
+            }
+
+            if (this.IsAttachedToVisualTree())
+            {
+                if (change.Property == TagColorProperty)
                 {
-                    SetupTagColorInfo(TagColor); 
+                    if (TagColor is not null)
+                    {
+                        SetupTagColorInfo(TagColor); 
+                    }
+                }
+                else if (change.Property == IsBorderedProperty)
+                {
+                    ConfigureBorderThickness();
                 }
             }
-            else if (change.Property == BorderedProperty)
+        }
+
+        private void ConfigureBorderThickness()
+        {
+            if (IsBordered)
             {
-                ConfigureBorderThickness();
+                SetValue(BorderThicknessProperty, RenderScaleAwareBorderThickness, BindingPriority.Template);
+            }
+            else
+            {
+                SetValue(BorderThicknessProperty, new Thickness(), BindingPriority.Template);
             }
         }
-    }
-
-    private void ConfigureBorderThickness()
-    {
-        if (Bordered)
-        {
-            SetValue(BorderThicknessProperty, RenderScaleAwareBorderThickness, BindingPriority.Template);
-        }
-        else
-        {
-            SetValue(BorderThicknessProperty, new Thickness(), BindingPriority.Template);
-        }
-    }
 
     // TODO 优化成静态变量
     private static void SetupPresetColorMap(bool force = false)
@@ -382,15 +382,15 @@ public abstract class AbstractTag : TemplatedControl
         }
 
         if (Color.TryParse(colorStr, out var color))
-        {
-            Bordered   = false;
-            IsColorSet = true;
-            Background = new SolidColorBrush(color);
-            PseudoClasses.Set(TagPseudoClass.PresetColor, false);
-            PseudoClasses.Set(TagPseudoClass.StatusColor, false);
-            PseudoClasses.Set(TagPseudoClass.CustomColor, true);
+            {
+                IsBordered = false;
+                IsColorSet = true;
+                Background = new SolidColorBrush(color);
+                PseudoClasses.Set(TagPseudoClass.PresetColor, false);
+                PseudoClasses.Set(TagPseudoClass.StatusColor, false);
+                PseudoClasses.Set(TagPseudoClass.CustomColor, true);
+            }
         }
-    }
 
     private void SetupDefaultCloseIcon()
     {

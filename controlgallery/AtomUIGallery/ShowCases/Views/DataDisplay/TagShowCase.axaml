@@ -133,30 +133,30 @@ If you want specific control over the positioning and placement of the Icon, the
             Description="borderless">
             <StackPanel Orientation="Vertical">
                 <WrapPanel HorizontalAlignment="Left">
-                    <atom:Tag Bordered="False">Tag1</atom:Tag>
-                    <atom:Tag Bordered="False">Tag2</atom:Tag>
-                    <atom:Tag Bordered="False" IsClosable="True">Tag3</atom:Tag>
-                    <atom:Tag Bordered="False" IsClosable="True">Tag4</atom:Tag>
+                    <atom:Tag IsBordered="False">Tag1</atom:Tag>
+                    <atom:Tag IsBordered="False">Tag2</atom:Tag>
+                    <atom:Tag IsBordered="False" IsClosable="True">Tag3</atom:Tag>
+                    <atom:Tag IsBordered="False" IsClosable="True">Tag4</atom:Tag>
                 </WrapPanel>
 
                 <atom:Separator FontWeight="Bold" FontSize="14" Margin="0, 20, 0, 20" />
                 <WrapPanel HorizontalAlignment="Left">
-                    <atom:Tag TagColor="magenta" Bordered="False">magenta</atom:Tag>
-                    <atom:Tag TagColor="red" Bordered="False">red</atom:Tag>
-                    <atom:Tag TagColor="volcano" Bordered="False">volcano</atom:Tag>
-                    <atom:Tag TagColor="orange" Bordered="False">orange</atom:Tag>
-                    <atom:Tag TagColor="gold" Bordered="False">gold</atom:Tag>
-                    <atom:Tag TagColor="lime" Bordered="False">lime</atom:Tag>
-                    <atom:Tag TagColor="green" Bordered="False">green</atom:Tag>
-                    <atom:Tag TagColor="cyan" Bordered="False">cyan</atom:Tag>
-                    <atom:Tag TagColor="blue" Bordered="False">blue</atom:Tag>
-                    <atom:Tag TagColor="geekblue" Bordered="False">geekblue</atom:Tag>
-                    <atom:Tag TagColor="purple" Bordered="False">purple</atom:Tag>
+                    <atom:Tag TagColor="magenta" IsBordered="False">magenta</atom:Tag>
+                    <atom:Tag TagColor="red" IsBordered="False">red</atom:Tag>
+                    <atom:Tag TagColor="volcano" IsBordered="False">volcano</atom:Tag>
+                    <atom:Tag TagColor="orange" IsBordered="False">orange</atom:Tag>
+                    <atom:Tag TagColor="gold" IsBordered="False">gold</atom:Tag>
+                    <atom:Tag TagColor="lime" IsBordered="False">lime</atom:Tag>
+                    <atom:Tag TagColor="green" IsBordered="False">green</atom:Tag>
+                    <atom:Tag TagColor="cyan" IsBordered="False">cyan</atom:Tag>
+                    <atom:Tag TagColor="blue" IsBordered="False">blue</atom:Tag>
+                    <atom:Tag TagColor="geekblue" IsBordered="False">geekblue</atom:Tag>
+                    <atom:Tag TagColor="purple" IsBordered="False">purple</atom:Tag>
 
-                    <atom:Tag TagColor="success" Bordered="False">success</atom:Tag>
-                    <atom:Tag TagColor="info" Bordered="False">processing</atom:Tag>
-                    <atom:Tag TagColor="error" Bordered="False">error</atom:Tag>
-                    <atom:Tag TagColor="warning" Bordered="False">warning</atom:Tag>
+                    <atom:Tag TagColor="success" IsBordered="False">success</atom:Tag>
+                    <atom:Tag TagColor="info" IsBordered="False">processing</atom:Tag>
+                    <atom:Tag TagColor="error" IsBordered="False">error</atom:Tag>
+                    <atom:Tag TagColor="warning" IsBordered="False">warning</atom:Tag>
                 </WrapPanel>
             </StackPanel>
 

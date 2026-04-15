@@ -51,7 +51,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 |---|---|---|---|
 | `Count` | `int` | `0` | 显示的数字（最小值为 0，负值被 coerce 为 0） |
 | `OverflowCount` | `int` | `99` | 封顶值，`Count > OverflowCount` 时显示 `{OverflowCount}+` |
-| `ShowZero` | `bool` | `false` | `Count == 0` 时是否仍然显示徽标 |
+| `IsShowZero` | `bool` | `false` | `Count == 0` 时是否仍然显示徽标 |
 | `Size` | `CountBadgeSize` | `CountBadgeSize.Default` | 徽标尺寸 |
 | `DecoratedTarget` | `Control?` | `null` | 被装饰的目标控件（[Content] 属性，支持直接包裹子元素） |
 | `BadgeColor` | `string?` | `null` | 自定义颜色（支持预设色名如 `"Blue"` 或 CSS 色值如 `"#faad14"`） |
