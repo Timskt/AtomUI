@@ -339,7 +339,7 @@ public static readonly StyledProperty<string?> ImageSourceProperty = ...
 
 ## 汇总
 
-| 严重度 | 数量 | 已修复 | 待修复 | 核心关键词 |
+=| 严重度 | 数量 | 已修复 | 待修复 | 核心关键词 |
 |--------|------|--------|--------|-----------|
 | 🔴 高 | 4 | 1 | 3 | Abstract 非 abstract ✅、拼写错误、Bool 缺 Is 前缀 |
 | 🟡 中 | 8 | 0 | 8 | 命名分裂、事件类型不一致、属性名不匹配类型名 |

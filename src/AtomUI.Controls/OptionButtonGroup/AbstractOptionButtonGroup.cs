@@ -125,11 +125,6 @@ public abstract class AbstractOptionButtonGroup : SelectingItemsControl,
         }
     }
 
-    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
-    {
-        return new AbstractOptionButton();
-    }
-
     protected override void OnGotFocus(GotFocusEventArgs e)
     {
         base.OnGotFocus(e);

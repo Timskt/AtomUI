@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:CheckBoxGroup}" TargetType="atom:CheckBoxGroup">
         <Setter Property="Template">
@@ -11,12 +10,12 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         CornerRadius="{TemplateBinding CornerRadius}">
-                    <atomc:CheckBoxItemsControl Name="PART_CheckBoxItems"
-                                                ItemTemplate="{TemplateBinding ItemTemplate}"
-                                                ItemSpacing="{TemplateBinding ItemSpacing}"
-                                                LineSpacing="{TemplateBinding LineSpacing}"
-                                                Orientation="{TemplateBinding Orientation}"
-                                                IsMotionEnabled="{TemplateBinding IsMotionEnabled}"/>
+                    <atom:CheckBoxItemsControl Name="PART_CheckBoxItems"
+                                               ItemTemplate="{TemplateBinding ItemTemplate}"
+                                               ItemSpacing="{TemplateBinding ItemSpacing}"
+                                               LineSpacing="{TemplateBinding LineSpacing}"
+                                               Orientation="{TemplateBinding Orientation}"
+                                               IsMotionEnabled="{TemplateBinding IsMotionEnabled}" />
                 </Border>
             </ControlTemplate>
         </Setter>
@@ -30,6 +29,6 @@
         </Setter>
         <Setter Property="ItemSpacing" Value="{atom:SharedTokenResource SpacingXS}" />
         <Setter Property="LineSpacing" Value="{atom:SharedTokenResource SpacingXS}" />
-        
+
     </ControlTheme>
 </ResourceDictionary>

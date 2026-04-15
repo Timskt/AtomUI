@@ -2,9 +2,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
-    <ControlTheme x:Key="{x:Type atomc:CheckBoxItemsControl}" TargetType="atomc:CheckBoxItemsControl">
+    <ControlTheme x:Key="{x:Type atom:CheckBoxItemsControl}" TargetType="atom:CheckBoxItemsControl">
         <Setter Property="Template">
             <ControlTemplate>
                 <ItemsPresenter Name="PART_ItemsPresenter"
@@ -15,9 +14,9 @@
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
                 <WrapPanel
-                    Orientation="{Binding (atomc:CheckBoxItemsControl).Orientation, RelativeSource={RelativeSource TemplatedParent}}"
-                    ItemSpacing="{Binding (atomc:CheckBoxItemsControl).ItemSpacing, RelativeSource={RelativeSource TemplatedParent}}"
-                    LineSpacing="{Binding (atomc:CheckBoxItemsControl).LineSpacing, RelativeSource={RelativeSource TemplatedParent}}"/>
+                    Orientation="{Binding (atom:CheckBoxItemsControl).Orientation, RelativeSource={RelativeSource TemplatedParent}}"
+                    ItemSpacing="{Binding (atom:CheckBoxItemsControl).ItemSpacing, RelativeSource={RelativeSource TemplatedParent}}"
+                    LineSpacing="{Binding (atom:CheckBoxItemsControl).LineSpacing, RelativeSource={RelativeSource TemplatedParent}}"/>
             </ItemsPanelTemplate>
         </Setter>
 

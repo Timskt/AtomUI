@@ -109,7 +109,7 @@ public abstract class AbstractCheckBoxGroup: TemplatedControl,
     #endregion
     
     private readonly ItemCollection _items = new();
-    private CheckBoxItemsControl? _itemsControl;
+    private AbstractCheckBoxItemsControl? _itemsControl;
     private bool _ignoreSyncToItemsControl;
     
     static AbstractCheckBoxGroup()
@@ -130,7 +130,7 @@ public abstract class AbstractCheckBoxGroup: TemplatedControl,
         {
             _itemsControl.SelectionChanged -= HandleItemsSelectedChanged;
         }
-        _itemsControl = e.NameScope.Find<CheckBoxItemsControl>("PART_CheckBoxItems");
+        _itemsControl = e.NameScope.Find<AbstractCheckBoxItemsControl>("PART_CheckBoxItems");
         if (_itemsControl != null)
         {
             _itemsControl.ItemsSource      =  _items;

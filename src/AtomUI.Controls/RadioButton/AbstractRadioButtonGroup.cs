@@ -72,11 +72,6 @@ public abstract class AbstractRadioButtonGroup : ItemsControl,
         CheckedItemProperty.Changed.AddClassHandler<AbstractRadioButtonGroup>((group, args) => group.HandleCheckedItemChanged(args));
     }
     
-    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
-    {
-        return new AbstractRadioButton();
-    }
-    
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
     {
         return NeedsContainer<AbstractRadioButton>(item, out recycleKey);

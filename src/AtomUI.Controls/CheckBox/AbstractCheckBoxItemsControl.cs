@@ -7,19 +7,19 @@ using Avalonia.Layout;
 
 namespace AtomUI.Controls.Commons;
 
-internal class CheckBoxItemsControl : SelectingItemsControl
+internal abstract class AbstractCheckBoxItemsControl : SelectingItemsControl
 {
     public static readonly StyledProperty<double> ItemSpacingProperty = 
-        AbstractCheckBoxGroup.ItemSpacingProperty.AddOwner<CheckBoxItemsControl>();
+        AbstractCheckBoxGroup.ItemSpacingProperty.AddOwner<AbstractCheckBoxItemsControl>();
     
     public static readonly StyledProperty<double> LineSpacingProperty = 
-        AbstractCheckBoxGroup.LineSpacingProperty.AddOwner<CheckBoxItemsControl>();
+        AbstractCheckBoxGroup.LineSpacingProperty.AddOwner<AbstractCheckBoxItemsControl>();
     
     public static readonly StyledProperty<Orientation> OrientationProperty = 
-        StackPanel.OrientationProperty.AddOwner<AbstractCheckBoxGroup>();
+        StackPanel.OrientationProperty.AddOwner<AbstractCheckBoxItemsControl>();
 
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
-        MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<AbstractCheckBoxGroup>();
+        MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<AbstractCheckBoxItemsControl>();
     
     public double ItemSpacing
     {
@@ -45,15 +45,10 @@ internal class CheckBoxItemsControl : SelectingItemsControl
         set => SetValue(IsMotionEnabledProperty, value);
     }
 
-    static CheckBoxItemsControl()
+    static AbstractCheckBoxItemsControl()
     {
-        SelectionModeProperty.OverrideDefaultValue<CheckBoxItemsControl>(SelectionMode.Multiple | SelectionMode.Toggle);
-        AbstractCheckBox.IsCheckedChangedEvent.AddClassHandler<CheckBoxItemsControl>((group, args) => group.HandleCheckBoxCheckedChanged(args));
-    }
-    
-    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
-    {
-        return new AbstractCheckBox();
+        SelectionModeProperty.OverrideDefaultValue<AbstractCheckBoxItemsControl>(SelectionMode.Multiple | SelectionMode.Toggle);
+        AbstractCheckBox.IsCheckedChangedEvent.AddClassHandler<AbstractCheckBoxItemsControl>((group, args) => group.HandleCheckBoxCheckedChanged(args));
     }
     
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
