@@ -7,7 +7,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 [TemplatePart("PART_MotionActor", typeof(BaseMotionActor))]
 internal abstract class AbstractCountBadgeAdorner : TemplatedControl

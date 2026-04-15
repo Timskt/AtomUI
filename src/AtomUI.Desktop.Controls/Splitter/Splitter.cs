@@ -68,32 +68,25 @@ public class Splitter : TemplatedControl
     
     #region 布局项附加属性
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Dimension?> SizeProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, Dimension?>("Size",
             defaultBindingMode: BindingMode.TwoWay);
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Dimension?> DefaultSizeProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, Dimension?>("DefaultSize");
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Dimension?> MinSizeProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, Dimension?>("MinSize");
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Dimension?> MaxSizeProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, Dimension?>("MaxSize");
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> IsResizableProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, bool>("IsResizable", true);
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<SplitterPanelCollapsible?> CollapsibleProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, SplitterPanelCollapsible?>("Collapsible");
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<bool> IsCollapsedProperty =
         AvaloniaProperty.RegisterAttached<Splitter, Control, bool>("IsCollapsed", defaultBindingMode: BindingMode.TwoWay);
 

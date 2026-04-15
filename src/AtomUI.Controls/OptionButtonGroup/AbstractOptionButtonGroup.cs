@@ -10,7 +10,7 @@ using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 public class AbstractOptionButtonGroup : SelectingItemsControl,
                                          ISizeTypeAware,

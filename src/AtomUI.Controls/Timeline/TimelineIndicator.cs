@@ -5,7 +5,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 [TemplatePart("PART_IconPresenter", typeof(IconPresenter))]
 internal class TimelineIndicator : TemplatedControl

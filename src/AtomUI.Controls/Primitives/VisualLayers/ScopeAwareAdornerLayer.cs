@@ -14,11 +14,9 @@ public class ScopeAwareAdornerLayer : Canvas
 {
     #region 公共属性定义
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Control?> AdornedElementProperty =
         AvaloniaProperty.RegisterAttached<ScopeAwareAdornerLayer, Visual, Control?>("AdornedElement");
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Control?> AdornerProperty =
         AvaloniaProperty.RegisterAttached<ScopeAwareAdornerLayer, Visual, Control?>("Adorner");
 
@@ -35,11 +33,9 @@ public class ScopeAwareAdornerLayer : Canvas
 
     #region 内部属性定义
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     private static readonly AttachedProperty<AdornedElementInfo?> AdornedElementInfoProperty =
         AvaloniaProperty.RegisterAttached<ScopeAwareAdornerLayer, Visual, AdornedElementInfo?>("AdornedElementInfo");
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     private static readonly AttachedProperty<ScopeAwareAdornerLayer?> SavedAdornerLayerProperty =
         AvaloniaProperty.RegisterAttached<Visual, Visual, ScopeAwareAdornerLayer?>("SavedAdornerLayer");
 

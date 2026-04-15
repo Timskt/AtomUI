@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 public class AbstractGeneralDashboardProgress : AbstractCircleProgress
 {

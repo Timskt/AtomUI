@@ -1609,7 +1609,7 @@ public partial class DataGrid : TemplatedControl,
         SetValue(EmptyIndicatorProperty, new Empty()
         {
             SizeType    = SizeType.Middle,
-            PresetEmptyImage = PresetEmptyImage.Simple
+            PresetImage = PresetEmptyImage.Simple
         }, BindingPriority.Template);
 
         _topPagination = e.NameScope.Find<Pagination>(DataGridThemeConstants.TopPaginationPart);

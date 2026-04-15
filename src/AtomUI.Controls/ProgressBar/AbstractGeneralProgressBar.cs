@@ -9,7 +9,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 [PseudoClasses(ProgressBarPseudoClass.Indeterminate, ProgressBarPseudoClass.Completed)]
 public class AbstractGeneralProgressBar : AbstractLineProgress

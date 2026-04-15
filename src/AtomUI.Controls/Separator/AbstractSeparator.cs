@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Metadata;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 using AvaloniaSeparator = Avalonia.Controls.Separator;
 

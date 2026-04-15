@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Metadata;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal enum AvatarContentType
 {

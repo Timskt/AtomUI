@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 public class AbstractRadioButtonGroup : ItemsControl,
                                         IMotionAwareControl,

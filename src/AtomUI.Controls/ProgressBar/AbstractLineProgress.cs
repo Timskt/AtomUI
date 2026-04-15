@@ -10,7 +10,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class SizeTypeThresholdValue
 {

@@ -8,7 +8,7 @@ using Avalonia.Input;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 using AvaloniaScrollViewer = Avalonia.Controls.ScrollViewer;
 

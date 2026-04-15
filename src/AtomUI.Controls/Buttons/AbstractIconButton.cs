@@ -9,7 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 using AvaloniaButton = Avalonia.Controls.Button;
 using IconControl = Icon;

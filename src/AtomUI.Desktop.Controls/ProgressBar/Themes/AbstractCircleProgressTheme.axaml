@@ -1,16 +1,17 @@
 <ControlTheme xmlns="https://github.com/avaloniaui"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:atom="https://atomui.net"
+              xmlns:atom="https://atomui.net"
+              xmlns:atomc="https://atomui.net/common-controls"
               xmlns:themes="using:AtomUI.Desktop.Controls.Themes"
               x:Class="AtomUI.Desktop.Controls.Themes.AbstractCircleProgressTheme"
-              TargetType="atom:AbstractCircleProgress"
+              TargetType="atomc:AbstractCircleProgress"
               x:ClassModifier="internal">
     <ControlTheme.BasedOn>
-        <themes:AbstractProgressBarTheme TargetType="atom:AbstractCircleProgress" />
+        <themes:AbstractProgressBarTheme TargetType="atomc:AbstractCircleProgress" />
     </ControlTheme.BasedOn>
 
     <Setter Property="Template">
-        <ControlTemplate TargetType="atom:AbstractCircleProgress">
+        <ControlTemplate TargetType="atomc:AbstractCircleProgress">
             <Canvas>
                 <LayoutTransformControl Name="PART_LayoutTransformControl">
                     <Label Name="PART_PercentageLabel"

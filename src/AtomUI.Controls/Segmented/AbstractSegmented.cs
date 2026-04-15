@@ -7,7 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 public abstract class AbstractSegmented : SelectingItemsControl,
                                           IMotionAwareControl,

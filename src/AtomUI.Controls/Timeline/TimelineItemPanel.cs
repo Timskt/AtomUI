@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Layout;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class TimelineItemPanel : Panel
 {

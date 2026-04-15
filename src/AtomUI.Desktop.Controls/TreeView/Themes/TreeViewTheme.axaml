@@ -47,7 +47,7 @@
         
         <Setter Property="EmptyIndicatorTemplate">
             <DataTemplate>
-                <atom:Empty SizeType="Small" PresetEmptyImage="Simple"/>
+                <atom:Empty SizeType="Small" PresetImage="Simple"/>
             </DataTemplate>
         </Setter>
         

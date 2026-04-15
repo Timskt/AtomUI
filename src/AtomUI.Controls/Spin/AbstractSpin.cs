@@ -7,7 +7,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Metadata;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 public abstract class AbstractSpin : ContentControl, IMotionAwareControl
 {

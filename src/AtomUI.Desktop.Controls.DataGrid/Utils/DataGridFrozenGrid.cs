@@ -10,7 +10,6 @@ namespace AtomUI.Desktop.Controls.Utils;
 
 public class DataGridFrozenGrid : Grid
 {
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly StyledProperty<bool> IsFrozenProperty =
         AvaloniaProperty.RegisterAttached<DataGridFrozenGrid, Control, bool>("IsFrozen");
 

@@ -18,7 +18,6 @@ public class GradientColorPicker : AbstractColorPicker
     public static readonly StyledProperty<LinearGradientBrush?> ValueProperty =
         GradientColorPickerView.ValueProperty.AddOwner<GradientColorPicker>();
     
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<Action<LinearGradientBrush?, ColorFormat, Avalonia.Controls.Controls>?> ColorTextFormatterProperty =
         AvaloniaProperty.RegisterAttached<GradientColorPicker, Control, Action<LinearGradientBrush?, ColorFormat, Avalonia.Controls.Controls>?>("ColorTextFormatter");
     

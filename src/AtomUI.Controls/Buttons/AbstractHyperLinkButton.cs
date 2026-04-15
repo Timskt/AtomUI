@@ -5,7 +5,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 using AvaloniaButton = Avalonia.Controls.Button;
 using ButtonSizeType = SizeType;

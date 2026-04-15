@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 public abstract class AbstractTimelineItem : ContentControl
 {

@@ -1,7 +1,7 @@
 using AtomUI.Icons.AntDesign;
 using Avalonia.Controls.Primitives;
 
-namespace AtomUI.Desktop.Controls.Themes;
+namespace AtomUI.Desktop.Controls;
 
 internal class RevealButton : ToggleIconButton
 {

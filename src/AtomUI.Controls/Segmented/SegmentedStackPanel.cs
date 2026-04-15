@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class SegmentedStackPanel : Panel
 {

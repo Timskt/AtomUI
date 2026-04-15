@@ -7,7 +7,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 [PseudoClasses(StdPseudoClass.Pressed, StdPseudoClass.Selected, SegmentedPseudoClass.HasIcon)]
 public abstract class AbstractSegmentedItem : ContentControl, ISelectable

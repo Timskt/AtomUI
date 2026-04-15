@@ -36,15 +36,12 @@ public class BoxPanel : Panel
     public static readonly StyledProperty<double> RowSpacingProperty =
         AvaloniaProperty.Register<BoxPanel, double>(nameof(RowSpacing), double.NaN);
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<int> FlexProperty =
         AvaloniaProperty.RegisterAttached<BoxPanel, Control, int>("Flex", 0);
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<int> OrderProperty =
         AvaloniaProperty.RegisterAttached<BoxPanel, Control, int>("Order", 0);
 
-    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
     public static readonly AttachedProperty<AlignItems?> AlignSelfProperty =
         AvaloniaProperty.RegisterAttached<BoxPanel, Control, AlignItems?>("AlignSelf", null);
 

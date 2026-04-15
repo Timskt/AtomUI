@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.Metadata;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 
 using AvaloniaScrollBar = Avalonia.Controls.Primitives.ScrollBar;

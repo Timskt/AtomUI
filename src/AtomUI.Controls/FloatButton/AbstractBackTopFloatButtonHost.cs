@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 using AvaScrollViewer = Avalonia.Controls.ScrollViewer;
 

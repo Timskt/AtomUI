@@ -1,14 +1,11 @@
 using System.Collections;
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 internal class CheckBoxItemsControl : SelectingItemsControl
 {

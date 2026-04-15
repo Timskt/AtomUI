@@ -27,6 +27,8 @@
                                 Margin="12, 0, 0, 0">
                         <atom:TextBlock Name="{x:Static atom:DataGridRowGroupHeaderThemeConstants.PropertyNameElementPart}"
                                         Margin="4, 0, 0, 0"/>
+                        <atom:TextBlock Margin="4, 0, 0, 0"/>
+                        <atom:TextBlock Margin="4, 0, 0, 0"/>
                     </StackPanel>
 
                     <Rectangle Name="CurrencyVisual"

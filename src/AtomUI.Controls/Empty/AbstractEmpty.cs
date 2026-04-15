@@ -1,5 +1,4 @@
-﻿using AtomUI.Controls;
-using AtomUI.Media;
+﻿using AtomUI.Media;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -7,15 +6,15 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Controls;
+namespace AtomUI.Controls.Commons;
 
 [TemplatePart("PART_SvgImage", typeof(Avalonia.Svg.Svg))]
 public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware
 {
     #region 公共属性定义
 
-    public static readonly StyledProperty<PresetEmptyImage?> PresetEmptyImageProperty =
-        AvaloniaProperty.Register<AbstractEmpty, PresetEmptyImage?>(nameof(PresetEmptyImage));
+    public static readonly StyledProperty<PresetEmptyImage?> PresetImageProperty =
+        AvaloniaProperty.Register<AbstractEmpty, PresetEmptyImage?>(nameof(PresetImage));
 
     public static readonly StyledProperty<string?> ImagePathProperty =
         AvaloniaProperty.Register<AbstractEmpty, string?>(nameof(ImagePath));
@@ -32,10 +31,10 @@ public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware
     public static readonly StyledProperty<bool> IsShowDescriptionProperty =
         AvaloniaProperty.Register<AbstractEmpty, bool>(nameof(IsShowDescription), true);
 
-    public PresetEmptyImage? PresetEmptyImage
+    public PresetEmptyImage? PresetImage
     {
-        get => GetValue(PresetEmptyImageProperty);
-        set => SetValue(PresetEmptyImageProperty, value);
+        get => GetValue(PresetImageProperty);
+        set => SetValue(PresetImageProperty, value);
     }
 
     public string? ImagePath
@@ -123,7 +122,7 @@ public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware
 
     static AbstractEmpty()
     {
-        AffectsMeasure<AbstractEmpty>(PresetEmptyImageProperty,
+        AffectsMeasure<AbstractEmpty>(PresetImageProperty,
             ImagePathProperty,
             ImageSourceProperty,
             DescriptionProperty,
@@ -139,7 +138,7 @@ public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware
     private void CheckImageSource()
     {
         var imageSetCount = 0;
-        if (PresetEmptyImage is not null)
+        if (PresetImage is not null)
         {
             imageSetCount++;
         }
@@ -157,7 +156,7 @@ public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware
         if (imageSetCount > 1)
         {
             throw new ApplicationException(
-                "ImagePath, ImageSource and PresetEmptyImage cannot be set at the same time.");
+                "ImagePath, ImageSource and PresetImage cannot be set at the same time.");
         }
     }
 
@@ -184,16 +183,17 @@ public abstract class AbstractEmpty : TemplatedControl, ISizeTypeAware
             return;
         }
 
-            if (PresetEmptyImage is not null)
+        if (PresetImage is not null)
         {
             if (BorderColor != null && ShadowColor != null && ContentColor != null && BgColor != null && BorderColorSecondary != null)
             {
-                var colorBgContainer    = ((ISolidColorBrush)BgColor!).Color;
-                var borderColor         = ColorUtils.OnBackground(((ISolidColorBrush)BorderColor).Color, colorBgContainer);
-                var borderColorSecondary         = ColorUtils.OnBackground(((ISolidColorBrush)BorderColorSecondary).Color, colorBgContainer);
-                var shadowColor         = ColorUtils.OnBackground(((ISolidColorBrush)ShadowColor).Color, colorBgContainer);
-                var contentColor        = ColorUtils.OnBackground(((ISolidColorBrush)ContentColor).Color, colorBgContainer);
-                if (PresetEmptyImage.Value == global::AtomUI.Controls.PresetEmptyImage.Default)
+                var colorBgContainer = ((ISolidColorBrush)BgColor!).Color;
+                var borderColor      = ColorUtils.OnBackground(((ISolidColorBrush)BorderColor).Color, colorBgContainer);
+                var borderColorSecondary =
+                    ColorUtils.OnBackground(((ISolidColorBrush)BorderColorSecondary).Color, colorBgContainer);
+                var shadowColor  = ColorUtils.OnBackground(((ISolidColorBrush)ShadowColor).Color, colorBgContainer);
+                var contentColor = ColorUtils.OnBackground(((ISolidColorBrush)ContentColor).Color, colorBgContainer);
+                if (PresetImage.Value == PresetEmptyImage.Default)
                 {
                     _svg.Source = BuiltInImageBuilder.BuildDefaultImage(shadowColor, borderColor, borderColorSecondary);
                 }
