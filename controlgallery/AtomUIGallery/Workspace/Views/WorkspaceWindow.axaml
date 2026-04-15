@@ -72,9 +72,7 @@
                                Tag="{x:Static workspaceviews:WindowMenuItemKind.LanguageEnUS}"/>
             </atom:MenuItem>
         </atom:Menu>
-        <workspaceviews:CaseNavigation DockPanel.Dock="Left" />
-        <rxui:RoutedViewHost Router="{Binding Router}"
-                             PageTransition="{x:Null}"
-                             ClipToBounds="True" />
+        <workspaceviews:CaseNavigation Name="ShowCaseNavigation" DockPanel.Dock="Left" />
+        <rxui:RoutedViewHost Name="RoutedViewHost" PageTransition="{x:Null}" ClipToBounds="True" />
     </DockPanel>
 </atom:Window>
