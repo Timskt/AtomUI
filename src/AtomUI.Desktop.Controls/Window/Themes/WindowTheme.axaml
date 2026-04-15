@@ -102,7 +102,7 @@
         </Style>
 
         <Style Selector="^[OsType=macOS]">
-            <Setter Property="MacOSCaptionGroupOffset" Value="10, 2" />
+            <Setter Property="MacOSCaptionGroupOffset" Value="15, 0" />
             <Setter Property="MacOSCaptionGroupSpacing" Value="5" />
         </Style>
 
