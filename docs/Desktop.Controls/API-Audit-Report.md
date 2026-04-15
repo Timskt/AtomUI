@@ -339,33 +339,50 @@ public static readonly StyledProperty<string?> ImageSourceProperty = ...
 
 ## 汇总
 
-| 严重度 | 数量 | 核心关键词 |
-|--------|------|-----------|
-| 🔴 高 | 4 | Abstract 非 abstract、拼写错误、Bool 缺 Is 前缀 |
-| 🟡 中 | 8 | 命名分裂、事件类型不一致、属性名不匹配类型名 |
-| 🔵 低 | 6 | 枚举命名对齐、属性冗余前缀、架构层级 |
-| **合计** | **18** | |
+| 严重度 | 数量 | 已修复 | 待修复 | 核心关键词 |
+|--------|------|--------|--------|-----------|
+| 🔴 高 | 4 | 1 | 3 | Abstract 非 abstract ✅、拼写错误、Bool 缺 Is 前缀 |
+| 🟡 中 | 8 | 0 | 8 | 命名分裂、事件类型不一致、属性名不匹配类型名 |
+| 🔵 低 | 6 | 0 | 6 | 枚举命名对齐、属性冗余前缀、架构层级 |
+| **合计** | **18** | **1** | **17** | |
+
+**修复进度**: 🟢 1/18 (5.5%)
 
 ---
 
-## 建议优先级
+## 建议优先级与修复状态
 
-1. **立即修复** (🔴):
-   - `IsMessageMarqueEnabled` → `IsMessageMarqueeEnabled` (拼写修复)
-   - `Bordered` → `IsBordered` (Tag)
-   - `ShowZero` → `IsShowZero` (CountBadge)
-   - 为所有 `Abstract` 前缀类加上 `abstract` 关键字
+### 1. **立即修复** (🔴 高严重度)
 
-2. **近期统一** (🟡):
-   - `IsClearable` → `IsAllowClear`
-   - `IsWaveAnimationEnabled` → `IsWaveSpiritEnabled`
-   - `Alert.CloseRequest` → `RoutedEvent`
-   - `WaveType` → `WaveSpiritType`
-   - `PresetImage` → `PresetEmptyImage`
+- ✅ **[已完成]** 为所有 `Abstract` 前缀类加上 `abstract` 关键字  
+  *Commit: 2a3a87c5 (2026-04-15)*
 
-3. **版本迭代中逐步调整** (🔵):
-   - `TagText` → `Text`
-   - `CardStyleVariant.Outline` → `Outlined`
-   - 颜色属性命名统一
-   - 基类位置整理
+- ⏳ `IsMessageMarqueEnabled` → `IsMessageMarqueeEnabled` (拼写修复)  
+  *Severity: Critical, File: Alert.cs*
+
+- ⏳ `Bordered` → `IsBordered` (Tag)  
+  *Severity: High, File: AbstractTag.cs*
+
+- ⏳ `ShowZero` → `IsShowZero` (CountBadge)  
+  *Severity: High, File: AbstractCountBadge.cs*
+
+### 2. **近期统一** (🟡 中严重度)
+
+- ⏳ `IsClearable` → `IsAllowClear` (SelectHandle, 7 vs 1 controls)
+- ⏳ `IsWaveAnimationEnabled` → `IsWaveSpiritEnabled` (RadioIndicator, Slider)
+- ⏳ `Alert.CloseRequest` → `RoutedEvent` (Event pattern consistency)
+- ⏳ `WaveType` → `WaveSpiritType` (Property naming convention)
+- ⏳ `PresetImage` → `PresetEmptyImage` (Property vs type name alignment)
+- ⏳ Badge 属性命名前缀整理 (BadgeColor, BadgeIsVisible)
+- ⏳ `CountBadgeSize` 与 `SizeType` 对齐
+- ⏳ HyperLinkButton 驼峰拼写（仅文档注明）
+
+### 3. **版本迭代中逐步调整** (🔵 低严重度)
+
+- ⏳ `TagText` → `Text` (Redundant prefix)
+- ⏳ `CardStyleVariant.Outline` → `Outlined` (Enum value alignment)
+- ⏳ 颜色属性命名统一 (TagColor, BadgeColor, RibbonColor)
+- ⏳ `ImagePath` vs `ImageSource` vs `PresetImage` API 设计优化
+- ⏳ `AbstractPagination` 位置整理 (Desktop → Base Layer)
+- ⏳ `AbstractImagePreviewer` 位置整理 (Desktop → Base Layer)
 
