@@ -9,7 +9,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractGeneralStepsProgressBar : AbstractLineProgress
+public abstract class AbstractGeneralStepsProgressBar : AbstractLineProgress
 {
     protected const double LARGE_CHUNK_WIDTH = 14;
     protected const double MIDDLE_CHUNK_WIDTH = 6;

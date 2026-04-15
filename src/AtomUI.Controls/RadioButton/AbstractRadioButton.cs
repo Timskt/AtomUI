@@ -5,9 +5,9 @@ namespace AtomUI.Controls.Commons;
 
 using AvaloniaRadioButton = Avalonia.Controls.RadioButton;
 
-public class AbstractRadioButton : AvaloniaRadioButton,
-                                   IWaveSpiritAwareControl,
-                                   IFormItemAware
+public abstract class AbstractRadioButton : AvaloniaRadioButton,
+                                            IWaveSpiritAwareControl,
+                                            IFormItemAware
 {
     #region 公共属性定义
 

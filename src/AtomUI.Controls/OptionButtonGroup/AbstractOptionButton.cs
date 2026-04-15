@@ -16,7 +16,7 @@ namespace AtomUI.Controls.Commons;
 
 using AvaloniaRadioButton = Avalonia.Controls.RadioButton;
 
-public class AbstractOptionButton : AvaloniaRadioButton
+public abstract class AbstractOptionButton : AvaloniaRadioButton
 {
     public static readonly StyledProperty<PathIcon?> IconProperty = AvaloniaProperty.Register<AbstractOptionButton, PathIcon?>(nameof (Icon));
     

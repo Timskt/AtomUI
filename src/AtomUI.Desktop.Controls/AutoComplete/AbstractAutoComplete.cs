@@ -39,13 +39,13 @@ public enum AutoCompletePlacementMode
 public delegate object? AutoCompleteFilterValueSelector(IAutoCompleteOption option);
 
 [PseudoClasses(AutoCompletePseudoClass.CandidatePopupOpen)]
-public class AbstractAutoComplete : TemplatedControl, 
-                                    ISizeTypeAware,
-                                    IMotionAwareControl,
-                                    IFormItemAware,
-                                    IInputControlStatusAware,
-                                    IInputControlStyleVariantAware,
-                                    IFormItemFeedbackAware
+public abstract class AbstractAutoComplete : TemplatedControl, 
+                                             ISizeTypeAware,
+                                             IMotionAwareControl,
+                                             IFormItemAware,
+                                             IInputControlStatusAware,
+                                             IInputControlStyleVariantAware,
+                                             IFormItemFeedbackAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<PathIcon?> ClearIconProperty =

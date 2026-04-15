@@ -4,9 +4,9 @@ namespace AtomUI.Controls.Commons;
 
 using AvaloniaCheckBox = Avalonia.Controls.CheckBox;
 
-public class AbstractCheckBox : AvaloniaCheckBox, 
-                                IWaveSpiritAwareControl,
-                                IFormItemAware
+public abstract class AbstractCheckBox : AvaloniaCheckBox, 
+                                         IWaveSpiritAwareControl,
+                                         IFormItemAware
 {
     #region 公共属性定义
 

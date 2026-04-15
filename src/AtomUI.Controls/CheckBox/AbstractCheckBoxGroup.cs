@@ -15,9 +15,9 @@ using ItemCollection = AtomUI.Collections.ItemCollection;
 namespace AtomUI.Controls.Commons;
 
 [TemplatePart("PART_CheckBoxItems", typeof(SelectingItemsControl))]
-public class AbstractCheckBoxGroup: TemplatedControl,
-                                    IMotionAwareControl,
-                                    IFormItemAware
+public abstract class AbstractCheckBoxGroup: TemplatedControl,
+                                             IMotionAwareControl,
+                                             IFormItemAware
 {
     #region 公共属性定义
     

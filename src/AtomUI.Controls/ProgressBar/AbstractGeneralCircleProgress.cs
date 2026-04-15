@@ -4,7 +4,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractGeneralCircleProgress : AbstractCircleProgress
+public abstract class AbstractGeneralCircleProgress : AbstractCircleProgress
 {
     private Rect _currentGrooveRect;
 

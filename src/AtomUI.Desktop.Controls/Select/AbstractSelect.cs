@@ -17,14 +17,14 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class AbstractSelect : TemplatedControl, 
-                              IMotionAwareControl, 
-                              ISizeTypeAware,
-                              ICompactSpaceAware,
-                              IInputControlStatusAware,
-                              IInputControlStyleVariantAware,
-                              IFormItemAware,
-                              IFormItemFeedbackAware
+public abstract class AbstractSelect : TemplatedControl, 
+                                       IMotionAwareControl, 
+                                       ISizeTypeAware,
+                                       ICompactSpaceAware,
+                                       IInputControlStatusAware,
+                                       IInputControlStyleVariantAware,
+                                       IFormItemAware,
+                                       IFormItemFeedbackAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<bool> IsAllowClearProperty =

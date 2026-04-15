@@ -12,10 +12,10 @@ using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractOptionButtonGroup : SelectingItemsControl,
-                                         ISizeTypeAware,
-                                         IWaveSpiritAwareControl,
-                                         IFormItemAware
+public abstract class AbstractOptionButtonGroup : SelectingItemsControl,
+                                                 ISizeTypeAware,
+                                                 IWaveSpiritAwareControl,
+                                                 IFormItemAware
 {
     #region 公共属性定义
 

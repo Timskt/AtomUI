@@ -14,10 +14,10 @@ using Avalonia.VisualTree;
 namespace AtomUI.Controls.Commons;
 
 [TemplatePart("PART_RateItems", typeof(ItemsControl))]
-public class AbstractRate : TemplatedControl, 
-                            IMotionAwareControl, 
-                            ISizeTypeAware,
-                            IFormItemAware
+public abstract class AbstractRate : TemplatedControl, 
+                                     IMotionAwareControl, 
+                                     ISizeTypeAware,
+                                     IFormItemAware
 {
     #region 公共属性定义
     

@@ -12,7 +12,7 @@ using Avalonia.Media;
 namespace AtomUI.Controls.Commons;
 
 [PseudoClasses(ProgressBarPseudoClass.Indeterminate, ProgressBarPseudoClass.Completed)]
-public class AbstractGeneralProgressBar : AbstractLineProgress
+public abstract class AbstractGeneralProgressBar : AbstractLineProgress
 {
     #region 公共属性定义
 

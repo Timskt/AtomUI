@@ -14,7 +14,7 @@ using static System.Enum;
 namespace AtomUI.Controls.Commons;
 
 [TemplatePart("PART_RefreshButton", typeof(Button))]
-public class AbstractQRCode : TemplatedControl
+public abstract class AbstractQRCode : TemplatedControl
 {
     #region 公共属性定义
 

@@ -5,9 +5,9 @@ using Avalonia.Layout;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractRadioButtonGroup : ItemsControl,
-                                        IMotionAwareControl,
-                                        IFormItemAware
+public abstract class AbstractRadioButtonGroup : ItemsControl,
+                                                IMotionAwareControl,
+                                                IFormItemAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<object?> CheckedItemProperty = 

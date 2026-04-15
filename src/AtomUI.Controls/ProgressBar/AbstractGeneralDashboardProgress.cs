@@ -5,7 +5,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractGeneralDashboardProgress : AbstractCircleProgress
+public abstract class AbstractGeneralDashboardProgress : AbstractCircleProgress
 {
     public const double DEFAULT_GAP_DEGREE = 75;
     public const double MIN_GAP_DEGREE = 0;

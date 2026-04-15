@@ -8,7 +8,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
 
-public class AbstractToggleIconButton : ToggleButton, IMotionAwareControl
+public abstract class AbstractToggleIconButton : ToggleButton, IMotionAwareControl
 {
     #region 公共属性定义
 

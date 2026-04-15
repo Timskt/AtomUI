@@ -17,7 +17,7 @@ using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
-public class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
+public abstract class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<IList<string>?> ItemsSourceProperty =

@@ -14,9 +14,9 @@ using ButtonSizeType = SizeType;
     ButtonPseudoClass.IconOnly,
     ButtonPseudoClass.Loading,
     ButtonPseudoClass.IsDanger)]
-public class AbstractHyperLinkButton : AvaloniaButton,
-                                       ISizeTypeAware,
-                                       IMotionAwareControl
+public abstract class AbstractHyperLinkButton : AvaloniaButton,
+                                                ISizeTypeAware,
+                                                IMotionAwareControl
 {
     #region 公共属性定义
     

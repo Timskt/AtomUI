@@ -20,11 +20,11 @@ using Avalonia.Rendering;
 namespace AtomUI.Controls;
 
 [TemplatePart("PART_SwitchKnob", typeof(SwitchKnob))]
-public class AbstractToggleSwitch : ToggleButton,
-                                    ISizeTypeAware,
-                                    ICustomHitTest,
-                                    IWaveSpiritAwareControl,
-                                    IFormItemAware
+public abstract class AbstractToggleSwitch : ToggleButton,
+                                             ISizeTypeAware,
+                                             ICustomHitTest,
+                                             IWaveSpiritAwareControl,
+                                             IFormItemAware
 {
     #region 公共属性定义
     
