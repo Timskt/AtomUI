@@ -112,8 +112,7 @@ public abstract class AbstractSegmented : SelectingItemsControl,
 
     public AbstractSegmented()
     {
-        SelectionChanged += HandleSelectionChanged;
-        SelectionMode    =  SelectionMode.Single;
+        SelectionMode = SelectionMode.Single;
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -155,6 +154,18 @@ public abstract class AbstractSegmented : SelectingItemsControl,
     {
         base.OnSizeChanged(e);
         SetupSelectedThumbRect();
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        SelectionChanged += HandleSelectionChanged;
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        SelectionChanged -= HandleSelectionChanged;
     }
 
     private void SetupSelectedThumbRect()
