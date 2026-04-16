@@ -206,53 +206,71 @@ internal class ColorSlider : AbstractColorSlider
     /// <summary>
     /// Generates a new background image for the color slider and applies it.
     /// </summary>
-    private async void UpdateBackground()
+    private async Task UpdateBackgroundAsync()
     {
-        // In Avalonia, Bounds returns the actual device-independent pixel size of a control.
-        // However, this is not necessarily the size of the control rendered on a display.
-        // A desktop or application scaling factor may be applied which must be accounted for here.
-        // Remember bitmaps in Avalonia are rendered mapping to actual device pixels, not the device-
-        // independent pixels of controls.
-
-        var scale = LayoutHelper.GetLayoutScale(this);
-        int pixelWidth;
-        int pixelHeight;
-
-        if (Track != null)
+        try
         {
-            pixelWidth  = Convert.ToInt32(Track.Bounds.Width * scale);
-            pixelHeight = Convert.ToInt32(Track.Bounds.Height * scale);
-        }
-        else
-        {
-            // As a fallback, attempt to calculate using the overall control size
-            // This shouldn't happen as a track is a required template part of a slider
-            // However, if it does, the spectrum gradient will still be shown
-            pixelWidth  = Convert.ToInt32(Bounds.Width * scale);
-            pixelHeight = Convert.ToInt32(Bounds.Height * scale);
-        }
+            // In Avalonia, Bounds returns the actual device-independent pixel size of a control.
+            // However, this is not necessarily the size of the control rendered on a display.
+            // A desktop or application scaling factor may be applied which must be accounted for here.
+            // Remember bitmaps in Avalonia are rendered mapping to actual device pixels, not the device-
+            // independent pixels of controls.
 
-        if (pixelWidth != 0 && pixelHeight != 0)
-        {
-            // siteToCapacity = true, because CreateComponentBitmapAsync sets bytes via indexer over pre-allocated buffer. 
-            using var bgraPixelData = new PooledList<byte>(pixelWidth * pixelHeight * 4, ClearMode.Never, true);
-            await ColorPickerHelpers.CreateComponentBitmapAsync(
-                bgraPixelData,
-                pixelWidth,
-                pixelHeight,
-                Orientation.Horizontal,
-                ColorModel,
-                ColorComponent,
-                HsvColor,
-                IsAlphaVisible,
-                IsPerceptive);
+            var scale = LayoutHelper.GetLayoutScale(this);
+            int pixelWidth;
+            int pixelHeight;
 
-            _backgroundBitmap?.Dispose();
-            _backgroundBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraPixelData, pixelWidth, pixelHeight);
+            if (Track != null)
+            {
+                pixelWidth  = Convert.ToInt32(Track.Bounds.Width * scale);
+                pixelHeight = Convert.ToInt32(Track.Bounds.Height * scale);
+            }
+            else
+            {
+                // As a fallback, attempt to calculate using the overall control size
+                // This shouldn't happen as a track is a required template part of a slider
+                // However, if it does, the spectrum gradient will still be shown
+                pixelWidth  = Convert.ToInt32(Bounds.Width * scale);
+                pixelHeight = Convert.ToInt32(Bounds.Height * scale);
+            }
 
-            Background = new ImageBrush(_backgroundBitmap);
+            if (pixelWidth != 0 && pixelHeight != 0)
+            {
+                // siteToCapacity = true, because CreateComponentBitmapAsync sets bytes via indexer over pre-allocated buffer. 
+                using var bgraPixelData = new PooledList<byte>(pixelWidth * pixelHeight * 4, ClearMode.Never, true);
+                await ColorPickerHelpers.CreateComponentBitmapAsync(
+                    bgraPixelData,
+                    pixelWidth,
+                    pixelHeight,
+                    Orientation.Horizontal,
+                    ColorModel,
+                    ColorComponent,
+                    HsvColor,
+                    IsAlphaVisible,
+                    IsPerceptive);
+
+                if (!this.IsAttachedToVisualTree())
+                {
+                    return;
+                }
+
+                _backgroundBitmap?.Dispose();
+                _backgroundBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraPixelData, pixelWidth, pixelHeight);
+
+                Background = new ImageBrush(_backgroundBitmap);
         }
     }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error in UpdateBackgroundAsync: {ex.Message}");
+    }
+}
+
+// Keep the old method for backward compatibility
+private void UpdateBackground()
+{
+    _ = UpdateBackgroundAsync();
+}
     
     /// <summary>
     /// Rounds the component values of the given <see cref="HsvColor"/>.

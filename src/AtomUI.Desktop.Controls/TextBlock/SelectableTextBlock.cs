@@ -122,33 +122,53 @@ public class SelectableTextBlock : TextBlock
     /// <summary>
     /// Copies the current selection to the Clipboard.
     /// </summary>
-    public async void Copy()
+    public async Task CopyAsync()
     {
-        if (!_canCopy)
+        try
         {
-            return;
-        }
-
-        var text = GetSelection();
-
-        if (string.IsNullOrEmpty(text))
-        {
-            return;
-        }
-
-        var eventArgs = new RoutedEventArgs(CopyingToClipboardEvent);
-
-        RaiseEvent(eventArgs);
-
-        if (!eventArgs.Handled)
-        {
-            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-
-            if (clipboard != null)
+            if (!_canCopy)
             {
-                await clipboard.SetTextAsync(text);
+                return;
+            }
+
+            var text = GetSelection();
+
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            var eventArgs = new RoutedEventArgs(CopyingToClipboardEvent);
+
+            RaiseEvent(eventArgs);
+
+            if (!eventArgs.Handled)
+            {
+                if (!this.IsAttachedToVisualTree())
+                {
+                    return;
+                }
+
+                var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+
+                if (clipboard != null)
+                {
+                    await clipboard.SetTextAsync(text);
+                }
             }
         }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in CopyAsync: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Copies the current selection to the Clipboard (legacy method for backward compatibility).
+    /// </summary>
+    public void Copy()
+    {
+        _ = CopyAsync();
     }
 
     /// <summary>

@@ -4651,14 +4651,27 @@ public partial class DataGrid
         }
     }
 
-    private async void CopyToClipboard(string text)
+    private async Task CopyToClipboardAsync(string text)
     {
-        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-
-        if (clipboard != null)
+        try
         {
-            await clipboard.SetTextAsync(text);
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+
+            if (clipboard != null && this.IsAttachedToVisualTree())
+            {
+                await clipboard.SetTextAsync(text);
+            }
         }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in CopyToClipboardAsync: {ex.Message}");
+        }
+    }
+
+    // Keep the old method for backward compatibility
+    private void CopyToClipboard(string text)
+    {
+        _ = CopyToClipboardAsync(text);
     }
 
     /// <summary>

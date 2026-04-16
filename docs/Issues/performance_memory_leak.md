@@ -1055,20 +1055,30 @@ protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e
 
 ---
 
-### 5.11 async void 方法 — 无异常保护 + 无取消支持
+### 5.11 ⏳ async void 方法 — 无异常保护 + 无取消支持（部分修复）
+
+**修复进度**：1/4 完成
 
 - **文件**：
-  - `src/AtomUI.Desktop.Controls.ColorPicker/ColorView/ColorSpectrum.cs`，第 1135 行 — `CreateBitmapsAndColorMap()`
-  - `src/AtomUI.Desktop.Controls.ColorPicker/ColorSlider/ColorSlider.cs`，第 209 行 — `UpdateBackground()`
-  - `src/AtomUI.Desktop.Controls.DataGrid/DataGrid.Privates.cs`，第 4654 行 — `CopyToClipboard()`
-  - `src/AtomUI.Desktop.Controls/TextBlock/SelectableTextBlock.cs`，第 125 行 — `Copy()`
+  - ✅ `src/AtomUI.Desktop.Controls.ColorPicker/ColorView/ColorSpectrum.cs`，第 1135 行 — `CreateBitmapsAndColorMap()` **已修复**
+  - ⏳ `src/AtomUI.Desktop.Controls.ColorPicker/ColorSlider/ColorSlider.cs`，第 209 行 — `UpdateBackground()`
+  - ⏳ `src/AtomUI.Desktop.Controls.DataGrid/DataGrid.Privates.cs`，第 4654 行 — `CopyToClipboard()`
+  - ⏳ `src/AtomUI.Desktop.Controls/TextBlock/SelectableTextBlock.cs`，第 125 行 — `Copy()`
 - **问题描述**：
 
 `async void` 方法中的异常会直接传播到 SynchronizationContext，导致应用崩溃。且无 CancellationToken 支持，控件在异步操作完成前被销毁时可能访问已释放的资源。
 
 - **复现条件**：异步操作中发生异常；或控件在操作完成前被销毁
 - **影响评估**：**中等** — 触发异常时导致应用崩溃
-- **修复建议**：将 `async void` 改为 `async Task`，添加 try-catch 和 CancellationToken 支持。
+- **修复方案**：✅ **部分实现**
+
+#### ColorSpectrum.CreateBitmapsAndColorMap() 修复
+- 从 `async void` 改为 `private async Task CreateBitmapsAndColorMapAsync()`
+- 添加 try-catch 块来捕获并处理异常
+- 添加 `IsAttachedToVisualTree()` 检查，防止在已分离的控件上更新 UI
+- 保留原来的 `void CreateBitmapsAndColorMap()` 方法作为包装器，调用异步版本
+- Commit：`[待获取]` - fix(5.11): add exception handling to ColorSpectrum CreateBitmapsAndColorMap
+- 代码变更：+18 行
 
 ---
 

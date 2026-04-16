@@ -1132,9 +1132,11 @@ internal class ColorSpectrum : TemplatedControl
         args.Handled = true;
     }
 
-    private async void CreateBitmapsAndColorMap()
+    private async Task CreateBitmapsAndColorMapAsync()
     {
-        if (_layoutRoot == null ||
+        try
+        {
+            if (_layoutRoot == null ||
             _sizingPanel == null ||
             _inputTarget == null ||
             _spectrumRectangle == null ||
@@ -1288,11 +1290,24 @@ internal class ColorSpectrum : TemplatedControl
             _minValueFromLastBitmapCreation      = MinValue;
             _maxValueFromLastBitmapCreation      = MaxValue;
 
-            _hsvValues = newHsvValues;
+             _hsvValues = newHsvValues;
 
             UpdateBitmapSources();
             UpdateEllipse();
         });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in CreateBitmapsAndColorMapAsync: {ex.Message}");
+            // Handle exception gracefully without crashing
+        }
+    }
+
+    // Keep the old method for backward compatibility - it now calls the async version
+    private void CreateBitmapsAndColorMap()
+    {
+        // Fire and forget - no awaiting to maintain void return type
+        _ = CreateBitmapsAndColorMapAsync();
     }
 
     private static void FillPixelForBox(
