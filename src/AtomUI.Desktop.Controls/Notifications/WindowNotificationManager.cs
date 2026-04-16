@@ -5,6 +5,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
@@ -268,8 +270,12 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
 
         try
         {
+            // 停止定时器并取消 Tick 事件订阅
             _cleanupTimer.Stop();
+            _cleanupTimer.Tick -= HandleCleanupTimerTick;
             _cardExpiredTimer.Stop();
+            _cardExpiredTimer.Tick -= HandleCardExpiredTimer;
+
             _items?.Clear();
             _cleanupQueue.Clear();
             // 卸载事件订阅
@@ -313,5 +319,4 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
     {
         _cardExpiredTimer.Start();
     }
-    
 }

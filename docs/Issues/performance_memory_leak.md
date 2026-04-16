@@ -558,16 +558,27 @@ private static void EnsureCacheSize()
 
 ---
 
-### 4.7 NotificationCard 关闭定时器生命周期问题
+### 4.7 ✅ ~~WindowNotificationManager 定时器 Tick 事件未取消订阅~~（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls/Notifications/NotificationCard.cs`
+- **文件**：`src/AtomUI.Desktop.Controls/Notifications/WindowNotificationManager.cs`
 - **问题描述**：
 
-NotificationCard 使用 `DispatcherTimer` 实现自动关闭功能。当通知被手动关闭或从视觉树移除时，定时器的 Tick 事件处理器可能未被正确取消订阅，导致定时器持续持有 NotificationCard 的引用。
+`Dispose()` 中停止了定时器但未取消 Tick 事件订阅。`DispatcherTimer` 是系统级对象，其 Tick 事件持有对 Manager 的委托引用，若不取消订阅，定时器可能阻止 Manager 被 GC 回收。
 
-- **复现条件**：快速创建和关闭多个通知
-- **影响评估**：**高** — 频繁创建通知的场景下，已关闭的 NotificationCard 无法被 GC 回收
-- **修复建议**：确保在所有关闭路径（手动关闭、自动关闭、从视觉树移除）中都取消定时器的 Tick 订阅并停止定时器。
+> **注**：`Show()` 中对 NotificationCard 的匿名 lambda 事件订阅（`NotificationClosed`、`PointerPressed`）**不需要**显式取消订阅，因为 NotificationCard 的生命周期比 WindowNotificationManager 短——Card 关闭后从 `_items` 移除即无引用，会被 GC 回收，其事件处理器一并回收。额外用字典追踪反而增加 Manager → Card 的强引用，延迟 Card 的 GC。
+
+- **复现条件**：WindowNotificationManager 被 Dispose 后，定时器仍持有引用
+- **影响评估**：**高** — Dispose 后定时器仍持有 Manager 引用
+- **修复方案**：
+
+在 `Dispose()` 中取消定时器 Tick 事件订阅：
+
+```csharp
+_cleanupTimer.Stop();
+_cleanupTimer.Tick -= HandleCleanupTimerTick;
+_cardExpiredTimer.Stop();
+_cardExpiredTimer.Tick -= HandleCardExpiredTimer;
+```
 
 ---
 
