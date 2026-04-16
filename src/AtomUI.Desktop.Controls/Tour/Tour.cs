@@ -817,18 +817,35 @@ public class Tour : TemplatedControl, IMotionAwareControl
         return new Point(offsetX, offsetY);
     }
     
-    private IgnorePropertyChangedScope BeginIgnoringPropertyChanged() => new IgnorePropertyChangedScope(this);
-    
-    private readonly struct IgnorePropertyChangedScope : IDisposable
-    {
-        private readonly Tour _owner;
-    
-        public IgnorePropertyChangedScope(Tour owner)
-        {
-            _owner                        = owner;
-            _owner._ignorePropertyChanged = true;
-        }
-    
-        public void Dispose() => _owner._ignorePropertyChanged = false;
-    }
-}
+     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+     {
+         base.OnDetachedFromVisualTree(e);
+         
+         Steps.CollectionChanged -= HandleItemsViewCollectionChanged;
+         CustomActions.CollectionChanged -= HandleCustomActionsChanged;
+         
+         _indicatorDisposables?.Dispose();
+         _indicatorDisposables = null;
+         
+         if (_stepsView != null)
+         {
+             _stepsView.CloseRequest -= HandleCloseRequest;
+             _stepsView.NavRequest -= HandleNavRequest;
+         }
+     }
+     
+     private IgnorePropertyChangedScope BeginIgnoringPropertyChanged() => new IgnorePropertyChangedScope(this);
+     
+     private readonly struct IgnorePropertyChangedScope : IDisposable
+     {
+         private readonly Tour _owner;
+     
+         public IgnorePropertyChangedScope(Tour owner)
+         {
+             _owner                        = owner;
+             _owner._ignorePropertyChanged = true;
+         }
+     
+         public void Dispose() => _owner._ignorePropertyChanged = false;
+     }
+ }

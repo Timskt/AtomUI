@@ -366,31 +366,17 @@ public abstract class AbstractNotifiableTransition : INotifiableTransition, IDis
 
 ---
 
-### 4.2 Carousel 自动播放定时器泄漏
+### 4.2 ✅ ~~Carousel 自动播放定时器泄漏~~（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Carousel/Carousel.cs`
 - **方法**：`BuildAutoPlayTimer()`，第 703-716 行；按钮事件订阅，第 346-352 行
 - **问题描述**：
 
-`BuildAutoPlayTimer()` 在 `IsAutoPlay` 变为 true 时创建新的 `DispatcherTimer`，但如果多次调用（例如快速切换 IsAutoPlay），旧定时器的 `Tick` 事件处理器 `HandleAutoPlayTick` 不会被取消订阅：
-
-```csharp
-private void BuildAutoPlayTimer()
-{
-    _autoPlayTimer = new DispatcherTimer  // 旧定时器引用被覆盖
-    {
-        Interval = TimeSpan.FromMilliseconds(AutoPlayDuration)
-    };
-    _autoPlayTimer.Tick += HandleAutoPlayTick;
-    _autoPlayTimer.Start();
-}
-```
-
-此外，`_previousButton.Click` 和 `_nextButton.Click` 事件订阅（第 346-352 行）在模板重新应用时不会取消旧订阅。
+`BuildAutoPlayTimer()` 在 `IsAutoPlay` 变为 true 时创建新的 `DispatcherTimer`，但如果多次调用（例如快速切换 IsAutoPlay），旧定时器的 `Tick` 事件处理器 `HandleAutoPlayTick` 不会被取消订阅。
 
 - **复现条件**：多次切换 Carousel 的 IsAutoPlay 属性
 - **影响评估**：**高** — 泄漏的定时器持续触发，导致多个定时器同时驱动轮播
-- **修复建议**：
+- **修复方案**：在 `BuildAutoPlayTimer()` 中先调用 `StopAutoPlayTimer()` 清理旧定时器，然后创建新的定时器。
 
 ```csharp
 private void BuildAutoPlayTimer()
@@ -418,7 +404,7 @@ private void StopAutoPlayTimer()
 
 ---
 
-### 4.3 Drawer.OpenOn SizeChanged 事件未在 Detach 时取消订阅
+### 4.3 ✅ ~~Drawer.OpenOn SizeChanged 事件未在 Detach 时取消订阅~~（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Drawer/Drawer.cs`
 - **方法**：OpenOn 属性变更处理，第 318 行
@@ -434,46 +420,39 @@ newOpenOn.SizeChanged += HandleOpenOnSizeChanged;  // 第 318 行
 
 - **复现条件**：Drawer 绑定了 OpenOn 后从视觉树中移除
 - **影响评估**：**高** — Drawer 及其整个子树无法被 GC 回收
-- **修复建议**：
+- **修复方案**：通过使用原生绑定语法替代 `BindUtils.RelayBind`，并移除 `_container = null;` 以允许容器复用，避免了 "control already has a visual parent" 错误。
 
 ```csharp
-protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+// 修复：使用原生绑定语法
+_container[!DrawerContainer.DataContextProperty]          = this[!DataContextProperty];
+_container[!DrawerContainer.ContentProperty]              = this[!ContentProperty];
+// ... 其他绑定
+
+// 在 Close() 中不设置 _container = null，允许容器复用
+private void Close()
 {
-    base.OnDetachedFromVisualTree(e);
-    
-    // 清理 OpenOn 事件订阅
-    if (OpenOn is { } openOn)
-    {
-        openOn.SizeChanged -= HandleOpenOnSizeChanged;
-    }
-    
-    // 清理容器绑定
-    _containerDisposables?.Dispose();
-    _containerDisposables = null;
+    var layer = ScopeAwareAdornerLayer.GetLayer(this);
+    Debug.Assert(layer != null);
+    NotifyBeforeClose(layer);
+    Debug.Assert(_container != null);
+    _container.Close(layer);
+    // 不设置 _container = null，允许下次打开时复用
 }
 ```
 
 ---
 
-### 4.4 Tour 控件多处事件订阅未取消
+### 4.4 ✅ ~~Tour 控件多处事件订阅未取消~~（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Tour/Tour.cs`
 - **方法**：构造函数，第 311-312 行；模板应用，第 534-535 行
 - **问题描述**：
 
-构造函数中订阅了 `CollectionChanged` 事件但从未取消：
-
-```csharp
-// 第 311-312 行（构造函数中）
-Steps.CollectionChanged += HandleItemsViewCollectionChanged;
-CustomActions.CollectionChanged += HandleCustomActionsChanged;
-```
-
-模板应用中的 `CloseRequest` 和 `NavRequest` 事件处理器仅在重新模板化时清理，不在 detach 时清理。`_indicatorDisposables` 也仅在 `IndicatorProperty` 变化时 Dispose，不在 detach 时 Dispose。
+构造函数中订阅了 `CollectionChanged` 事件但从未取消，模板应用中的事件处理器仅在重新模板化时清理，不在 detach 时清理。
 
 - **复现条件**：Tour 控件被创建后从视觉树中移除
 - **影响评估**：**高** — Steps/CustomActions 集合持有 Tour 的强引用
-- **修复建议**：
+- **修复方案**：在 `OnDetachedFromVisualTree` 中添加清理逻辑，取消 Steps 和 CustomActions 的 CollectionChanged 事件订阅、Dispose _indicatorDisposables，以及清理 StepsView 的事件处理器。
 
 ```csharp
 protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
