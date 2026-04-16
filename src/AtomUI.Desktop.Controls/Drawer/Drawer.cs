@@ -355,7 +355,6 @@ public class Drawer : Control,
         NotifyBeforeClose(layer);
         Debug.Assert(_container != null);
         _container.Close(layer);
-        _container = null;
     }
 
     private void CreateDrawerContainer()
@@ -405,8 +404,6 @@ public class Drawer : Control,
 
             current = current.Parent;
         }
-
-        
     }
 
     internal void NotifyChildDrawerAboutToOpen(Drawer childDrawer)
@@ -476,8 +473,7 @@ public class Drawer : Control,
             if (OpenOn != null)
             {
                 var containerSize = OpenOn.Bounds.Size;
-                if (Placement == DrawerPlacement.Top ||
-                    Placement == DrawerPlacement.Bottom)
+                if (Placement == DrawerPlacement.Top || Placement == DrawerPlacement.Bottom)
                 {
                     SetCurrentValue(EffectiveDialogSizeProperty, DialogSize.Resolve(containerSize.Height));
                 }
