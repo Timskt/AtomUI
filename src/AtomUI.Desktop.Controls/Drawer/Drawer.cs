@@ -208,7 +208,6 @@ public class Drawer : Control,
 
     private DrawerContainer? _container;
     private CompositeDisposable? _relayBindingDisposables;
-    private CompositeDisposable? _containerDisposables;
     
     static Drawer()
     {
@@ -263,6 +262,7 @@ public class Drawer : Control,
     {
         base.OnDetachedFromVisualTree(e);
         _relayBindingDisposables?.Dispose();
+        _relayBindingDisposables = null;
     }
 
     private Drawer? FindParentDrawer()
@@ -355,6 +355,7 @@ public class Drawer : Control,
         NotifyBeforeClose(layer);
         Debug.Assert(_container != null);
         _container.Close(layer);
+        _container = null;
     }
 
     private void CreateDrawerContainer()
@@ -365,25 +366,21 @@ public class Drawer : Control,
             {
                 Drawer = new WeakReference<Drawer>(this)
             };
-            _containerDisposables?.Dispose();
-            _containerDisposables = new CompositeDisposable();
-            _containerDisposables.Add(BindUtils.RelayBind(this, DataContextProperty, _container, DrawerContainer.DataContextProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, ContentProperty, _container, DrawerContainer.ContentProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, ContentTemplateProperty, _container, DrawerContainer.ContentTemplateProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, FooterProperty, _container, DrawerContainer.FooterProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, FooterTemplateProperty, _container, DrawerContainer.FooterTemplateProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, ExtraProperty, _container, DrawerContainer.ExtraProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, ExtraTemplateProperty, _container, DrawerContainer.ExtraTemplateProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, EffectiveDialogSizeProperty, _container, DrawerContainer.DialogSizeProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, _container, DrawerContainer.PlacementProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, TitleProperty, _container, DrawerContainer.TitleProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, IsShowMaskProperty, _container, DrawerContainer.IsShowMaskProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, IsShowCloseButtonProperty, _container, DrawerContainer.IsShowCloseButtonProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, _container, DrawerContainer.IsMotionEnabledProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, CloseWhenClickOnMaskProperty, _container,
-                DrawerContainer.CloseWhenClickOnMaskProperty));
-            _containerDisposables.Add(BindUtils.RelayBind(this, PushOffsetPercentProperty, _container,
-                DrawerContainer.PushOffsetPercentProperty));
+            _container[!DrawerContainer.DataContextProperty]          = this[!DataContextProperty];
+            _container[!DrawerContainer.ContentProperty]              = this[!ContentProperty];
+            _container[!DrawerContainer.ContentTemplateProperty]      = this[!ContentTemplateProperty];
+            _container[!DrawerContainer.FooterProperty]               = this[!FooterProperty];
+            _container[!DrawerContainer.FooterTemplateProperty]       = this[!FooterTemplateProperty];
+            _container[!DrawerContainer.ExtraProperty]                = this[!ExtraProperty];
+            _container[!DrawerContainer.ExtraTemplateProperty]        = this[!ExtraTemplateProperty];
+            _container[!DrawerContainer.DialogSizeProperty]           = this[!EffectiveDialogSizeProperty];
+            _container[!DrawerContainer.PlacementProperty]            = this[!PlacementProperty];
+            _container[!DrawerContainer.TitleProperty]                = this[!TitleProperty];
+            _container[!DrawerContainer.IsShowMaskProperty]           = this[!IsShowMaskProperty];
+            _container[!DrawerContainer.IsShowCloseButtonProperty]    = this[!IsShowCloseButtonProperty];
+            _container[!DrawerContainer.IsMotionEnabledProperty]      = this[!IsMotionEnabledProperty];
+            _container[!DrawerContainer.CloseWhenClickOnMaskProperty] = this[!CloseWhenClickOnMaskProperty];
+            _container[!DrawerContainer.PushOffsetPercentProperty]    = this[!PushOffsetPercentProperty];
         }
     }
 
