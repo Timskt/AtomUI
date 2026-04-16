@@ -48,7 +48,7 @@
                                       Padding="4,0"
                                       VerticalAlignment="Center"
                                       Margin="8,0,0,0"
-                                      TagText="{gallery:CaseNavigationLangResource Layout_BoxPanel_DeprecatedTag}" />
+                                      Text="{gallery:CaseNavigationLangResource Layout_BoxPanel_DeprecatedTag}" />
                         </atom:FlexPanel>
                     </DataTemplate>
                 </atom:NavMenuNode.HeaderTemplate>

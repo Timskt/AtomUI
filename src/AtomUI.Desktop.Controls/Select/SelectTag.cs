@@ -34,6 +34,6 @@ internal class SelectRemainInfoTag : SelectTag
     
     public void SetRemainText(int remainCount)
     {
-        TagText = $"+ {remainCount} ...";
+        Text = $"+ {remainCount} ...";
     }
 }

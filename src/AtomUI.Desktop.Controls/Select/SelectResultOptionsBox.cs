@@ -185,7 +185,7 @@ internal class SelectResultOptionsBox : TemplatedControl
                         var option = _selectedOptions[i];
                         var tag = new SelectTag
                         {
-                            TagText = option.Header?.ToString(),
+                            Text = option.Header?.ToString(),
                             Item    = option
                         };
                         tag[!SizeTypeProperty] = this[!SizeTypeProperty];
@@ -211,7 +211,7 @@ internal class SelectResultOptionsBox : TemplatedControl
                     {
                         var tag = new SelectTag
                         {
-                            TagText = option.Header?.ToString(),
+                            Text = option.Header?.ToString(),
                             Item    = option
                         };
                         tag[!SizeTypeProperty] = this[!SizeTypeProperty];

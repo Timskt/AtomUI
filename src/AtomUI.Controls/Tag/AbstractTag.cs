@@ -89,17 +89,6 @@ public abstract class AbstractTag : TemplatedControl
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
-
-    /// <summary>
-    /// 已弃用：使用 <see cref="Text"/> 属性代替。
-    /// </summary>
-    [Obsolete("Use Text property instead.", false)]
-    public string? TagText
-    {
-        get => Text;
-        set => Text = value;
-    }
-
     #endregion
 
     #region 公共事件定义

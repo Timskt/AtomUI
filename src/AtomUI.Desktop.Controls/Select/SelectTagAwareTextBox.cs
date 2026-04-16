@@ -169,7 +169,7 @@ internal class SelectTagAwareTextBox : TemplatedControl
                         {
                             var tag = new SelectTag
                             {
-                                TagText = tagTextProvider.TagText,
+                                Text = tagTextProvider.TagText,
                                 Item    = item
                             };
                             tag[!SizeTypeProperty] = this[!SizeTypeProperty];
@@ -198,7 +198,7 @@ internal class SelectTagAwareTextBox : TemplatedControl
                         {
                             var tag = new SelectTag
                             {
-                                TagText = tagTextProvider.TagText,
+                                Text = tagTextProvider.TagText,
                                 Item    = item
                             };
                             tag[!SizeTypeProperty] = this[!SizeTypeProperty];

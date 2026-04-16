@@ -100,17 +100,16 @@ The packages we have released are as follows:
 
 | Package                             | Description                                                                                                                                |
 |-------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| AtomUI.Core                         | The basic functional package includes basic classes and a style system.                                                                    |
-| AtomUI.Controls.Shared              | Basic control package for both mobile phones and desktops                                                                                  |
-| AtomUI.Desktop.Controls             | Main Controls package for desktops                                                                                                         |
-| AtomUI.Desktop.Controls.DataGrid    | Data grid control. Can be omitted if not used.                                                                                             |
-| AtomUI.Desktop.Controls.ColorPicker | ColorPicker control. Can be omitted if not used.                                                                                           |
-| AtomUI.Generator                    | Source generator definitions required for custom controls. Required if integrating with AtomUI theme system when creating custom controls. |
-| AtomUI.Icons.Generator              | Required if you need to create custom icon packages.                                                                                       |
+| AtomUI.Core                         | Core infrastructure — Theme system, Token system, animations                                                                               |
+| AtomUI.Controls.Shared              | Shared interfaces and enums for control development                                                                                        |
+| AtomUI.Desktop.Controls             | Desktop control library — the main package                                                                                                 |
+| AtomUI.Desktop.Controls.DataGrid    | DataGrid control (opt-in)                                                                                                                  |
+| AtomUI.Desktop.Controls.ColorPicker | ColorPicker control (opt-in)                                                                                                               |
+| AtomUI.Generator                    | Source generators for custom control development                                                                                           |
 | AtomUI.Fonts.AlibabaSans            | Alibaba Sans font package                                                                                                                  |
 
 ```bash
-dotnet add package AtomUI --version 5.1.0
+dotnet add package AtomUI --version 5.2.0-build.4
 ```
 
 You can install nuget packages one by one directly. If the above command line fails to complete the installation, please go to the NuGet package manager. In Rider, you can click on the following steps:
@@ -129,7 +128,7 @@ Searching for "AtomUI" will find available AtomUI packages. Then, install them o
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -137,14 +136,10 @@ Searching for "AtomUI" will find available AtomUI packages. Then, install them o
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AtomUI" Version="5.1.0"/>
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.8">
+        <PackageReference Include="AtomUI" Version="5.2.0-build.4"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.12">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
-</Project>
-```
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">
 
 ###### Program.cs Configure
 
@@ -179,13 +174,11 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
         this.UseAtomUI(builder =>
         {
-            builder.WithDefaultLanguageVariant(LanguageVariant.zh_CN);
             builder.WithDefaultTheme(IThemeManager.DEFAULT_THEME_ID);
-            builder.UseAlibabaSansFont(); // front setting.
+            builder.UseAlibabaSansFont();
             builder.UseDesktopControls();
-            builder.UseGalleryControls(); // This API may be removed in a future version. If your IDE indicates that this API does not exist, simply delete it.
-            builder.UseDesktopDataGrid();
-            builder.UseDesktopColorPicker(); 
+            builder.UseDesktopDataGrid();      // optional
+            builder.UseDesktopColorPicker();   // optional
         });
     }
 }
@@ -195,38 +188,16 @@ public partial class App : Application
 
 You can start using it in your own projects
 
-```xaml
+```xml
 <atom:Window xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:atom="using:AtomUI.Controls"
-             xmlns:local="using:AtomUIProgressApp"
-             xmlns:antdicons="https://atomui.net/icons/antdesign"
-             x:Class="AtomUIProgressApp.MainWindow"
-             Title="AtomUIProgressApp"
-             Width="800"
-             Height="600"
-             x:DataType="local:MainWindow"
-             WindowState="Normal"
-             WindowStartupLocation="CenterScreen">
-    <Panel>
-        <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <atom:ProgressBar Value="{Binding ProgressValue}" Minimum="0" Maximum="100" 
-                              HorizontalAlignment="Center"
-                              Width="400"/>
-            <atom:CircleProgress Value="{Binding ProgressValue}" Minimum="0" Maximum="100"
-                                 HorizontalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                <atom:Button Click="HandleSubBtnClicked" Icon="{atom:AntDesignIconProvider PlusOutlined}">Sub</atom:Button>
-                <atom:Button Click="HandleAddBtnClicked">Add</atom:Button>
-            </StackPanel>
-        </StackPanel>
-    </Panel>
+             xmlns:atom="https://atomui.net"
+             xmlns:antdicons="https://atomui.net/icons/antdesign">
+    <atom:Space Orientation="Horizontal">
+        <atom:Button ButtonType="Primary">Get Started</atom:Button>
+        <atom:Button Icon="{antdicons:AntDesignIconProvider StarOutlined}">Star on GitHub</atom:Button>
+    </atom:Space>
 </atom:Window>
 ```
-
-> In AtomUI version 5.1.0, the namespace xmlns:atom="using:AtomUI.Controls" works correctly. However, in AtomUI versions 5.1.4 and later, this namespace may not work correctly. Please use xmlns:atom="https://atomui.net" or import it directly through your IDE.
-
-> We apologize for the poor experience caused by the differences between versions and the outdated documentation. Due to the heavy workload of development, some documentation cannot be updated in a timely manner, and most of the development work is handled by a small number of people, who simply do not have time to maintain the documentation. We apologise from the bottom of our hearts. 
 
 <div style="height:50px"></div>
 
@@ -236,8 +207,8 @@ You can launch the `./controlgallery/AtomUIGallery.Desktop/AtomUIGallery.Desktop
 
 ```bash
 git clone https://github.com/AtomUI/AtomUI.git
-dotnet restore
-dotnet run --project controlgallery/AtomUIGallery.Desktop/AtomUIGallery.Desktop.csproj -f net10.0
+cd AtomUI
+dotnet run --project controlgallery/AtomUIGallery.Desktop/AtomUIGallery.Desktop.csproj
 ```
 
 <div style="height:50px"></div>
