@@ -252,7 +252,7 @@ internal class SwitchKnob : TemplatedControl
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        base.OnAttachedToVisualTree(e);
+        base.OnDetachedFromVisualTree(e);
         if (_isLoading)
         {
             _cancellationTokenSource?.Cancel();

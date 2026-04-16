@@ -87,7 +87,7 @@ public void SetVisual(Visual? visual)
 
 ---
 
-### 3.2 SwitchKnob.OnDetachedFromVisualTree 调用了错误的基类方法
+### 3.2 ✅ ~~SwitchKnob.OnDetachedFromVisualTree 调用了错误的基类方法~~（已修复）
 
 - **文件**：`src/AtomUI.Controls/Switch/SwitchKnob.cs`
 - **方法**：`OnDetachedFromVisualTree`，第 255 行
