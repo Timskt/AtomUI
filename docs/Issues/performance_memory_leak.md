@@ -978,39 +978,33 @@ private void HandleGlyphPropertyChanged(object? sender, AvaloniaPropertyChangedE
 
 ---
 
-### 5.10 TreeView / CascaderView 异步加载 — CancellationTokenSource 未 Dispose
+### 5.10 ✅ ~~TreeView / CascaderView 异步加载 — CancellationTokenSource 未 Dispose~~（已修复）
+
+**修复时间**：2026-04-16  
+**修复 Commit**：`7472c56a` - `fix(5.10): complete async load CancellationTokenSource lifecycle management`
 
 - **文件**：
-  - `src/AtomUI.Desktop.Controls/TreeView/TreeView.AsyncItemDataLoad.cs`，第 38 行
-  - `src/AtomUI.Desktop.Controls/Cascader/CascaderView.AsyncItemDataLoad.cs`，第 35 行
+  - `src/AtomUI.Desktop.Controls/TreeView/TreeView.AsyncItemDataLoad.cs`
+  - `src/AtomUI.Desktop.Controls/TreeView/TreeView.cs`
+  - `src/AtomUI.Desktop.Controls/Cascader/CascaderView.AsyncItemDataLoad.cs`
+  - `src/AtomUI.Desktop.Controls/Cascader/CascaderView.cs`
 - **问题描述**：
 
-```csharp
-var cts = new CancellationTokenSource(); // TODO 做一个超时结束
-viewItem.IsLoading = true;
-Dispatcher.UIThread.InvokeAsync(async () =>
-{
-    var result = await DataLoader.LoadAsync(treeItemData, cts.Token);
-    // ... 处理结果
-});
-```
+原始代码中 CTS 创建后从不 Dispose，没有超时机制，控件在异步操作期间被销毁时回调仍会更新已分离控件状态。
 
-1. CTS 创建后从不 Dispose（CTS 持有 WaitHandle 等非托管资源）
-2. 没有超时机制（代码中有 TODO 注释但未实现）
-3. 控件在异步操作期间被销毁时，回调仍会更新已分离控件状态
-4. `Dispatcher.UIThread.InvokeAsync` 返回值未保存，无法取消
-
-- **复现条件**：TreeView/Cascader 频繁触发异步加载
-- **影响评估**：**中等** — 累积 CTS 对象，潜在无限增长
-- **修复建议**：
+- **修复方案**：✅ **已实现**
+  - 添加 `_loadingTokens` 列表追踪所有待处理的 CTS
+  - 异步加载开始时将 CTS 添加到列表
+  - 在 finally 块中移除并 Dispose CTS
+  - 在 `OnDetachedFromVisualTree` 中取消并 Dispose 所有待处理的 CTS
+  - 使用 `AsyncLoadTimeout` 属性（默认 30 秒）控制超时时间
 
 ```csharp
 private List<CancellationTokenSource>? _loadingTokens;
 
 private void HandleNodeLoadRequest(TreeViewItem viewItem)
 {
-    var cts = new CancellationTokenSource();
-    cts.CancelAfter(TimeSpan.FromSeconds(30)); // 30 秒超时
+    var cts = new CancellationTokenSource(AsyncLoadTimeout);
     _loadingTokens ??= new();
     _loadingTokens.Add(cts);
     
@@ -1025,7 +1019,10 @@ private void HandleNodeLoadRequest(TreeViewItem viewItem)
                 // ... 处理结果
             }
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+            viewItem.IsLoading = false;
+        }
         finally
         {
             cts.Dispose();
@@ -1039,11 +1036,22 @@ protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e
     base.OnDetachedFromVisualTree(e);
     if (_loadingTokens != null)
     {
-        foreach (var cts in _loadingTokens) { cts.Cancel(); cts.Dispose(); }
+        foreach (var cts in _loadingTokens)
+        {
+            cts.Cancel();
+            cts.Dispose();
+        }
         _loadingTokens.Clear();
     }
 }
 ```
+
+**修复特点**：
+- ✅ 完整的 CancellationTokenSource 生命周期管理
+- ✅ 防止控件 detach 时仍有待处理的异步操作
+- ✅ 确保没有回调在已分离的控件上执行
+- ✅ 使用 AsyncLoadTimeout 属性使超时时间可配置
+- ✅ 应用于 TreeView 和 CascaderView 两个控件
 
 ---
 
