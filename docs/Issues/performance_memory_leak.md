@@ -15,11 +15,12 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 2 |
-| ⏳ 待修复 | 37 |
-| 修复进度 | **5.1%** |
+| ✅ 已修复 | 3 |
+| ⏳ 待修复 | 36 |
+| 修复进度 | **7.7%** |
 
 **最近修复**：
+- ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
 - ✅ **4.5** OptionButtonGroup Lambda 事件订阅（Commit: `01ec42d6`）
 - ✅ **4.8** 异步方法 CancellationToken 支持（Commits: `76aadb94`, `4c9054dd`）
 
@@ -304,30 +305,27 @@ protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
 
 ---
 
-### 3.7 ColorPickerInput — OnApplyTemplate 中 8 个 ValueChanged Lambda 叠加
+### 3.7 ✅ ~~ColorPickerInput — OnApplyTemplate 中 8 个 ValueChanged Lambda 叠加~~（已修复）
+
+**修复时间**：早期修复（实现时已采用正确的事件管理模式）
 
 - **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/ColorView/ColorPickerInput.cs`
-- **方法**：`OnApplyTemplate()`，第 118-240 行
+- **方法**：`OnApplyTemplate()`，第 127-291 行
 - **问题描述**：
 
-`OnApplyTemplate` 中对 8 个输入控件的 `ValueChanged`/`TextChanged` 事件使用匿名 lambda：
+`OnApplyTemplate` 中对 8 个输入控件的 `ValueChanged`/`TextChanged` 事件使用匿名 lambda，模板重新应用时全部叠加，导致多倍回调执行。
 
-```csharp
-_alphaInput.ValueChanged += (sender, args) => { ... };  // ❌
-_hexValueInput.TextChanged += (sender, args) => { ... }; // ❌
-_hValueInput.ValueChanged += (sender, args) => { ... };  // ❌
-_sValueInput.ValueChanged += (sender, args) => { ... };  // ❌
-_vValueInput.ValueChanged += (sender, args) => { ... };  // ❌
-_rValueInput.ValueChanged += (sender, args) => { ... };  // ❌
-_gValueInput.ValueChanged += (sender, args) => { ... };  // ❌
-_bValueInput.ValueChanged += (sender, args) => { ... };  // ❌
-```
+- **修复方案**：✅ **已实现**
+  - 为每个事件处理器定义了类级字段（第 80-87 行）
+  - 在 `OnApplyTemplate` 开头先取消旧订阅（第 129-160 行）
+  - 创建新的命名事件处理器 Lambda，存储到字段中
+  - 在将字段的事件处理器订阅到事件（第 179-289 行）
 
-模板重新应用时全部叠加，导致 8× 回调执行次数。
-
-- **复现条件**：ColorPicker 模板重新应用（主题切换等）
-- **影响评估**：**极高** — 比 3.6 更严重，8 个事件同时叠加
-- **修复建议**：同 3.6，将所有 lambda 改为命名方法，在 OnApplyTemplate 开头先移除旧订阅。
+**修复特点**：
+- ✅ 使用命名委托字段存储事件处理器
+- ✅ 在 OnApplyTemplate 开头先移除所有旧订阅
+- ✅ 防止事件处理器累积
+- ✅ 8 个事件全部正确管理
 
 ---
 
@@ -1463,11 +1461,11 @@ public static class CacheManager
 
 | 严重程度 | 总数 | 已修复 | 待修复 | 类别 |
 |----------|------|--------|--------|------|
-| 🔴 Critical | 7 | 0 | 7 | 事件订阅 Bug、基类方法调用错误、定时器泄漏、CollectionChanged lambda 泄漏、OnApplyTemplate lambda 叠加 |
+| 🔴 Critical | 7 | 1 | 6 | ✅ 3.7 ColorPickerInput；⏳ 其他 6 个问题 |
 | 🟠 High | 8 | 2 | 6 | ✅ 4.5 OptionButtonGroup、✅ 4.8 CancellationToken；⏳ Transition 泄漏、定时器泄漏、事件未取消、缓存无限增长 |
 | 🟡 Medium | 19 | 0 | 19 | CompositeDisposable 清理、动画资源、主题性能、虚拟化泄漏、CTS 未 Dispose、async void、Timer 重建、渲染性能、高频轮询 |
 | 🔵 Low | 5 | 0 | 5 | 静态字典优化、反射开销、Dead Code、示例代码 |
-| **合计** | **39** | **2** | **37** | |
+| **合计** | **39** | **3** | **36** | |
 
 ### 8.2 修复优先级建议
 
@@ -1549,16 +1547,25 @@ public void Control_ShouldBeCollected_AfterDetach()
 
 ## 附录：修复日志
 
-### 2026-04-16 修复 Section 4.5 和 4.8
+### 2026-04-16 修复 Section 3.7、4.5 和 4.8
 
 #### 修复列表
 
 | 问题 | 分类 | 状态 | Commit |
 |------|------|------|--------|
+| **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加 | 🔴 Critical | ✅ 已修复 | 早期修复 |
 | **4.5** OptionButtonGroup Lambda 事件订阅 | 🟠 High | ✅ 已修复 | `01ec42d6` |
 | **4.8** 异步方法 CancellationToken 支持 | 🟠 High | ✅ 已修复 | `76aadb94`, `4c9054dd` |
 
 #### 修复详情
+
+**Section 3.7 修复**：
+- 为 8 个事件处理器定义了类级字段存储
+- 在 OnApplyTemplate 开头先取消所有旧订阅
+- 创建新的命名 Lambda，存储到字段中再订阅
+- 完全防止了事件处理器累积
+- 文件：`src/AtomUI.Desktop.Controls.ColorPicker/ColorView/ColorPickerInput.cs`
+- 实现位置：第 80-87 行（字段定义）、第 127-160 行（取消旧订阅）、第 179-289 行（新建和订阅）
 
 **Section 4.5 修复**：
 - 将匿名 lambda 改为命名方法 `HandleChildIndexChanged`
@@ -1581,11 +1588,10 @@ public void Control_ShouldBeCollected_AfterDetach()
 
 #### 修复特点
 
-✅ **100% 向后兼容** - 所有新参数都有默认值  
-✅ **完整生命周期管理** - Upload 实现了从 Attach 到 Detach 的完整管理  
-✅ **超时支持** - 支持 `CancellationTokenSource(TimeSpan)` 模式  
-✅ **递归传递** - MenuItem 正确向下传递 token  
-✅ **取消检查点** - 关键操作点添加了取消检查  
+✅ **3.7** - 事件处理器字段存储 + 完整的 Unsubscribe 流程  
+✅ **4.5** - 命名方法 + 单次订阅 + 完整取消  
+✅ **4.8** - 100% 向后兼容 + 完整生命周期管理 + 超时支持  
+✅ **整体** - 所有修复都遵循最佳实践  
 
 ---
 
