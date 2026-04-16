@@ -15,14 +15,16 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 3 |
-| ⏳ 待修复 | 36 |
-| 修复进度 | **7.7%** |
+| ✅ 已修复 | 4 |
+| ⏳ 待修复 | 35 |
+| 修复进度 | **10.3%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
 - ✅ **4.5** OptionButtonGroup Lambda 事件订阅（Commit: `01ec42d6`）
 - ✅ **4.8** 异步方法 CancellationToken 支持（Commits: `76aadb94`, `4c9054dd`）
+- ✅ **5.1** Segmented SelectionChanged 事件生命周期（Commit: `12865b91`）
+- ✅ **5.2** FlyoutStateHelper 定时器 Lambda 捕获（Commit: `98a5500e`）
 
 ---
 
@@ -686,36 +688,28 @@ public async Task ResetAsync(CancellationToken cancellationToken = default)
 
 ## 5. 🟡 中等问题（Medium）
 
-### 5.1 Segmented 控件 SelectionChanged 事件在构造函数中订阅但从未取消
+### 5.1 ✅ ~~Segmented 控件 SelectionChanged 事件在构造函数中订阅但从未取消~~（已修复）
+
+**修复时间**：2026-04-16  
+**修复 Commit**：`12865b91` - `fix(5.1): move Segmented SelectionChanged subscription from constructor to lifecycle hooks`
 
 - **文件**：`src/AtomUI.Controls/Segmented/AbstractSegmented.cs`
-- **方法**：构造函数，第 115 行
+- **方法**：构造函数、OnAttachedToVisualTree、OnDetachedFromVisualTree
 - **问题描述**：
 
-```csharp
-// 第 115 行（构造函数中）
-SelectionChanged += HandleSelectionChanged;
-```
+控件在构造函数中订阅了自身的 `SelectionChanged` 事件，但没有取消订阅。虽然这是自身事件的自订阅（self-subscription），在大多数情况下不会导致外部泄漏，但不符合最佳实践。
 
-控件在构造函数中订阅了自身的 `SelectionChanged` 事件，但在 `OnDetachedFromVisualTree` 或任何其他清理方法中都没有取消订阅。虽然这是自身事件的自订阅（self-subscription），在大多数情况下不会导致外部泄漏，但如果控件被其他对象通过事件链引用，可能形成意外的引用环。
+- **修复方案**：✅ **已实现**
+  - 从构造函数中移除 SelectionChanged 订阅
+  - 在 `OnAttachedToVisualTree()` 中添加订阅
+  - 在 `OnDetachedFromVisualTree()` 中添加取消订阅
+  - 确保完整的生命周期管理
 
-- **复现条件**：Segmented 控件正常使用
-- **影响评估**：**中等** — 自订阅通常不会导致泄漏，但不符合最佳实践
-- **修复建议**：
-
-```csharp
-protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-{
-    base.OnDetachedFromVisualTree(e);
-    SelectionChanged -= HandleSelectionChanged;
-}
-
-protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-{
-    base.OnAttachedToVisualTree(e);
-    SelectionChanged += HandleSelectionChanged;
-}
-```
+**修复特点**：
+- ✅ 订阅和取消订阅对称
+- ✅ 完全跟随 Visual Tree 生命周期
+- ✅ 防止潜在的引用环
+- ✅ 代码变更：+13, -2
 
 ---
 
@@ -1463,9 +1457,9 @@ public static class CacheManager
 |----------|------|--------|--------|------|
 | 🔴 Critical | 7 | 1 | 6 | ✅ 3.7 ColorPickerInput；⏳ 其他 6 个问题 |
 | 🟠 High | 8 | 2 | 6 | ✅ 4.5 OptionButtonGroup、✅ 4.8 CancellationToken；⏳ Transition 泄漏、定时器泄漏、事件未取消、缓存无限增长 |
-| 🟡 Medium | 19 | 0 | 19 | CompositeDisposable 清理、动画资源、主题性能、虚拟化泄漏、CTS 未 Dispose、async void、Timer 重建、渲染性能、高频轮询 |
+| 🟡 Medium | 19 | 1 | 18 | ✅ 5.1 Segmented SelectionChanged；⏳ CompositeDisposable 清理、动画资源、主题性能、虚拟化泄漏、CTS 未 Dispose、async void、Timer 重建、渲染性能、高频轮询 |
 | 🔵 Low | 5 | 0 | 5 | 静态字典优化、反射开销、Dead Code、示例代码 |
-| **合计** | **39** | **3** | **36** | |
+| **合计** | **39** | **4** | **35** | |
 
 ### 8.2 修复优先级建议
 

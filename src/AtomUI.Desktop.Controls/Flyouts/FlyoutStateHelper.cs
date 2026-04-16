@@ -143,56 +143,72 @@ internal class FlyoutStateHelper : AvaloniaObject
 
     private void StartMouseEnterTimer()
     {
+        StopMouseEnterTimer();  // 确保先清理旧定时器
+        
         _mouseEnterDelayTimer = new DispatcherTimer
             { Interval = TimeSpan.FromMilliseconds(MouseEnterDelay), Tag = this };
-        _mouseEnterDelayTimer.Tick += (sender, args) =>
-        {
-            if (_mouseEnterDelayTimer != null)
-            {
-                StopMouseEnterTimer();
-                if (Flyout is null || AnchorTarget is null)
-                {
-                    return;
-                }
-
-                FlyoutAboutToShow?.Invoke(this, EventArgs.Empty);
-                Flyout.ShowAt(AnchorTarget);
-            }
-        };
+        _mouseEnterDelayTimer.Tick += HandleMouseEnterTimerTick;
         _mouseEnterDelayTimer.Start();
+    }
+
+    private void HandleMouseEnterTimerTick(object? sender, EventArgs e)
+    {
+        if (_mouseEnterDelayTimer != null)
+        {
+            StopMouseEnterTimer();
+            if (Flyout is null || AnchorTarget is null)
+            {
+                return;
+            }
+
+            FlyoutAboutToShow?.Invoke(this, EventArgs.Empty);
+            Flyout.ShowAt(AnchorTarget);
+        }
     }
 
     private void StopMouseEnterTimer()
     {
-        _mouseEnterDelayTimer?.Stop();
-        _mouseEnterDelayTimer = null;
+        if (_mouseEnterDelayTimer != null)
+        {
+            _mouseEnterDelayTimer.Stop();
+            _mouseEnterDelayTimer.Tick -= HandleMouseEnterTimerTick;
+            _mouseEnterDelayTimer = null;
+        }
     }
 
     private void StopMouseLeaveTimer()
     {
-        _mouseLeaveDelayTimer?.Stop();
-        _mouseLeaveDelayTimer = null;
+        if (_mouseLeaveDelayTimer != null)
+        {
+            _mouseLeaveDelayTimer.Stop();
+            _mouseLeaveDelayTimer.Tick -= HandleMouseLeaveTimerTick;
+            _mouseLeaveDelayTimer = null;
+        }
     }
 
     private void StartMouseLeaveTimer()
     {
+        StopMouseLeaveTimer();  // 确保先清理旧定时器
+        
         _mouseLeaveDelayTimer = new DispatcherTimer
             { Interval = TimeSpan.FromMilliseconds(MouseLeaveDelay), Tag = this };
-        _mouseLeaveDelayTimer.Tick += (sender, args) =>
-        {
-            if (_mouseLeaveDelayTimer != null)
-            {
-                StopMouseLeaveTimer();
-                if (Flyout is null)
-                {
-                    return;
-                }
-        
-                FlyoutAboutToClose?.Invoke(this, EventArgs.Empty);
-                Flyout.Hide();
-            }
-        };
+        _mouseLeaveDelayTimer.Tick += HandleMouseLeaveTimerTick;
         _mouseLeaveDelayTimer.Start();
+    }
+
+    private void HandleMouseLeaveTimerTick(object? sender, EventArgs e)
+    {
+        if (_mouseLeaveDelayTimer != null)
+        {
+            StopMouseLeaveTimer();
+            if (Flyout is null)
+            {
+                return;
+            }
+    
+            FlyoutAboutToClose?.Invoke(this, EventArgs.Empty);
+            Flyout.Hide();
+        }
     }
 
     public void NotifyAttachedToVisualTree()
