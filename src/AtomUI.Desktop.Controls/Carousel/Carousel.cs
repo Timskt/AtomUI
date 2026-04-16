@@ -704,13 +704,22 @@ public class Carousel : SelectingItemsControl, IMotionAwareControl
     {
         if (IsAutoPlay)
         {
+            if (_autoPlayTimer != null)
+            {
+                _autoPlayTimer.Stop();
+                _autoPlayTimer.Tick -= HandleAutoPlayTick;
+            }
             _autoPlayTimer      =  new DispatcherTimer();
             _autoPlayTimer.Tick += HandleAutoPlayTick;
             ConfigureAutoPlayTimer();
         }
         else
         {
-            _autoPlayTimer?.Stop();
+            if (_autoPlayTimer != null)
+            {
+                _autoPlayTimer.Stop();
+                _autoPlayTimer.Tick -= HandleAutoPlayTick;
+            }
             _autoPlayTimer = null;
         }
     }
