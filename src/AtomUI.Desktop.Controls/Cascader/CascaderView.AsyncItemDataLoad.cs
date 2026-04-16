@@ -33,6 +33,10 @@ public partial class CascaderView
     }
     #endregion
 
+    #region 私有字段
+    private List<CancellationTokenSource>? _loadingTokens;
+    #endregion
+
     private async Task LoadItemDataAsync(CascaderViewItem item)
     {
         if (DataLoader == null)
@@ -44,6 +48,9 @@ public partial class CascaderView
         if (option != null)
         {
             var cts = new CancellationTokenSource(AsyncLoadTimeout);
+            _loadingTokens ??= new();
+            _loadingTokens.Add(cts);
+            
             item.IsLoading = true;
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
@@ -76,6 +83,7 @@ public partial class CascaderView
                 finally
                 {
                     cts.Dispose();
+                    _loadingTokens?.Remove(cts);
                 }
             });
         }

@@ -34,6 +34,10 @@ public partial class TreeView
     }
     #endregion
 
+    #region 私有字段
+    private List<CancellationTokenSource>? _loadingTokens;
+    #endregion
+
     private void HandleNodeLoadRequest(TreeViewItem viewItem)
     {
         if (DataLoader == null)
@@ -48,6 +52,9 @@ public partial class TreeView
         if (data is ITreeItemNode treeItemData)
         {
             var cts = new CancellationTokenSource(AsyncLoadTimeout);
+            _loadingTokens ??= new();
+            _loadingTokens.Add(cts);
+            
             viewItem.IsLoading = true;
             Dispatcher.UIThread.InvokeAsync(async () =>
             {
@@ -81,6 +88,7 @@ public partial class TreeView
                 finally
                 {
                     cts.Dispose();
+                    _loadingTokens?.Remove(cts);
                 }
             });
         }
