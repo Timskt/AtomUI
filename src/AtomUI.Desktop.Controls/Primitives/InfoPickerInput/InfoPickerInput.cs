@@ -309,6 +309,14 @@ public abstract class InfoPickerInput : TemplatedControl,
     private CompositeDisposable? _flyoutBindingDisposables;
     private CompositeDisposable? _flyoutHelperBindingDisposables;
     private AddOnDecoratedBox? _addOnDecoratedBox;
+    
+    // Event handlers for OnApplyTemplate to prevent lambda stacking
+    private EventHandler? _flyoutOpenedHandler;
+    private EventHandler? _flyoutClosedHandler;
+    private EventHandler<PickerFlyoutPresenterCreatedEventArgs>? _flyoutPresenterCreatedHandler;
+    private EventHandler? _decoratedBoxTemplateAppliedHandler;
+    private PropertyChangedEventHandler? _decoratedBoxPropertyChangedHandler;
+    private EventHandler? _clearRequestHandler;
 
     static InfoPickerInput()
     {
@@ -447,6 +455,19 @@ public abstract class InfoPickerInput : TemplatedControl,
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        // 移除旧的 DecoratedBox 事件订阅，防止 lambda 叠加
+        if (DecoratedBox != null)
+        {
+            DecoratedBox.TemplateApplied -= _decoratedBoxTemplateAppliedHandler;
+            DecoratedBox.PropertyChanged -= _decoratedBoxPropertyChangedHandler;
+        }
+        
+        // 移除旧的 PickerClearUpButton 事件订阅
+        if (PickerClearUpButton is not null)
+        {
+            PickerClearUpButton.ClearRequest -= _clearRequestHandler;
+        }
+        
         base.OnApplyTemplate(e);
         if (PickerFlyout is null)
         {
@@ -476,23 +497,28 @@ public abstract class InfoPickerInput : TemplatedControl,
                 PickerClearUpButton = rightContent.FindDescendantOfType<PickerClearUpButton>();
             }
 
-            DecoratedBox.TemplateApplied += (sender, args) =>
+            // 使用命名方法而不是 lambda，防止叠加
+            _decoratedBoxTemplateAppliedHandler = (sender, args) =>
             {
                 PickerInnerBox                 = DecoratedBox.ContentFrame;
                 FlyoutStateHelper.AnchorTarget = PickerInnerBox;
             };
-            DecoratedBox.PropertyChanged += (sender, args) =>
+            DecoratedBox.TemplateApplied += _decoratedBoxTemplateAppliedHandler;
+            
+            _decoratedBoxPropertyChangedHandler = (sender, args) =>
             {
                 if (args.Property == AddOnDecoratedBox.IsInnerBoxHoverProperty)
                 {
                     ConfigureIsClearButtonVisible();
                 }
             };
+            DecoratedBox.PropertyChanged += _decoratedBoxPropertyChangedHandler;
         }
 
         if (PickerClearUpButton is not null)
         {
-            PickerClearUpButton.ClearRequest += (sender, args) => { NotifyClearButtonClicked(); };
+            _clearRequestHandler = (sender, args) => { NotifyClearButtonClicked(); };
+            PickerClearUpButton.ClearRequest += _clearRequestHandler;
         }
         
         _addOnDecoratedBox = e.NameScope.Find<AddOnDecoratedBox>(AddOnDecoratedBox.AddOnDecoratedBoxPart);

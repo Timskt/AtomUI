@@ -241,7 +241,7 @@ private void HandleSourceCollectionChanged(object? sender, NotifyCollectionChang
 
 ---
 
-### 3.6 InfoPickerInput — OnApplyTemplate 中 Lambda 事件重复叠加注册
+### 3.6 ✅ ~~InfoPickerInput — OnApplyTemplate 中 Lambda 事件重复叠加注册~~（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Primitives/InfoPickerInput/InfoPickerInput.cs`
 - **方法**：`OnApplyTemplate()`，第 454-495 行
