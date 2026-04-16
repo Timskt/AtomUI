@@ -155,7 +155,12 @@ public abstract class AbstractMarqueeLabel : TextBlock
 
     private void HandleCleanupMarqueeAnimation()
     {
-        _cancellationTokenSource?.Cancel();
+        if (_cancellationTokenSource != null)
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource = null;
+        }
     }
 
     private void HandleLayoutUpdated(Size size, Size availableSize)

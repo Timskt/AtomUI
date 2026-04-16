@@ -806,16 +806,36 @@ private void OnSomePropertyChanged(...)
 
 ---
 
-### 5.4 MarqueeLabel 动画资源清理
+### 5.4 ✅ ~~MarqueeLabel 动画资源清理~~（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls/MarqueeLabel/MarqueeLabel.cs`
+**修复时间**：2026-04-16
+
+- **文件**：`src/AtomUI.Controls/MarqueeLabel/AbstractMarqueeLabel.cs`
 - **问题描述**：
 
-MarqueeLabel 使用持续运行的动画实现文字滚动效果。当控件从视觉树中移除时，需要确保动画被正确停止和清理。如果动画的 `Completed` 事件处理器未被取消，或动画对象未被释放，将导致控件无法被 GC 回收。
+MarqueeLabel 使用持续运行的动画实现文字滚动效果。当控件从视觉树中移除时，需要确保动画被正确停止和清理。`HandleCleanupMarqueeAnimation()` 只调用了 `Cancel()` 但没有 `Dispose()` CancellationTokenSource，导致非托管资源泄漏。
 
-- **复现条件**：MarqueeLabel 从视觉树中移除
-- **影响评估**：**中等** — 动画持续运行消耗 CPU，且持有控件引用
-- **修复建议**：在 `OnDetachedFromVisualTree` 中停止所有动画，取消事件订阅，释放动画资源。
+- **修复方案**：✅ **已实现**
+  - 在 `HandleCleanupMarqueeAnimation()` 中添加 `Dispose()` 调用
+  - 将 CancellationTokenSource 设置为 null
+  - 确保在 OnDetachedFromVisualTree 中正确清理所有资源
+
+```csharp
+private void HandleCleanupMarqueeAnimation()
+{
+    if (_cancellationTokenSource != null)
+    {
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
+        _cancellationTokenSource = null;
+    }
+}
+```
+
+**修复特点**：
+- ✅ 完整的 CancellationTokenSource 生命周期管理
+- ✅ 释放非托管资源（WaitHandle 等）
+- ✅ 防止资源泄漏
 
 ---
 
