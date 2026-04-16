@@ -90,7 +90,12 @@ public class TimerStatistic : AbstractStatistic
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        _timer?.Stop();
+        if (_timer != null)
+        {
+            _timer.Stop();
+            _timer.Tick -= HandleTickElapsed;
+            _timer = null;
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -140,6 +145,13 @@ public class TimerStatistic : AbstractStatistic
     
     private void BuildTimer(bool start)
     {
+        // 先清理旧定时器
+        if (_timer != null)
+        {
+            _timer.Stop();
+            _timer.Tick -= HandleTickElapsed;
+        }
+        
         _timer          =  new DispatcherTimer();
         _timer.Interval =  RefreshDuration;
         _timer.Tick     += HandleTickElapsed;

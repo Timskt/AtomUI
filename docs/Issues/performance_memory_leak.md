@@ -118,7 +118,7 @@ protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e
 
 ---
 
-### 3.3 TimerStatistic 定时器泄漏 — 旧定时器未停止/释放
+### 3.3 ✅ ~~TimerStatistic 定时器泄漏 — 旧定时器未停止/释放~~（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Statistic/TimerStatistic.cs`
 - **方法**：`BuildTimer(bool start)`，第 141-150 行
