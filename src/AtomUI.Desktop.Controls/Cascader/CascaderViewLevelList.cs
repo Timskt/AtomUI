@@ -345,4 +345,11 @@ internal class CascaderViewLevelList : SelectingItemsControl, IListVirtualizingC
         }
     }
     #endregion
+
+    internal void NotifyDetachedFromVisualTree()
+    {
+        // 清理 DispatcherTimer
+        _clickDisposable?.Dispose();
+        _clickDisposable = null;
+    }
 }

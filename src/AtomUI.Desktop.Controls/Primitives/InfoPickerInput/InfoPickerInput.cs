@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives.Themes;
@@ -307,13 +306,9 @@ public abstract class InfoPickerInput : TemplatedControl,
 
     private protected bool IsFlyoutOpen;
     private protected bool IsChoosing;
-    private CompositeDisposable? _flyoutBindingDisposables;
     private CompositeDisposable? _flyoutHelperBindingDisposables;
     private AddOnDecoratedBox? _addOnDecoratedBox;
     
-    private EventHandler<TemplateAppliedEventArgs>? _decoratedBoxTemplateAppliedHandler;
-    private EventHandler<AvaloniaPropertyChangedEventArgs>? _decoratedBoxPropertyChangedHandler;
-    private EventHandler? _clearRequestHandler;
 
     static InfoPickerInput()
     {
@@ -454,30 +449,22 @@ public abstract class InfoPickerInput : TemplatedControl,
     {
         if (DecoratedBox != null)
         {
-            DecoratedBox.TemplateApplied -= _decoratedBoxTemplateAppliedHandler;
-            DecoratedBox.PropertyChanged -= _decoratedBoxPropertyChangedHandler;
+            DecoratedBox.TemplateApplied -= HandleDecoratedBoxTemplateApplied;
+            DecoratedBox.PropertyChanged -= HandleDecoratedBoxPropertyChanged;
         }
         
         if (PickerClearUpButton is not null)
         {
-            PickerClearUpButton.ClearRequest -= _clearRequestHandler;
+            PickerClearUpButton.ClearRequest -= HandleClearRequest;
         }
         
         base.OnApplyTemplate(e);
         if (PickerFlyout is null)
         {
-            PickerFlyout = CreatePickerFlyout();
-            PickerFlyout.Opened += (sender, args) =>
-            {
-                IsFlyoutOpen = true;
-                UpdatePseudoClasses();
-            };
-            PickerFlyout.Closed += (sender, args) =>
-            {
-                IsFlyoutOpen = false;
-                UpdatePseudoClasses();
-            };
-            PickerFlyout.PresenterCreated += (sender, args) => { NotifyFlyoutPresenterCreated(args.Presenter); };
+            PickerFlyout                  =  CreatePickerFlyout();
+            PickerFlyout.Opened           += HandlePickerFlyoutOpened;
+            PickerFlyout.Closed           += HandlePickerFlyoutClosed;
+            PickerFlyout.PresenterCreated += HandlePickerFlyoutPresenterCreated;
             FlyoutStateHelper.Flyout      =  PickerFlyout;
         }
 
@@ -492,27 +479,13 @@ public abstract class InfoPickerInput : TemplatedControl,
                 PickerClearUpButton = rightContent.FindDescendantOfType<PickerClearUpButton>();
             }
 
-            _decoratedBoxTemplateAppliedHandler = (sender, args) =>
-            {
-                PickerInnerBox                 = DecoratedBox.ContentFrame;
-                FlyoutStateHelper.AnchorTarget = PickerInnerBox;
-            };
-            DecoratedBox.TemplateApplied += _decoratedBoxTemplateAppliedHandler;
-            
-            _decoratedBoxPropertyChangedHandler = (sender, args) =>
-            {
-                if (args.Property == AddOnDecoratedBox.IsInnerBoxHoverProperty)
-                {
-                    ConfigureIsClearButtonVisible();
-                }
-            };
-            DecoratedBox.PropertyChanged += _decoratedBoxPropertyChangedHandler;
+            DecoratedBox.TemplateApplied += HandleDecoratedBoxTemplateApplied;
+            DecoratedBox.PropertyChanged += HandleDecoratedBoxPropertyChanged;
         }
 
         if (PickerClearUpButton is not null)
         {
-            _clearRequestHandler = (sender, args) => { NotifyClearButtonClicked(); };
-            PickerClearUpButton.ClearRequest += _clearRequestHandler;
+            PickerClearUpButton.ClearRequest += HandleClearRequest;
         }
         
         _addOnDecoratedBox = e.NameScope.Find<AddOnDecoratedBox>(AddOnDecoratedBox.AddOnDecoratedBoxPart);
@@ -542,13 +515,11 @@ public abstract class InfoPickerInput : TemplatedControl,
     {
         if (PickerFlyout is not null)
         {
-            _flyoutBindingDisposables?.Dispose();
-            _flyoutBindingDisposables = new CompositeDisposable(5);
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PickerPlacementProperty, PickerFlyout, PopupFlyoutBase.PlacementProperty));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowArrowProperty, PickerFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsPointAtCenterProperty, PickerFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, PickerFlyout));
-            _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, PickerFlyout, Flyout.IsMotionEnabledProperty));
+            PickerFlyout[!Flyout.PlacementProperty]                = this[!PickerPlacementProperty];
+            PickerFlyout[!Flyout.IsShowArrowProperty]              = this[!IsShowArrowProperty];
+            PickerFlyout[!Flyout.IsPointAtCenterProperty]          = this[!IsPointAtCenterProperty];
+            PickerFlyout[!PopupFlyoutBase.MarginToAnchorProperty]  = this[!MarginToAnchorProperty];
+            PickerFlyout[!PopupFlyoutBase.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
         }
     }
 
@@ -583,10 +554,57 @@ public abstract class InfoPickerInput : TemplatedControl,
         FlyoutStateHelper.NotifyAttachedToVisualTree();
     }
 
+    private void HandleDecoratedBoxTemplateApplied(object? sender, TemplateAppliedEventArgs args)
+    {
+        PickerInnerBox                 = DecoratedBox!.ContentFrame;
+        FlyoutStateHelper.AnchorTarget = PickerInnerBox;
+    }
+
+    private void HandleDecoratedBoxPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+    {
+        if (args.Property == AddOnDecoratedBox.IsInnerBoxHoverProperty)
+        {
+            ConfigureIsClearButtonVisible();
+        }
+    }
+
+    private void HandleClearRequest(object? sender, EventArgs args)
+    {
+        NotifyClearButtonClicked();
+    }
+
+    private void HandlePickerFlyoutOpened(object? sender, EventArgs args)
+    {
+        IsFlyoutOpen = true;
+        UpdatePseudoClasses();
+    }
+
+    private void HandlePickerFlyoutClosed(object? sender, EventArgs args)
+    {
+        IsFlyoutOpen = false;
+        UpdatePseudoClasses();
+    }
+
+    private void HandlePickerFlyoutPresenterCreated(object? sender, FlyoutPresenterCreatedEventArgs args)
+    {
+        NotifyFlyoutPresenterCreated(args.Presenter);
+    }
+
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
         FlyoutStateHelper.NotifyDetachedFromVisualTree();
+        
+        if (DecoratedBox != null)
+        {
+            DecoratedBox.TemplateApplied -= HandleDecoratedBoxTemplateApplied;
+            DecoratedBox.PropertyChanged -= HandleDecoratedBoxPropertyChanged;
+        }
+        
+        if (PickerClearUpButton is not null)
+        {
+            PickerClearUpButton.ClearRequest -= HandleClearRequest;
+        }
     }
 
     protected virtual bool ShowClearButtonPredicate()

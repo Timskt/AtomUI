@@ -1,10 +1,8 @@
 ﻿using System.Globalization;
-using System.Reactive.Disposables;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.CalendarView;
 using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Desktop.Controls.Primitives;
-using AtomUI.Desktop.Controls.TimePickerLang;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
@@ -98,7 +96,6 @@ public class DatePicker : InfoPickerInput
     }
 
     private DatePickerPresenter? _pickerPresenter;
-    private CompositeDisposable? _flyoutBindingDisposables;
 
     /// <summary>
     /// 清除时间选择器的值，不考虑默认值
@@ -163,15 +160,14 @@ public class DatePicker : InfoPickerInput
     {
         var flyout = new DatePickerFlyout();
         flyout.IsDetectMouseClickEnabled = false;
-        _flyoutBindingDisposables?.Dispose();
-        _flyoutBindingDisposables = new CompositeDisposable(6);
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, flyout, DatePickerFlyout.IsMotionEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, SelectedDateTimeProperty, flyout, DatePickerFlyout.SelectedDateTimeProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsNeedConfirmProperty, flyout, DatePickerFlyout.IsNeedConfirmProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowNowProperty, flyout, DatePickerFlyout.IsShowNowProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowTimeProperty, flyout, DatePickerFlyout.IsShowTimeProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, ClockIdentifierProperty, flyout, DatePickerFlyout.ClockIdentifierProperty));
-        
+
+        flyout[!DatePickerFlyout.IsMotionEnabledProperty]  = this[!IsMotionEnabledProperty];
+        flyout[!DatePickerFlyout.SelectedDateTimeProperty] = this[!SelectedDateTimeProperty];
+        flyout[!DatePickerFlyout.IsNeedConfirmProperty]    = this[!IsNeedConfirmProperty];
+        flyout[!DatePickerFlyout.IsShowNowProperty]        = this[!IsShowNowProperty];
+        flyout[!DatePickerFlyout.IsShowTimeProperty]       = this[!IsShowTimeProperty];
+        flyout[!DatePickerFlyout.ClockIdentifierProperty]  = this[!ClockIdentifierProperty];
+
         return flyout;
     }
 

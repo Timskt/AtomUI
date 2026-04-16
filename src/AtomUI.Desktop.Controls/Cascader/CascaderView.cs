@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Diagnostics;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
@@ -299,7 +298,6 @@ public partial class CascaderView : TemplatedControl,
     #endregion
     
     private readonly ItemCollection _options = new();
-    private static readonly IList Empty = Array.Empty<object>();
     private bool _ignoreSyncSelectedOptions;
     private StackPanel? _itemsPanel;
     private int _ignoreExpandAndCollapseLevel;
@@ -643,6 +641,23 @@ public partial class CascaderView : TemplatedControl,
 
             default:
                 break;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        
+        // 清理所有 level list 中的 disposable
+        if (_itemsPanel != null)
+        {
+            foreach (var child in _itemsPanel.Children)
+            {
+                if (child is CascaderViewLevelList levelList)
+                {
+                    levelList.NotifyDetachedFromVisualTree();
+                }
+            }
         }
     }
 }

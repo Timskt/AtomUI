@@ -1,10 +1,8 @@
 ﻿using System.Globalization;
-using System.Reactive.Disposables;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.CalendarView;
 using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Desktop.Controls.Primitives;
-using AtomUI.Desktop.Controls.TimePickerLang;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
@@ -114,7 +112,6 @@ public class RangeDatePicker : RangeInfoPickerInput
     
     private RangeDatePickerPresenter? _pickerPresenter;
     private bool? _isNeedConfirmedBackup;
-    private CompositeDisposable? _flyoutBindingDisposables;
 
     public RangeDatePicker()
     {
@@ -130,16 +127,14 @@ public class RangeDatePicker : RangeInfoPickerInput
     protected override Flyout CreatePickerFlyout()
     {
         var flyout = new RangeDatePickerFlyout();
-        flyout.IsDetectMouseClickEnabled = false;
-        _flyoutBindingDisposables?.Dispose();
-        _flyoutBindingDisposables = new CompositeDisposable(7);
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, flyout, RangeDatePickerFlyout.IsMotionEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, RangeStartSelectedDateProperty, flyout, RangeDatePickerFlyout.SelectedDateTimeProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, RangeEndSelectedDateProperty, flyout, RangeDatePickerFlyout.SecondarySelectedDateTimeProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, ClockIdentifierProperty, flyout, RangeDatePickerFlyout.ClockIdentifierProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsNeedConfirmProperty, flyout, RangeDatePickerFlyout.IsNeedConfirmProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowNowProperty, flyout, RangeDatePickerFlyout.IsShowNowProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowTimeProperty, flyout, RangeDatePickerFlyout.IsShowTimeProperty));
+        flyout.IsDetectMouseClickEnabled                                 = false;
+        flyout[!RangeDatePickerFlyout.IsMotionEnabledProperty]           = this[!IsMotionEnabledProperty];
+        flyout[!RangeDatePickerFlyout.SelectedDateTimeProperty]          = this[!RangeStartSelectedDateProperty];
+        flyout[!RangeDatePickerFlyout.SecondarySelectedDateTimeProperty] = this[!RangeEndSelectedDateProperty];
+        flyout[!RangeDatePickerFlyout.ClockIdentifierProperty]           = this[!ClockIdentifierProperty];
+        flyout[!RangeDatePickerFlyout.IsNeedConfirmProperty]             = this[!IsNeedConfirmProperty];
+        flyout[!RangeDatePickerFlyout.IsShowNowProperty]                 = this[!IsShowNowProperty];
+        flyout[!RangeDatePickerFlyout.IsShowTimeProperty]                = this[!IsShowTimeProperty];
         
         return flyout;
     }
@@ -487,7 +482,7 @@ public class RangeDatePicker : RangeInfoPickerInput
             RangeEndSelectedDate = RangeEndDefaultDate;
         }
     }
-    
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -495,7 +490,7 @@ public class RangeDatePicker : RangeInfoPickerInput
         {
             SetValue(InfoIconProperty, new CalendarOutlined(), BindingPriority.Template);
         }
-        Text = FormatDateTime(RangeStartSelectedDate);
+        Text          = FormatDateTime(RangeStartSelectedDate);
         SecondaryText = FormatDateTime(RangeEndSelectedDate);
     }
     

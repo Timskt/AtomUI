@@ -309,25 +309,35 @@ protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
 
 ### 3.7 ✅ ~~ColorPickerInput — OnApplyTemplate 中 8 个 ValueChanged Lambda 叠加~~（已修复）
 
-**修复时间**：早期修复（实现时已采用正确的事件管理模式）
+**修复时间**：2026-04-16
 
 - **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/ColorView/ColorPickerInput.cs`
-- **方法**：`OnApplyTemplate()`，第 127-291 行
+- **方法**：`OnApplyTemplate()`，第 115-290 行
 - **问题描述**：
 
-`OnApplyTemplate` 中对 8 个输入控件的 `ValueChanged`/`TextChanged` 事件使用匿名 lambda，模板重新应用时全部叠加，导致多倍回调执行。
+`OnApplyTemplate` 中对 8 个输入控件的 `ValueChanged`/`TextChanged` 事件使用匿名 lambda 存储在私有委托字段中，模板重新应用时全部叠加，导致多倍回调执行。
 
 - **修复方案**：✅ **已实现**
-  - 为每个事件处理器定义了类级字段（第 80-87 行）
-  - 在 `OnApplyTemplate` 开头先取消旧订阅（第 129-160 行）
-  - 创建新的命名事件处理器 Lambda，存储到字段中
-  - 在将字段的事件处理器订阅到事件（第 179-289 行）
+  - 删除了 8 个私有事件处理器委托字段（原第 80-87 行）
+  - 添加了 8 个私有方法来替代委托字段（第 115-189 行）：
+    - `HandleAlphaInputValueChanged()`
+    - `HandleHexValueInputTextChanged()`
+    - `HandleHValueInputValueChanged()`
+    - `HandleSValueInputValueChanged()`
+    - `HandleVValueInputValueChanged()`
+    - `HandleRValueInputValueChanged()`
+    - `HandleGValueInputValueChanged()`
+    - `HandleBValueInputValueChanged()`
+  - 在 `OnApplyTemplate` 开头先取消旧订阅（第 197-214 行）
+  - 使用方法引用直接订阅事件（第 232-254 行）
 
 **修复特点**：
-- ✅ 使用命名委托字段存储事件处理器
+- ✅ 使用私有方法而非委托字段（因为 lambda 不捕获闭包变量，只访问 this 成员）
+- ✅ 避免每次 OnApplyTemplate 都分配新的委托对象
 - ✅ 在 OnApplyTemplate 开头先移除所有旧订阅
 - ✅ 防止事件处理器累积
 - ✅ 8 个事件全部正确管理
+- ✅ 代码更简洁，少了 8 个委托字段声明
 
 ---
 
@@ -713,7 +723,10 @@ public async Task ResetAsync(CancellationToken cancellationToken = default)
 
 ---
 
-### 5.2 FlyoutStateHelper 定时器使用 Lambda 捕获 this
+### 5.2 ✅ ~~FlyoutStateHelper 定时器使用 Lambda 捕获 this~~（已修复）
+
+**修复时间**：2026-04-16  
+**修复 Commit**：`98a5500e` - `fix(5.2): replace lambda with named methods in FlyoutStateHelper timer handlers`
 
 - **文件**：`src/AtomUI.Desktop.Controls/Flyouts/FlyoutStateHelper.cs`
 - **方法**：`StartMouseEnterTimer()` / `StartMouseLeaveTimer()`，第 144-196 行
@@ -738,44 +751,28 @@ private void StartMouseEnterTimer()
 
 - **复现条件**：快速在 Flyout 触发区域上移入/移出鼠标
 - **影响评估**：**中等** — 正常情况下定时器会被正确清理，但极端场景下可能有短暂泄漏
-- **修复建议**：
+- **修复方案**：✅ **已实现**
+  - 将匿名 lambda 改为命名方法 `HandleMouseEnterTimerTick()` 和 `HandleMouseLeaveTimerTick()`
+  - 在 `StopMouseEnterTimer()` 和 `StopMouseLeaveTimer()` 中添加事件取消订阅
+  - 在 `StartMouseEnterTimer()` 和 `StartMouseLeaveTimer()` 开头调用对应的 Stop 方法确保先清理旧定时器
 
-```csharp
-private void StartMouseEnterTimer()
-{
-    StopMouseEnterTimer();  // 确保先清理旧定时器
-    
-    _mouseEnterDelayTimer = new DispatcherTimer { Interval = ... };
-    _mouseEnterDelayTimer.Tick += HandleMouseEnterTimerTick;  // 使用命名方法
-    _mouseEnterDelayTimer.Start();
-}
-
-private void HandleMouseEnterTimerTick(object? sender, EventArgs e)
-{
-    StopMouseEnterTimer();
-    // ... 原有逻辑
-}
-
-private void StopMouseEnterTimer()
-{
-    if (_mouseEnterDelayTimer != null)
-    {
-        _mouseEnterDelayTimer.Stop();
-        _mouseEnterDelayTimer.Tick -= HandleMouseEnterTimerTick;
-        _mouseEnterDelayTimer = null;
-    }
-}
-```
+**修复特点**：
+- ✅ 使用命名方法替代 lambda
+- ✅ 完整的事件取消订阅
+- ✅ 先清理旧定时器再创建新的
+- ✅ 代码变更：+44, -28
 
 ---
 
-### 5.3 多个控件的 CompositeDisposable 未在 Detach 时 Dispose
+### 5.3 ✅ ~~多个控件的 CompositeDisposable 未在 Detach 时 Dispose~~（已修复）
+
+**修复时间**：2026-04-16
 
 - **文件**：多个控件文件
-  - `src/AtomUI.Desktop.Controls/Drawer/Drawer.cs` — `_containerDisposables`
-  - `src/AtomUI.Desktop.Controls/Tour/Tour.cs` — `_indicatorDisposables`
-  - `src/AtomUI.Desktop.Controls/DatePicker/DatePicker.cs` — 类似模式
-  - `src/AtomUI.Desktop.Controls/Cascader/Cascader.cs` — 类似模式
+  - ✅ `src/AtomUI.Desktop.Controls/Drawer/Drawer.cs` — `_containerDisposables`
+  - ✅ `src/AtomUI.Desktop.Controls/Tour/Tour.cs` — `_indicatorDisposables`
+  - ✅ `src/AtomUI.Desktop.Controls/DatePicker/DatePicker.cs` — 类似模式
+  - ✅ `src/AtomUI.Desktop.Controls/Cascader/Cascader.cs` — 类似模式
 - **问题描述**：
 
 多个控件使用 `CompositeDisposable` 来管理绑定和订阅的生命周期，但这些 disposable 集合仅在属性变化或重新模板化时被 Dispose，而不在 `OnDetachedFromVisualTree` 中清理。
@@ -797,7 +794,15 @@ private void OnSomePropertyChanged(...)
 
 - **复现条件**：控件从视觉树中移除但属性未变化
 - **影响评估**：**中等** — 绑定订阅持续存在，可能阻止相关对象被 GC 回收
-- **修复建议**：在所有使用 `CompositeDisposable` 的控件中，确保在 `OnDetachedFromVisualTree` 中调用 Dispose。
+- **修复方案**：✅ **已实现**
+  - 在所有使用 `CompositeDisposable` 的控件中，确保在 `OnDetachedFromVisualTree` 中调用 Dispose
+  - 通过原生绑定语法替代 `BindUtils.RelayBind`，避免额外的 disposable 管理
+  - 允许容器复用而非每次销毁重建
+
+**修复特点**：
+- ✅ 完整的生命周期管理
+- ✅ 在 Detach 时正确清理所有 disposable
+- ✅ 避免不必要的容器销毁和重建
 
 ---
 
