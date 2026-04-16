@@ -252,10 +252,10 @@ public class MessageBox : TemplatedControl, IMotionAwareControl
         return _dialog.Open();
     }
 
-    public async Task OpenAsync()
+    public async Task OpenAsync(CancellationToken cancellationToken = default)
     {
         Debug.Assert(_dialog != null);
-        await _dialog.OpenAsync();
+        await _dialog.OpenAsync(cancellationToken);
     }
 
     public void Cancel()

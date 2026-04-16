@@ -139,11 +139,12 @@ internal class FileUploadScheduler : IFileUploadScheduler
         }
     }
     
-    public async Task CancelAllAsync()
+    public async Task CancelAllAsync(CancellationToken cancellationToken = default)
     {
         DisableSchedule();
         while (_runningTasks.Count > 0) 
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (_runningTasks.TryTake(out var uploadInfo))
             {
                 await CancelUploadAsync(uploadInfo);
@@ -151,17 +152,17 @@ internal class FileUploadScheduler : IFileUploadScheduler
         }
     }
 
-    public async Task SetMaxConcurrentTasksAsync(int taskCount)
+    public async Task SetMaxConcurrentTasksAsync(int taskCount, CancellationToken cancellationToken = default)
     {
-        await CancelAllAsync();
+        await CancelAllAsync(cancellationToken);
         _concurrentSemaphore.Dispose();
         _concurrentSemaphore = new SemaphoreSlim(taskCount);
         EnableSchedule();
     }
 
-    public async Task SetTransportAsync(IFileUploadTransport transport)
+    public async Task SetTransportAsync(IFileUploadTransport transport, CancellationToken cancellationToken = default)
     {
-        await CancelAllAsync();
+        await CancelAllAsync(cancellationToken);
         _transport = transport;
         EnableSchedule();
     }

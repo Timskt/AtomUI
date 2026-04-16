@@ -812,11 +812,11 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
         });
     }
 
-    public async Task MotionAwareOpenAsync()
+    public async Task MotionAwareOpenAsync(CancellationToken cancellationToken = default)
     {
         var tcs = new TaskCompletionSource<bool>();
         MotionAwareOpen(() => tcs.SetResult(true));
-        await tcs.Task;
+        await tcs.Task.WaitAsync(cancellationToken);
     }
 
     public void MotionAwareClose(Action? closed = null)
@@ -948,11 +948,11 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
         });
     }
 
-    public async Task MotionAwareCloseAsync()
+    public async Task MotionAwareCloseAsync(CancellationToken cancellationToken = default)
     {
         var tcs = new TaskCompletionSource<bool>();
         MotionAwareClose(() => tcs.SetResult(true));
-        await tcs.Task;
+        await tcs.Task.WaitAsync(cancellationToken);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

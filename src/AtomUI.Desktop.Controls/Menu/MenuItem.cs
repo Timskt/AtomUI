@@ -375,20 +375,20 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         Transitions = null;
     }
     
-    public async Task CloseItemAsync()
+    public async Task CloseItemAsync(CancellationToken cancellationToken = default)
     {
         for (var i = 0; i < ItemCount; i++)
         {
             var container = ContainerFromIndex(i);
             if (container is MenuItem childMenuItem)
             {
-                await childMenuItem.CloseItemAsync();
+                await childMenuItem.CloseItemAsync(cancellationToken);
             }
         }
 
         if (_popup != null && _popup.IsMotionAwareOpen)
         {
-            await _popup.MotionAwareCloseAsync();
+            await _popup.MotionAwareCloseAsync(cancellationToken);
         }
 
         IsSubMenuOpen = false;
