@@ -1170,36 +1170,56 @@ protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e
 
 ---
 
-### 5.13 Mentions / AutoComplete — _delayTimer 重建时未停旧实例
+### 5.13 ✅ ~~Mentions / AutoComplete — _delayTimer 重建时未停旧实例~~（已修复）
 
 - **文件**：
-  - `src/AtomUI.Desktop.Controls/Mentions/Mentions.cs`，第 586 行
-  - `src/AtomUI.Desktop.Controls/AutoComplete/AbstractAutoComplete.cs`，第 860 行
+  - `src/AtomUI.Desktop.Controls/Mentions/Mentions.cs`，第 565-584 行
+  - `src/AtomUI.Desktop.Controls/AutoComplete/AbstractAutoComplete.cs`，第 839-858 行
 - **问题描述**：
 
-创建新 `_delayTimer` 时未先停止旧的。如果 `MinimumPopulateDelay` 频繁变化，旧 Timer 继续运行。
+创建新 `_delayTimer` 时未先停止旧的。如果 `MinimumPopulateDelay` 频繁变化，特别是从一个非零值改到另一个非零值时，旧 Timer 的事件处理器仍然存在，导致多余的回调。
 
-- **复现条件**：频繁修改 MinimumPopulateDelay 属性
-- **影响评估**：**中等** — 旧 Timer 继续运行导致多余回调
-- **修复建议**：
+- **复现条件**：频繁修改 MinimumPopulateDelay 属性，特别是在非零值之间切换
+- **影响评估**：**中等** — 旧 Timer 继续运行导致多余回调和事件处理器堆积
+- **修复方案**：✅ **已实现**
+
+#### 修复详情
+
+统一了 Mentions.cs 和 AbstractAutoComplete.cs 中的处理逻辑：
 
 ```csharp
 private void HandleMinimumPopulateDelayChanged(AvaloniaPropertyChangedEventArgs e)
 {
+    var newValue = (TimeSpan)e.NewValue!;
+
+    // Always clean up the old timer first
     if (_delayTimer != null)
     {
         _delayTimer.Stop();
-        _delayTimer.Tick -= PopulateDropDown;
-        _delayTimer = null;
+        _delayTimer.Tick -= PopulateDropDown;  // ✅ 取消订阅
+        _delayTimer      =  null;              // ✅ 清空引用
     }
-    _delayTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(MinimumPopulateDelay) };
-    _delayTimer.Tick += PopulateDropDown;
+
+    // Create a new timer with the new delay value if needed
+    if (newValue > TimeSpan.Zero)
+    {
+        _delayTimer           =  new DispatcherTimer();
+        _delayTimer.Interval  =  newValue;
+        _delayTimer.Tick      += PopulateDropDown;
+    }
 }
 ```
 
+**修复特点**：
+- ✅ 无条件清理 - 总是先停止、取消订阅、清空旧 timer
+- ✅ 完全隔离 - 旧 timer 的所有引用都被清理
+- ✅ 事件处理器安全 - 显式取消订阅，防止堆积
+- ✅ 两处一致 - Mentions 和 AutoComplete 采用相同模式
+- ✅ Commit：`fix(5.13): properly clean up old DispatcherTimer in Mentions and AutoComplete`
+
 ---
 
-### 5.14 Form — Items.CollectionChanged += lambda
+## 5.14 Form — Items.CollectionChanged += lambda
 
 - **文件**：`src/AtomUI.Desktop.Controls/Form/Form.cs`，第 456 行
 - **问题描述**：

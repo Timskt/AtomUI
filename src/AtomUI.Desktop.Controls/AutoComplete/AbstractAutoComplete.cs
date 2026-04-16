@@ -840,29 +840,20 @@ public abstract class AbstractAutoComplete : TemplatedControl,
     {
         var newValue = (TimeSpan)e.NewValue!;
 
-        // Stop any existing timer
+        // Always clean up the old timer first
         if (_delayTimer != null)
         {
             _delayTimer.Stop();
-
-            if (newValue == TimeSpan.Zero)
-            {
-                _delayTimer.Tick -= PopulateDropDown;
-                _delayTimer      =  null;
-            }
+            _delayTimer.Tick -= PopulateDropDown;
+            _delayTimer      =  null;
         }
 
+        // Create a new timer with the new delay value if needed
         if (newValue > TimeSpan.Zero)
         {
-            // Create or clear a dispatcher timer instance
-            if (_delayTimer == null)
-            {
-                _delayTimer      =  new DispatcherTimer();
-                _delayTimer.Tick += PopulateDropDown;
-            }
-
-            // Set the new tick interval
-            _delayTimer.Interval = newValue;
+            _delayTimer           =  new DispatcherTimer();
+            _delayTimer.Interval  =  newValue;
+            _delayTimer.Tick      += PopulateDropDown;
         }
     }
 
