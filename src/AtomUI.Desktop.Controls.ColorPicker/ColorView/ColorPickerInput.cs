@@ -68,14 +68,23 @@ internal class ColorPickerInput : TemplatedControl
    private NumericUpDown? _gValueInput;
    private NumericUpDown? _bValueInput;
    private bool _ignoringConfigureValues;
-   private bool _alphaInputPassiveChanged;
-   private bool _hexValueInputPassiveChanged;
-   private bool _hValueInputPassiveChanged;
-   private bool _sValueInputPassiveChanged;
-   private bool _vValueInputPassiveChanged;
-   private bool _rValueInputPassiveChanged;
-   private bool _gValueInputPassiveChanged;
-   private bool _bValueInputPassiveChanged;
+    private bool _alphaInputPassiveChanged;
+    private bool _hexValueInputPassiveChanged;
+    private bool _hValueInputPassiveChanged;
+    private bool _sValueInputPassiveChanged;
+    private bool _vValueInputPassiveChanged;
+    private bool _rValueInputPassiveChanged;
+    private bool _gValueInputPassiveChanged;
+    private bool _bValueInputPassiveChanged;
+    
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _alphaInputValueChangedHandler;
+    private EventHandler<TextChangedEventArgs>? _hexValueInputTextChangedHandler;
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _hValueInputValueChangedHandler;
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _sValueInputValueChangedHandler;
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _vValueInputValueChangedHandler;
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _rValueInputValueChangedHandler;
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _gValueInputValueChangedHandler;
+    private EventHandler<NumericUpDownValueChangedEventArgs>? _bValueInputValueChangedHandler;
    
    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
    {
@@ -117,6 +126,39 @@ internal class ColorPickerInput : TemplatedControl
 
    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
    {
+      if (_alphaInput != null)
+      {
+         _alphaInput.ValueChanged -= _alphaInputValueChangedHandler;
+      }
+      if (_hexValueInput != null)
+      {
+         _hexValueInput.TextChanged -= _hexValueInputTextChangedHandler;
+      }
+      if (_hValueInput != null)
+      {
+         _hValueInput.ValueChanged -= _hValueInputValueChangedHandler;
+      }
+      if (_sValueInput != null)
+      {
+         _sValueInput.ValueChanged -= _sValueInputValueChangedHandler;
+      }
+      if (_vValueInput != null)
+      {
+         _vValueInput.ValueChanged -= _vValueInputValueChangedHandler;
+      }
+      if (_rValueInput != null)
+      {
+         _rValueInput.ValueChanged -= _rValueInputValueChangedHandler;
+      }
+      if (_gValueInput != null)
+      {
+         _gValueInput.ValueChanged -= _gValueInputValueChangedHandler;
+      }
+      if (_bValueInput != null)
+      {
+         _bValueInput.ValueChanged -= _bValueInputValueChangedHandler;
+      }
+      
       base.OnApplyTemplate(e);
       _colorFormatComboBox = e.NameScope.Find<ComboBox>(ColorPickerInputThemeConstants.ColorFormatComboBoxPart);
       _alphaInput          = e.NameScope.Find<NumericUpDown>(ColorPickerInputThemeConstants.AlphaInputPart);
@@ -136,7 +178,7 @@ internal class ColorPickerInput : TemplatedControl
       
       if (_alphaInput != null)
       {
-         _alphaInput.ValueChanged += (sender, args) =>
+         _alphaInputValueChangedHandler = (sender, args) =>
          {
             if (_alphaInputPassiveChanged)
             {
@@ -145,11 +187,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _alphaInput.ValueChanged += _alphaInputValueChangedHandler;
       }
       
       if (_hexValueInput != null)
       {
-         _hexValueInput.TextChanged += (sender, args) =>
+         _hexValueInputTextChangedHandler = (sender, args) =>
          {
             if (_hexValueInputPassiveChanged)
             {
@@ -158,11 +201,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _hexValueInput.TextChanged += _hexValueInputTextChangedHandler;
       }
 
       if (_hValueInput != null)
       {
-         _hValueInput.ValueChanged += (sender, args) =>
+         _hValueInputValueChangedHandler = (sender, args) =>
          {
             if (_hValueInputPassiveChanged)
             {
@@ -171,11 +215,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _hValueInput.ValueChanged += _hValueInputValueChangedHandler;
       }
 
       if (_sValueInput != null)
       {
-         _sValueInput.ValueChanged += (sender, args) =>
+         _sValueInputValueChangedHandler = (sender, args) =>
          {
             if (_sValueInputPassiveChanged)
             {
@@ -184,11 +229,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _sValueInput.ValueChanged += _sValueInputValueChangedHandler;
       }
       
       if (_vValueInput != null)
       {
-         _vValueInput.ValueChanged += (sender, args) =>
+         _vValueInputValueChangedHandler = (sender, args) =>
          {
             if (_vValueInputPassiveChanged)
             {
@@ -197,11 +243,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _vValueInput.ValueChanged += _vValueInputValueChangedHandler;
       }
 
       if (_rValueInput != null)
       {
-         _rValueInput.ValueChanged += (sender, args) =>
+         _rValueInputValueChangedHandler = (sender, args) =>
          {
             if (_rValueInputPassiveChanged)
             {
@@ -210,11 +257,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _rValueInput.ValueChanged += _rValueInputValueChangedHandler;
       }
       
       if (_gValueInput != null)
       {
-         _gValueInput.ValueChanged += (sender, args) =>
+         _gValueInputValueChangedHandler = (sender, args) =>
          {
             if (_gValueInputPassiveChanged)
             {
@@ -223,11 +271,12 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _gValueInput.ValueChanged += _gValueInputValueChangedHandler;
       }
       
       if (_bValueInput != null)
       {
-         _bValueInput.ValueChanged += (sender, args) =>
+         _bValueInputValueChangedHandler = (sender, args) =>
          {
             if (_bValueInputPassiveChanged)
             {
@@ -236,6 +285,7 @@ internal class ColorPickerInput : TemplatedControl
             }
             SyncInputValue();
          };
+         _bValueInput.ValueChanged += _bValueInputValueChangedHandler;
       }
       ConfigureColorValues();
    }
