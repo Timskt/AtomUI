@@ -15,9 +15,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 4 |
-| ⏳ 待修复 | 35 |
-| 修复进度 | **10.3%** |
+| ✅ 已修复 | 10 |
+| ⏳ 待修复 | 29 |
+| 修复进度 | **25.6%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
@@ -25,6 +25,11 @@
 - ✅ **4.8** 异步方法 CancellationToken 支持（Commits: `76aadb94`, `4c9054dd`）
 - ✅ **5.1** Segmented SelectionChanged 事件生命周期（Commit: `12865b91`）
 - ✅ **5.2** FlyoutStateHelper 定时器 Lambda 捕获（Commit: `98a5500e`）
+- ✅ **5.3** CompositeDisposable 未在 Detach 时 Dispose（Commit: `8a9196ab` 等）
+- ✅ **5.4** MarqueeLabel 动画资源清理（Commit: `09a03d8e`）
+- ✅ **5.6** ToolTip 服务的全局事件订阅（Commit: `98afb745`）
+- ✅ **5.9** Watermark glyph.PropertyChanged 取消订阅（Commit: `8a9196ab`）
+- ✅ **5.10** TreeView/CascaderView CancellationTokenSource Dispose（Commits: 最新）
 
 ---
 

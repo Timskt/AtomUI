@@ -7,7 +7,18 @@ namespace AtomUI.Desktop.Controls;
 
 public partial class CascaderView
 {
-     #region 内部属性定义
+    #region 公开属性定义
+    public static readonly StyledProperty<TimeSpan> AsyncLoadTimeoutProperty =
+        AvaloniaProperty.Register<CascaderView, TimeSpan>(nameof(AsyncLoadTimeout),
+            TimeSpan.FromSeconds(30));
+
+    public TimeSpan AsyncLoadTimeout
+    {
+        get => GetValue(AsyncLoadTimeoutProperty);
+        set => SetValue(AsyncLoadTimeoutProperty, value);
+    }
+    #endregion
+    #region 内部属性定义
     internal static readonly DirectProperty<CascaderView, bool> HasItemAsyncDataLoaderProperty =
         AvaloniaProperty.RegisterDirect<CascaderView, bool>(nameof(HasItemAsyncDataLoader),
             o => o.HasItemAsyncDataLoader,
@@ -32,25 +43,39 @@ public partial class CascaderView
         var option = item.AttachedOption;
         if (option != null)
         {
-            var cts = new CancellationTokenSource(); // TODO 做一个超时结束
+            var cts = new CancellationTokenSource(AsyncLoadTimeout);
             item.IsLoading = true;
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                Debug.Assert(DataLoader != null);
-                var result = await DataLoader.LoadAsync(option, cts.Token);
-                item.IsLoading   = false;
-                item.AsyncLoaded = true;
-                ItemAsyncLoaded?.Invoke(this, new CascaderViewItemLoadedEventArgs(item, result));
-                if (result.IsSuccess)
+                try
                 {
-                    if (result.Data?.Count > 0)
+                    Debug.Assert(DataLoader != null);
+                    var result = await DataLoader.LoadAsync(option, cts.Token);
+                    if (!cts.Token.IsCancellationRequested)
                     {
-                        foreach (var child in result.Data)
+                        item.IsLoading   = false;
+                        item.AsyncLoaded = true;
+                        ItemAsyncLoaded?.Invoke(this, new CascaderViewItemLoadedEventArgs(item, result));
+                        if (result.IsSuccess)
                         {
-                            child.UpdateParentNode(option);
+                            if (result.Data?.Count > 0)
+                            {
+                                foreach (var child in result.Data)
+                                {
+                                    child.UpdateParentNode(option);
+                                }
+                                option.Children.AddRange(result.Data);
+                            }
                         }
-                        option.Children.AddRange(result.Data);
                     }
+                }
+                catch (OperationCanceledException)
+                {
+                    item.IsLoading = false;
+                }
+                finally
+                {
+                    cts.Dispose();
                 }
             });
         }

@@ -22,6 +22,18 @@ public partial class TreeView
     }
     #endregion
 
+    #region 公开属性定义
+    public static readonly StyledProperty<TimeSpan> AsyncLoadTimeoutProperty =
+        AvaloniaProperty.Register<TreeView, TimeSpan>(nameof(AsyncLoadTimeout),
+            TimeSpan.FromSeconds(30));
+
+    public TimeSpan AsyncLoadTimeout
+    {
+        get => GetValue(AsyncLoadTimeoutProperty);
+        set => SetValue(AsyncLoadTimeoutProperty, value);
+    }
+    #endregion
+
     private void HandleNodeLoadRequest(TreeViewItem viewItem)
     {
         if (DataLoader == null)
@@ -35,26 +47,40 @@ public partial class TreeView
         var data = TreeItemFromContainer(viewItem);
         if (data is ITreeItemNode treeItemData)
         {
-            var cts = new CancellationTokenSource(); // TODO 做一个超时结束
+            var cts = new CancellationTokenSource(AsyncLoadTimeout);
             viewItem.IsLoading = true;
             Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                Debug.Assert(DataLoader != null);
-                var result = await DataLoader.LoadAsync(treeItemData, cts.Token);
-                viewItem.IsLoading   = false;
-                viewItem.AsyncLoaded = true; // TODO 是不是应该多给几次机会？
-                TreeItemLoaded?.Invoke(this, new TreeViewItemLoadedEventArgs(viewItem, result));
-                if (result.IsSuccess)
+                try
                 {
-                    if (result.Data?.Count > 0)
+                    Debug.Assert(DataLoader != null);
+                    var result = await DataLoader.LoadAsync(treeItemData, cts.Token);
+                    if (!cts.Token.IsCancellationRequested)
                     {
-                        foreach (var child in result.Data)
+                        viewItem.IsLoading   = false;
+                        viewItem.AsyncLoaded = true; // TODO 是不是应该多给几次机会？
+                        TreeItemLoaded?.Invoke(this, new TreeViewItemLoadedEventArgs(viewItem, result));
+                        if (result.IsSuccess)
                         {
-                            child.UpdateParentNode(treeItemData);
+                            if (result.Data?.Count > 0)
+                            {
+                                foreach (var child in result.Data)
+                                {
+                                    child.UpdateParentNode(treeItemData);
+                                }
+                                treeItemData.Children.AddRange(result.Data);
+                                viewItem.IsExpanded = true;
+                            }
                         }
-                        treeItemData.Children.AddRange(result.Data);
-                        viewItem.IsExpanded = true;
                     }
+                }
+                catch (OperationCanceledException)
+                {
+                    viewItem.IsLoading = false;
+                }
+                finally
+                {
+                    cts.Dispose();
                 }
             });
         }
