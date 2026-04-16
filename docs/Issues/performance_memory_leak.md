@@ -476,44 +476,36 @@ protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e
 
 ---
 
-### 4.5 OptionButtonGroup 匿名 Lambda 事件订阅无法取消
+### 4.5 ✅ ~~OptionButtonGroup 匿名 Lambda 事件订阅无法取消~~（已修复）
 
 - **文件**：`src/AtomUI.Controls/OptionButtonGroup/AbstractOptionButtonGroup.cs`
 - **方法**：第 124 行、第 189 行
 - **问题描述**：
 
-```csharp
-// 第 124 行 — 匿名 lambda，无法取消订阅
-childIndexProvider.ChildIndexChanged += (sender, args) => { UpdateOptionButtonsPosition(); };
-
-// 第 189 行 — 命名方法但仅在 PrepareContainerForItemOverride 中订阅
-optionButton.IsCheckedChanged += HandleOptionButtonChecked;
-// ClearContainerForItemOverride 中未取消订阅
-```
-
 匿名 lambda 捕获了 `this`，且由于没有保存委托引用，无法在任何时候取消订阅。
 
 - **复现条件**：OptionButtonGroup 被创建并使用
 - **影响评估**：**高** — childIndexProvider 通过 lambda 持有 OptionButtonGroup 的强引用，阻止 GC
-- **修复建议**：
+- **修复方案**：将匿名 lambda 改为命名方法 `HandleChildIndexChanged`，在构造函数中订阅，在 `OnDetachedFromVisualTree` 中取消订阅。添加 `ClearContainerForItemOverride` 方法在容器回收时取消 `IsCheckedChanged` 订阅。
 
 ```csharp
-// 将匿名 lambda 改为命名方法
 private void HandleChildIndexChanged(object? sender, EventArgs args)
 {
     UpdateOptionButtonsPosition();
 }
 
-// 订阅时使用命名方法
-childIndexProvider.ChildIndexChanged += HandleChildIndexChanged;
+protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+{
+    base.OnDetachedFromVisualTree(e);
+    if (this is IChildIndexProvider childIndexProvider)
+    {
+        childIndexProvider.ChildIndexChanged -= HandleChildIndexChanged;
+    }
+}
 
-// 在适当的清理点取消订阅
-childIndexProvider.ChildIndexChanged -= HandleChildIndexChanged;
-
-// ClearContainerForItemOverride 中取消 IsCheckedChanged 订阅
 protected override void ClearContainerForItemOverride(Control container)
 {
-    if (container is OptionButton optionButton)
+    if (container is AbstractOptionButton optionButton)
     {
         optionButton.IsCheckedChanged -= HandleOptionButtonChecked;
     }
@@ -523,43 +515,46 @@ protected override void ClearContainerForItemOverride(Control container)
 
 ---
 
-### 4.6 静态 ConcurrentDictionary 缓存无大小限制
+### 4.6 ✅ ~~静态 ConcurrentDictionary 缓存无大小限制~~（已修复）
 
-- **文件**：多个文件
-  - `src/AtomUI.Core/Controls/Icon/IconProviderCache.cs`，第 7 行
-  - `src/AtomUI.Core/Theme/TokenSystem/TokenResourceCache.cs`（类似模式）
-  - `src/AtomUI.Core/Theme/TokenSystem/AbstractDesignToken.cs`，第 14 行
+- **文件**：`src/AtomUI.Core/Controls/Icon/IconProviderCache.cs`
 - **问题描述**：
 
-```csharp
-// IconProviderCache.cs 第 7 行
-static readonly ConcurrentDictionary<Type, ConcurrentDictionary<object, IconInfo>> _cache = new();
-```
+静态缓存只增不减，没有大小限制、过期策略或 WeakReference 机制。在长时间运行的应用中，如果不断创建新的图标类型，缓存将无限增长。
 
-这些静态缓存只增不减，没有大小限制、过期策略或 WeakReference 机制。在长时间运行的应用中，如果不断创建新的图标类型或 Token 组合，缓存将无限增长。
-
-- **复现条件**：长时间运行的应用，持续创建不同类型的图标或主题配置
+- **复现条件**：长时间运行的应用，持续创建不同类型的图标
 - **影响评估**：**高** — 在极端场景下可能导致内存持续增长
-- **修复建议**：
+- **修复方案**：
+
+实现了 FIFO 淘汰策略，具体改进包括：
 
 ```csharp
-// 方案 1：使用 WeakReference 缓存
-static readonly ConcurrentDictionary<Type, WeakReference<ConcurrentDictionary<object, IconInfo>>> _cache = new();
+// 添加最大缓存大小限制
+private const int MaxCacheSize = 256;
 
-// 方案 2：添加大小限制和 LRU 淘汰策略
-public static void TrimCache(int maxSize)
+// 追踪插入顺序用于 FIFO 淘汰
+private static readonly Queue<Type> CacheInsertionOrder = new();
+
+// 在添加新条目时检查并淘汰最早的条目
+private static void EnsureCacheSize()
 {
-    while (_cache.Count > maxSize)
+    lock (_lockObject)
     {
-        // 移除最早添加的条目
-        var oldest = _cache.Keys.First();
-        _cache.TryRemove(oldest, out _);
+        while (TypeCache.Count > MaxCacheSize && CacheInsertionOrder.Count > 0)
+        {
+            var oldestType = CacheInsertionOrder.Dequeue();
+            TypeCache.TryRemove(oldestType, out _);
+            CreatorCache.TryRemove(oldestType, out _);
+        }
     }
 }
-
-// 方案 3：提供显式清理 API
-public static void ClearCache() => _cache.Clear();
 ```
+
+**修复特点**：
+- 自动 FIFO 淘汰：缓存超过 256 个条目时自动移除最早添加的条目
+- 线程安全：使用 lock 保护并发访问
+- 向后兼容：保留现有的 `ClearCache` 和 `ClearAllCache` API
+- 低开销：只在添加新条目时检查大小，不影响查询性能
 
 ---
 
