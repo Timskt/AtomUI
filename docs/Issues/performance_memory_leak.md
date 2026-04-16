@@ -1125,44 +1125,48 @@ protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e
 
 ---
 
-### 5.12 AbstractSkeleton — CancellationTokenSource 未 Dispose
+### 5.12 ✅ ~~AbstractSkeleton — CancellationTokenSource 未 Dispose~~（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Skeleton/AbstractSkeleton.cs`
-- **方法**：`StartActiveAnimation()`，第 155-156 行；`StopActiveAnimation()`，第 182 行
+- **方法**：`StartActiveAnimation()`，第 155-157 行；`StopActiveAnimation()`，第 165-170 行；`BuildActiveAnimation()`，第 185-186 行
 - **问题描述**：
 
-`StartActiveAnimation()` 中 `Cancel()` 后直接 `= new`，旧 CTS 没有 Dispose：
-
-```csharp
-protected void StartActiveAnimation()
-{
-    _cancellationTokenSource?.Cancel();
-    // ❌ 缺少 _cancellationTokenSource?.Dispose();
-    _cancellationTokenSource = new CancellationTokenSource();
-    // ...
-}
-```
+`StartActiveAnimation()` 中 `Cancel()` 后直接 `= new`，旧 CTS 没有 Dispose。同时 `StopActiveAnimation()` 和 `BuildActiveAnimation()` 中也缺少 Dispose 调用。
 
 - **复现条件**：Skeleton 动画多次启停
 - **影响评估**：**中等** — CTS 持有 WaitHandle 等非托管资源
-- **修复建议**：
+- **修复方案**：✅ **已实现**
 
-```csharp
-protected void StartActiveAnimation()
-{
-    _cancellationTokenSource?.Cancel();
-    _cancellationTokenSource?.Dispose();  // ✅ 添加
-    _cancellationTokenSource = new CancellationTokenSource();
-    // ...
-}
+#### 修复详情
 
-protected void StopActiveAnimation()
-{
-    _cancellationTokenSource?.Cancel();
-    _cancellationTokenSource?.Dispose();  // ✅ 添加
-    _cancellationTokenSource = null;
-}
-```
+三处都添加了 `Dispose()` 调用：
+
+1. **StartActiveAnimation()** - 在 Cancel 后添加 Dispose，然后创建新 CTS：
+   ```csharp
+   _cancellationTokenSource?.Cancel();
+   _cancellationTokenSource?.Dispose();  // ✅ 添加
+   _cancellationTokenSource = new CancellationTokenSource();
+   ```
+
+2. **StopActiveAnimation()** - 在 Cancel 后添加 Dispose，然后设置为 null：
+   ```csharp
+   _cancellationTokenSource?.Cancel();
+   _cancellationTokenSource?.Dispose();  // ✅ 添加
+   _cancellationTokenSource = null;      // ✅ 添加
+   ```
+
+3. **BuildActiveAnimation()** - 在 Cancel 后添加 Dispose：
+   ```csharp
+   _cancellationTokenSource?.Cancel();
+   _cancellationTokenSource?.Dispose();  // ✅ 添加
+   _animation = new Animation { ... };
+   ```
+
+**修复特点**：
+- ✅ 完整清理 - Cancel 后立即 Dispose，确保资源完全释放
+- ✅ 安全赋值 - Dispose 后立即赋新值或 null，避免使用已释放对象
+- ✅ 所有分支覆盖 - StartActiveAnimation、StopActiveAnimation、BuildActiveAnimation 都处理
+- ✅ Commit：`fix(5.12): add Dispose call for CancellationTokenSource in AbstractSkeleton`
 
 ---
 
