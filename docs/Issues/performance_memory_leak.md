@@ -864,18 +864,44 @@ private void HandleCleanupMarqueeAnimation()
 
 ---
 
-### 5.6 ToolTip 服务的全局事件订阅
+### 5.6 ✅ ~~ToolTip 服务的全局事件订阅~~（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls/Tooltip/` 相关文件
+**修复时间**：2026-04-16
+
+- **文件**：`src/AtomUI.Desktop.Controls/Tooltip/ToolTipService.cs`
 - **问题描述**：
 
-ToolTip 服务通常通过全局事件（如 `PointerMoved`、`PointerEntered`）来管理 ToolTip 的显示/隐藏。这些全局事件订阅如果未正确管理，可能导致：
-1. 已销毁的控件仍然接收事件
-2. 事件处理器持有控件的强引用
+ToolTip 服务在 `StartShowTimer` 方法中使用匿名 lambda 订阅定时器的 Tick 事件，lambda 捕获了 `control` 参数但没有保存委托引用，无法取消订阅。此外，快速鼠标移入/移出时可能产生多个并行定时器。
 
-- **复现条件**：带有 ToolTip 的控件被频繁创建和销毁
-- **影响评估**：**中等** — 取决于具体实现，可能导致已销毁控件无法被 GC
-- **修复建议**：确保 ToolTip 相关的全局事件订阅在控件 detach 时正确清理，或使用弱事件模式。
+- **修复方案**：✅ **已实现**
+  - 将匿名 lambda 改为命名方法 `HandleShowTimerTick()`
+  - 在 `StartShowTimer()` 开头调用 `StopTimer()` 先清理旧定时器
+  - 使用 `_timer.Tag` 存储 control 引用，在事件处理器中提取
+  - 确保定时器的完整生命周期管理
+
+```csharp
+private void StartShowTimer(int showDelay, Control control)
+{
+    StopTimer();  // 先清理旧定时器
+    _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay), Tag = (this, control) };
+    _timer.Tick += HandleShowTimerTick;
+    _timer.Start();
+}
+
+private void HandleShowTimerTick(object? sender, EventArgs e)
+{
+    if (_timer != null && _timer.Tag is (ToolTipService, Control) tuple)
+    {
+        Open(tuple.Item2);
+    }
+}
+```
+
+**修复特点**：
+- ✅ 使用命名方法替代 lambda
+- ✅ 先清理旧定时器再创建新的
+- ✅ 通过 Tag 安全传递 control 引用
+- ✅ 防止多个并行定时器
 
 ---
 
