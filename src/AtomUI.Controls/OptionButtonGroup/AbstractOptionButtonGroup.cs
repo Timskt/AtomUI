@@ -121,7 +121,21 @@ public abstract class AbstractOptionButtonGroup : SelectingItemsControl,
     {
         if (this is IChildIndexProvider childIndexProvider)
         {
-            childIndexProvider.ChildIndexChanged += (sender, args) => { UpdateOptionButtonsPosition(); };
+            childIndexProvider.ChildIndexChanged += HandleChildIndexChanged;
+        }
+    }
+    
+    private void HandleChildIndexChanged(object? sender, EventArgs args)
+    {
+        UpdateOptionButtonsPosition();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (this is IChildIndexProvider childIndexProvider)
+        {
+            childIndexProvider.ChildIndexChanged -= HandleChildIndexChanged;
         }
     }
 
@@ -220,6 +234,15 @@ public abstract class AbstractOptionButtonGroup : SelectingItemsControl,
             RaiseEvent(new OptionCheckedChangedEventArgs(OptionCheckedChangedEvent, optionButton,
                 SelectedIndex));
         }
+    }
+
+    protected override void ClearContainerForItemOverride(Control container)
+    {
+        if (container is AbstractOptionButton optionButton)
+        {
+            optionButton.IsCheckedChanged -= HandleOptionButtonChecked;
+        }
+        base.ClearContainerForItemOverride(container);
     }
 
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
