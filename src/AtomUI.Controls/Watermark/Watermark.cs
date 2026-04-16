@@ -38,11 +38,20 @@ public sealed class Watermark : Control
     {
         Target = target;
         Glyph  = glyph;
+    }
 
-        if (glyph != null)
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (Glyph != null)
         {
-            glyph.PropertyChanged += (sender, args) => { InvalidateVisual(); };
+            Glyph.PropertyChanged += HandleGlyphPropertyChanged;
         }
+    }
+
+    private void HandleGlyphPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+    {
+        InvalidateVisual();
     }
 
     private static void OnGlyphChanged(Layoutable target, AvaloniaPropertyChangedEventArgs arg)
@@ -67,6 +76,10 @@ public sealed class Watermark : Control
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
+        if (Glyph != null)
+        {
+            Glyph.PropertyChanged -= HandleGlyphPropertyChanged;
+        }
         UnInstallWatermark(this);
     }
 
