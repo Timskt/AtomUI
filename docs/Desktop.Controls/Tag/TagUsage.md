@@ -36,7 +36,7 @@ using AtomUI.Controls;            // TagStatus 等共享类型
 </WrapPanel>
 ```
 
-> 💡 `TagText` 是 `[Content]` 属性，可以直接在 `<atom:Tag>` 标签内写文字。
+> 💡 `Text` 是 `[Content]` 属性，可以直接在 `<atom:Tag>` 标签内写文字。
 
 ---
 
@@ -94,7 +94,7 @@ using AtomUI.Controls;            // TagStatus 等共享类型
 </WrapPanel>
 ```
 
-> 注意：自定义颜色模式下边框自动隐藏（`Bordered` 被设为 `false`）。
+> 注意：自定义颜色模式下边框自动隐藏（`IsBordered` 被设为 `false`）。
 
 ---
 
@@ -185,10 +185,10 @@ private void HandleTagClosed(object? sender, RoutedEventArgs e)
 
 ```xml
 <atom:Tag TagColor="{Binding Status}"
-          TagText="{Binding StatusText}" />
+          Text="{Binding StatusText}" />
 ```
 
-> 💡 `TagText` 虽然是 `[Content]` 属性（可以在标签体内直接写文字），但数据绑定时必须显式使用 `TagText="{Binding ...}"` 语法。
+> 💡 `Text` 虽然是 `[Content]` 属性（可以在标签体内直接写文字），但数据绑定时必须显式使用 `Text="{Binding ...}"` 语法。
 
 ### 动态生成标签列表
 
@@ -197,7 +197,7 @@ private void HandleTagClosed(object? sender, RoutedEventArgs e)
     <ItemsControl.ItemTemplate>
         <DataTemplate>
             <atom:Tag TagColor="{Binding Color}"
-                      TagText="{Binding Name}"
+                      Text="{Binding Name}"
                       IsClosable="{Binding CanRemove}"
                       Closed="HandleTagClosed" />
         </DataTemplate>

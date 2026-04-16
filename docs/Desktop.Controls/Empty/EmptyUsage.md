@@ -18,7 +18,7 @@ xmlns:atom="https://atomui.net"
 
 ```csharp
 using AtomUI.Desktop.Controls;   // Empty 控件
-using AtomUI.Controls;            // SizeType、PresetEmptyImage 等共享类型
+using AtomUI.Controls;            // SizeType、PresetImage 等共享类型
 ```
 
 ---

@@ -4,7 +4,7 @@
 
 ```csharp
 namespace AtomUI.Desktop.Controls;   // Empty 控件
-namespace AtomUI.Controls;            // AbstractEmpty 基类、PresetEmptyImage 枚举
+namespace AtomUI.Controls;            // AbstractEmpty 基类、PresetImage 枚举
 ```
 
 AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
@@ -13,7 +13,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 
 ## 枚举类型
 
-### PresetEmptyImage
+### PresetImage
 
 预设空状态图片类型枚举。定义在 `AtomUI.Controls` 命名空间。
 
@@ -40,7 +40,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 
 | 属性名 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
-| `PresetImage` | `PresetEmptyImage?` | `null` | 预设图片类型（`Default` / `Simple`）。设置后自动根据主题色动态生成 SVG 图片 |
+| `PresetImage` | `PresetImage?` | `null` | 预设图片类型（`Default` / `Simple`）。设置后自动根据主题色动态生成 SVG 图片 |
 | `ImagePath` | `string?` | `null` | 自定义 SVG 图片文件路径（支持 `avares://` 协议） |
 | `ImageSource` | `string?` | `null` | 自定义 SVG 图片内容字符串 |
 | `Description` | `string?` | 由本地化系统提供 | 描述文字，默认值为 `"No Data"`（中文 `"暂无数据"`） |

@@ -37,7 +37,7 @@ Tag 的视觉表现通过 `ControlTheme` + Design Token 系统控制。以下介
 </atom:Tag>
 
 <!-- 无边框标签 -->
-<atom:Tag Bordered="False" TagColor="blue">No Border</atom:Tag>
+<atom:Tag IsBordered="False" TagColor="blue">No Border</atom:Tag>
 ```
 
 ---
@@ -95,7 +95,7 @@ Tag 的视觉表现通过 `ControlTheme` + Design Token 系统控制。以下介
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Padding="{TemplateBinding Padding}">
-                <TextBlock Text="{TemplateBinding TagText}"
+                <TextBlock Text="{TemplateBinding Text}"
                            VerticalAlignment="Center" />
             </Border>
         </ControlTemplate>
@@ -154,7 +154,7 @@ private void HandleTagClosed(object? sender, RoutedEventArgs e)
 | 选择器 | 说明 |
 |---|---|
 | `atom\|Tag[IsClosable=True]` | 匹配可关闭标签 |
-| `atom\|Tag[Bordered=False]` | 匹配无边框标签 |
+| `atom\|Tag[IsBordered=False]` | 匹配无边框标签 |
 
 ### 按状态伪类选择
 

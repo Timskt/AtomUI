@@ -77,7 +77,7 @@ System.Object
 | 属性名 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
 | `IsMotionEnabled` | `bool` | 跟随全局 Token `EnableMotion` | 是否启用过渡动画，通过 `AddOwner` 共享自 `MotionAwareControlProperty` |
-| `IsWaveAnimationEnabled` | `bool` | 跟随全局 Token | 是否启用聚焦波纹效果，通过 `AddOwner` 共享自 `WaveSpiritAwareControlProperty` |
+| `IsWaveSpiritEnabled` | `bool` | 跟随全局 Token | 是否启用聚焦波纹效果，通过 `AddOwner` 共享自 `WaveSpiritAwareControlProperty` |
 
 ---
 

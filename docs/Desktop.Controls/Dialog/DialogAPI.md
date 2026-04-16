@@ -126,7 +126,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 | `HorizontalOffset` | `Dimension?` | `null` | 水平偏移（像素或百分比），当 `HorizontalStartupLocation == Custom` 时生效 |
 | `VerticalOffset` | `Dimension?` | `null` | 垂直偏移（像素或百分比），当 `VerticalStartupLocation == Custom` 时生效 |
 | `PlacementTarget` | `Control?` | `null` | 定位参考控件。未设置时自动查找逻辑父控件 |
-| `CustomDialogPlacementCallback` | `CustomDialogPlacementCallback?` | `null` | 自定义定位回调 |
+| `PlacementCallback` | `CustomDialogPlacementCallback?` | `null` | 自定义定位回调 |
 | `OverlayDismissEventPassThrough` | `bool` | `false` | 遮罩关闭时是否将指针事件穿透给下层控件 |
 | `OverlayInputPassThroughElement` | `IInputElement?` | `null` | 输入穿透元素 |
 | `InheritsTransform` | `bool` | `false` | 是否继承父元素变换（缩放等） |

@@ -109,7 +109,7 @@ using AtomUI.Controls.Commons;    // CountBadgeSize, DotBadgeStatus, RibbonBadge
     <atom:ToggleSwitch IsChecked="{Binding StandaloneSwitchChecked}" />
     <atom:CountBadge BadgeColor="#faad14"
                      Count="{Binding StandaloneBadgeCount1}"
-                     ShowZero="True" />
+                     IsShowZero="True" />
     <atom:CountBadge Count="{Binding StandaloneBadgeCount2}" />
     <atom:CountBadge BadgeColor="#52c41a"
                      Count="{Binding StandaloneBadgeCount3}" />

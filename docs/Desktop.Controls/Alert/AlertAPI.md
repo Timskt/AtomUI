@@ -36,7 +36,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 | `IsClosable` | `bool` | `false` | 是否可关闭，启用后右侧显示关闭按钮 |
 | `CloseIcon` | `PathIcon?` | `null`（默认使用 `CloseOutlined`） | 自定义关闭图标，仅在 `IsClosable=True` 时生效 |
 | `ExtraAction` | `Control?` | `null` | 额外操作区域，放置在消息行右侧（如操作按钮） |
-| `IsMessageMarqueEnabled` | `bool` | `false` | 是否启用消息跑马灯效果（长文本自动水平滚动） |
+| `IsMessageMarqueeEnabled` | `bool` | `false` | 是否启用消息跑马灯效果（长文本自动水平滚动） |
 
 ### 继承自 TemplatedControl 的常用属性
 
@@ -86,7 +86,7 @@ Alert 支持以下伪类，可在样式选择器中使用：
 
 以下属性变更会触发重新测量（`AffectsMeasure`）：
 
-- `IsClosable`、`IsShowIcon`、`Message`、`Description`、`IsMessageMarqueEnabled`、`Padding`、`ExtraAction`
+- `IsClosable`、`IsShowIcon`、`Message`、`Description`、`IsMessageMarqueeEnabled`、`Padding`、`ExtraAction`
 
 以下属性变更会触发重新渲染（`AffectsRender`）：
 

@@ -167,7 +167,7 @@ private void HandleAlertClose(object? sender, EventArgs e)
 长文本自动水平滚动，适合在有限宽度内展示长消息：
 
 ```xml
-<atom:Alert Type="Warning" IsMessageMarqueEnabled="True" IsShowIcon="True">
+<atom:Alert Type="Warning" IsMessageMarqueeEnabled="True" IsShowIcon="True">
     This is a very long warning message that will scroll automatically when the content overflows the available width.
 </atom:Alert>
 ```

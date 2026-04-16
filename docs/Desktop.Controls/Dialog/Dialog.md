@@ -44,7 +44,7 @@ Dialog 提供了灵活的定位能力：
 - `HorizontalStartupLocation` / `VerticalStartupLocation`：锚点定位（Left / Center / Right / Top / Bottom / Custom）
 - `HorizontalOffset` / `VerticalOffset`：偏移量，支持像素和百分比（`Dimension` 类型）
 - `PlacementTarget`：定位参考控件
-- `CustomDialogPlacementCallback`：完全自定义定位回调
+- `PlacementCallback`：完全自定义定位回调
 
 **MVVM 集成：**
 

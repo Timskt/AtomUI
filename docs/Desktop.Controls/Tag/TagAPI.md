@@ -36,9 +36,9 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 | 属性名 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
 | `TagColor` | `string?` | `null` | 标签颜色，支持预设色名称（`"blue"`）、状态名称（`"success"`）、CSS 颜色值（`"#f50"`）。传入 `"default"` 或其他无法识别的值时，标签保持默认样式 |
-| `TagText` | `string?` | `null` | 标签文字内容（`[Content]` 属性，可直接写在标签内） |
+| `Text` | `string?` | `null` | 标签文字内容（`[Content]` 属性，可直接写在标签内） |
 | `IsClosable` | `bool` | `false` | 是否可关闭，启用后显示关闭图标 |
-| `Bordered` | `bool` | `true` | 是否显示边框（自定义颜色模式下自动设为 `false`） |
+| `IsBordered` | `bool` | `true` | 是否显示边框（自定义颜色模式下自动设为 `false`） |
 | `Icon` | `PathIcon?` | `null` | 标签图标，显示在文字左侧 |
 | `CloseIcon` | `PathIcon?` | `null`（默认 `CloseOutlined`） | 关闭图标，可自定义 |
 
@@ -88,7 +88,7 @@ AXAML 命名空间前缀：`atom`（`xmlns:atom="https://atomui.net"`）
 
 以下属性变更会触发重新测量（`AffectsMeasure`）：
 
-- `Bordered`、`Icon`、`IsClosable`、`TagText`
+- `IsBordered`、`Icon`、`IsClosable`、`Text`
 
 以下属性变更会触发重新渲染（`AffectsRender`）：
 
