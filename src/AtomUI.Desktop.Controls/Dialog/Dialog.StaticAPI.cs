@@ -69,7 +69,8 @@ public partial class Dialog
     public static async Task ShowDialogAsync<TView, TViewModel>(TViewModel? dataContext,
                                                                 DialogOptions? options = null,
                                                                 Action<IDialogActionResult>? closed = null,
-                                                                TopLevel? topLevel = null)
+                                                                TopLevel? topLevel = null,
+                                                                CancellationToken cancellationToken = default)
         where TView : Control, new()
     {
         var dialogManager = FindDialogManager(topLevel);
@@ -87,13 +88,16 @@ public partial class Dialog
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await dialog.OpenAsync();
+            await dialog.OpenAsync(cancellationToken);
             tsc.TrySetResult();
         });
         await tsc.Task;
     }
     
-    public static async Task<object?> ShowDialogModalAsync<TView, TViewModel>(TViewModel? dataContext, DialogOptions? options = null, TopLevel? topLevel = null)
+    public static async Task<object?> ShowDialogModalAsync<TView, TViewModel>(TViewModel? dataContext,
+                                                                              DialogOptions? options = null,
+                                                                              TopLevel? topLevel = null,
+                                                                              CancellationToken cancellationToken = default)
         where TView : Control, new()
     {
         var dialogManager = FindDialogManager(topLevel);
@@ -105,10 +109,10 @@ public partial class Dialog
         }
         dialog.Closed += (_, _) => dialogManager.Children.Remove(dialog);
         dialogManager.Children.Add(dialog);
-        var tsc = new  TaskCompletionSource();
+        var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await dialog.OpenAsync();
+            await dialog.OpenAsync(cancellationToken);
             tsc.TrySetResult();
         });
         await tsc.Task;
@@ -119,7 +123,8 @@ public partial class Dialog
                                              object? dataContext = null, 
                                              DialogOptions? options = null, 
                                              Action<IDialogActionResult>? closed = null,
-                                             TopLevel? topLevel = null)
+                                             TopLevel? topLevel = null,
+                                             CancellationToken cancellationToken = default)
     {
         var dialogManager = FindDialogManager(topLevel);
         var dialog        = CreateDialog(content, dataContext, options);
@@ -137,13 +142,17 @@ public partial class Dialog
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await dialog.OpenAsync();
+            await dialog.OpenAsync(cancellationToken);
             tsc.TrySetResult();
         });
         await tsc.Task;
     }
     
-    public static async Task<object?> ShowDialogModalAsync(Control content, object? dataContext = null, DialogOptions? options = null, TopLevel? topLevel = null)
+    public static async Task<object?> ShowDialogModalAsync(Control content,
+                                                           object? dataContext = null,
+                                                           DialogOptions? options = null,
+                                                           TopLevel? topLevel = null,
+                                                           CancellationToken cancellationToken = default)
     {
         var dialogManager = FindDialogManager(topLevel);
         var dialog        = CreateDialog(content, dataContext, options);
@@ -157,7 +166,7 @@ public partial class Dialog
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await dialog.OpenAsync();
+            await dialog.OpenAsync(cancellationToken);
             tsc.TrySetResult();
         });
         await tsc.Task;

@@ -10,6 +10,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -200,6 +201,7 @@ public class Upload : ContentControl,
         new (@"\.(webp|svg|png|gif|jpg|jpeg|jfif|bmp|dpg|ico|heic|heif)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     private bool _defaultTaskListApplied;
+    private CancellationTokenSource? _uploadCts;
 
     static Upload()
     {
@@ -559,6 +561,14 @@ public class Upload : ContentControl,
         {
             OpenFileDialog();
         }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _uploadCts?.Cancel();
+        _uploadCts?.Dispose();
+        _uploadCts = null;
     }
 
     protected override void OnLoaded(RoutedEventArgs e)

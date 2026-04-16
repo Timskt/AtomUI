@@ -413,7 +413,7 @@ public partial class Dialog : TemplatedControl,
         {
             if (e.NewValue.Value)
             {
-                Dispatcher.UIThread.InvokeAsync(OpenAsync);
+                Dispatcher.UIThread.InvokeAsync(() => OpenAsync());
             }
             else
             {
@@ -449,12 +449,14 @@ public partial class Dialog : TemplatedControl,
     /// 1. IsModal 为 true，Task 会等待到窗口关闭才会完成，所以在 await 之后可以获取 Result
     /// 2. IsMoal 为 false，Task 会在窗口打开之后就会完成，所以 await 之后是不能获取 Result
     /// </summary>
-    public async Task OpenAsync()
+    public async Task OpenAsync(CancellationToken cancellationToken = default)
     {
         if (_openState != null || _opening)
         {
             return;
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         _opening = true;
         var placementTarget = PlacementTarget ?? this.FindLogicalAncestorOfType<Control>();
@@ -631,7 +633,10 @@ public partial class Dialog : TemplatedControl,
         _dialogHostChangedHandler?.Invoke(Host);
         if (modalTsc != null)
         {
-            await modalTsc.Task;
+            using (cancellationToken.Register(() => modalTsc.TrySetCanceled(cancellationToken)))
+            {
+                await modalTsc.Task;
+            }
         }
     }
 
