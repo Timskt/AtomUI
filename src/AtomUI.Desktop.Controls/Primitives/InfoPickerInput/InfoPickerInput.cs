@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System.ComponentModel;
+using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives.Themes;
@@ -310,12 +311,8 @@ public abstract class InfoPickerInput : TemplatedControl,
     private CompositeDisposable? _flyoutHelperBindingDisposables;
     private AddOnDecoratedBox? _addOnDecoratedBox;
     
-    // Event handlers for OnApplyTemplate to prevent lambda stacking
-    private EventHandler? _flyoutOpenedHandler;
-    private EventHandler? _flyoutClosedHandler;
-    private EventHandler<PickerFlyoutPresenterCreatedEventArgs>? _flyoutPresenterCreatedHandler;
-    private EventHandler? _decoratedBoxTemplateAppliedHandler;
-    private PropertyChangedEventHandler? _decoratedBoxPropertyChangedHandler;
+    private EventHandler<TemplateAppliedEventArgs>? _decoratedBoxTemplateAppliedHandler;
+    private EventHandler<AvaloniaPropertyChangedEventArgs>? _decoratedBoxPropertyChangedHandler;
     private EventHandler? _clearRequestHandler;
 
     static InfoPickerInput()
@@ -455,14 +452,12 @@ public abstract class InfoPickerInput : TemplatedControl,
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        // 移除旧的 DecoratedBox 事件订阅，防止 lambda 叠加
         if (DecoratedBox != null)
         {
             DecoratedBox.TemplateApplied -= _decoratedBoxTemplateAppliedHandler;
             DecoratedBox.PropertyChanged -= _decoratedBoxPropertyChangedHandler;
         }
         
-        // 移除旧的 PickerClearUpButton 事件订阅
         if (PickerClearUpButton is not null)
         {
             PickerClearUpButton.ClearRequest -= _clearRequestHandler;
@@ -497,7 +492,6 @@ public abstract class InfoPickerInput : TemplatedControl,
                 PickerClearUpButton = rightContent.FindDescendantOfType<PickerClearUpButton>();
             }
 
-            // 使用命名方法而不是 lambda，防止叠加
             _decoratedBoxTemplateAppliedHandler = (sender, args) =>
             {
                 PickerInnerBox                 = DecoratedBox.ContentFrame;
