@@ -232,6 +232,13 @@ public class Upload : ContentControl,
         TaskInfoList.CollectionChanged += HandleTaskListChanged;
     }
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        // Create a new CancellationTokenSource when attached to visual tree
+        _uploadCts = new CancellationTokenSource();
+    }
+
     private void HandleTaskListChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (TaskInfoList.Count == 0)
@@ -518,9 +525,9 @@ public class Upload : ContentControl,
         }
     }
 
-    public async Task ResetAsync()
+    public async Task ResetAsync(CancellationToken cancellationToken = default)
     {
-        await CancelAllUploadTaskAsync();
+        await CancelAllUploadTaskAsync(cancellationToken);
         TaskInfoList = new();
     }
 
@@ -532,10 +539,11 @@ public class Upload : ContentControl,
         });
     }
     
-    private async Task CancelAllUploadTaskAsync()
+    private async Task CancelAllUploadTaskAsync(CancellationToken cancellationToken = default)
     {
         for (int i = _allTaskList.Count - 1; i >= 0; i--)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var taskInfo = TaskInfoList[i];
             if (taskInfo.Status != FileUploadStatus.Uploading || taskInfo.UploadTask == null)
             {
