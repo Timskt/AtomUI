@@ -11,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Utilities;
+using Avalonia.VisualTree;
 using AvaloniaButton = Avalonia.Controls.Button;
 
 namespace AtomUI.Desktop.Controls;
@@ -258,19 +259,13 @@ internal class ColorSlider : AbstractColorSlider
                 _backgroundBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraPixelData, pixelWidth, pixelHeight);
 
                 Background = new ImageBrush(_backgroundBitmap);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in UpdateBackgroundAsync: {ex.Message}");
         }
     }
-    catch (Exception ex)
-    {
-        System.Diagnostics.Debug.WriteLine($"Error in UpdateBackgroundAsync: {ex.Message}");
-    }
-}
-
-// Keep the old method for backward compatibility
-private void UpdateBackground()
-{
-    _ = UpdateBackgroundAsync();
-}
     
     /// <summary>
     /// Rounds the component values of the given <see cref="HsvColor"/>.
@@ -521,7 +516,7 @@ private void UpdateBackground()
             SetCurrentValue(HsvColorProperty, Color.ToHsv());
 
             SetColorToSliderValues();
-            UpdateBackground();
+            _ = UpdateBackgroundAsync();
             UpdatePseudoClasses();
 
             NotifyColorChanged(new ColorChangedEventArgs(
@@ -538,7 +533,7 @@ private void UpdateBackground()
             IgnorePropertyChanged = true;
 
             SetColorToSliderValues();
-            UpdateBackground();
+            _ = UpdateBackgroundAsync();
             UpdatePseudoClasses();
 
             IgnorePropertyChanged = false;
@@ -551,7 +546,7 @@ private void UpdateBackground()
             SetCurrentValue(ColorProperty, HsvColor.ToRgb());
 
             SetColorToSliderValues();
-            UpdateBackground();
+            _ = UpdateBackgroundAsync();
             UpdatePseudoClasses();
 
             NotifyColorChanged(new ColorChangedEventArgs(
@@ -567,11 +562,11 @@ private void UpdateBackground()
         else if (change.Property == BoundsProperty)
         {
             // If the control's overall dimensions have changed the background bitmap size also needs to change.
-            // This means the existing bitmap must be released to be recreated correctly in UpdateBackground().
+            // This means the existing bitmap must be released to be recreated correctly in UpdateBackgroundAsync().
             _backgroundBitmap?.Dispose();
             _backgroundBitmap = null;
 
-            UpdateBackground();
+            _ = UpdateBackgroundAsync();
             UpdatePseudoClasses();
         }
         else if (change.Property == ValueProperty ||

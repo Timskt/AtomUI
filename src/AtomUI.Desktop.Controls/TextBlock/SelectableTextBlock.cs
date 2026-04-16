@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Styling;
 using Avalonia.Utilities;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -162,15 +163,7 @@ public class SelectableTextBlock : TextBlock
             System.Diagnostics.Debug.WriteLine($"Error in CopyAsync: {ex.Message}");
         }
     }
-
-    /// <summary>
-    /// Copies the current selection to the Clipboard (legacy method for backward compatibility).
-    /// </summary>
-    public void Copy()
-    {
-        _ = CopyAsync();
-    }
-
+    
     /// <summary>
     /// Select all text in the TextBox
     /// </summary>
@@ -299,7 +292,7 @@ public class SelectableTextBlock : TextBlock
 
         if (Match(keymap.Copy))
         {
-            Copy();
+            _ = CopyAsync();
             handled = true;
         }
         else if (Match(keymap.SelectAll))

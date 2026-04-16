@@ -4525,7 +4525,7 @@ public partial class DataGrid
 
             if (!string.IsNullOrEmpty(text))
             {
-                CopyToClipboard(text);
+                _ = CopyToClipboardAsync(text);
                 return true;
             }
         }
@@ -4668,11 +4668,6 @@ public partial class DataGrid
         }
     }
 
-    // Keep the old method for backward compatibility
-    private void CopyToClipboard(string text)
-    {
-        _ = CopyToClipboardAsync(text);
-    }
 
     /// <summary>
     /// This is an empty content control that's used during the DataGrid's copy procedure
