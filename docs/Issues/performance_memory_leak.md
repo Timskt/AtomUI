@@ -51,7 +51,7 @@
 | 5.19 | WindowNotificationManager 50ms 高频轮询 | 🟡 | `640897d6` |
 | 6.1 | 预设颜色映射 Dictionary → FrozenDictionary | 🔵 | `dfb1554b` |
 | 6.3 | TimerStatistic Dead Code | 🔵 | `41dacbae` |
-| 1.1 | ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式 | 🔴 | `待填入` |
+| 1.1 | ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式 | 🔴 | `29452afe` |
 
 ---
 
@@ -216,11 +216,11 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 
 | 严重程度 | 总数 | 已修复 | 待修复 |
 |----------|------|--------|--------|
-| 🔴 Critical | 7 | 5 | 2 |
+| 🔴 Critical | 7 | 6 | 1 |
 | 🟠 High | 8 | 7 | 1 |
 | 🟡 Medium | 19 | 15 | 4 |
 | 🔵 Low | 5 | 2 | 3 |
-| **合计** | **39** | **29** | **10** |
+| **合计** | **39** | **30** | **9** |
 
 ### 6.2 待修复优先级
 
@@ -228,7 +228,6 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 
 | # | 问题 | 预计工作量 |
 |---|------|-----------|
-| 1.1 | ListCollectionView CollectionChanged lambda 泄漏 | ~15 行代码 |
 | 1.2 | DataGridCollectionView 同上 | ~15 行代码 |
 
 #### P1 — 尽快修复
