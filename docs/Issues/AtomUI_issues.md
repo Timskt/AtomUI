@@ -32,23 +32,6 @@
 
 ## 二、生命周期与分离问题
 
-### 2.2 🟠 Space — Children.PropertyChanged 重复订阅保护（主文档 5.16）
-
-- **文件**：`src/AtomUI.Desktop.Controls/Space/Space.cs`
-- **当前实现**：使用了 `add`/`remove` 事件访问器，条件订阅正确。但 `OnApplyTemplate` 中若直接 `+=` 会造成叠加。
-- **修复建议**：审计所有 `OnApplyTemplate` 调用栈，确保订阅幂等。
-
-```csharp
-protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-{
-    base.OnApplyTemplate(e);
-    Children.PropertyChanged -= HandleChildrenPropertyChanged;
-    Children.PropertyChanged += HandleChildrenPropertyChanged;
-}
-```
-
----
-
 ### 2.4 🟠 Popup.cs、Dialog.cs、Tour.cs、AbstractImagePreviewer — IDisposable 实现但未在生命周期钩子中调用
 
 以下类实现了 `IDisposable`：
@@ -125,8 +108,8 @@ private void StartOperation()
 
 - **文件**：
   - `src/AtomUI.Controls/QRCode/AbstractQRCode.cs` 第 231 行
-  - `src/AtomUI.Desktop.Controls/ImagePreviewer/PreviewImageSource.cs` 第 38 行
-- **问题**：每次重新生成 / 切换图源时，旧 `Bitmap` 对象未 Dispose。Avalonia `Bitmap` 持有非托管像素缓冲，依赖终结器回收会延迟。
+  - `src/AtomUI.Desktop.Controls/ImagePreviewer/PreviewImageSource.cs`
+- **问题**：每次重新生成 / 切换图源时，旧 `Bitmap` 对象未 Dispose。Avalonia `Bitmap` 持有非托管像素缓冲，依赖终结器回收会延迟。`PreviewImageSource` 为 record 类型，未实现 `IDisposable`，实例被替换时 Bitmap 无法释放。
 - **影响评估**：🟠 中。
 - **修复建议**：
 
@@ -150,17 +133,17 @@ public Bitmap? Bitmap
 
 ### 4.2 🟠 ColorPickerHelpers.CreateBitmapFromPixelData — 调用者需主动 Dispose
 
-- **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/Utils/ColorPickerHelpers.cs` 第 625 行
-- **问题**：返回 `new Bitmap(...)`，调用者（`ColorSpectrum` / `ColorSlider`）在频繁更新时需要主动 Dispose 前一个 Bitmap。需全局审计所有调用。
-- **修复建议**：在 XML doc 明确标注 "Caller must Dispose"，或包装成 `PooledBitmap`。
+- **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/Utils/ColorPickerHelpers.cs`
+- **问题**：返回 `new Bitmap(...)`，调用者在频繁更新时需要主动 Dispose 前一个 Bitmap。XML doc 中无 "Caller must Dispose" 标注，且 `<returns>` 标签描述有误（写的是 `WriteableBitmap`）。
+- **修复建议**：在 XML doc 明确标注 "Caller must Dispose"，修正 `<returns>` 描述。
 
 ---
 
 ### 4.3 🟠 RenderTargetBitmap 泄漏风险 — ControlExtensions.cs
 
 - **文件**：`src/AtomUI.Controls.Shared/Utils/ControlExtensions.cs` 第 23 行
-- **问题**：`var bitmap = new RenderTargetBitmap(...)` 使用方必须负责 Dispose。RenderTargetBitmap 在 GPU 上驻留，开销更高。
-- **修复建议**：在 XML doc 明确标注 "Caller must Dispose"，或改为 `using` 块模式。
+- **问题**：`CaptureCurrentBitmap` 返回 `RenderTargetBitmap`（实现 `IDisposable`），完全没有 XML doc，调用者不知道需要 Dispose。RenderTargetBitmap 在 GPU 上驻留，开销更高。
+- **修复建议**：添加 XML doc 明确标注 "Caller must Dispose"，或改为 `using` 块模式。
 
 ---
 
@@ -175,7 +158,7 @@ public Bitmap? Bitmap
 ### 4.5 🟠 WaveSpiritDecorator — `_cancellationTokenSource = new CTS()` 未 Dispose 旧实例
 
 - **文件**：`src/AtomUI.Controls/Primitives/WaveSpiritDecorator.cs` 第 292 行
-- **问题**：`WaveSpirit` 点击涟漪高频触发（每次点击都创建 CTS），之前的 CTS 未 Dispose。
+- **问题**：`WaveSpirit` 点击涟漪高频触发（每次点击都创建 CTS），之前的 CTS 未 Dispose。`OnDetachedFromVisualTree` 和 `OnPropertyChanged` 中也只 Cancel 不 Dispose。
 - **影响评估**：🟠 中（按钮密集场景下持续泄漏 WaitHandle）。
 - **修复建议**：
 
@@ -192,7 +175,7 @@ _cancellationTokenSource = new CancellationTokenSource();
 - **文件**：
   - `src/AtomUI.Controls/Switch/SwitchKnob.cs` 第 192 行
   - `src/AtomUI.Controls/Spin/AbstractSpinIndicator.cs` 第 127 行
-- **问题**：均是 `_cancellationTokenSource = new CancellationTokenSource()` 前无 Dispose。
+- **问题**：均是 `_cancellationTokenSource = new CancellationTokenSource()` 前无 Dispose，`OnDetachedFromVisualTree` 中也只 Cancel 不 Dispose。
 - **修复建议**：同 4.5。
 
 ---
@@ -235,31 +218,6 @@ public static readonly IReadOnlyList<double> DashedStyle = new[] { 4d, 2d };
 ---
 
 ## 六、性能热点
-
-### 6.1 🟠 Watermark.Render — 紧循环渲染（主文档 5.18）
-
-- **文件**：`src/AtomUI.Desktop.Controls/Watermark/WatermarkGlyph.cs`
-- **问题**：Render 方法双重 for 循环调用 `DrawText`，未缓存 `FormattedText` 对象。
-- **建议**：预构建 `GlyphRun` 或 `FormattedText`，仅在属性变化时重建。
-
----
-
-### 6.2 🟠 WindowNotificationManager — 50ms 高频 Timer（主文档 5.19）
-
-- **文件**：`src/AtomUI.Desktop.Controls/Notifications/WindowNotificationManager.cs` 第 84、86 行
-- **问题**：`_cardExpiredTimer`、`_cleanupTimer` 以 50ms 固定间隔运行，即使没有通知也在运行。
-- **影响评估**：🟠 中（持续 CPU 占用，节能场景影响明显）。
-- **修复建议**：改为按需启动：
-
-```csharp
-if (_notifications.Count == 0)
-{
-    _cardExpiredTimer.Stop();
-    _cleanupTimer.Stop();
-}
-```
-
----
 
 ### 6.3 🟡 Icon Geometry — StreamGeometry.Parse 重复调用
 
@@ -376,12 +334,9 @@ public async Task Button_DoesNotLeak_AfterDetach()
 |-----|------|--------|--------|--------|
 | P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
 | P4 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
-| P6 | 6.2 WindowNotificationManager 50ms 常驻 Timer | 🟠 中 | 中 | 中 |
 | P7 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
-| P8 | 2.2 Space 子控件订阅幂等性（主文档 5.16） | 🟠 中 | 小 | 中 |
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
 | P11 | 3.4 FileUploadScheduler 局部 CTS Dispose | 🟠 中 | 最小 | 中 |
-| P12 | 6.1 Watermark 渲染优化（主文档 5.18） | 🟠 中 | 中 | 中 |
 | P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
 | P14 | 6.3 Icon Geometry 缓存 | 🟡 低 | 中（改生成器） | 低 |
 | P15 | 6.4 InterpolateUtils LOH 分配 | 🟡 低 | 中 | 低 |
