@@ -110,6 +110,7 @@ internal class GradientColorSlider : AbstractColorSlider
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
+        _activatedThumbDispose?.Dispose();
         _activatedThumbDispose = GradientColorPickerTrack.ActivatedThumbProperty.Changed.Subscribe(HandleActivatedThumbChanged);
     }
 

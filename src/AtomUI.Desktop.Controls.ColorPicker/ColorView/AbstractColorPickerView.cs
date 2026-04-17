@@ -303,6 +303,16 @@ public abstract class AbstractColorPickerView : TemplatedControl, IMotionAwareCo
     {
         base.OnApplyTemplate(e);
         ConfigureAlphaEffectiveVisible();
+        
+        if (_clearColorButton != null)
+        {
+            _clearColorButton.ClearRequest -= HandleColorClearRequest;
+        }
+        if (_paletteGroup != null)
+        {
+            _paletteGroup.ColorSelected -= HandlePaletteColorSelected;
+        }
+
         _clearColorButton = e.NameScope.Find<ColorBlock>(ColorPickerViewThemeConstants.ClearColorPart);
         if (_clearColorButton != null)
         {
@@ -316,11 +326,13 @@ public abstract class AbstractColorPickerView : TemplatedControl, IMotionAwareCo
         _paletteGroup = e.NameScope.Find<ColorPickerPaletteGroup>(ColorPickerViewThemeConstants.PaletteGroupPart);
         if (_paletteGroup != null)
         {
-            _paletteGroup.ColorSelected += (sender, args) =>
-            {
-                NotifyPaletteColorSelected(args.SelectedColor);
-            };
+            _paletteGroup.ColorSelected += HandlePaletteColorSelected;
         }
+    }
+
+    private void HandlePaletteColorSelected(object? sender, ColorPickerPaletteColorSelectedEventArgs args)
+    {
+        NotifyPaletteColorSelected(args.SelectedColor);
     }
     
     private void ConfigureDefaultPaletteGroup()

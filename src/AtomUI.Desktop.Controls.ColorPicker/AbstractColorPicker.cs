@@ -375,19 +375,11 @@ public abstract class AbstractColorPicker : AvaloniaButton,
         base.OnApplyTemplate(e);
         if (PickerFlyout is null)
         {
-            PickerFlyout = CreatePickerFlyout();
-            PickerFlyout.Opened += (sender, args) =>
-            {
-                IsFlyoutOpen = true;
-                UpdatePseudoClasses();
-            };
-            PickerFlyout.Closed += (sender, args) =>
-            {
-                IsFlyoutOpen = false;
-                UpdatePseudoClasses();
-            };
-            PickerFlyout.PresenterCreated += (sender, args) => { NotifyFlyoutPresenterCreated(args.Presenter); };
-            _flyoutStateHelper.Flyout      =  PickerFlyout;
+            PickerFlyout                    =  CreatePickerFlyout();
+            PickerFlyout.Opened            += HandlePickerFlyoutOpened;
+            PickerFlyout.Closed            += HandlePickerFlyoutClosed;
+            PickerFlyout.PresenterCreated  += HandlePickerFlyoutPresenterCreated;
+            _flyoutStateHelper.Flyout       =  PickerFlyout;
         }
         _flyoutStateHelper.AnchorTarget = this;
         SetupFlyoutProperties();
@@ -423,6 +415,23 @@ public abstract class AbstractColorPicker : AvaloniaButton,
     private void HandleFlyoutOpened(object? sender, EventArgs args)
     {
         NotifyFlyoutOpened();
+    }
+
+    private void HandlePickerFlyoutOpened(object? sender, EventArgs args)
+    {
+        IsFlyoutOpen = true;
+        UpdatePseudoClasses();
+    }
+
+    private void HandlePickerFlyoutClosed(object? sender, EventArgs args)
+    {
+        IsFlyoutOpen = false;
+        UpdatePseudoClasses();
+    }
+
+    private void HandlePickerFlyoutPresenterCreated(object? sender, FlyoutPresenterCreatedEventArgs args)
+    {
+        NotifyFlyoutPresenterCreated(args.Presenter);
     }
 
     protected virtual void NotifyFlyoutOpened()

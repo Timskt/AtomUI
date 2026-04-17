@@ -230,6 +230,11 @@ internal class ColorPickerInput : TemplatedControl
             _bValueInput.ValueChanged -= HandleBValueInputValueChanged;
         }
       
+        if (_colorFormatComboBox != null)
+        {
+            _colorFormatComboBox.SelectionChanged -= HandleFormatChanged;
+        }
+
         base.OnApplyTemplate(e);
         _colorFormatComboBox = e.NameScope.Find<ComboBox>(ColorPickerInputThemeConstants.ColorFormatComboBoxPart);
         _alphaInput          = e.NameScope.Find<NumericUpDown>(ColorPickerInputThemeConstants.AlphaInputPart);
