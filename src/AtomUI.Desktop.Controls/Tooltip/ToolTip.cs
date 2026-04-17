@@ -597,21 +597,28 @@ public class ToolTip : ContentControl,
     
     private void StartShowTimer(int showDelay, Control control)
     {
+        StopTimer();
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay), Tag = (this, control) };
-        _timer.Tick += (o, e) =>
-        {
-            if (_timer != null)
-            {
-                Open(control);
-            }
-        };
+        _timer.Tick += HandleShowTimerTick;
         _timer.Start();
     }
-    
+
+    private void HandleShowTimerTick(object? sender, EventArgs e)
+    {
+        if (_timer?.Tag is ValueTuple<ToolTip, Control> tuple)
+        {
+            Open(tuple.Item2);
+        }
+    }
+
     private void StopTimer()
     {
-        _timer?.Stop();
-        _timer = null;
+        if (_timer != null)
+        {
+            _timer.Tick -= HandleShowTimerTick;
+            _timer.Stop();
+            _timer = null;
+        }
     }
 
     private void HandlePopupHostChanged(IPopupHost? host)
