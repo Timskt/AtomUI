@@ -35,6 +35,13 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
     public static readonly StyledProperty<bool> IsPauseOnHoverProperty =
         AvaloniaProperty.Register<WindowNotificationManager, bool>(nameof(IsPauseOnHover), true);
 
+    /// <summary>
+    /// 通知卡片过期检测与清理的轮询间隔，默认 200ms。
+    /// </summary>
+    public static readonly StyledProperty<TimeSpan> PollingIntervalProperty =
+        AvaloniaProperty.Register<WindowNotificationManager, TimeSpan>(
+            nameof(PollingInterval), TimeSpan.FromMilliseconds(200));
+
     public NotificationPosition Position
     {
         get => GetValue(PositionProperty);
@@ -52,11 +59,20 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
         get => GetValue(IsPauseOnHoverProperty);
         set => SetValue(IsPauseOnHoverProperty, value);
     }
-    
+
     public bool IsMotionEnabled
     {
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
+    }
+
+    /// <summary>
+    /// 获取或设置通知卡片过期检测与清理的轮询间隔。
+    /// </summary>
+    public TimeSpan PollingInterval
+    {
+        get => GetValue(PollingIntervalProperty);
+        set => SetValue(PollingIntervalProperty, value);
     }
     
     #endregion
@@ -66,6 +82,7 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
     private AdornerLayer? _adornerLayer;
     private IList? _items;
     private readonly Queue<NotificationCard> _cleanupQueue;
+    private readonly HashSet<NotificationCard> _cleanupSet;
     private readonly DispatcherTimer _cardExpiredTimer;
     private readonly DispatcherTimer _cleanupTimer;
 
@@ -81,11 +98,13 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
     public WindowNotificationManager()
     {
         this.RegisterTokenResourceScope(NotificationToken.ScopeProvider);
-        _cardExpiredTimer      =  new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50), Tag = this };
+        var defaultInterval    =  PollingIntervalProperty.GetDefaultValue(typeof(WindowNotificationManager));
+        _cardExpiredTimer      =  new DispatcherTimer { Interval = defaultInterval, Tag = this };
         _cardExpiredTimer.Tick += HandleCardExpiredTimer;
-        _cleanupTimer          =  new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50), Tag = this };
+        _cleanupTimer          =  new DispatcherTimer { Interval = defaultInterval, Tag = this };
         _cleanupTimer.Tick     += HandleCleanupTimerTick;
         _cleanupQueue          =  new Queue<NotificationCard>();
+        _cleanupSet            =  new HashSet<NotificationCard>();
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -106,7 +125,7 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
                 {
                     if (card.NotifyCloseTick(_cardExpiredTimer.Interval))
                     {
-                        if (!_cleanupQueue.Contains(card))
+                        if (_cleanupSet.Add(card))
                         {
                             _cleanupQueue.Enqueue(card);
                             if (!_cleanupTimer.IsEnabled)
@@ -132,6 +151,7 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
             else if (card.IsClosed)
             {
                 _cleanupQueue.Dequeue();
+                _cleanupSet.Remove(card);
                 if (_cleanupQueue.Count == 0)
                 {
                     _cleanupTimer.Stop();
@@ -228,6 +248,13 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
         {
             UpdatePseudoClasses(change.GetNewValue<NotificationPosition>());
         }
+        else if (change.Property == PollingIntervalProperty)
+        {
+            // Update the interval for both timers
+            var newInterval = change.GetNewValue<TimeSpan>();
+            _cardExpiredTimer.Interval = newInterval;
+            _cleanupTimer.Interval      = newInterval;
+        }
     }
     
     private void InstallFromTopLevel(TopLevel topLevel)
@@ -278,6 +305,7 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
 
             _items?.Clear();
             _cleanupQueue.Clear();
+            _cleanupSet.Clear();
             // 卸载事件订阅
             _topLevel.TemplateApplied -= TopLevelOnTemplateApplied;
 

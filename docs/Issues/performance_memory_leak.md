@@ -15,9 +15,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 14 |
-| ⏳ 待修复 | 25 |
-| 修复进度 | **35.9%** |
+| ✅ 已修复 | 15 |
+| ⏳ 待修复 | 24 |
+| 修复进度 | **38.5%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
@@ -34,6 +34,7 @@
 - ✅ **5.16** Space Children.PropertyChanged 重复订阅（Commit: `5ba9ca9a`）
 - ✅ **5.17** ToolTip.StartShowTimer Timer 重叠（Commit: `5e339b2f`）
 - ✅ **5.18** Watermark.Render 紧密循环渲染性能（Commit: `df642d01`）
+- ✅ **5.19** WindowNotificationManager 50ms 高频轮询（Commit: `9a8fb13c`）
 
 ---
 
@@ -1371,19 +1372,33 @@ var m = c % 2 == 1 && Glyph.UseMirror
 
 ---
 
-### 5.19 WindowNotificationManager — 50ms 高频轮询
+### 5.19 ✅ ~~WindowNotificationManager — 50ms 高频轮询~~（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls/Notifications/WindowNotificationManager.cs`，第 82-85 行
+- **文件**：`src/AtomUI.Desktop.Controls/Notifications/WindowNotificationManager.cs`
+- **Commit**：`9a8fb13c`
 - **问题描述**：
 
-`_cardExpiredTimer` 和 `_cleanupTimer` 以 50ms 间隔轮询。`_cleanupQueue.Contains(card)` 在 Queue 上是 O(n) 操作。
+`_cardExpiredTimer` 和 `_cleanupTimer` 以 50ms 间隔轮询，且 `_cleanupQueue.Contains(card)` 在 `Queue<T>` 上是 O(n) 操作，随通知数量线性增长。
+
+- **修复方案**：
+  1. 轮询间隔从 50ms 调整为 **200ms**（减少 4× CPU 调用频率）
+  2. 新增 `_cleanupSet: HashSet<NotificationCard>` 与 `_cleanupQueue` 并行维护，入队时用 `_cleanupSet.Add(card)` 做 O(1) 去重，出队时同步 `_cleanupSet.Remove(card)`
+  3. `Dispose()` 中同步清理 `_cleanupSet`
+
+```csharp
+// 修复后
+if (_cleanupSet.Add(card))          // O(1) 去重
+{
+    _cleanupQueue.Enqueue(card);
+    ...
+}
+// 出队
+_cleanupQueue.Dequeue();
+_cleanupSet.Remove(card);
+```
 
 - **复现条件**：通知管理器持续运行
 - **影响评估**：**中等** — 不必要的 CPU 开销
-- **修复建议**：
-  1. 使用 HashSet 辅助查重
-  2. 考虑基于事件驱动而非轮询
-  3. 适当降低轮询频率（如 200ms）
 
 ---
 
