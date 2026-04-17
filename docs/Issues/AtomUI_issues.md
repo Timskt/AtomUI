@@ -38,7 +38,6 @@
 
 | 文件 | 风险 |
 |------|------|
-| `src/AtomUI.Controls/FloatButton/AbstractBackTopFloatButtonHost.cs` | 订阅 `ScrollViewer.ScrollChanged` 未解除 |
 | `src/AtomUI.Desktop.Controls/PopupConfirm/PopupConfirm.cs` | FlyoutStateHelper 未清理 |
 | `src/AtomUI.Desktop.Controls/Notifications/NotificationCard.cs` | 动画 CTS 未清理 |
 | `src/AtomUI.Desktop.Controls/NavMenu/NavMenuItem.cs` | SubMenu Popup 未清理 |
@@ -263,12 +262,11 @@ _cancellationTokenSource = new CancellationTokenSource();
 
 ---
 
-### 4.6 🟠 SwitchKnob / AbstractSpinIndicator / AbstractBackTopFloatButton — 相同 CTS 模式
+### 4.6 🟠 SwitchKnob / AbstractSpinIndicator — 相同 CTS 模式
 
 - **文件**：
   - `src/AtomUI.Controls/Switch/SwitchKnob.cs` 第 192 行
   - `src/AtomUI.Controls/Spin/AbstractSpinIndicator.cs` 第 127 行
-  - `src/AtomUI.Controls/FloatButton/AbstractBackTopFloatButton.cs` 第 202 行
 - **问题**：均是 `_cancellationTokenSource = new CancellationTokenSource()` 前无 Dispose。
 - **修复建议**：同 4.5。
 
@@ -451,9 +449,9 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
-| P1 | 2.1 剩余控件缺少 OnDetachedFromVisualTree（NavMenuItem / NotificationCard / PopupConfirm / BackTopHost / Collapse / Card token scope） | 🔴 高 | 中 | 🚨 最高 |
+| P1 | 2.1 剩余控件缺少 OnDetachedFromVisualTree（NavMenuItem / NotificationCard / PopupConfirm / Collapse / Card token scope） | 🔴 高 | 中 | 🚨 最高 |
 | P2 | 3.1 Select / AutoComplete / Mentions / Form / Dialog — CTS 未 Dispose | 🔴 高 | 中 | 🚨 最高 |
-| P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin / BackTop CTS 模式 | 🟠 中 | 小 | 高 |
+| P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
 | P4 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
 | P5 | 2.3 ToolTip Timer 重叠（主文档 5.17） | 🟠 中 | 小 | 高 |
 | P6 | 6.2 WindowNotificationManager 50ms 常驻 Timer | 🟠 中 | 中 | 中 |

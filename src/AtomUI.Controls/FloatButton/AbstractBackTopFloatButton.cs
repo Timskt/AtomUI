@@ -72,6 +72,25 @@ public abstract class AbstractBackTopFloatButton : AbstractFloatButton
     private bool _hideAnimating;
     private CancellationTokenSource? _cancellationTokenSource;
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (Target != null)
+        {
+            Target.ScrollChanged -= HandleScrollChanged;
+            Target.ScrollChanged += HandleScrollChanged;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        Target?.ScrollChanged -= HandleScrollChanged;
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
+        _cancellationTokenSource = null;
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -199,6 +218,7 @@ public abstract class AbstractBackTopFloatButton : AbstractFloatButton
             if (Target != null)
             {
                 _cancellationTokenSource?.Cancel();
+                _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = new CancellationTokenSource();
                 var currentOffset = Target.Offset;
                 var animation = new Animation
