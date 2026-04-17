@@ -722,6 +722,7 @@ public class FormItem : TemplatedControl, IFormItem
     private void ValidateValueDefer()
     {
         _validationTokenSource?.Cancel();
+        _validationTokenSource?.Dispose();
         _validationTokenSource = new CancellationTokenSource();
         var cancellationToken = _validationTokenSource.Token;
         if (ValidateDebounce != TimeSpan.Zero)

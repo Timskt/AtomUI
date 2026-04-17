@@ -275,7 +275,11 @@ internal sealed class ToolTipService : IDisposable
 
     private void StopTimer()
     {
-        _timer?.Stop();
-        _timer = null;
+        if (_timer != null)
+        {
+            _timer.Tick -= HandleShowTimerTick;
+            _timer.Stop();
+            _timer = null;
+        }
     }
 }

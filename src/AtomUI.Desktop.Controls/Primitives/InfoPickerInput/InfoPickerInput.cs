@@ -1,6 +1,4 @@
-﻿using System.Reactive.Disposables;
-using AtomUI.Controls;
-using AtomUI.Data;
+﻿using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives.Themes;
 using AtomUI.Theme;
 using Avalonia;
@@ -306,7 +304,6 @@ public abstract class InfoPickerInput : TemplatedControl,
 
     private protected bool IsFlyoutOpen;
     private protected bool IsChoosing;
-    private CompositeDisposable? _flyoutHelperBindingDisposables;
     private AddOnDecoratedBox? _addOnDecoratedBox;
     
 
@@ -322,12 +319,14 @@ public abstract class InfoPickerInput : TemplatedControl,
         {
             TriggerType = FlyoutTriggerType.Click
         };
-        FlyoutStateHelper.FlyoutAboutToShow        += HandleFlyoutAboutToShow;
-        FlyoutStateHelper.FlyoutAboutToClose       += HandleFlyoutAboutToClose;
-        FlyoutStateHelper.FlyoutOpened             += HandleFlyoutOpened;
-        FlyoutStateHelper.FlyoutClosed             += HandleFlyoutClosed;
-        FlyoutStateHelper.OpenFlyoutPredicate      =  FlyoutOpenPredicate;
-        FlyoutStateHelper.ClickHideFlyoutPredicate =  ClickHideFlyoutPredicate;
+        FlyoutStateHelper.FlyoutAboutToShow                           += HandleFlyoutAboutToShow;
+        FlyoutStateHelper.FlyoutAboutToClose                          += HandleFlyoutAboutToClose;
+        FlyoutStateHelper.FlyoutOpened                                += HandleFlyoutOpened;
+        FlyoutStateHelper.FlyoutClosed                                += HandleFlyoutClosed;
+        FlyoutStateHelper[!FlyoutStateHelper.MouseEnterDelayProperty] =  this[!MouseEnterDelayProperty];
+        FlyoutStateHelper[!FlyoutStateHelper.MouseLeaveDelayProperty] =  this[!MouseLeaveDelayProperty];
+        FlyoutStateHelper.OpenFlyoutPredicate                         =  FlyoutOpenPredicate;
+        FlyoutStateHelper.ClickHideFlyoutPredicate                    =  ClickHideFlyoutPredicate;
     }
 
     public virtual void Clear()
@@ -529,23 +528,6 @@ public abstract class InfoPickerInput : TemplatedControl,
     {
         PseudoClasses.Set(InfoPickerPseudoClass.FlyoutOpen, IsFlyoutOpen);
         PseudoClasses.Set(InfoPickerPseudoClass.Choosing, IsChoosing);
-    }
-
-    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToLogicalTree(e);
-        _flyoutHelperBindingDisposables?.Dispose();
-        _flyoutHelperBindingDisposables = new CompositeDisposable(2);
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseEnterDelayProperty, FlyoutStateHelper,
-            FlyoutStateHelper.MouseEnterDelayProperty));
-        _flyoutHelperBindingDisposables.Add(BindUtils.RelayBind(this, MouseLeaveDelayProperty, FlyoutStateHelper,
-            FlyoutStateHelper.MouseLeaveDelayProperty));
-    }
-
-    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromLogicalTree(e);
-        _flyoutHelperBindingDisposables?.Dispose();
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

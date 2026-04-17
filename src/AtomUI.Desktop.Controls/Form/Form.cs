@@ -516,6 +516,7 @@ public class Form : ItemsControl,
     public void Validate()
     {
         _validationTokenSource?.Cancel();
+        _validationTokenSource?.Dispose();
         _validationTokenSource = new CancellationTokenSource();
         var cancellationToken = _validationTokenSource.Token;
         Dispatcher.UIThread.InvokeAsync(() => ValidateAsync(cancellationToken));
@@ -599,6 +600,7 @@ public class Form : ItemsControl,
     public void Submit()
     {
         _validationTokenSource?.Cancel();
+        _validationTokenSource?.Dispose();
         _validationTokenSource = new CancellationTokenSource();
         var cancellationToken = _validationTokenSource.Token;
         Dispatcher.UIThread.InvokeAsync(async () =>

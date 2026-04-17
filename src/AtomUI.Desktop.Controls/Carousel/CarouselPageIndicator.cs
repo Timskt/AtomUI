@@ -217,20 +217,21 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
     {
         base.OnDetachedFromVisualTree(e);
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
     }
 
     private void HandleSelectChanged()
     {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         if (IsSelected && IsShowTransitionProgress)
         {
-            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             _animation?.RunAsync(this, _cancellationTokenSource.Token);
         }
         else
         {
-            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = null;
         }
     }

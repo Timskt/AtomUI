@@ -1210,6 +1210,17 @@ public partial class DataGrid : TemplatedControl,
             DataConnection.WireEvents(DataConnection.DataSource);
             InitializeElements(true /*recycleRows*/);
         }
+
+        if (_topPagination != null)
+        {
+            _topPagination.CurrentPageChanged -= HandlePageChangeRequest;
+            _topPagination.CurrentPageChanged += HandlePageChangeRequest;
+        }
+        if (_bottomPagination != null)
+        {
+            _bottomPagination.CurrentPageChanged -= HandlePageChangeRequest;
+            _bottomPagination.CurrentPageChanged += HandlePageChangeRequest;
+        }
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -1219,6 +1230,14 @@ public partial class DataGrid : TemplatedControl,
         if (DataConnection.DataSource != null && DataConnection.EventsWired)
         {
             DataConnection.UnWireEvents(DataConnection.DataSource);
+        }
+        if (_topPagination != null)
+        {
+            _topPagination.CurrentPageChanged -= HandlePageChangeRequest;
+        }
+        if (_bottomPagination != null)
+        {
+            _bottomPagination.CurrentPageChanged -= HandlePageChangeRequest;
         }
     }
 

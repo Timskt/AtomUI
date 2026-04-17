@@ -97,10 +97,13 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
                 // Cancel any already running transition, and recycle the element we're transitioning from.
                 if (cancelTransition)
                 {
-                    _transition!.Cancel();
+                    _transition?.Cancel();
+                    _transition?.Dispose();
                     _transition = null;
                     if (_transitionFrom is not null)
+                    {
                         RecycleElement(_transitionFrom);
+                    }
                     _transitionFrom      = null;
                     _transitionFromIndex = -1;
                 }
@@ -396,6 +399,7 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
         {
             RecycleElement(_transitionFrom);
         }
+        _transition?.Dispose();
         _transition          = null;
         _transitionFrom      = null;
         _transitionFromIndex = -1;

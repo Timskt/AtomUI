@@ -38,7 +38,6 @@
 
 | 文件 | 风险 |
 |------|------|
-| `src/AtomUI.Desktop.Controls/PopupConfirm/PopupConfirm.cs` | FlyoutStateHelper 未清理 |
 | `src/AtomUI.Desktop.Controls/Notifications/NotificationCard.cs` | 动画 CTS 未清理 |
 | `src/AtomUI.Desktop.Controls/NavMenu/NavMenuItem.cs` | SubMenu Popup 未清理 |
 | `src/AtomUI.Desktop.Controls/Collapse/Collapse.cs` | 动画控制器未释放 |
@@ -449,7 +448,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
-| P1 | 2.1 剩余控件缺少 OnDetachedFromVisualTree（NavMenuItem / NotificationCard / PopupConfirm / Collapse / Card token scope） | 🔴 高 | 中 | 🚨 最高 |
+| P1 | 2.1 剩余控件缺少 OnDetachedFromVisualTree（NavMenuItem / NotificationCard / Collapse / Card token scope） | 🔴 高 | 中 | 🚨 最高 |
 | P2 | 3.1 Select / AutoComplete / Mentions / Form / Dialog — CTS 未 Dispose | 🔴 高 | 中 | 🚨 最高 |
 | P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
 | P4 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |

@@ -433,6 +433,7 @@ public partial class Dialog : TemplatedControl,
             return null;
         }
         _frameCancellationTokenSource?.Cancel();
+        _frameCancellationTokenSource?.Dispose();
         _frameCancellationTokenSource = new CancellationTokenSource();
         var token = _frameCancellationTokenSource.Token;
         var frame = new DispatcherFrame();

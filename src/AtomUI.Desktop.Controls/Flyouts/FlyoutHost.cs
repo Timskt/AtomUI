@@ -157,7 +157,6 @@ public class FlyoutHost : ContentControl, IMotionAwareControl
     #endregion
     
     private readonly FlyoutStateHelper _flyoutStateHelper;
-    private CompositeDisposable? _flyoutStateHelperDisposables;
     private CompositeDisposable? _flyoutDisposables;
     
     static FlyoutHost()
@@ -168,20 +167,17 @@ public class FlyoutHost : ContentControl, IMotionAwareControl
     public FlyoutHost()
     {
         this.RegisterTokenResourceScope(FlyoutHostToken.ScopeProvider);
-        _flyoutStateHelper = new FlyoutStateHelper();
+        _flyoutStateHelper                                             = new FlyoutStateHelper();
+        _flyoutStateHelper[!FlyoutStateHelper.AnchorTargetProperty]    = this[!ContentProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.FlyoutProperty]          = this[!FlyoutProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseEnterDelayProperty] = this[!MouseEnterDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.MouseLeaveDelayProperty] = this[!MouseLeaveDelayProperty];
+        _flyoutStateHelper[!FlyoutStateHelper.TriggerTypeProperty]     = this[!TriggerProperty];
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        _flyoutStateHelperDisposables = new CompositeDisposable();
-        _flyoutStateHelperDisposables.Add(BindUtils.RelayBind(this, ContentProperty, _flyoutStateHelper, FlyoutStateHelper.AnchorTargetProperty));
-        _flyoutStateHelperDisposables.Add(BindUtils.RelayBind(this, FlyoutProperty, _flyoutStateHelper, FlyoutStateHelper.FlyoutProperty));
-        _flyoutStateHelperDisposables.Add(BindUtils.RelayBind(this, MouseEnterDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseEnterDelayProperty));
-        _flyoutStateHelperDisposables.Add(BindUtils.RelayBind(this, MouseLeaveDelayProperty, _flyoutStateHelper,
-            FlyoutStateHelper.MouseLeaveDelayProperty));
-        _flyoutStateHelperDisposables.Add(BindUtils.RelayBind(this, TriggerProperty, _flyoutStateHelper, FlyoutStateHelper.TriggerTypeProperty));
         SetupFlyoutProperties();
         _flyoutStateHelper.NotifyAttachedToVisualTree();
     }
@@ -190,8 +186,8 @@ public class FlyoutHost : ContentControl, IMotionAwareControl
     {
         base.OnDetachedFromVisualTree(e);
         _flyoutStateHelper.NotifyDetachedFromVisualTree();
-        _flyoutStateHelperDisposables?.Dispose();
-        _flyoutStateHelperDisposables = null;
+        _flyoutDisposables?.Dispose();
+        _flyoutDisposables = null;
     }
 
     protected virtual void SetupFlyoutProperties()

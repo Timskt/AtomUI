@@ -193,16 +193,23 @@ public class DropdownButton : Button
     {
         base.OnAttachedToVisualTree(e);
         _flyoutStateHelper.NotifyAttachedToVisualTree();
+        if (DropdownFlyout != null)
+        {
+            SetupFlyoutProperties(DropdownFlyout);
+        }
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
         _flyoutStateHelper.NotifyDetachedFromVisualTree();
+        _flyoutBindingDisposables?.Dispose();
+        _flyoutBindingDisposables = null;
     }
     
     private void SetupFlyoutProperties(MenuFlyout menuFlyout)
     {
+        _flyoutBindingDisposables?.Dispose();
         _flyoutBindingDisposables = new CompositeDisposable(8);
         _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, menuFlyout));
         _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PlacementAnchorProperty, menuFlyout));
