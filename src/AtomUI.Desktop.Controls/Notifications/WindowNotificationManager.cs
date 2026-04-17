@@ -36,11 +36,18 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
         AvaloniaProperty.Register<WindowNotificationManager, bool>(nameof(IsPauseOnHover), true);
 
     /// <summary>
-    /// 通知卡片过期检测与清理的轮询间隔，默认 200ms。
+    /// 通知卡片过期检测的轮询间隔，默认 200ms。
     /// </summary>
-    public static readonly StyledProperty<TimeSpan> PollingIntervalProperty =
+    public static readonly StyledProperty<TimeSpan> CardExpiredPollingIntervalProperty =
         AvaloniaProperty.Register<WindowNotificationManager, TimeSpan>(
-            nameof(PollingInterval), TimeSpan.FromMilliseconds(200));
+            nameof(CardExpiredPollingInterval), TimeSpan.FromMilliseconds(80));
+
+    /// <summary>
+    /// 通知卡片关闭清理的轮询间隔，默认 200ms。
+    /// </summary>
+    public static readonly StyledProperty<TimeSpan> CleanupPollingIntervalProperty =
+        AvaloniaProperty.Register<WindowNotificationManager, TimeSpan>(
+            nameof(CleanupPollingInterval), TimeSpan.FromMilliseconds(150));
 
     public NotificationPosition Position
     {
@@ -67,12 +74,21 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
     }
 
     /// <summary>
-    /// 获取或设置通知卡片过期检测与清理的轮询间隔。
+    /// 获取或设置通知卡片过期检测的轮询间隔。
     /// </summary>
-    public TimeSpan PollingInterval
+    public TimeSpan CardExpiredPollingInterval
     {
-        get => GetValue(PollingIntervalProperty);
-        set => SetValue(PollingIntervalProperty, value);
+        get => GetValue(CardExpiredPollingIntervalProperty);
+        set => SetValue(CardExpiredPollingIntervalProperty, value);
+    }
+
+    /// <summary>
+    /// 获取或设置通知卡片关闭清理的轮询间隔。
+    /// </summary>
+    public TimeSpan CleanupPollingInterval
+    {
+        get => GetValue(CleanupPollingIntervalProperty);
+        set => SetValue(CleanupPollingIntervalProperty, value);
     }
     
     #endregion
@@ -98,10 +114,9 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
     public WindowNotificationManager()
     {
         this.RegisterTokenResourceScope(NotificationToken.ScopeProvider);
-        var defaultInterval    =  PollingIntervalProperty.GetDefaultValue(typeof(WindowNotificationManager));
-        _cardExpiredTimer      =  new DispatcherTimer { Interval = defaultInterval, Tag = this };
+        _cardExpiredTimer      =  new DispatcherTimer { Interval = CardExpiredPollingIntervalProperty.GetDefaultValue(typeof(WindowNotificationManager)), Tag = this };
         _cardExpiredTimer.Tick += HandleCardExpiredTimer;
-        _cleanupTimer          =  new DispatcherTimer { Interval = defaultInterval, Tag = this };
+        _cleanupTimer          =  new DispatcherTimer { Interval = CleanupPollingIntervalProperty.GetDefaultValue(typeof(WindowNotificationManager)), Tag = this };
         _cleanupTimer.Tick     += HandleCleanupTimerTick;
         _cleanupQueue          =  new Queue<NotificationCard>();
         _cleanupSet            =  new HashSet<NotificationCard>();
@@ -248,12 +263,13 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
         {
             UpdatePseudoClasses(change.GetNewValue<NotificationPosition>());
         }
-        else if (change.Property == PollingIntervalProperty)
+        else if (change.Property == CardExpiredPollingIntervalProperty)
         {
-            // Update the interval for both timers
-            var newInterval = change.GetNewValue<TimeSpan>();
-            _cardExpiredTimer.Interval = newInterval;
-            _cleanupTimer.Interval      = newInterval;
+            _cardExpiredTimer.Interval = change.GetNewValue<TimeSpan>();
+        }
+        else if (change.Property == CleanupPollingIntervalProperty)
+        {
+            _cleanupTimer.Interval = change.GetNewValue<TimeSpan>();
         }
     }
     
