@@ -14,9 +14,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 32 |
-| ⏳ 待修复 | 7 |
-| 修复进度 | **82.1%** |
+| ✅ 已修复 | 34 |
+| ⏳ 待修复 | 5 |
+| 修复进度 | **87.2%** |
 
 ### 已修复问题清单
 
@@ -52,7 +52,8 @@
 | 6.1 | 预设颜色映射 Dictionary → FrozenDictionary | 🔵 | `dfb1554b` |
 | 6.3 | TimerStatistic Dead Code | 🔵 | `41dacbae` |
 | 1.1 | ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式 | 🔴 | `29452afe` |
-| 2.1 | AbstractNotifiableTransition Subject&lt;bool&gt; IDisposable | 🟠 | 本次修复 |
+| 3.3 | ColorPicker 匿名 Lambda / 重复订阅 / 双重订阅 | 🟡 | 本次修复 |
+| 2.1 | AbstractNotifiableTransition Subject&lt;bool&gt; IDisposable | 🟠 | `fcf25b60` |
 | 1.2 | DataGridCollectionView CollectionChanged 匿名 Lambda 泄漏 | 🔴 | `1f04fcee` |
 
 ---
@@ -111,7 +112,7 @@ if (source is INotifyCollectionChanged coll)
 
 ## 2. 🟠 高危问题（High）
 
-### ✅ 2.1 AbstractNotifiableTransition 的 Subject&lt;bool&gt; 未实现 IDisposable（已修复）
+### ✅ 2.1 AbstractNotifiableTransition 的 Subject&lt;bool&gt; 未实现 IDisposable（已修复 `fcf25b60`）
 
 - **文件**：`src/AtomUI.Core/Animations/Transitions/AbstractNotifiableTransition.cs`
 - **问题描述**：类未实现 `IDisposable`。Transition 被中断或从未完成时，Subject 及其订阅者永远不会被清理。
@@ -144,12 +145,12 @@ if (source is INotifyCollectionChanged coll)
 
 ---
 
-### 3.3 ColorPicker 控件复杂状态管理
+### ✅ 3.3 ColorPicker 控件复杂状态管理（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/` 相关文件
 - **问题描述**：多个子控件之间通过事件和绑定通信，控件销毁时若通信链未正确断开，可能导致循环引用。
 - **影响评估**：**中等**
-- **修复建议**：在 `OnDetachedFromVisualTree` 中断开所有子控件之间的事件订阅和绑定。
+- **✅ 修复方案**：`ColorPickerInput`、`AbstractColorPickerView`、`ColorSliderThumb` 的 `OnApplyTemplate` 均已改为命名方法，并在开头先 `-=` 取消旧订阅再 `+=` 添加新订阅，彻底消除重复订阅和匿名 Lambda 泄漏。
 
 ---
 
@@ -198,9 +199,9 @@ if (source is INotifyCollectionChanged coll)
 |----------|------|--------|--------|
 | 🔴 Critical | 7 | 7 | 0 |
 | 🟠 High | 8 | 8 | 0 |
-| 🟡 Medium | 19 | 15 | 4 |
+| 🟡 Medium | 19 | 17 | 2 |
 | 🔵 Low | 5 | 2 | 3 |
-| **合计** | **39** | **32** | **7** |
+| **合计** | **39** | **34** | **5** |
 
 ### 6.2 待修复优先级
 
@@ -218,7 +219,6 @@ if (source is INotifyCollectionChanged coll)
 |---|------|-----------|
 | 3.1 | ThemeConfigProvider 性能 | 中等 |
 | 3.2 | DataGrid 虚拟化泄漏 | 中等 |
-| 3.3 | ColorPicker 复杂状态管理 | 中等 |
 | ~~3.4~~ | ~~Form Items.CollectionChanged lambda~~ | ~~误报~~ |
 
 #### P3 — 长期优化
