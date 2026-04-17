@@ -15,9 +15,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 12 |
-| ⏳ 待修复 | 27 |
-| 修复进度 | **30.8%** |
+| ✅ 已修复 | 13 |
+| ⏳ 待修复 | 26 |
+| 修复进度 | **33.3%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
@@ -32,6 +32,7 @@
 - ✅ **5.10** TreeView/CascaderView CancellationTokenSource Dispose（Commits: 最新）
 - ✅ **5.15** FloatButtonGroupHost lambda 订阅 OpenRequest/CloseRequest（Commit: `d2fc1ec4`）
 - ✅ **5.16** Space Children.PropertyChanged 重复订阅（Commit: `5ba9ca9a`）
+- ✅ **5.17** ToolTip.StartShowTimer Timer 重叠（Commit: `5e339b2f`）
 
 ---
 
@@ -1294,18 +1295,47 @@ if (_childIndexChanged is null)
 
 ---
 
-### 5.17 ToolTip.StartShowTimer — Timer 可能重叠
+### 5.17 ✅ ~~ToolTip.StartShowTimer — Timer 可能重叠~~（已修复）
 
-- **文件**：
-  - `src/AtomUI.Desktop.Controls/Tooltip/ToolTip.cs`，第 600-608 行
-  - `src/AtomUI.Desktop.Controls/Tooltip/ToolTipService.cs`，第 239-240 行
+- **文件**：`src/AtomUI.Desktop.Controls/Tooltip/ToolTip.cs`
+- **Commit**：`5e339b2f`
 - **问题描述**：
 
-每次 `StartShowTimer` 创建新 Timer + lambda，但不确保总是在 `StartShowTimer` 前调用 `StopTimer`。快速鼠标移入移出多个控件时可能产生多个并行 Timer。
+`StartShowTimer` 每次直接创建新 `DispatcherTimer` 并用 lambda 订阅 `Tick`，未先调用 `StopTimer()`。快速移入移出控件时会产生多个并行计时器，旧 lambda 持有对 `control` 的强引用无法释放。
+
+- **修复方案**：
+  1. `StartShowTimer` 开头调用 `StopTimer()` 确保旧计时器已停止。
+  2. lambda 改为命名方法 `HandleShowTimerTick`，通过 `Tag` 传递 `control` 参数。
+  3. `StopTimer` 主动解除 `Tick` 订阅再 Stop，彻底断开引用。
+
+```csharp
+private void StartShowTimer(int showDelay, Control control)
+{
+    StopTimer();  // 先清理旧定时器
+    _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay), Tag = (this, control) };
+    _timer.Tick += HandleShowTimerTick;
+    _timer.Start();
+}
+
+private void HandleShowTimerTick(object? sender, EventArgs e)
+{
+    if (_timer?.Tag is ValueTuple<ToolTip, Control> tuple)
+        Open(tuple.Item2);
+}
+
+private void StopTimer()
+{
+    if (_timer != null)
+    {
+        _timer.Tick -= HandleShowTimerTick;
+        _timer.Stop();
+        _timer = null;
+    }
+}
+```
 
 - **复现条件**：快速在多个带 ToolTip 的控件间移动鼠标
 - **影响评估**：**中等**
-- **修复建议**：在 `StartShowTimer` 开头始终调用 `StopTimer()`，并使用命名方法替代 lambda。
 
 ---
 
