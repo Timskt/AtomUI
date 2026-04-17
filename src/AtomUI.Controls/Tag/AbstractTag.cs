@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
@@ -156,14 +157,14 @@ public abstract class AbstractTag : TemplatedControl
     
     #endregion
     
-    private static readonly Dictionary<PresetColorType, TagCalcColor> PresetColorMap;
-    private static readonly Dictionary<TagStatus, TagStatusCalcColor> StatusColorMap;
+    private static FrozenDictionary<PresetColorType, TagCalcColor> PresetColorMap =
+        FrozenDictionary<PresetColorType, TagCalcColor>.Empty;
+    private static FrozenDictionary<TagStatus, TagStatusCalcColor> StatusColorMap =
+        FrozenDictionary<TagStatus, TagStatusCalcColor>.Empty;
     protected AbstractIconButton? CloseButton;
     
     static AbstractTag()
     {
-        PresetColorMap = new Dictionary<PresetColorType, TagCalcColor>();
-        StatusColorMap = new Dictionary<TagStatus, TagStatusCalcColor>();
         AffectsMeasure<AbstractTag>(IsBorderedProperty,
             IconProperty,
             IsClosableProperty,
@@ -269,30 +270,26 @@ public abstract class AbstractTag : TemplatedControl
     {
         if (PresetColorMap.Count == 0 || force)
         {
-            if (force)
-            {
-                PresetColorMap.Clear();
-            }
             var activatedTheme = ThemeManager.Current?.ActivatedTheme;
             var sharedToken    = activatedTheme?.SharedToken;
             if (sharedToken == null)
             {
-                // 是否需要输出日志
                 return;
             }
 
+            var dict = new Dictionary<PresetColorType, TagCalcColor>();
             foreach (var entry in PresetPrimaryColor.AllColorTypes())
             {
-                var colorMap = sharedToken.GetColorPalette(entry)!;
-                var calcColor = new TagCalcColor
+                var colorMap  = sharedToken.GetColorPalette(entry)!;
+                dict[entry.Type] = new TagCalcColor
                 {
                     LightColor       = colorMap.Color1,
                     LightBorderColor = colorMap.Color3,
                     DarkColor        = colorMap.Color6,
                     TextColor        = colorMap.Color7
                 };
-                PresetColorMap.Add(entry.Type, calcColor);
             }
+            PresetColorMap = dict.ToFrozenDictionary();
         }
     }
 
@@ -300,45 +297,40 @@ public abstract class AbstractTag : TemplatedControl
     {
         if (StatusColorMap.Count == 0 || force)
         {
-            if (force)
-            {
-                StatusColorMap.Clear();
-            }
             var activatedTheme = ThemeManager.Current?.ActivatedTheme;
             var sharedToken    = activatedTheme?.SharedToken;
             if (sharedToken == null)
             {
-                // 是否需要输出日志
                 return;
             }
 
-            StatusColorMap.Add(TagStatus.Success, new TagStatusCalcColor
+            StatusColorMap = new Dictionary<TagStatus, TagStatusCalcColor>
             {
-                Color       = sharedToken.ColorSuccess,
-                Background  = sharedToken.ColorSuccessBg,
-                BorderColor = sharedToken.ColorSuccessBorder
-            });
-
-            StatusColorMap.Add(TagStatus.Info, new TagStatusCalcColor
-            {
-                Color       = sharedToken.ColorInfo,
-                Background  = sharedToken.ColorInfoBg,
-                BorderColor = sharedToken.ColorInfoBorder
-            });
-
-            StatusColorMap.Add(TagStatus.Warning, new TagStatusCalcColor
-            {
-                Color       = sharedToken.ColorWarning,
-                Background  = sharedToken.ColorWarningBg,
-                BorderColor = sharedToken.ColorWarningBorder
-            });
-
-            StatusColorMap.Add(TagStatus.Error, new TagStatusCalcColor
-            {
-                Color       = sharedToken.ColorError,
-                Background  = sharedToken.ColorErrorBg,
-                BorderColor = sharedToken.ColorErrorBorder
-            });
+                [TagStatus.Success] = new TagStatusCalcColor
+                {
+                    Color       = sharedToken.ColorSuccess,
+                    Background  = sharedToken.ColorSuccessBg,
+                    BorderColor = sharedToken.ColorSuccessBorder
+                },
+                [TagStatus.Info] = new TagStatusCalcColor
+                {
+                    Color       = sharedToken.ColorInfo,
+                    Background  = sharedToken.ColorInfoBg,
+                    BorderColor = sharedToken.ColorInfoBorder
+                },
+                [TagStatus.Warning] = new TagStatusCalcColor
+                {
+                    Color       = sharedToken.ColorWarning,
+                    Background  = sharedToken.ColorWarningBg,
+                    BorderColor = sharedToken.ColorWarningBorder
+                },
+                [TagStatus.Error] = new TagStatusCalcColor
+                {
+                    Color       = sharedToken.ColorError,
+                    Background  = sharedToken.ColorErrorBg,
+                    BorderColor = sharedToken.ColorErrorBorder
+                }
+            }.ToFrozenDictionary();
         }
     }
 

@@ -15,9 +15,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 15 |
-| ⏳ 待修复 | 24 |
-| 修复进度 | **38.5%** |
+| ✅ 已修复 | 16 |
+| ⏳ 待修复 | 23 |
+| 修复进度 | **41.0%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
@@ -35,6 +35,7 @@
 - ✅ **5.17** ToolTip.StartShowTimer Timer 重叠（Commit: `5e339b2f`）
 - ✅ **5.18** Watermark.Render 紧密循环渲染性能（Commit: `df642d01`）
 - ✅ **5.19** WindowNotificationManager 50ms 高频轮询（Commit: `9a8fb13c`）
+- ✅ **6.1** 预设颜色映射静态 Dictionary → FrozenDictionary（Commit: 本次）
 
 ---
 
@@ -1404,34 +1405,20 @@ _cleanupSet.Remove(card);
 
 ## 6. 🔵 低危问题（Low）
 
-### 6.1 预设颜色映射使用静态只读字典
+### 6.1 ✅ ~~预设颜色映射使用静态只读字典~~（已修复）
 
 - **文件**：
-  - `src/AtomUI.Controls/Tag/AbstractTag.cs`，第 159-160 行
-  - `src/AtomUI.Core/Theme/Palette/PresetPalettes.cs`，第 14-15 行
-  - `src/AtomUI.Core/Theme/Palette/PaletteGenerator.cs`，第 45 行
+  - `src/AtomUI.Controls/Tag/AbstractTag.cs`
+  - `src/AtomUI.Core/Theme/Palette/PresetPalettes.cs`
 - **问题描述**：
 
-```csharp
-// AbstractTag.cs
-static readonly Dictionary<PresetColorType, TagCalcColor> PresetColorMap = ...;
-static readonly Dictionary<TagStatus, TagStatusCalcColor> StatusColorMap = ...;
+静态 `Dictionary` 字段在内容固定的场景下，查找性能不如 `FrozenDictionary`（.NET 8+）。
 
-// PresetPalettes.cs
-static readonly Dictionary<PresetPrimaryColor, PaletteInfo> sm_presetPalettes = ...;
-static readonly Dictionary<PresetPrimaryColor, PaletteInfo> sm_presetDarkPalettes = ...;
-```
+- **修复方案**：
+  - `PresetPalettes`：静态构造函数先填充临时 `Dictionary`，再调用 `.ToFrozenDictionary()` 冻结，赋值给 `readonly` 字段。
+  - `AbstractTag`：`PresetColorMap` / `StatusColorMap` 改为可重新赋值的 `FrozenDictionary` 字段，主题切换时整体替换（`.ToFrozenDictionary()`），去掉原来的 `Clear()` + `Add()` 模式。
 
-这些静态字典在类加载时初始化，内容固定不变。虽然它们不会增长，但会在应用整个生命周期中占用内存。对于预设颜色这类有限集合，这是合理的设计选择。
-
-- **影响评估**：**低** — 内存占用固定且较小，属于合理的设计权衡
-- **修复建议**：无需修复。如果需要进一步优化，可以考虑使用 `FrozenDictionary`（.NET 8+）替代 `Dictionary` 以获得更好的查找性能。
-
-```csharp
-// .NET 8+ 优化建议
-static readonly FrozenDictionary<PresetColorType, TagCalcColor> PresetColorMap = 
-    new Dictionary<PresetColorType, TagCalcColor> { ... }.ToFrozenDictionary();
-```
+- **影响评估**：**低** — 查找性能提升，内存布局更紧凑
 
 ---
 
