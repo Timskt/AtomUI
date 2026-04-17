@@ -126,6 +126,7 @@ public class Space : Control,
         {
             if (_childIndexChanged is null)
             {
+                Children.PropertyChanged -= HandleChildrenPropertyChanged;
                 Children.PropertyChanged += HandleChildrenPropertyChanged;
             }
             _childIndexChanged += value;
