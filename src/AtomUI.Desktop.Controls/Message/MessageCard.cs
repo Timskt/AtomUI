@@ -115,6 +115,9 @@ public class MessageCard : TemplatedControl, IMotionAwareControl
 
     #region 内部属性定义
 
+    /// <summary>回调：消息卡片关闭时触发，由 WindowMessageManager 设置以避免 lambda 闭包。</summary>
+    internal Action? OnClose { get; set; }
+
     internal static readonly DirectProperty<MessageCard, TimeSpan> OpenCloseMotionDurationProperty =
         AvaloniaProperty.RegisterDirect<MessageCard, TimeSpan>(nameof(OpenCloseMotionDuration),
             o => o.OpenCloseMotionDuration,

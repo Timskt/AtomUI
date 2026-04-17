@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -124,11 +125,8 @@ public class WindowMessageManager : TemplatedControl, IMessageManager, IMotionAw
             }
         }
 
-        messageControl.MessageClosed += (sender, _) =>
-        {
-            message.OnClose?.Invoke();
-            _items.Remove(sender);
-        };
+        messageControl.OnClose = message.OnClose;
+        messageControl.MessageClosed += OnMessageClosed;
 
         Dispatcher.UIThread.Post(() =>
         {
@@ -140,6 +138,15 @@ public class WindowMessageManager : TemplatedControl, IMessageManager, IMotionAw
         if (message.Expiration != TimeSpan.Zero)
         {
             DispatcherTimer.RunOnce(messageControl.Close, message.Expiration);
+        }
+    }
+
+    private void OnMessageClosed(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MessageCard card)
+        {
+            card.OnClose?.Invoke();
+            _items?.Remove(card);
         }
     }
 
