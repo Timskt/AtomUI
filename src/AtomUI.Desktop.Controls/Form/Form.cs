@@ -453,12 +453,7 @@ public class Form : ItemsControl,
     {
         this.RegisterTokenResourceScope(FormToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
-        Items.CollectionChanged            += HandleItemsCollectionChanged;
-    }
-    
-    private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
-    {
-        InvalidateMeasure();
+        Items.CollectionChanged           += (_, _) => InvalidateMeasure();
     }
 
     private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
