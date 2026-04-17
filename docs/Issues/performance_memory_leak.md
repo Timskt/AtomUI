@@ -68,7 +68,7 @@
 
 ## 1. 🔴 严重问题（Critical）
 
-### 1.1 ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式
+### ✅ 1.1 ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式（已修复 `29452afe`）
 
 - **文件**：`src/AtomUI.Controls.Shared/Data/ListCollectionViews/ListCollectionView.cs`
 - **方法**：`SetSource()`，第 706 行
