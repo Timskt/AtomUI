@@ -113,12 +113,21 @@ internal abstract class AbstractDotBadgeAdorner : TemplatedControl
         _indicatorMotionActor = e.NameScope.Get<BaseMotionActor>(BaseMotionActor.MotionActorPart);
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _motionCancellationTokenSource?.Cancel();
+        _motionCancellationTokenSource?.Dispose();
+        _motionCancellationTokenSource = null;
+    }
+
     private void ApplyShowMotion()
     {
         if (_indicatorMotionActor is not null)
         {
             _indicatorMotionActor.IsVisible = false;
             _motionCancellationTokenSource?.Cancel();
+            _motionCancellationTokenSource?.Dispose();
             _motionCancellationTokenSource = new CancellationTokenSource();
             var motion = new BadgeZoomBadgeInMotion(MotionDuration, null, FillMode.Forward);
             motion.Run(_indicatorMotionActor, () => _indicatorMotionActor.IsVisible = true);
@@ -130,6 +139,7 @@ internal abstract class AbstractDotBadgeAdorner : TemplatedControl
         if (_indicatorMotionActor is not null)
         {
             _motionCancellationTokenSource?.Cancel();
+            _motionCancellationTokenSource?.Dispose();
             _motionCancellationTokenSource = new CancellationTokenSource();
             var motion = new BadgeZoomBadgeOutMotion(MotionDuration, null, FillMode.Forward);
             motion.Run(_indicatorMotionActor, null, completedAction);
@@ -168,6 +178,7 @@ internal abstract class AbstractDotBadgeAdorner : TemplatedControl
         if (IsMotionEnabled)
         {
             _motionCancellationTokenSource?.Cancel();
+            _motionCancellationTokenSource?.Dispose();
             _motionCancellationTokenSource = new CancellationTokenSource();
 
             ApplyShowMotion();

@@ -69,25 +69,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ---
 
-### 3.5 🟠 Badge 动画 CTS — AbstractDotBadgeAdorner / AbstractCountBadgeAdorner 多处 new CTS 未显式 Dispose 旧的
-
-- **文件**：
-  - `src/AtomUI.Controls/Badge/AbstractDotBadgeAdorner.cs` 第 122、133、171 行
-  - `src/AtomUI.Controls/Badge/AbstractCountBadgeAdorner.cs` 第 254、277 行
-- **问题**：每处都直接 `_motionCancellationTokenSource = new CancellationTokenSource()`，但上一次的可能没 Dispose。
-- **修复模板**：
-
-```csharp
-private void StartOperation()
-{
-    _cts?.Cancel();
-    _cts?.Dispose();
-    _cts = new CancellationTokenSource();
-}
-```
-
----
-
 ## 四、资源管理与 IDisposable
 
 ### 4.1 🟠 AbstractQRCode / PreviewImageSource — Bitmap 未 Dispose 旧实例
@@ -319,7 +300,6 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
 | P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
-| P4 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
 | P7 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
 | P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
@@ -333,7 +313,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 ## 建议的后续步骤
 
-1. **立即处理 P3-P4**：WaveSpirit / SwitchKnob / Badge CTS 高频泄漏。
+1. **立即处理 P3**：WaveSpirit / SwitchKnob / Spin CTS 高频泄漏。
 2. **建立 CI 检查**：P17 Roslyn 分析器长期防止同类问题再次引入。
 3. **按季度审计**：运行 `git log --stat src/**.cs` 检测新代码是否引入 `async void`、`+= lambda` 等反模式。
 

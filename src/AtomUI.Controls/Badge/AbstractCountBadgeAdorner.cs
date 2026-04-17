@@ -181,6 +181,14 @@ internal abstract class AbstractCountBadgeAdorner : TemplatedControl
         BuildCountText();
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _motionCancellationTokenSource?.Cancel();
+        _motionCancellationTokenSource?.Dispose();
+        _motionCancellationTokenSource = null;
+    }
+
     private void BuildBoxShadow()
     {
         if (BadgeShadowColor is not null)
@@ -251,6 +259,7 @@ internal abstract class AbstractCountBadgeAdorner : TemplatedControl
         {
             var motion = new BadgeZoomBadgeOutMotion(MotionDuration);
             _motionCancellationTokenSource?.Cancel();
+            _motionCancellationTokenSource?.Dispose();
             _motionCancellationTokenSource = new CancellationTokenSource();
             motion.Run(_indicatorMotionActor,  null, completedAction);
         }
@@ -274,6 +283,7 @@ internal abstract class AbstractCountBadgeAdorner : TemplatedControl
         if (IsMotionEnabled)
         {
             _motionCancellationTokenSource?.Cancel();
+            _motionCancellationTokenSource?.Dispose();
             _motionCancellationTokenSource = new CancellationTokenSource();
             ApplyShowMotion();
         }
