@@ -10,14 +10,14 @@
 
 ## 📊 修复进度
 
-**最后更新**：2026-04-16
+**最后更新**：2026-04-17
 
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 10 |
-| ⏳ 待修复 | 29 |
-| 修复进度 | **25.6%** |
+| ✅ 已修复 | 12 |
+| ⏳ 待修复 | 27 |
+| 修复进度 | **30.8%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
@@ -30,6 +30,8 @@
 - ✅ **5.6** ToolTip 服务的全局事件订阅（Commit: `98afb745`）
 - ✅ **5.9** Watermark glyph.PropertyChanged 取消订阅（Commit: `8a9196ab`）
 - ✅ **5.10** TreeView/CascaderView CancellationTokenSource Dispose（Commits: 最新）
+- ✅ **5.15** FloatButtonGroupHost lambda 订阅 OpenRequest/CloseRequest（Commit: `d2fc1ec4`）
+- ✅ **5.16** Space Children.PropertyChanged 重复订阅（Commit: `5ba9ca9a`）
 
 ---
 
@@ -1236,43 +1238,59 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 
 ---
 
-### 5.15 FloatButtonGroupHost — lambda 订阅 OpenRequest/CloseRequest
+### 5.15 ✅ ~~FloatButtonGroupHost — lambda 订阅 OpenRequest/CloseRequest~~（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls/FloatButton/FloatButtonGroupHost.cs`，第 199-200 行
+- **文件**：`src/AtomUI.Desktop.Controls/FloatButton/FloatButtonGroupHost.cs`
+- **Commit**：`d2fc1ec4`
 - **问题描述**：
 
 ```csharp
+// 修复前
 floatButtonGroup.OpenRequest  += (sender, args) => SetValue(IsOpenProperty, true, BindingPriority.Style);
 floatButtonGroup.CloseRequest += (sender, args) => SetValue(IsOpenProperty, false, BindingPriority.Style);
 ```
 
-Lambda 捕获 `this`（FloatButtonGroupHost），无法取消订阅。
+Lambda 捕获 `this`（FloatButtonGroupHost），无法取消订阅，导致 `floatButtonGroup` 持有对 Host 的强引用。
+
+- **修复方案**：将 lambda 替换为命名方法 `OnFloatButtonGroupOpenRequest` / `OnFloatButtonGroupCloseRequest`，并通过 `Disposable.Create` 注册到 `CompositeDisposable`，在 detach 时自动取消订阅。
+
+```csharp
+// 修复后
+floatButtonGroup.OpenRequest  += OnFloatButtonGroupOpenRequest;
+floatButtonGroup.CloseRequest += OnFloatButtonGroupCloseRequest;
+disposables.Add(Disposable.Create(() =>
+{
+    floatButtonGroup.OpenRequest  -= OnFloatButtonGroupOpenRequest;
+    floatButtonGroup.CloseRequest -= OnFloatButtonGroupCloseRequest;
+}));
+```
 
 - **复现条件**：FloatButtonGroupHost 被创建并使用
 - **影响评估**：**中等**
-- **修复建议**：改为命名方法，在 detach 时取消订阅。
 
 ---
 
-### 5.16 Space.OnApplyTemplate — Children.PropertyChanged 可能重复订阅
+### 5.16 ✅ ~~Space.OnApplyTemplate — Children.PropertyChanged 可能重复订阅~~（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls/Space/Space.cs`，第 129 行
+- **文件**：`src/AtomUI.Desktop.Controls/Space/Space.cs`
+- **Commit**：`5ba9ca9a`
 - **问题描述**：
 
-`OnApplyTemplate` 中订阅 `Children.PropertyChanged`，未先检查是否已订阅。模板重新应用时会叠加。
+`IChildIndexProvider.ChildIndexChanged` 的 `add` 访问器在 `_childIndexChanged is null` 时订阅 `Children.PropertyChanged`，但若某些边界情况下处理器已被订阅，仍可能造成重复。
 
-- **复现条件**：Space 控件模板重新应用
-- **影响评估**：**中等**
-- **修复建议**：
+- **修复方案**：在 `add` 访问器内改为 remove-before-add 防御性写法：
 
 ```csharp
-protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+// 修复后
+if (_childIndexChanged is null)
 {
-    base.OnApplyTemplate(e);
-    Children.PropertyChanged -= HandleChildrenPropertyChanged;  // 先移除
+    Children.PropertyChanged -= HandleChildrenPropertyChanged;  // 先移除（防御）
     Children.PropertyChanged += HandleChildrenPropertyChanged;
 }
 ```
+
+- **复现条件**：`IChildIndexProvider.ChildIndexChanged` 被重复订阅触发的边界场景
+- **影响评估**：**中等**
 
 ---
 
