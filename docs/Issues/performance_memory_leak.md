@@ -15,9 +15,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 13 |
-| ⏳ 待修复 | 26 |
-| 修复进度 | **33.3%** |
+| ✅ 已修复 | 14 |
+| ⏳ 待修复 | 25 |
+| 修复进度 | **35.9%** |
 
 **最近修复**：
 - ✅ **3.7** ColorPickerInput OnApplyTemplate Lambda 叠加（早期修复）
@@ -33,6 +33,7 @@
 - ✅ **5.15** FloatButtonGroupHost lambda 订阅 OpenRequest/CloseRequest（Commit: `d2fc1ec4`）
 - ✅ **5.16** Space Children.PropertyChanged 重复订阅（Commit: `5ba9ca9a`）
 - ✅ **5.17** ToolTip.StartShowTimer Timer 重叠（Commit: `5e339b2f`）
+- ✅ **5.18** Watermark.Render 紧密循环渲染性能（Commit: `df642d01`）
 
 ---
 
@@ -1339,16 +1340,34 @@ private void StopTimer()
 
 ---
 
-### 5.18 Watermark.Render — 紧密循环渲染性能问题
+### 5.18 ✅ ~~Watermark.Render — 紧密循环渲染性能问题~~（已修复）
 
-- **文件**：`src/AtomUI.Controls/Watermark/Watermark.cs`，第 116-174 行
+- **文件**：`src/AtomUI.Controls/Watermark/Watermark.cs`
+- **Commit**：`df642d01`
 - **问题描述**：
 
-双重 while 循环在每帧 Render 中创建大量 Matrix 计算和 `context.PushTransform` 调用。大面积 + 密集水印场景下渲染卡顿。
+每帧 `Render` 的双重 while 循环中，每个 tile 都重新调用 `MatrixUtils.CreateRotationRadians(angle * Math.PI / 180, ...)` 进行三角函数计算和矩阵分配，在大面积密集水印时造成明显 CPU 开销。
+
+- **修复方案**：预缓存两个旋转矩阵（正向 `_normalRotationMatrix` / 镜像 `_mirrorRotationMatrix`），仅在 glyph 属性变化或尺寸改变时重建，每帧直接复用缓存矩阵：
+
+```csharp
+// 仅当 glyph 属性或尺寸变化时重建
+private void RebuildMatrixCache(Size glyphSize, Size targetSize)
+{
+    var angleRad          = Glyph!.Rotate * Math.PI / 180;
+    _normalRotationMatrix = MatrixUtils.CreateRotationRadians(angleRad, ...);
+    _mirrorRotationMatrix = MatrixUtils.CreateRotationRadians(-angleRad, ...);
+    _matrixCacheValid     = true;
+}
+
+// Render 中直接取缓存，无三角函数调用
+var m = c % 2 == 1 && Glyph.UseMirror
+    ? _mirrorRotationMatrix
+    : _normalRotationMatrix;
+```
 
 - **复现条件**：大面积区域使用密集水印
 - **影响评估**：**中等** — 渲染性能瓶颈
-- **修复建议**：使用 `DrawingGroup` + `TileBrush` 缓存水印 tile，或 `RenderTargetBitmap` 仅在 glyph 变化时重建。
 
 ---
 
