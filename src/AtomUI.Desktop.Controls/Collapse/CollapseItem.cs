@@ -270,6 +270,12 @@ public class CollapseItem : HeaderedContentControl,
         SetupDefaultExpandIcon();
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        InAnimating = false;
+    }
+
     private void SetupDefaultExpandIcon()
     {
         if (ExpandIcon is null)

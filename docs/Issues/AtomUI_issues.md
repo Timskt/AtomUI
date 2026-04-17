@@ -196,7 +196,7 @@ floatButtonGroup.CloseRequest += OnFloatButtonGroupCloseRequest;
 
 ## 二、生命周期与分离问题
 
-### 2.1 🔴 多个控件缺少 `OnDetachedFromVisualTree` 清理逻辑
+### ✅ 2.1 多个控件缺少 `OnDetachedFromVisualTree` 清理逻辑（已修复）
 
 以下控件类重写了 `OnAttachedToVisualTree` 或在构造中注册了资源，但**没有对应的 `OnDetachedFromVisualTree`**：
 
@@ -660,7 +660,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
-| P1 | 2.1 多控件缺少 OnDetachedFromVisualTree 清理 | 🔴 高 | 大（10+ 文件） | 🚨 最高 |
+| ~~P1~~ | ~~2.1 多控件缺少 OnDetachedFromVisualTree 清理~~ | ~~已修复~~ | — | — |
 | P2 | 3.1 Select / AutoComplete / Mentions / Form / Dialog — CTS 未 Dispose | 🔴 高 | 中 | 🚨 最高 |
 | ~~P3~~ | ~~1.1 MessageBox / Dialog Closed += lambda（8 处）~~ | ~~已修复~~ | — | — |
 | P4 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin / BackTop CTS 模式 | 🟠 中 | 小 | 高 |

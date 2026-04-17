@@ -109,6 +109,12 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
         _topLevel = TopLevel.GetTopLevel(this);
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _topLevel = null;
+    }
+
     private void ConfigureTransitions(bool force)
     {
         if (IsMotionEnabled)

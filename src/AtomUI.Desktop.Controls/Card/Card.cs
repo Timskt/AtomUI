@@ -220,7 +220,7 @@ public class Card : HeaderedContentControl,
     public Card()
     {
         this.RegisterTokenResourceScope(CardToken.ScopeProvider);
-        Actions.CollectionChanged += new NotifyCollectionChangedEventHandler(HandleActionsChanged);
+        Actions.CollectionChanged += HandleActionsChanged;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

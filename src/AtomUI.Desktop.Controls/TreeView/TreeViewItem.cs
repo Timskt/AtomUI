@@ -436,6 +436,12 @@ public class TreeViewItem : AvaloniaTreeItem, IRadioButton, ITreeItemNode
         base.OnAttachedToVisualTree(e);
         OwnerTreeView = this.GetLogicalAncestors().OfType<TreeView>().FirstOrDefault();
     }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        OwnerTreeView = null;
+    }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

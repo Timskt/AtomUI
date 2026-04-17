@@ -104,6 +104,22 @@ internal class MotionGhostControl : Control
         SetupContent(Content);
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (Content != null)
+        {
+            Content.SizeChanged -= HandleContentSizeChanged;
+        }
+        if (_layout != null)
+        {
+            LogicalChildren.Remove(_layout);
+            VisualChildren.Remove(_layout);
+        }
+        _layout         = null;
+        _maskCenterFrame = null;
+    }
+
     private void SetupShadowRenderers(in BoxShadows boxShadows)
     {
         Debug.Assert(_layout != null);
