@@ -116,7 +116,7 @@ public class TimerStatistic : AbstractStatistic
 
     private void GenerateRemainingTimeText()
     {
-        string? formattedText = null;
+        string? formattedText;
         if (Formatter != null)
         {
             formattedText = Formatter(RemainingTime);
@@ -127,17 +127,13 @@ public class TimerStatistic : AbstractStatistic
             {
                 formattedText = RemainingTime.ToString(Format);
             }
-            else if (Format == @"hh\:mm\:ss")
+            else if (RemainingTime.TotalHours >= 1)
             {
                 formattedText = $"{(int)RemainingTime.TotalHours:00}:{RemainingTime.Minutes:00}:{RemainingTime.Seconds:00}";
-            }
-            else if (Format == @"hh\:mm\:ss\.fff")
-            {
-                formattedText = $"{(int)RemainingTime.TotalHours:00}:{RemainingTime.Minutes:00}:{RemainingTime.Seconds:00}.{RemainingTime.Milliseconds:000}";
             }
             else
             {
-                formattedText = $"{(int)RemainingTime.TotalHours:00}:{RemainingTime.Minutes:00}:{RemainingTime.Seconds:00}";
+                formattedText = $"{(int)RemainingTime.TotalMinutes:00}:{RemainingTime.Seconds:00}";
             }
         }
         SetCurrentValue(RemainingTimeTextProperty, formattedText);
