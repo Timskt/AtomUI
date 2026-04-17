@@ -9,7 +9,7 @@ using Avalonia.Collections;
 
 namespace AtomUI.Controls.Data;
 
-internal class ListCollectionView : IListCollectionView, IList, INotifyPropertyChanged
+internal class ListCollectionView : IListCollectionView, IList, INotifyPropertyChanged, IDisposable
 {
     #region 公共属性定义
 
@@ -650,6 +650,13 @@ internal class ListCollectionView : IListCollectionView, IList, INotifyPropertyC
     private IEnumerable _sourceCollection;
 
     /// <summary>
+    /// Forwarder that holds a WeakReference to this view so that the source collection
+    /// cannot prevent this view from being garbage collected.  Also used for eager
+    /// unsubscription via <see cref="Dispose"/>.
+    /// </summary>
+    private WeakCollectionChangedForwarder? _collectionChangedForwarder;
+
+    /// <summary>
     /// Private accessor for the Grouping data on the entire collection
     /// </summary>
     private ListCollectionViewGroupRoot _temporaryGroup;
@@ -703,7 +710,7 @@ internal class ListCollectionView : IListCollectionView, IList, INotifyPropertyC
         // If we implement INotifyCollectionChanged
         if (source is INotifyCollectionChanged coll)
         {
-            coll.CollectionChanged += (_, args) => ProcessCollectionChanged(args);
+            _collectionChangedForwarder = new WeakCollectionChangedForwarder(this, coll);
         }
         else
         {
@@ -715,8 +722,64 @@ internal class ListCollectionView : IListCollectionView, IList, INotifyPropertyC
         _culture = CultureInfo.InvariantCulture;
     }
     
-    private string GetOperationNotAllowedDuringAddOrEditText(string action)
+    private void HandleSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
     {
+        ProcessCollectionChanged(args);
+    }
+
+    /// <summary>
+    /// Eagerly unsubscribes from the source collection's CollectionChanged event.
+    /// If not called, the subscription is cleaned up automatically the next time the
+    /// source raises an event after this view has been garbage collected.
+    /// </summary>
+    public void Dispose()
+    {
+        _collectionChangedForwarder?.Dispose();
+        _collectionChangedForwarder = null;
+    }
+
+    /// <summary>
+    /// Forwards <see cref="INotifyCollectionChanged.CollectionChanged"/> events to a
+    /// <see cref="ListCollectionView"/> via a <see cref="WeakReference{T}"/>, preventing
+    /// the source collection from rooting the view.  Self-unsubscribes once the view
+    /// has been garbage collected.
+    /// </summary>
+    private sealed class WeakCollectionChangedForwarder : IDisposable
+    {
+        private readonly WeakReference<ListCollectionView> _weakView;
+        private INotifyCollectionChanged? _source;
+
+        public WeakCollectionChangedForwarder(ListCollectionView view, INotifyCollectionChanged source)
+        {
+            _weakView = new WeakReference<ListCollectionView>(view);
+            _source   = source;
+            source.CollectionChanged += OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (_weakView.TryGetTarget(out var view))
+            {
+                view.ProcessCollectionChanged(args);
+            }
+            else
+            {
+                // The view has been GC'd — self-unsubscribe to release the forwarder too.
+                Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_source != null)
+            {
+                _source.CollectionChanged -= OnCollectionChanged;
+                _source = null;
+            }
+        }
+    }
+
+    private string GetOperationNotAllowedDuringAddOrEditText(string action)    {
         return $"'{action}' is not allowed during an AddNew or EditItem transaction.";
     }
 

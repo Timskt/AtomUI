@@ -380,6 +380,8 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
         new(() => new VirtualizingStackPanel());
 
     private IListCollectionView? _collectionView;
+    /// <summary>Indicates whether _collectionView was created by ListView (and should be disposed by it).</summary>
+    private bool _ownsCollectionView;
     
     static ListView()
     {
@@ -408,6 +410,7 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
             var                  oldCollectionView = change.OldValue as ListCollectionView;
             var                  newItemsSource    = (IEnumerable?)change.NewValue;
             IListCollectionView? newCollectionView = null;
+            bool                 ownsNew           = false;
             if (newItemsSource is IListCollectionView)
             {
                 newCollectionView  = (IListCollectionView)newItemsSource;
@@ -417,6 +420,7 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
                 if (newItemsSource != null)
                 {
                     newCollectionView = new ListCollectionView(newItemsSource);
+                    ownsNew           = true;
                 }
             }
             if (oldCollectionView != null)
@@ -425,6 +429,11 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
                 oldCollectionView.CollectionChanged -= HandleCollectionViewChanged;
                 oldCollectionView.PageChanging      -= HandlePageChanging;
                 oldCollectionView.PageChanged       -= HandlePageChanged;
+                // Dispose only if we created this view (not user-provided)
+                if (_ownsCollectionView)
+                {
+                    oldCollectionView.Dispose();
+                }
             }
             if (newCollectionView != null)
             {
@@ -442,7 +451,8 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
                 IsEmptyDataSource = true;
             }
 
-            _collectionView = newCollectionView;
+            _collectionView     = newCollectionView;
+            _ownsCollectionView = ownsNew;
             SetValueNoCallback(ItemsSourceProperty, newCollectionView);
             ConfigureFilterDescription();
             ConfigureSortDescriptions();
@@ -466,7 +476,7 @@ public partial class ListView : ItemsControl, ISizeTypeAware, IMotionAwareContro
             _areHandlersSuspended = false;
         }
     }
-    
+
     private void HandleCollectionViewChanged(object? sender, NotifyCollectionChangedEventArgs args)
     {
         if (sender is IListCollectionView view)
