@@ -125,6 +125,12 @@ public class AbstractMotion : IMotion
             completedAction?.Invoke();
             actor.RenderTransformOrigin = originRenderTransformOrigin;
             actor.MotionTransform       = null;
+            // Dispose all transitions to release Subject<bool> subscriptions,
+            // regardless of whether they completed normally or were timed-out.
+            foreach (var t in Transitions)
+            {
+                t.Dispose();
+            }
         });
     }
 
@@ -134,6 +140,11 @@ public class AbstractMotion : IMotion
 
     protected virtual void ConfigureTransitions()
     {
+        // Dispose existing transitions before rebuilding to release Subject<bool> resources.
+        foreach (var t in Transitions)
+        {
+            t.Dispose();
+        }
         Transitions.Clear();
         var opacityTransition             = new NotifiableDoubleTransition()
         {

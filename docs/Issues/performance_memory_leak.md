@@ -14,9 +14,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 31 |
-| ⏳ 待修复 | 8 |
-| 修复进度 | **79.5%** |
+| ✅ 已修复 | 32 |
+| ⏳ 待修复 | 7 |
+| 修复进度 | **82.1%** |
 
 ### 已修复问题清单
 
@@ -52,6 +52,7 @@
 | 6.1 | 预设颜色映射 Dictionary → FrozenDictionary | 🔵 | `dfb1554b` |
 | 6.3 | TimerStatistic Dead Code | 🔵 | `41dacbae` |
 | 1.1 | ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式 | 🔴 | `29452afe` |
+| 2.1 | AbstractNotifiableTransition Subject&lt;bool&gt; IDisposable | 🟠 | 本次修复 |
 | 1.2 | DataGridCollectionView CollectionChanged 匿名 Lambda 泄漏 | 🔴 | `1f04fcee` |
 
 ---
@@ -110,30 +111,16 @@ if (source is INotifyCollectionChanged coll)
 
 ## 2. 🟠 高危问题（High）
 
-### 2.1 AbstractNotifiableTransition 的 Subject<bool> 未实现 IDisposable
+### ✅ 2.1 AbstractNotifiableTransition 的 Subject&lt;bool&gt; 未实现 IDisposable（已修复）
 
 - **文件**：`src/AtomUI.Core/Animations/Transitions/AbstractNotifiableTransition.cs`
-- **问题描述**：
-
-```csharp
-public abstract class AbstractNotifiableTransition : INotifiableTransition
-{
-    private readonly Subject<bool> _subject = new();
-    public IObservable<bool> CompletedObservable => _subject;
-
-    protected void NotifyTransitionCompleted()
-    {
-        _subject.OnNext(true);
-        _subject.OnCompleted();  // Subject 变为终态
-    }
-}
-```
-
-类未实现 `IDisposable`。Transition 被中断或从未完成时，Subject 及其订阅者永远不会被清理。`OnCompleted()` 后 Subject 进入终态，复用时后续调用无效。
-
-- **复现条件**：Transition 动画被中断；或 Transition 对象被复用
+- **问题描述**：类未实现 `IDisposable`。Transition 被中断或从未完成时，Subject 及其订阅者永远不会被清理。
 - **影响评估**：**高** — 未完成的 Transition 泄漏 Subject 及订阅者引用链
-- **修复建议**：实现 `IDisposable`，在 `Dispose()` 中调用 `_subject?.Dispose()`。
+- **✅ 修复方案**：三处协同修复：
+  1. `INotifyTransitionCompleted` 接口继承 `IDisposable`
+  2. `AbstractNotifiableTransition<T>` 实现 `Dispose()`，释放 `Subject<bool>`
+  3. **调用端** `AbstractMotion.RunTransitions`：`await Task.WhenAny` 完成后（无论正常完成还是超时）对所有 Transitions 调用 `Dispose()`
+  4. **调用端** `AbstractMotion.ConfigureTransitions`：Clear 前先 Dispose 旧 Transitions，防止重建时旧 Subject 泄漏
 
 ---
 
@@ -210,10 +197,10 @@ public abstract class AbstractNotifiableTransition : INotifiableTransition
 | 严重程度 | 总数 | 已修复 | 待修复 |
 |----------|------|--------|--------|
 | 🔴 Critical | 7 | 7 | 0 |
-| 🟠 High | 8 | 7 | 1 |
+| 🟠 High | 8 | 8 | 0 |
 | 🟡 Medium | 19 | 15 | 4 |
 | 🔵 Low | 5 | 2 | 3 |
-| **合计** | **39** | **31** | **8** |
+| **合计** | **39** | **32** | **7** |
 
 ### 6.2 待修复优先级
 
@@ -223,9 +210,7 @@ public abstract class AbstractNotifiableTransition : INotifiableTransition
 
 #### P1 — 尽快修复
 
-| # | 问题 | 预计工作量 |
-|---|------|-----------|
-| 2.1 | AbstractNotifiableTransition IDisposable | ~15 行代码 |
+> 🎉 所有 P1 问题已全部修复。
 
 #### P2 — 计划修复
 
