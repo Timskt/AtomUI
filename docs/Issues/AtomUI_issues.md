@@ -120,7 +120,7 @@ notificationControl.PointerPressed += OnNotificationPointerPressed;
 
 ---
 
-### 1.3 🟠 AbstractListGroupDescription / DataGridGroupDescription — 构造函数中 lambda 订阅
+### ✅ 1.3 AbstractListGroupDescription / DataGridGroupDescription — 构造函数中 lambda 订阅（已修复）
 
 - **文件**：
   - `src/AtomUI.Controls.Shared/Data/ListCollectionViews/AbstractListGroupDescription.cs` 第 14 行
@@ -668,7 +668,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | P6 | 2.3 ToolTip Timer 重叠（主文档 5.17） | 🟠 中 | 小 | 高 |
 | P7 | 6.2 WindowNotificationManager 50ms 常驻 Timer | 🟠 中 | 中 | 中 |
 | ~~P8~~ | ~~1.2 WindowNotificationManager PointerPressed lambda~~ | ~~已修复~~ | — | — |
-| P9 | 1.3 ListGroupDescription / DataGridGroupDescription lambda | 🟠 中 | 小 | 中 |
+| ~~P9~~ | ~~1.3 ListGroupDescription / DataGridGroupDescription lambda~~ | ~~已修复~~ | — | — |
 | P10 | 1.4 FloatButtonGroupHost lambda（主文档 5.15） | 🟠 中 | 小 | 中 |
 | P11 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
 | P12 | 2.2 Space 子控件订阅幂等性（主文档 5.16） | 🟠 中 | 小 | 中 |

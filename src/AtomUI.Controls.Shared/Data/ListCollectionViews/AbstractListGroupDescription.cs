@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using Avalonia.Collections;
@@ -11,7 +12,7 @@ public abstract class AbstractListGroupDescription : INotifyPropertyChanged, ILi
     public AbstractListGroupDescription()
     {
         GroupKeys = new AvaloniaList<object>();
-        GroupKeys.CollectionChanged += (sender, e) => OnPropertyChanged(new PropertyChangedEventArgs(nameof(GroupKeys)));
+        GroupKeys.CollectionChanged += OnGroupKeysCollectionChanged;
     }
 
     protected virtual event PropertyChangedEventHandler? PropertyChanged;
@@ -19,6 +20,11 @@ public abstract class AbstractListGroupDescription : INotifyPropertyChanged, ILi
     {
         add => PropertyChanged += value;
         remove => PropertyChanged -= value;
+    }
+    
+    private void OnGroupKeysCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(new PropertyChangedEventArgs(nameof(GroupKeys)));
     }
     
     protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
