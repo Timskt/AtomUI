@@ -130,8 +130,9 @@ internal class FileUploadScheduler : IFileUploadScheduler
             if (task.CancellationTokenSource != null)
             {
                 await task.CancellationTokenSource.CancelAsync();
+                task.CancellationTokenSource.Dispose();
+                task.CancellationTokenSource = null;
             }
-            task.CancellationTokenSource = null;
         }
         else if (task.Status == FileUploadStatus.Pending)
         {

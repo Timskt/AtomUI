@@ -69,20 +69,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ---
 
-### 3.4 🟠 FileUploadScheduler — 局部 CTS 未 Dispose
-
-- **文件**：`src/AtomUI.Controls.Shared/Net/FileUploadScheduler.cs` 第 52 行
-- **问题**：
-
-```csharp
-var cancellationTokenSource = new CancellationTokenSource();
-// 未见 using 或 Dispose
-```
-
-- **修复建议**：改为 `using var cts = new CancellationTokenSource();`。
-
----
-
 ### 3.5 🟠 Badge 动画 CTS — AbstractDotBadgeAdorner / AbstractCountBadgeAdorner 多处 new CTS 未显式 Dispose 旧的
 
 - **文件**：
@@ -336,7 +322,6 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | P4 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
 | P7 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
-| P11 | 3.4 FileUploadScheduler 局部 CTS Dispose | 🟠 中 | 最小 | 中 |
 | P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
 | P14 | 6.3 Icon Geometry 缓存 | 🟡 低 | 中（改生成器） | 低 |
 | P15 | 6.4 InterpolateUtils LOH 分配 | 🟡 低 | 中 | 低 |
