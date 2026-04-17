@@ -85,7 +85,10 @@ public abstract class AbstractBackTopFloatButton : AbstractFloatButton
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        Target?.ScrollChanged -= HandleScrollChanged;
+        if (Target != null)
+        {
+            Target?.ScrollChanged -= HandleScrollChanged;
+        }
         _cancellationTokenSource?.Cancel();
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
@@ -121,7 +124,6 @@ public abstract class AbstractBackTopFloatButton : AbstractFloatButton
             if (IsActive)
             {
                 ApplyShowMotion();
-
             }
             else
             {
