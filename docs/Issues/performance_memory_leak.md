@@ -14,9 +14,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 30 |
-| ⏳ 待修复 | 9 |
-| 修复进度 | **76.9%** |
+| ✅ 已修复 | 31 |
+| ⏳ 待修复 | 8 |
+| 修复进度 | **79.5%** |
 
 ### 已修复问题清单
 
@@ -52,6 +52,7 @@
 | 6.1 | 预设颜色映射 Dictionary → FrozenDictionary | 🔵 | `dfb1554b` |
 | 6.3 | TimerStatistic Dead Code | 🔵 | `41dacbae` |
 | 1.1 | ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式 | 🔴 | `29452afe` |
+| 1.2 | DataGridCollectionView CollectionChanged 匿名 Lambda 泄漏 | 🔴 | 本次修复 |
 
 ---
 
@@ -98,12 +99,12 @@ if (source is INotifyCollectionChanged coll)
 
 ---
 
-### 1.2 DataGridCollectionView — 同样的 CollectionChanged Lambda 泄漏
+### ✅ 1.2 DataGridCollectionView — 同样的 CollectionChanged Lambda 泄漏（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls.DataGrid/Data/DataGridCollectionView.cs`，第 212 行
 - **问题描述**：与 1.1 完全相同的模式。
 - **影响评估**：**极高** — 影响所有 DataGrid 实例
-- **修复建议**：同 1.1
+- **✅ 修复方案**：同 1.1，引入 `WeakCollectionChangedForwarder` 嵌套类，实现 `IDisposable`。
 
 ---
 
@@ -216,19 +217,17 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 
 | 严重程度 | 总数 | 已修复 | 待修复 |
 |----------|------|--------|--------|
-| 🔴 Critical | 7 | 6 | 1 |
+| 🔴 Critical | 7 | 7 | 0 |
 | 🟠 High | 8 | 7 | 1 |
 | 🟡 Medium | 19 | 15 | 4 |
 | 🔵 Low | 5 | 2 | 3 |
-| **合计** | **39** | **30** | **9** |
+| **合计** | **39** | **31** | **8** |
 
 ### 6.2 待修复优先级
 
 #### P0 — 立即修复
 
-| # | 问题 | 预计工作量 |
-|---|------|-----------|
-| 1.2 | DataGridCollectionView 同上 | ~15 行代码 |
+> 🎉 所有 P0 问题已全部修复。
 
 #### P1 — 尽快修复
 

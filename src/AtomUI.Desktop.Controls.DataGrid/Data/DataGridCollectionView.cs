@@ -16,7 +16,7 @@ using Avalonia.Collections;
 namespace AtomUI.Desktop.Controls.Data;
 
 public sealed class DataGridCollectionView : IDataGridCollectionView, IDataGridEditableCollectionView, IList,
-                                             INotifyPropertyChanged
+                                             INotifyPropertyChanged, IDisposable
 {
     /// <summary>
     /// Since there's nothing in the un-cancelable event args that is mutable,
@@ -147,6 +147,13 @@ public sealed class DataGridCollectionView : IDataGridCollectionView, IDataGridE
     private IEnumerable _sourceCollection;
 
     /// <summary>
+    /// Forwarder that holds a WeakReference to this view so that the source collection
+    /// cannot prevent this view from being garbage collected.  Also used for eager
+    /// unsubscription via <see cref="Dispose"/>.
+    /// </summary>
+    private WeakCollectionChangedForwarder? _collectionChangedForwarder;
+
+    /// <summary>
     /// Private accessor for the Grouping data on the entire collection
     /// </summary>
     private CollectionViewGroupRoot _temporaryGroup;
@@ -209,7 +216,7 @@ public sealed class DataGridCollectionView : IDataGridCollectionView, IDataGridE
         // If we implement INotifyCollectionChanged
         if (source is INotifyCollectionChanged coll)
         {
-            coll.CollectionChanged += (_, args) => ProcessCollectionChanged(args);
+            _collectionChangedForwarder = new WeakCollectionChangedForwarder(this, coll);
         }
         else
         {
@@ -219,6 +226,58 @@ public sealed class DataGridCollectionView : IDataGridCollectionView, IDataGridE
         }
 
         _culture = CultureInfo.InvariantCulture;
+    }
+
+    /// <summary>
+    /// Eagerly unsubscribes from the source collection's CollectionChanged event.
+    /// If not called, the subscription is cleaned up automatically the next time the
+    /// source raises an event after this view has been garbage collected.
+    /// </summary>
+    public void Dispose()
+    {
+        _collectionChangedForwarder?.Dispose();
+        _collectionChangedForwarder = null;
+    }
+
+    /// <summary>
+    /// Forwards <see cref="INotifyCollectionChanged.CollectionChanged"/> events to a
+    /// <see cref="DataGridCollectionView"/> via a <see cref="WeakReference{T}"/>, preventing
+    /// the source collection from rooting the view.  Self-unsubscribes once the view
+    /// has been garbage collected.
+    /// </summary>
+    private sealed class WeakCollectionChangedForwarder : IDisposable
+    {
+        private readonly WeakReference<DataGridCollectionView> _weakView;
+        private INotifyCollectionChanged? _source;
+
+        public WeakCollectionChangedForwarder(DataGridCollectionView view, INotifyCollectionChanged source)
+        {
+            _weakView = new WeakReference<DataGridCollectionView>(view);
+            _source   = source;
+            source.CollectionChanged += OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (_weakView.TryGetTarget(out var view))
+            {
+                view.ProcessCollectionChanged(args);
+            }
+            else
+            {
+                // The view has been GC'd — self-unsubscribe to release the forwarder too.
+                Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_source != null)
+            {
+                _source.CollectionChanged -= OnCollectionChanged;
+                _source = null;
+            }
+        }
     }
 
     /// <summary>
