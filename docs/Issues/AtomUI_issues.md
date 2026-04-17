@@ -47,7 +47,7 @@
 
 ## 一、事件订阅问题（Lambda 捕获 / 未取消）
 
-### 1.1 🔴 MessageBox / Dialog — `Closed += lambda` 捕获大量闭包（8 处）
+### ✅ 1.1 MessageBox / Dialog — `Closed += lambda` 捕获大量闭包（8 处）（已修复）
 
 - **文件**：
   - `src/AtomUI.Desktop.Controls/MessageBox/MessageBox.cs` 第 318、343、368、392 行
@@ -662,7 +662,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 |-----|------|--------|--------|--------|
 | P1 | 2.1 多控件缺少 OnDetachedFromVisualTree 清理 | 🔴 高 | 大（10+ 文件） | 🚨 最高 |
 | P2 | 3.1 Select / AutoComplete / Mentions / Form / Dialog — CTS 未 Dispose | 🔴 高 | 中 | 🚨 最高 |
-| P3 | 1.1 MessageBox / Dialog Closed += lambda（8 处） | 🟠 中 | 小 | 高 |
+| ~~P3~~ | ~~1.1 MessageBox / Dialog Closed += lambda（8 处）~~ | ~~已修复~~ | — | — |
 | P4 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin / BackTop CTS 模式 | 🟠 中 | 小 | 高 |
 | P5 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
 | P6 | 2.3 ToolTip Timer 重叠（主文档 5.17） | 🟠 中 | 小 | 高 |

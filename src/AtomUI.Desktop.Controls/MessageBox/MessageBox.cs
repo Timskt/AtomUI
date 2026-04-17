@@ -340,7 +340,6 @@ public class MessageBox : TemplatedControl, IMotionAwareControl
         {
             messageBox.PlacementTarget = dialogManager;
         }
-        messageBox.Closed += (_, _) => dialogManager.Children.Remove(messageBox);
         dialogManager.Children.Add(messageBox);
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
@@ -349,10 +348,11 @@ public class MessageBox : TemplatedControl, IMotionAwareControl
             tsc.TrySetResult();
         });
         await tsc.Task;
+        dialogManager.Children.Remove(messageBox);
         return messageBox.Result;
     }
 
-    public static async Task ShowMessageAsync(Control content, 
+    public static async Task ShowMessageAsync(Control content,
                                               object? dataContext = null,
                                               MessageBoxOptions? options = null, 
                                               Action<IMessageBoxActionResult>? closed = null,
@@ -389,7 +389,6 @@ public class MessageBox : TemplatedControl, IMotionAwareControl
         {
             messageBox.PlacementTarget = dialogManager;
         }
-        messageBox.Closed += (_, _) => dialogManager.Children.Remove(messageBox);
         dialogManager.Children.Add(messageBox);
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
@@ -398,6 +397,7 @@ public class MessageBox : TemplatedControl, IMotionAwareControl
             tsc.TrySetResult();
         });
         await tsc.Task;
+        dialogManager.Children.Remove(messageBox);
         return messageBox.Result;
     }
 

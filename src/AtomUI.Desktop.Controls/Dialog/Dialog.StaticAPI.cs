@@ -107,7 +107,6 @@ public partial class Dialog
         {
             dialog.PlacementTarget = dialogManager;
         }
-        dialog.Closed += (_, _) => dialogManager.Children.Remove(dialog);
         dialogManager.Children.Add(dialog);
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
@@ -116,10 +115,11 @@ public partial class Dialog
             tsc.TrySetResult();
         });
         await tsc.Task;
+        dialogManager.Children.Remove(dialog);
         return dialog.Result;
     }
 
-    public static async Task ShowDialogAsync(Control content, 
+    public static async Task ShowDialogAsync(Control content,
                                              object? dataContext = null, 
                                              DialogOptions? options = null, 
                                              Action<IDialogActionResult>? closed = null,
@@ -161,7 +161,6 @@ public partial class Dialog
         {
             dialog.PlacementTarget = dialogManager;
         }
-        dialog.Closed += (_, _) => dialogManager.Children.Remove(dialog);
         dialogManager.Children.Add(dialog);
         var tsc = new TaskCompletionSource();
         await Dispatcher.UIThread.InvokeAsync(async () =>
@@ -170,6 +169,7 @@ public partial class Dialog
             tsc.TrySetResult();
         });
         await tsc.Task;
+        dialogManager.Children.Remove(dialog);
         return dialog.Result;
     }
 
