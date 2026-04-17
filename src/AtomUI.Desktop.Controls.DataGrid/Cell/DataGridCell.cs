@@ -192,6 +192,9 @@ public class DataGridCell : ContentControl
     #endregion
 
     private Rectangle? _rightGridLine;
+    private IDisposable? _sortingStateSubscription;
+    private IDisposable? _headerDragModeSubscription;
+    private bool _templateApplied;
 
     static DataGridCell()
     {
@@ -209,7 +212,14 @@ public class DataGridCell : ContentControl
     /// </summary>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        // 模板重新应用时先清理旧订阅，防止重复订阅累积
+        _sortingStateSubscription?.Dispose();
+        _sortingStateSubscription = null;
+        _headerDragModeSubscription?.Dispose();
+        _headerDragModeSubscription = null;
+
         base.OnApplyTemplate(e);
+        _templateApplied = true;
         UpdatePseudoClasses();
         _rightGridLine = e.NameScope.Find<Rectangle>(DataGridCellThemeConstants.RightGridLinePart);
         if (_rightGridLine != null && OwningColumn == null)
@@ -222,9 +232,14 @@ public class DataGridCell : ContentControl
             EnsureGridLine(null);
         }
         // 可能会影响性能
+        EnsureSortBindings();
+    }
+    
+    private void EnsureSortBindings()
+    {
         if (OwningGrid != null && OwningColumn != null && OwningGrid.DataConnection.AllowSort)
         {
-            BindUtils.RelayBind(OwningColumn.HeaderCell,
+            _sortingStateSubscription = BindUtils.RelayBind(OwningColumn.HeaderCell,
                 DataGridColumnHeader.CurrentSortingStateProperty,
                 this,
                 IsSortingProperty,
@@ -238,7 +253,7 @@ public class DataGridCell : ContentControl
                     return false;
                 },
                 BindingPriority.Template);
-            BindUtils.RelayBind(OwningColumn.HeaderCell,
+            _headerDragModeSubscription = BindUtils.RelayBind(OwningColumn.HeaderCell,
                 DataGridColumnHeader.HeaderDragModeProperty,
                 this,
                 OwningColumnDraggingProperty,
@@ -253,6 +268,24 @@ public class DataGridCell : ContentControl
                 },
                 BindingPriority.Template);
         }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (_templateApplied && _sortingStateSubscription == null && _headerDragModeSubscription == null)
+        {
+            EnsureSortBindings();
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _sortingStateSubscription?.Dispose();
+        _sortingStateSubscription = null;
+        _headerDragModeSubscription?.Dispose();
+        _headerDragModeSubscription = null;
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)

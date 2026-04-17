@@ -14,9 +14,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 34 |
-| ⏳ 待修复 | 5 |
-| 修复进度 | **87.2%** |
+| ✅ 已修复 | 35 |
+| ⏳ 待修复 | 4 |
+| 修复进度 | **89.7%** |
 
 ### 已修复问题清单
 
@@ -55,6 +55,7 @@
 | 3.3 | ColorPicker 匿名 Lambda / 重复订阅 / 双重订阅 | 🟡 | 本次修复 |
 | 2.1 | AbstractNotifiableTransition Subject&lt;bool&gt; IDisposable | 🟠 | `fcf25b60` |
 | 1.2 | DataGridCollectionView CollectionChanged 匿名 Lambda 泄漏 | 🔴 | `1f04fcee` |
+| 3.2 | DataGrid 虚拟化场景下的潜在泄漏 | 🟡 | 本次修复 |
 
 ---
 
@@ -136,12 +137,17 @@ if (source is INotifyCollectionChanged coll)
 
 ---
 
-### 3.2 DataGrid 虚拟化场景下的潜在泄漏
+### ✅ 3.2 DataGrid 虚拟化场景下的潜在泄漏（已修复）
 
-- **文件**：`src/AtomUI.Desktop.Controls.DataGrid/` 相关文件
-- **问题描述**：虚拟化模式下频繁创建和回收行/单元格容器，若回收时未正确清理事件订阅和绑定，容器可能仍持有旧数据项的引用。
-- **影响评估**：**中等**
-- **修复建议**：确保 `PrepareContainerForItemOverride` 和 `ClearContainerForItemOverride` 中正确管理所有事件订阅和绑定。
+- **文件**：`src/AtomUI.Desktop.Controls.DataGrid/Cell/DataGridCell.cs`
+- **问题描述**：`DataGridCell.OnApplyTemplate` 中调用 `BindUtils.RelayBind` 创建了两个订阅（`CurrentSortingStateProperty` → `IsSortingProperty`、`HeaderDragModeProperty` → `OwningColumnDraggingProperty`），但返回的 `IDisposable` 被直接丢弃，导致：
+  1. 若主题切换触发模板重新应用，每次 `OnApplyTemplate` 都会叠加新订阅，旧订阅永远无法释放
+  2. 单元格从可视树移除时（DataGrid 销毁、列移除），`OwningColumn.HeaderCell` 仍通过订阅持有对 Cell 的引用，阻止 GC
+- **影响评估**：**中等** — 每个可见单元格（行数 × 列数）均受影响，主题切换场景下订阅线性累积
+- **✅ 修复方案**：
+  - 新增 `_sortingStateSubscription` 和 `_headerDragModeSubscription` 两个 `IDisposable?` 字段
+  - `OnApplyTemplate` 开头先 `Dispose` 旧订阅再创建新订阅，防止重复订阅累积
+  - 新增 `OnDetachedFromVisualTree` 覆写，在单元格离开可视树时释放订阅，切断 HeaderCell → Cell 的引用链
 
 ---
 
@@ -199,9 +205,9 @@ if (source is INotifyCollectionChanged coll)
 |----------|------|--------|--------|
 | 🔴 Critical | 7 | 7 | 0 |
 | 🟠 High | 8 | 8 | 0 |
-| 🟡 Medium | 19 | 17 | 2 |
+| 🟡 Medium | 19 | 18 | 1 |
 | 🔵 Low | 5 | 2 | 3 |
-| **合计** | **39** | **34** | **5** |
+| **合计** | **39** | **35** | **4** |
 
 ### 6.2 待修复优先级
 
@@ -218,7 +224,7 @@ if (source is INotifyCollectionChanged coll)
 | # | 问题 | 预计工作量 |
 |---|------|-----------|
 | 3.1 | ThemeConfigProvider 性能 | 中等 |
-| 3.2 | DataGrid 虚拟化泄漏 | 中等 |
+| ~~3.2~~ | ~~DataGrid 虚拟化泄漏~~ | ~~已修复~~ |
 | ~~3.4~~ | ~~Form Items.CollectionChanged lambda~~ | ~~误报~~ |
 
 #### P3 — 长期优化
