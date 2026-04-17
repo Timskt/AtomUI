@@ -92,7 +92,7 @@ messageBox.Closed += OnMessageBoxClosedRemove;
 
 ---
 
-### 1.2 🟠 WindowNotificationManager — `PointerPressed += lambda`
+### ✅ 1.2 WindowNotificationManager — `PointerPressed += lambda`（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Notifications/WindowNotificationManager.cs` 第 186 行
 - **问题描述**：
@@ -667,7 +667,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | P5 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
 | P6 | 2.3 ToolTip Timer 重叠（主文档 5.17） | 🟠 中 | 小 | 高 |
 | P7 | 6.2 WindowNotificationManager 50ms 常驻 Timer | 🟠 中 | 中 | 中 |
-| P8 | 1.2 WindowNotificationManager PointerPressed lambda | 🟠 中 | 小 | 中 |
+| ~~P8~~ | ~~1.2 WindowNotificationManager PointerPressed lambda~~ | ~~已修复~~ | — | — |
 | P9 | 1.3 ListGroupDescription / DataGridGroupDescription lambda | 🟠 中 | 小 | 中 |
 | P10 | 1.4 FloatButtonGroupHost lambda（主文档 5.15） | 🟠 中 | 小 | 中 |
 | P11 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |

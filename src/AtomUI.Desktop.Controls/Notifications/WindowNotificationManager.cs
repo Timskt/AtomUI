@@ -218,16 +218,10 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
             }
         }
 
-        notificationControl.PointerPressed += (_, _) => { onClick?.Invoke(); };
-        notificationControl.NotificationClosed += (sender, _) =>
-        {
-            onClose?.Invoke();
-            if (sender is NotificationCard card)
-            {
-                _items?.Remove(card);
-                ConfigureExpiredTimer();
-            }
-        };
+        notificationControl.OnClick = onClick;
+        notificationControl.OnClose = onClose;
+        notificationControl.PointerPressed     += OnNotificationPointerPressed;
+        notificationControl.NotificationClosed += OnNotificationClosed;
 
         Dispatcher.UIThread.Post(() =>
         {
@@ -237,6 +231,24 @@ public class WindowNotificationManager : TemplatedControl, INotificationManager,
         });
     }
     
+    private static void OnNotificationPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is NotificationCard card)
+        {
+            card.OnClick?.Invoke();
+        }
+    }
+
+    private void OnNotificationClosed(object? sender, RoutedEventArgs e)
+    {
+        if (sender is NotificationCard card)
+        {
+            card.OnClose?.Invoke();
+            _items?.Remove(card);
+            ConfigureExpiredTimer();
+        }
+    }
+
     /// <summary>
     /// Removes excess notifications when the count exceeds MaxItems.
     /// </summary>

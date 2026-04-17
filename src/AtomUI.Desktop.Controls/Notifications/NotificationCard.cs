@@ -1,5 +1,4 @@
 ﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
@@ -111,6 +110,12 @@ public class NotificationCard : ContentControl, IMotionAwareControl
     #endregion
 
     #region 内部属性定义
+
+    /// <summary>回调：用户点击通知卡片时触发，由 WindowNotificationManager 设置以避免 lambda 闭包。</summary>
+    internal Action? OnClick { get; set; }
+
+    /// <summary>回调：通知卡片关闭时触发，由 WindowNotificationManager 设置以避免 lambda 闭包。</summary>
+    internal Action? OnClose { get; set; }
 
     internal static readonly DirectProperty<NotificationCard, NotificationPosition> PositionProperty =
         AvaloniaProperty.RegisterDirect<NotificationCard, NotificationPosition>(
