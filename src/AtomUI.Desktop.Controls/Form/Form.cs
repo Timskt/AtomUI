@@ -453,12 +453,14 @@ public class Form : ItemsControl,
     {
         this.RegisterTokenResourceScope(FormToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
-        Items.CollectionChanged += (sender, args) =>
-        {
-            InvalidateMeasure();
-        };
+        Items.CollectionChanged            += HandleItemsCollectionChanged;
     }
     
+    private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+    {
+        InvalidateMeasure();
+    }
+
     private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         ConfigureShowItemDeleteButton();

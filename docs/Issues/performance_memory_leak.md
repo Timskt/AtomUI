@@ -14,9 +14,9 @@
 | 统计 | 数量 |
 |------|------|
 | 总问题数 | 39 |
-| ✅ 已修复 | 31 |
-| ⏳ 待修复 | 8 |
-| 修复进度 | **79.5%** |
+| ✅ 已修复 | 32 |
+| ⏳ 待修复 | 7 |
+| 修复进度 | **82.1%** |
 
 ### 已修复问题清单
 
@@ -52,7 +52,8 @@
 | 6.1 | 预设颜色映射 Dictionary → FrozenDictionary | 🔵 | `dfb1554b` |
 | 6.3 | TimerStatistic Dead Code | 🔵 | `41dacbae` |
 | 1.1 | ListCollectionView CollectionChanged 匿名 Lambda — 经典泄漏模式 | 🔴 | `29452afe` |
-| 1.2 | DataGridCollectionView CollectionChanged 匿名 Lambda 泄漏 | 🔴 | 本次修复 |
+| 1.2 | DataGridCollectionView CollectionChanged 匿名 Lambda 泄漏 | 🔴 | `1f04fcee` |
+| 3.4 | Form Items.CollectionChanged 匿名 Lambda | 🟡 | 本次修复 |
 
 ---
 
@@ -166,7 +167,7 @@ public abstract class AbstractNotifiableTransition : INotifiableTransition
 
 ---
 
-### 3.4 Form — Items.CollectionChanged += lambda
+### ✅ 3.4 Form — Items.CollectionChanged += lambda（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Form/Form.cs`，第 456 行
 - **问题描述**：
@@ -178,7 +179,7 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 `Items` 被外部 CollectionView 替换时，旧订阅无法取消。
 
 - **影响评估**：**中等**
-- **修复建议**：改为命名方法 `HandleItemsCollectionChanged`。
+- **✅ 修复方案**：提取为命名方法 `HandleItemsCollectionChanged`，可被 `-=` 精确取消。
 
 ---
 
@@ -219,7 +220,7 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 |----------|------|--------|--------|
 | 🔴 Critical | 7 | 7 | 0 |
 | 🟠 High | 8 | 7 | 1 |
-| 🟡 Medium | 19 | 15 | 4 |
+| 🟡 Medium | 19 | 16 | 3 |
 | 🔵 Low | 5 | 2 | 3 |
 | **合计** | **39** | **31** | **8** |
 
@@ -242,7 +243,6 @@ Items.CollectionChanged += (sender, args) => { InvalidateMeasure(); };
 | 3.1 | ThemeConfigProvider 性能 | 中等 |
 | 3.2 | DataGrid 虚拟化泄漏 | 中等 |
 | 3.3 | ColorPicker 复杂状态管理 | 中等 |
-| 3.4 | Form Items.CollectionChanged lambda | ~5 行代码 |
 
 #### P3 — 长期优化
 
