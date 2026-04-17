@@ -158,7 +158,7 @@ private void OnGroupKeysCollectionChanged(object? sender, NotifyCollectionChange
 
 ---
 
-### 1.4 🟠 FloatButtonGroupHost — `OpenRequest/CloseRequest += lambda`（主文档 5.15）
+### ✅ 1.4 FloatButtonGroupHost — `OpenRequest/CloseRequest += lambda`（主文档 5.15）（已修复）
 
 - **文件**：`src/AtomUI.Desktop.Controls/FloatButton/FloatButtonGroupHost.cs` 第 199-200 行
 - **问题确认**：
@@ -669,7 +669,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | P7 | 6.2 WindowNotificationManager 50ms 常驻 Timer | 🟠 中 | 中 | 中 |
 | ~~P8~~ | ~~1.2 WindowNotificationManager PointerPressed lambda~~ | ~~已修复~~ | — | — |
 | ~~P9~~ | ~~1.3 ListGroupDescription / DataGridGroupDescription lambda~~ | ~~已修复~~ | — | — |
-| P10 | 1.4 FloatButtonGroupHost lambda（主文档 5.15） | 🟠 中 | 小 | 中 |
+| ~~P10~~ | ~~1.4 FloatButtonGroupHost lambda（主文档 5.15）~~ | ~~已修复~~ | — | — |
 | P11 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
 | P12 | 2.2 Space 子控件订阅幂等性（主文档 5.16） | 🟠 中 | 小 | 中 |
 | P13 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
