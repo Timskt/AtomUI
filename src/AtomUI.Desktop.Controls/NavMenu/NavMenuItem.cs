@@ -884,6 +884,27 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         base.OnAttachedToVisualTree(e);
         UpdatePseudoClasses();
         TryUpdateCanExecute();
+        if (_popup != null)
+        {
+            _popup.Opened -= PopupOpened;
+            _popup.Closed -= PopupClosed;
+            _popup.Opened += PopupOpened;
+            _popup.Closed += PopupClosed;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_popup != null)
+        {
+            if (IsSubMenuOpen)
+            {
+                SetCurrentValue(IsSubMenuOpenProperty, false);
+            }
+            _popup.Opened -= PopupOpened;
+            _popup.Closed -= PopupClosed;
+        }
     }
     
     private static int CalculateDistanceFromLogicalParent<T>(ILogical? logical, int defaultDistance = -1) where T : class

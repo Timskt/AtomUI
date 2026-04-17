@@ -176,12 +176,29 @@ public class NotificationCard : ContentControl, IMotionAwareControl
         SetupPositionPseudoClasses(Position);
         SetupNotificationTypePseudoClasses();
         SetupDefaultNotificationIcon();
+        if (_closeButton != null)
+        {
+            _closeButton.Click += HandleCloseButtonClose;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_closeButton != null)
+        {
+            _closeButton.Click -= HandleCloseButtonClose;
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
+        if (_closeButton is not null)
+        {
+            _closeButton.Click -= HandleCloseButtonClose;
+        }
         _closeButton = e.NameScope.Find<IconButton>("PART_CloseButton");
         _motionActor = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
 

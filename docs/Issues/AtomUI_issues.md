@@ -32,30 +32,6 @@
 
 ## 二、生命周期与分离问题
 
-### 2.1 🔴 多个控件缺少 `OnDetachedFromVisualTree` 清理逻辑（部分未修复）
-
-以下控件已修复部分，但仍有以下文件未处理：
-
-| 文件 | 风险 |
-|------|------|
-| `src/AtomUI.Desktop.Controls/Notifications/NotificationCard.cs` | 动画 CTS 未清理 |
-| `src/AtomUI.Desktop.Controls/NavMenu/NavMenuItem.cs` | SubMenu Popup 未清理 |
-| `src/AtomUI.Desktop.Controls/Collapse/Collapse.cs` | 动画控制器未释放 |
-| `src/AtomUI.Desktop.Controls/Card/Card.cs` | token scope 资源未释放 |
-
-- **影响评估**：🔴 高 — `NavMenuItem`、`NotificationCard` 高频实例化，泄漏倍增。
-- **修复建议**：
-
-```csharp
-protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-{
-    base.OnDetachedFromVisualTree(e);
-    // 停止 Timer、Cancel CTS、关闭 Popup、解除事件订阅
-}
-```
-
----
-
 ### 2.2 🟠 Space — Children.PropertyChanged 重复订阅保护（主文档 5.16）
 
 - **文件**：`src/AtomUI.Desktop.Controls/Space/Space.cs`
@@ -68,26 +44,6 @@ protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     base.OnApplyTemplate(e);
     Children.PropertyChanged -= HandleChildrenPropertyChanged;
     Children.PropertyChanged += HandleChildrenPropertyChanged;
-}
-```
-
----
-
-### 2.3 🟠 ToolTip / ToolTipService — Timer 重叠（主文档 5.17）
-
-- **文件**：
-  - `src/AtomUI.Desktop.Controls/Tooltip/ToolTip.cs` 第 600-608 行
-  - `src/AtomUI.Desktop.Controls/Tooltip/ToolTipService.cs` 第 239-240 行
-- **问题**：每次 `StartShowTimer` 直接 `new DispatcherTimer`，未先调用 `StopTimer`。快速鼠标移动时多个并行 Timer 可能触发意外显示。
-- **修复建议**：
-
-```csharp
-private void StartShowTimer(int showDelay, Control control)
-{
-    StopTimer();
-    _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay), Tag = (this, control) };
-    _timer.Tick += OnTimerTick;
-    _timer.Start();
 }
 ```
 
@@ -113,37 +69,6 @@ private void StartShowTimer(int showDelay, Control control)
 
 ## 三、异步与并发问题
 
-### 3.1 🔴 Select / AutoComplete / Mentions / Form / Dialog — CancellationTokenSource 未 Dispose
-
-- **新发现未修**：
-  - `src/AtomUI.Desktop.Controls/Select/Select.AsyncOptionsLoad.cs` 第 48 行 — `_optionsLoadCTS = new CancellationTokenSource();` 前未 Dispose 旧的
-  - `src/AtomUI.Desktop.Controls/AutoComplete/AbstractAutoComplete.cs` 第 1434 行 — `_populationCancellationTokenSource`
-  - `src/AtomUI.Desktop.Controls/Mentions/Mentions.cs` 第 826 行 — `_populationCancellationTokenSource`
-  - `src/AtomUI.Desktop.Controls/Form/Form.cs` 第 522、605 行 — `_validationTokenSource`
-  - `src/AtomUI.Desktop.Controls/Form/FormItem.cs` 第 725 行
-  - `src/AtomUI.Desktop.Controls/Dialog/Dialog.cs` 第 436 行 — `_frameCancellationTokenSource`
-  - `src/AtomUI.Desktop.Controls/Carousel/CarouselPageIndicator.cs` 第 228 行
-- **修复模板**：
-
-```csharp
-private void StartOperation()
-{
-    _cts?.Cancel();
-    _cts?.Dispose();
-    _cts = new CancellationTokenSource();
-}
-
-protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-{
-    base.OnDetachedFromVisualTree(e);
-    _cts?.Cancel();
-    _cts?.Dispose();
-    _cts = null;
-}
-```
-
----
-
 ### 3.2 🟠 Gallery — 8 处 async void 未做异常保护
 
 - **文件**：`controlgallery/AtomUIGallery/ShowCases/Views/Feedback/ModalShowCase.axaml.cs` 第 257、277、298、345、359、373、387、401 行
@@ -158,14 +83,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
     catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
 }
 ```
-
----
-
-### 3.3 🟠 VirtualizingCarouselPanel — `_transition` 字段命名误导
-
-- **文件**：`src/AtomUI.Desktop.Controls/Carousel/VirtualizingCarouselPanel.cs` 第 158 行
-- **问题**：`_transition = new CancellationTokenSource();` 字段名为 `_transition` 但类型是 CTS，未 Dispose 旧 CTS。
-- **修复建议**：重命名为 `_transitionCts` 并走标准 Cancel+Dispose 流程。
 
 ---
 
@@ -189,7 +106,16 @@ var cancellationTokenSource = new CancellationTokenSource();
   - `src/AtomUI.Controls/Badge/AbstractDotBadgeAdorner.cs` 第 122、133、171 行
   - `src/AtomUI.Controls/Badge/AbstractCountBadgeAdorner.cs` 第 254、277 行
 - **问题**：每处都直接 `_motionCancellationTokenSource = new CancellationTokenSource()`，但上一次的可能没 Dispose。
-- **修复模板**：与 3.1 同。
+- **修复模板**：
+
+```csharp
+private void StartOperation()
+{
+    _cts?.Cancel();
+    _cts?.Dispose();
+    _cts = new CancellationTokenSource();
+}
+```
 
 ---
 
@@ -448,16 +374,12 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
-| P1 | 2.1 剩余控件缺少 OnDetachedFromVisualTree（NavMenuItem / NotificationCard / Collapse / Card token scope） | 🔴 高 | 中 | 🚨 最高 |
-| P2 | 3.1 Select / AutoComplete / Mentions / Form / Dialog — CTS 未 Dispose | 🔴 高 | 中 | 🚨 最高 |
 | P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
 | P4 | 3.5 Badge Adorner CTS 未 Dispose（5 处） | 🟠 中 | 小 | 高 |
-| P5 | 2.3 ToolTip Timer 重叠（主文档 5.17） | 🟠 中 | 小 | 高 |
 | P6 | 6.2 WindowNotificationManager 50ms 常驻 Timer | 🟠 中 | 中 | 中 |
 | P7 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
 | P8 | 2.2 Space 子控件订阅幂等性（主文档 5.16） | 🟠 中 | 小 | 中 |
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
-| P10 | 3.3 VirtualizingCarouselPanel `_transition` CTS | 🟠 中 | 小 | 中 |
 | P11 | 3.4 FileUploadScheduler 局部 CTS Dispose | 🟠 中 | 最小 | 中 |
 | P12 | 6.1 Watermark 渲染优化（主文档 5.18） | 🟠 中 | 中 | 中 |
 | P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
@@ -471,7 +393,7 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 ## 建议的后续步骤
 
-1. **立即处理 P1-P5**：涉及 🔴 高严重度与高频资源泄漏问题。
+1. **立即处理 P3-P4**：WaveSpirit / SwitchKnob / Badge CTS 高频泄漏。
 2. **建立 CI 检查**：P17 Roslyn 分析器长期防止同类问题再次引入。
 3. **按季度审计**：运行 `git log --stat src/**.cs` 检测新代码是否引入 `async void`、`+= lambda` 等反模式。
 
