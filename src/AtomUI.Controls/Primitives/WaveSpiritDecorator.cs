@@ -159,14 +159,16 @@ internal class WaveSpiritDecorator : Control
             }
         }
         if (change.Property == WaveBrushProperty ||
-                 change.Property == OriginOpacityProperty ||
-                 change.Property == SizeMotionDurationProperty ||
-                 change.Property == OpacityMotionDurationProperty ||
-                 change.Property == SizeEasingCurveProperty ||
-                 change.Property == OpacityEasingCurveProperty ||
-                 change.Property == CornerRadiusProperty)
+            change.Property == OriginOpacityProperty ||
+            change.Property == SizeMotionDurationProperty ||
+            change.Property == OpacityMotionDurationProperty ||
+            change.Property == SizeEasingCurveProperty ||
+            change.Property == OpacityEasingCurveProperty ||
+            change.Property == CornerRadiusProperty)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
             ConfigureWavePainter();
         }
         else if (change.Property == BoundsProperty)
@@ -254,7 +256,9 @@ internal class WaveSpiritDecorator : Control
     {
         base.OnDetachedFromVisualTree(e);
         _cancellationTokenSource?.Cancel();
-        _isPlaying = false;
+        _cancellationTokenSource?.Dispose();
+        _cancellationTokenSource = null;
+        _isPlaying               = false;
     }
     
     public void Play()
@@ -289,6 +293,7 @@ internal class WaveSpiritDecorator : Control
         _wavePainter.NotifyBuildOpacityAnimation(opacityAnimation, LastWaveOpacityProperty);
 
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
 
         var sizeAnimationTask    = sizeAnimation.RunAsync(this, _cancellationTokenSource.Token);

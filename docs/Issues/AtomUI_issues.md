@@ -21,8 +21,7 @@
 
 - [二、生命周期与分离问题](#二生命周期与分离问题)
 - [三、异步与并发问题](#三异步与并发问题)
-- [四、资源管理与 IDisposable](#四资源管理与-idisposable)
-- [五、集合 / 缓存 / 静态字段](#五集合--缓存--静态字段)
+- [四、集合 / 缓存 / 静态字段](#四集合--缓存--静态字段)
 - [六、性能热点](#六性能热点)
 - [七、Gallery 项目相关问题](#七gallery-项目相关问题)
 - [八、架构层面建议](#八架构层面建议)
@@ -69,34 +68,7 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ---
 
-## 四、资源管理与 IDisposable
-
-### 4.5 🟠 WaveSpiritDecorator — `_cancellationTokenSource = new CTS()` 未 Dispose 旧实例
-
-- **文件**：`src/AtomUI.Controls/Primitives/WaveSpiritDecorator.cs` 第 292 行
-- **问题**：`WaveSpirit` 点击涟漪高频触发（每次点击都创建 CTS），之前的 CTS 未 Dispose。`OnDetachedFromVisualTree` 和 `OnPropertyChanged` 中也只 Cancel 不 Dispose。
-- **影响评估**：🟠 中（按钮密集场景下持续泄漏 WaitHandle）。
-- **修复建议**：
-
-```csharp
-_cancellationTokenSource?.Cancel();
-_cancellationTokenSource?.Dispose();
-_cancellationTokenSource = new CancellationTokenSource();
-```
-
----
-
-### 4.6 🟠 SwitchKnob / AbstractSpinIndicator — 相同 CTS 模式
-
-- **文件**：
-  - `src/AtomUI.Controls/Switch/SwitchKnob.cs` 第 192 行
-  - `src/AtomUI.Controls/Spin/AbstractSpinIndicator.cs` 第 127 行
-- **问题**：均是 `_cancellationTokenSource = new CancellationTokenSource()` 前无 Dispose，`OnDetachedFromVisualTree` 中也只 Cancel 不 Dispose。
-- **修复建议**：同 4.5。
-
----
-
-## 五、集合 / 缓存 / 静态字段
+## 四、集合 / 缓存 / 静态字段
 
 ### 5.1 🟡 ButtonTheme.DashedStyle — `public static IList<double>` 可变
 
@@ -248,7 +220,6 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
-| P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
 | P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
 | P14 | 6.3 Icon Geometry 缓存 | 🟡 低 | 中（改生成器） | 低 |
@@ -261,9 +232,8 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 ## 建议的后续步骤
 
-1. **立即处理 P3**：WaveSpirit / SwitchKnob / Spin CTS 高频泄漏。
-2. **建立 CI 检查**：P17 Roslyn 分析器长期防止同类问题再次引入。
-3. **按季度审计**：运行 `git log --stat src/**.cs` 检测新代码是否引入 `async void`、`+= lambda` 等反模式。
+1. **建立 CI 检查**：P17 Roslyn 分析器长期防止同类问题再次引入。
+2. **按季度审计**：运行 `git log --stat src/**.cs` 检测新代码是否引入 `async void`、`+= lambda` 等反模式。
 
 ---
 

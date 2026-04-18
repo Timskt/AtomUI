@@ -124,6 +124,7 @@ public abstract class AbstractSpinIndicator : TemplatedControl, ISizeTypeAware
         base.OnAttachedToVisualTree(e);
         BuildIndicatorAnimation();
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
         if (_animation != null)
         {
@@ -138,6 +139,7 @@ public abstract class AbstractSpinIndicator : TemplatedControl, ISizeTypeAware
     {
         base.OnDetachedFromVisualTree(e);
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
     }
 
@@ -173,6 +175,7 @@ public abstract class AbstractSpinIndicator : TemplatedControl, ISizeTypeAware
         if (force || _animation is null)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
             _animation = new Animation
             {
                 Easing         = MotionEasingCurve ?? new LinearEasing(),

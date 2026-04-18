@@ -161,6 +161,7 @@ internal class SwitchKnob : TemplatedControl
     private void StartLoadingAnimation()
     {
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         var loadingAnimation = new Animation();
         loadingAnimation[!Animation.DurationProperty] = this[!LoadingAnimationDurationProperty];
         loadingAnimation.Duration                     = LoadingAnimationDuration;
@@ -201,6 +202,7 @@ internal class SwitchKnob : TemplatedControl
         }
 
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
         _isLoading               = false;
         IsEnabled                = true;
@@ -256,6 +258,8 @@ internal class SwitchKnob : TemplatedControl
         if (_isLoading)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
         }
     }
 
@@ -313,5 +317,4 @@ internal class SwitchKnob : TemplatedControl
             Transitions = null;
         }
     }
-
 }
