@@ -295,7 +295,15 @@ public abstract class AbstractImagePreviewer : TemplatedControl, IMotionAwareCon
                     // TODO 这个错误直接抛出还是忽略
                 }
             }
+            var oldSources = EffectiveSources;
             SetCurrentValue(EffectiveSourcesProperty, effectiveSources);
+            if (oldSources != null)
+            {
+                foreach (var source in oldSources)
+                {
+                    source.Dispose();
+                }
+            }
         }
     }
 

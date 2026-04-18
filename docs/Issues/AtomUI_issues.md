@@ -71,33 +71,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ## 四、资源管理与 IDisposable
 
-### 4.1 🟠 AbstractQRCode / PreviewImageSource — Bitmap 未 Dispose 旧实例
-
-- **文件**：
-  - `src/AtomUI.Controls/QRCode/AbstractQRCode.cs` 第 231 行
-  - `src/AtomUI.Desktop.Controls/ImagePreviewer/PreviewImageSource.cs`
-- **问题**：每次重新生成 / 切换图源时，旧 `Bitmap` 对象未 Dispose。Avalonia `Bitmap` 持有非托管像素缓冲，依赖终结器回收会延迟。`PreviewImageSource` 为 record 类型，未实现 `IDisposable`，实例被替换时 Bitmap 无法释放。
-- **影响评估**：🟠 中。
-- **修复建议**：
-
-```csharp
-public Bitmap? Bitmap
-{
-    get => _bitmap;
-    set
-    {
-        if (_bitmap != value)
-        {
-            _bitmap?.Dispose();
-            _bitmap = value;
-            OnPropertyChanged();
-        }
-    }
-}
-```
-
----
-
 ### 4.2 🟠 ColorPickerHelpers.CreateBitmapFromPixelData — 调用者需主动 Dispose
 
 - **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/Utils/ColorPickerHelpers.cs`
@@ -300,7 +273,6 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
 | P3 | 4.5、4.6 WaveSpirit / SwitchKnob / Spin CTS 模式 | 🟠 中 | 小 | 高 |
-| P7 | 4.1 AbstractQRCode / PreviewImageSource Bitmap 未 Dispose | 🟠 中 | 小 | 中 |
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
 | P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
 | P14 | 6.3 Icon Geometry 缓存 | 🟡 低 | 中（改生成器） | 低 |

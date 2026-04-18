@@ -9,7 +9,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Metadata;
 using SkiaSharp;
 using SkiaSharp.QrCode;
-using static System.Enum;
 
 namespace AtomUI.Controls.Commons;
 
@@ -167,10 +166,10 @@ public abstract class AbstractQRCode : TemplatedControl
 
     #region 内部属性定义
 
-    internal static readonly StyledProperty<Bitmap> BitmapProperty =
-        AvaloniaProperty.Register<AbstractQRCode, Bitmap>(nameof(Bitmap));
+    internal static readonly StyledProperty<Bitmap?> BitmapProperty =
+        AvaloniaProperty.Register<AbstractQRCode, Bitmap?>(nameof(Bitmap));
     
-    internal Bitmap Bitmap
+    internal Bitmap? Bitmap
     {
         get => GetValue(BitmapProperty);
         set => SetValue(BitmapProperty, value);
@@ -209,7 +208,18 @@ public abstract class AbstractQRCode : TemplatedControl
 
     private void SetupQRCode()
     {
-        TryParse(EccLevel.ToString(), out ECCLevel eccLevel);
+        if (string.IsNullOrEmpty(Value))
+        { 
+            return;
+        }
+        var eccLevel = EccLevel switch
+        {
+            QRCodeEccLevel.L => ECCLevel.L,
+            QRCodeEccLevel.M => ECCLevel.M,
+            QRCodeEccLevel.Q => ECCLevel.Q,
+            QRCodeEccLevel.H => ECCLevel.H,
+            _                => ECCLevel.M
+        };
         var       qrcode  = QRCodeGenerator.CreateQrCode(Value, eccLevel, quietZoneSize: 0);
         var       info    = new SKImageInfo(Size, Size);
         using var surface = SKSurface.Create(info);
@@ -226,9 +236,11 @@ public abstract class AbstractQRCode : TemplatedControl
             new SKColor(bgColor.R, bgColor.G, bgColor.B, bgColor.A)
         );
 
-        using var image = surface.Snapshot();
-        using var data  = image.Encode(SKEncodedImageFormat.Png, 100);
+        using var image     = surface.Snapshot();
+        using var data      = image.Encode(SKEncodedImageFormat.Png, 100);
+        var       oldBitmap = Bitmap;
         Bitmap = new Bitmap(data.AsStream());
+        oldBitmap?.Dispose();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
