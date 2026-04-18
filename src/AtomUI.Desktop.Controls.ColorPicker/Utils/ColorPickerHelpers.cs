@@ -614,7 +614,7 @@ internal static class ColorPickerHelpers
     /// <param name="bgraPixelData">The bitmap (in raw BGRA pre-multiplied alpha pixels).</param>
     /// <param name="pixelWidth">The pixel width of the bitmap.</param>
     /// <param name="pixelHeight">The pixel height of the bitmap.</param>
-    /// <returns>A new <see cref="WriteableBitmap"/>.</returns>
+    /// <returns>A new <see cref="Bitmap"/>. The caller is responsible for disposing the returned bitmap.</returns>
     public static unsafe Bitmap CreateBitmapFromPixelData(
         PooledList<byte> bgraPixelData,
         int pixelWidth,

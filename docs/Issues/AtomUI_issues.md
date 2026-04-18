@@ -71,14 +71,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ## 四、资源管理与 IDisposable
 
-### 4.2 🟠 ColorPickerHelpers.CreateBitmapFromPixelData — 调用者需主动 Dispose
-
-- **文件**：`src/AtomUI.Desktop.Controls.ColorPicker/Utils/ColorPickerHelpers.cs`
-- **问题**：返回 `new Bitmap(...)`，调用者在频繁更新时需要主动 Dispose 前一个 Bitmap。XML doc 中无 "Caller must Dispose" 标注，且 `<returns>` 标签描述有误（写的是 `WriteableBitmap`）。
-- **修复建议**：在 XML doc 明确标注 "Caller must Dispose"，修正 `<returns>` 描述。
-
----
-
 ### 4.3 🟠 RenderTargetBitmap 泄漏风险 — ControlExtensions.cs
 
 - **文件**：`src/AtomUI.Controls.Shared/Utils/ControlExtensions.cs` 第 23 行
