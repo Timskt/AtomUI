@@ -256,68 +256,80 @@ public partial class ModalShowCase : ReactiveUserControl<ModalViewModel>
     
     private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEventArgs e)
     {
-        // 鼠标会被卡死，强制刷新一次事件循环
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildDialogContent();
-        var options = new DialogOptions
+        try
         {
-            Title                     = "Basic Modal",
-            IsResizable               = false,
-            IsDragMovable             = true,
-            IsMaximizable             = false,
-            StandardButtons           = DialogStandardButtons.Parse("Cancel,Ok"),
-            DefaultStandardButton     = DialogStandardButton.Ok,
-            HorizontalStartupLocation = DialogHorizontalAnchor.Center,
-            VerticalOffset            = new Dimension(30, DimensionUnitType.Percentage),
-            MinWidth                  = 400
-        };
-        await Dialog.ShowDialogModalAsync(content, null, options);
+            // 鼠标会被卡死，强制刷新一次事件循环
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildDialogContent();
+            var options = new DialogOptions
+            {
+                Title                     = "Basic Modal",
+                IsResizable               = false,
+                IsDragMovable             = true,
+                IsMaximizable             = false,
+                StandardButtons           = DialogStandardButtons.Parse("Cancel,Ok"),
+                DefaultStandardButton     = DialogStandardButton.Ok,
+                HorizontalStartupLocation = DialogHorizontalAnchor.Center,
+                VerticalOffset            = new Dimension(30, DimensionUnitType.Percentage),
+                MinWidth                  = 400
+            };
+            await Dialog.ShowDialogModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
 
     private async void HandleOpenWindowDialogButtonClick(object? sender, RoutedEventArgs e)
     {
-        // 鼠标会被卡死，强制刷新一次事件循环
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildDialogContent();
-        var options = new DialogOptions
+        try
         {
-            Title                     = "Basic Modal",
-            IsResizable               = false,
-            IsDragMovable             = true,
-            IsMaximizable             = false,
-            DialogHostType            = DialogHostType.Window,
-            StandardButtons           = DialogStandardButtons.Parse("Cancel,Ok"),
-            DefaultStandardButton     = DialogStandardButton.Ok,
-            HorizontalStartupLocation = DialogHorizontalAnchor.Center,
-            VerticalOffset            = new Dimension(30, DimensionUnitType.Percentage),
-            MinWidth                  = 400
-        };
-        await Dialog.ShowDialogModalAsync(content, null, options);
+            // 鼠标会被卡死，强制刷新一次事件循环
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildDialogContent();
+            var options = new DialogOptions
+            {
+                Title                     = "Basic Modal",
+                IsResizable               = false,
+                IsDragMovable             = true,
+                IsMaximizable             = false,
+                DialogHostType            = DialogHostType.Window,
+                StandardButtons           = DialogStandardButtons.Parse("Cancel,Ok"),
+                DefaultStandardButton     = DialogStandardButton.Ok,
+                HorizontalStartupLocation = DialogHorizontalAnchor.Center,
+                VerticalOffset            = new Dimension(30, DimensionUnitType.Percentage),
+                MinWidth                  = 400
+            };
+            await Dialog.ShowDialogModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
 
     private async void HandleOpenCustomViewDialogButtonClick(object? sender, RoutedEventArgs e)
     {
-        // 鼠标会被卡死，强制刷新一次事件循环
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var options = new DialogOptions
+        try
         {
-            Title                     = "Basic Modal",
-            IsResizable               = false,
-            IsDragMovable             = true,
-            IsMaximizable             = false,
-            DialogHostType            = DialogHostType.Window,
-            StandardButtons           = DialogStandardButtons.Parse("Cancel,Ok"),
-            DefaultStandardButton     = DialogStandardButton.Ok,
-            HorizontalStartupLocation = DialogHorizontalAnchor.Center,
-            VerticalOffset            = new Dimension(30, DimensionUnitType.Percentage),
-            MinWidth                  = 400
-        };
-        var viewModel = new ModalUserControlViewModel()
-        {
-            Name = "AtomUI",
-            Age  = 2
-        };
-        await Dialog.ShowDialogModalAsync<ModalUserControlView, ModalUserControlViewModel>(viewModel, options);
+            // 鼠标会被卡死，强制刷新一次事件循环
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var options = new DialogOptions
+            {
+                Title                     = "Basic Modal",
+                IsResizable               = false,
+                IsDragMovable             = true,
+                IsMaximizable             = false,
+                DialogHostType            = DialogHostType.Window,
+                StandardButtons           = DialogStandardButtons.Parse("Cancel,Ok"),
+                DefaultStandardButton     = DialogStandardButton.Ok,
+                HorizontalStartupLocation = DialogHorizontalAnchor.Center,
+                VerticalOffset            = new Dimension(30, DimensionUnitType.Percentage),
+                MinWidth                  = 400
+            };
+            var viewModel = new ModalUserControlViewModel()
+            {
+                Name = "AtomUI",
+                Age  = 2
+            };
+            await Dialog.ShowDialogModalAsync<ModalUserControlView, ModalUserControlViewModel>(viewModel, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
 
     private Control BuildDialogContent()
@@ -344,72 +356,92 @@ public partial class ModalShowCase : ReactiveUserControl<ModalViewModel>
 
     private async void HandleCreateConfirmMessageBox(object? sender, RoutedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildMessageBoxContent();
-        var options = new MessageBoxOptions()
+        try
         {
-            Title             = "Do you want to delete these items?",
-            IsDragMovable     = true,
-            IsCenterOnStartup = true,
-            Style             = MessageBoxStyle.Confirm
-        };
-        await MessageBox.ShowMessageModalAsync(content, null, options);
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildMessageBoxContent();
+            var options = new MessageBoxOptions()
+            {
+                Title             = "Do you want to delete these items?",
+                IsDragMovable     = true,
+                IsCenterOnStartup = true,
+                Style             = MessageBoxStyle.Confirm
+            };
+            await MessageBox.ShowMessageModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
     
     private async void HandleCreateInformationMessageBox(object? sender, RoutedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildMessageBoxContent();
-        var options = new MessageBoxOptions()
+        try
         {
-            Title             = "This is a notification message",
-            IsDragMovable     = true,
-            IsCenterOnStartup = true,
-            Style             = MessageBoxStyle.Information
-        };
-        await MessageBox.ShowMessageModalAsync(content, null, options);
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildMessageBoxContent();
+            var options = new MessageBoxOptions()
+            {
+                Title             = "This is a notification message",
+                IsDragMovable     = true,
+                IsCenterOnStartup = true,
+                Style             = MessageBoxStyle.Information
+            };
+            await MessageBox.ShowMessageModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
     
     private async void HandleCreateSuccessMessageBox(object? sender, RoutedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildMessageBoxContent();
-        var options = new MessageBoxOptions()
+        try
         {
-            Title             = "Operation successful",
-            IsDragMovable     = true,
-            IsCenterOnStartup = true,
-            Style             = MessageBoxStyle.Success
-        };
-        await MessageBox.ShowMessageModalAsync(content, null, options);
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildMessageBoxContent();
+            var options = new MessageBoxOptions()
+            {
+                Title             = "Operation successful",
+                IsDragMovable     = true,
+                IsCenterOnStartup = true,
+                Style             = MessageBoxStyle.Success
+            };
+            await MessageBox.ShowMessageModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
     
     private async void HandleCreateErrorMessageBox(object? sender, RoutedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildMessageBoxContent();
-        var options = new MessageBoxOptions()
+        try
         {
-            Title             = "This is an error message",
-            IsDragMovable     = true,
-            IsCenterOnStartup = true,
-            Style             = MessageBoxStyle.Error
-        };
-        await MessageBox.ShowMessageModalAsync(content, null, options);
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildMessageBoxContent();
+            var options = new MessageBoxOptions()
+            {
+                Title             = "This is an error message",
+                IsDragMovable     = true,
+                IsCenterOnStartup = true,
+                Style             = MessageBoxStyle.Error
+            };
+            await MessageBox.ShowMessageModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
     
     private async void HandleCreateWarningMessageBox(object? sender, RoutedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
-        var content = BuildMessageBoxContent();
-        var options = new MessageBoxOptions()
+        try
         {
-            Title             = "This is a warning message",
-            IsDragMovable     = true,
-            IsCenterOnStartup = true,
-            Style             = MessageBoxStyle.Warning
-        };
-        await MessageBox.ShowMessageModalAsync(content, null, options);
+            await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+            var content = BuildMessageBoxContent();
+            var options = new MessageBoxOptions()
+            {
+                Title             = "This is a warning message",
+                IsDragMovable     = true,
+                IsCenterOnStartup = true,
+                Style             = MessageBoxStyle.Warning
+            };
+            await MessageBox.ShowMessageModalAsync(content, null, options);
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
     }
     
     private Control BuildMessageBoxContent()

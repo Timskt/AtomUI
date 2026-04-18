@@ -20,9 +20,7 @@
 ## 目录
 
 - [二、生命周期与分离问题](#二生命周期与分离问题)
-- [三、异步与并发问题](#三异步与并发问题)
 - [四、集合 / 缓存 / 静态字段](#四集合--缓存--静态字段)
-- [六、性能热点](#六性能热点)
 - [七、Gallery 项目相关问题](#七gallery-项目相关问题)
 - [八、架构层面建议](#八架构层面建议)
 - [九、修复优先级清单](#九修复优先级清单)
@@ -49,25 +47,6 @@
 
 ---
 
-## 三、异步与并发问题
-
-### 3.2 🟠 Gallery — 8 处 async void 未做异常保护
-
-- **文件**：`controlgallery/AtomUIGallery/ShowCases/Views/Feedback/ModalShowCase.axaml.cs` 第 257、277、298、345、359、373、387、401 行
-- **问题**：全部是 `private async void Handle*Click(...)`。若演示崩溃会导致整个 Gallery 无法用于验收测试。
-- **影响评估**：🟠 中（仅影响演示环境）。
-- **修复建议**：统一包装 try-catch：
-
-```csharp
-private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEventArgs e)
-{
-    try { /* 原逻辑 */ }
-    catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"Modal demo failed: {ex}"); }
-}
-```
-
----
-
 ## 四、集合 / 缓存 / 静态字段
 
 ### 5.2 🟡 PresetPalettes / ThemeVariantCalculator — 内部静态字典未限制
@@ -83,31 +62,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 - **文件**：`controlgallery/AtomUIGallery/ShowCases/...`
 - **问题**：showcase 注册使用静态集合，长期运行会持有所有 showcase 视图实例。Gallery 作为 demo 不会长期运行，影响可忽略。
 - **影响评估**：🟡 低。
-
----
-
-## 六、性能热点
-
-### 6.3 🟡 Icon Geometry — StreamGeometry.Parse 重复调用
-
-- **文件**：`src/AtomUI.Icons.AntDesign/GeneratedIcons/*.g.cs`（800+ 图标）
-- **问题**：每个生成图标类的 `Build` 方法每次调用都 `StreamGeometry.Parse("...")`，频繁显示图标时重复解析 SVG 路径。
-- **影响评估**：🟡 低。
-- **修复建议**：在图标类中把 `StreamGeometry` 缓存为 `static readonly` 字段（惰性初始化），需改 `AtomUI.Icons.AntDesign.Generator` 模板。
-
----
-
-### 6.4 🟡 InterpolateUtils.InterpolateStops — 每帧分配
-
-- **文件**：`src/AtomUI.Core/Animations/InterpolateUtils.cs` 第 289、344 行
-- **问题**：动画每一帧调用，创建 `IReadOnlyList<ImmutableGradientStop>`（LINQ `.ToList()`），可能产生 LOH 分配。
-- **修复建议**：使用 `ArrayPool<ImmutableGradientStop>` 或静态预分配缓冲。
-
----
-
-### 6.5 🟡 控件模板中 Brush / Pen 每次创建
-
-审计 `src/AtomUI.Desktop.Controls/**/Themes/*.cs` 中生成的 Pen/Brush 都是 `new Pen(...)` 而非 `ImmutablePen.Pool`。在 Avalonia 11 中创建成本相对低，但视觉量大时仍有优化空间。
 
 ---
 
@@ -128,72 +82,9 @@ this.WhenActivated(disposables =>
 });
 ```
 
-### 7.2 🟠 ModalShowCase 8 处 async void（见 3.2）
-
 ### 7.3 🟡 BaseGalleryApplication 静态主题资源
 
 `BaseGalleryApplication.axaml.cs` 注册主题时使用静态字段。Gallery 自身不切换应用实例，影响可忽略。
-
----
-
-## 八、架构层面建议
-
-### 8.1 建立统一的控件生命周期基类
-
-在 `AtomUI.Controls` 中提供一个抽象基类，统一管理 `CompositeDisposable`、CTS、Timer：
-
-```csharp
-public abstract class AtomTemplatedControl : TemplatedControl
-{
-    protected CompositeDisposable DetachDisposables { get; } = new();
-    protected CancellationTokenSource? DetachCts { get; private set; }
-
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-        DetachCts = new CancellationTokenSource();
-    }
-
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromVisualTree(e);
-        DetachCts?.Cancel();
-        DetachCts?.Dispose();
-        DetachCts = null;
-        DetachDisposables.Clear();
-    }
-}
-```
-
-### 8.2 添加 Roslyn 分析器
-
-基于 `AtomUI.Generator` 添加分析器，在编译时检查以下反模式：
-
-- `async void` 非事件处理器
-- `+= (...) => ...` Lambda 订阅 CLR 事件
-- `new CancellationTokenSource()` 赋值到字段前未 Dispose
-- `new DispatcherTimer()` 未赋值到字段
-
-### 8.3 统一 Bitmap / Disposable 资源管理
-
-所有 `Bitmap`、`RenderTargetBitmap`、`FormattedText` 等资源通过工厂获取，工厂内部使用 `ObjectPool` + 引用计数管理，避免手工 Dispose。
-
-### 8.4 单元测试与泄漏检测
-
-建议添加 `AtomUI.Base.Tests/MemoryLeakTests.cs`：
-
-```csharp
-[Fact]
-public async Task Button_DoesNotLeak_AfterDetach()
-{
-    WeakReference wr = CreateButton();
-    await Task.Delay(100);
-    GC.Collect();
-    GC.WaitForPendingFinalizers();
-    GC.Collect();
-    Assert.False(wr.IsAlive);
-}
-```
 
 ---
 
@@ -201,9 +92,6 @@ public async Task Button_DoesNotLeak_AfterDetach()
 
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
-| P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
-| P14 | 6.3 Icon Geometry 缓存 | 🟡 低 | 中（改生成器） | 低 |
-| P15 | 6.4 InterpolateUtils LOH 分配 | 🟡 低 | 中 | 低 |
 | P16 | 8.1 提供 AtomTemplatedControl 基类 | 架构 | 中 | 低 |
 | P17 | 8.2 Roslyn 分析器 | 架构 | 大 | 低 |
 | P18 | 8.4 MemoryLeakTests 自动化 | 架构 | 中 | 低 |

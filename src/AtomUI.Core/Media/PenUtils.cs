@@ -21,7 +21,7 @@ public static class PenUtils
    internal static bool TryModifyOrCreate(ref IPen? pen,
                                           IBrush? brush,
                                           double thickness,
-                                          IList<double>? strokeDashArray = null,
+                                          IReadOnlyList<double>? strokeDashArray = null,
                                           double strokeDaskOffset = 0.0,
                                           PenLineCap lineCap = PenLineCap.Flat,
                                           PenLineJoin lineJoin = PenLineJoin.Miter,

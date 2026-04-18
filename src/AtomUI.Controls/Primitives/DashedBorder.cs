@@ -29,8 +29,8 @@ public class DashedBorder : Decorator
     public static readonly StyledProperty<BoxShadows> BoxShadowProperty =
         AvaloniaProperty.Register<DashedBorder, BoxShadows>(nameof(BoxShadow));
     
-    public static readonly StyledProperty<IList<double>?> StrokeDashArrayProperty =
-        AvaloniaProperty.Register<DashedBorder, IList<double>?>(nameof(StrokeDashArray));
+    public static readonly StyledProperty<IReadOnlyList<double>?> StrokeDashArrayProperty =
+        AvaloniaProperty.Register<DashedBorder, IReadOnlyList<double>?>(nameof(StrokeDashArray));
     
     public static readonly StyledProperty<double> StrokeDaskOffsetProperty =
         AvaloniaProperty.Register<DashedBorder, double>(nameof(StrokeDaskOffset), 0.0);
@@ -89,7 +89,7 @@ public class DashedBorder : Decorator
         set => SetValue(BoxShadowProperty, value);
     }
     
-    public IList<double>? StrokeDashArray
+    public IReadOnlyList<double>? StrokeDashArray
     {
         get => GetValue(StrokeDashArrayProperty);
         set => SetValue(StrokeDashArrayProperty, value);

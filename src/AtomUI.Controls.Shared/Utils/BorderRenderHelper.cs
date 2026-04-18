@@ -111,7 +111,7 @@ internal class BorderRenderHelper
         BackgroundSizing backgroundSizing,
         IBrush? background,
         IBrush? borderBrush,
-        IList<double>? strokeDashArray = null,
+        IReadOnlyList<double>? strokeDashArray = null,
         double strokeDaskOffset = 0.0,
         BoxShadows boxShadows = default)
     {
