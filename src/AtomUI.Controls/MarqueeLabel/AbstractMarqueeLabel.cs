@@ -141,6 +141,8 @@ public abstract class AbstractMarqueeLabel : TextBlock
     {
         if (_animation is not null)
         {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var animationTask = _animation!.RunAsync(this, _cancellationTokenSource.Token);
             _animationRunning = true;
@@ -196,6 +198,8 @@ public abstract class AbstractMarqueeLabel : TextBlock
         if (_animation is not null && _animationRunning)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
         }
 
         var cycleWidth = _lastTextWidth + CycleSpace;

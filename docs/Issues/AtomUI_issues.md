@@ -71,22 +71,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ## 四、资源管理与 IDisposable
 
-### 4.3 🟠 RenderTargetBitmap 泄漏风险 — ControlExtensions.cs
-
-- **文件**：`src/AtomUI.Controls.Shared/Utils/ControlExtensions.cs` 第 23 行
-- **问题**：`CaptureCurrentBitmap` 返回 `RenderTargetBitmap`（实现 `IDisposable`），完全没有 XML doc，调用者不知道需要 Dispose。RenderTargetBitmap 在 GPU 上驻留，开销更高。
-- **修复建议**：添加 XML doc 明确标注 "Caller must Dispose"，或改为 `using` 块模式。
-
----
-
-### 4.4 🟠 AbstractMarqueeLabel — `_cancellationTokenSource` 前未 Dispose 旧的
-
-- **文件**：`src/AtomUI.Controls/MarqueeLabel/AbstractMarqueeLabel.cs` 第 144 行
-- **问题**：`_cancellationTokenSource?.Cancel();` 存在，但缺 `Dispose()`。
-- **修复建议**：统一 Cancel + Dispose 模式。
-
----
-
 ### 4.5 🟠 WaveSpiritDecorator — `_cancellationTokenSource = new CTS()` 未 Dispose 旧实例
 
 - **文件**：`src/AtomUI.Controls/Primitives/WaveSpiritDecorator.cs` 第 292 行
