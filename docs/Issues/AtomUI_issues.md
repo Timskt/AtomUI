@@ -70,25 +70,6 @@ private async void HandleOpenOverlayDialogButtonClick(object? sender, RoutedEven
 
 ## 四、集合 / 缓存 / 静态字段
 
-### 5.1 🟡 ButtonTheme.DashedStyle — `public static IList<double>` 可变
-
-- **文件**：`src/AtomUI.Desktop.Controls/Buttons/Themes/ButtonTheme.cs` 第 9 行
-- **问题**：
-
-```csharp
-public static IList<double> DashedStyle = [4, 2];
-```
-
-公开的可变集合字段，任何调用方都可 `.Add()` / `.Clear()`，会影响所有 Button 实例的渲染。
-- **影响评估**：🟡 低。
-- **修复建议**：
-
-```csharp
-public static readonly IReadOnlyList<double> DashedStyle = new[] { 4d, 2d };
-```
-
----
-
 ### 5.2 🟡 PresetPalettes / ThemeVariantCalculator — 内部静态字典未限制
 
 主文档 4.6 已修复 "静态 ConcurrentDictionary 缓存无大小限制"。建议再次审计所有内部 `static Dictionary`，确保：
@@ -221,7 +202,6 @@ public async Task Button_DoesNotLeak_AfterDetach()
 | 序号 | 问题 | 严重度 | 工作量 | 优先级 |
 |-----|------|--------|--------|--------|
 | P9 | 3.2 Gallery 8 处 async void | 🟠 中 | 小 | 中 |
-| P13 | 5.1 ButtonTheme.DashedStyle 改 IReadOnlyList | 🟡 低 | 最小 | 低 |
 | P14 | 6.3 Icon Geometry 缓存 | 🟡 低 | 中（改生成器） | 低 |
 | P15 | 6.4 InterpolateUtils LOH 分配 | 🟡 低 | 中 | 低 |
 | P16 | 8.1 提供 AtomTemplatedControl 基类 | 架构 | 中 | 低 |
