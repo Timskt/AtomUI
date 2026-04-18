@@ -26,7 +26,7 @@ public partial class FormShowCase : ReactiveUserControl<FormViewModel>
             {
                 ConfigureSliderMarks(viewModel);
                 ConfigureBasicForm(viewModel);
-                ConfigureLayoutForm();
+                ConfigureLayoutForm(disposables);
                 this.OneWayBind(viewModel, vm => vm.SliderMarks,
                     v => v.FormSliderItem.Marks).DisposeWith(disposables);
                 this.OneWayBind(viewModel, vm => vm.BasicFormInitialValues,
@@ -49,27 +49,30 @@ public partial class FormShowCase : ReactiveUserControl<FormViewModel>
         viewModel.BasicFormInitialValues = values;
     }
     
-    private void ConfigureLayoutForm()
+    private void ConfigureLayoutForm(CompositeDisposable disposables)
     {
-        LayoutCaseForm.PropertyChanged += (sender, args) =>
+        LayoutCaseForm.PropertyChanged += HandleLayoutCaseFormPropertyChanged;
+        disposables.Add(Disposable.Create(() => LayoutCaseForm.PropertyChanged -= HandleLayoutCaseFormPropertyChanged));
+    }
+
+    private void HandleLayoutCaseFormPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+    {
+        if (args.Property == Form.FormLayoutProperty)
         {
-            if (args.Property == Form.FormLayoutProperty)
+            if (args.NewValue is FormLayout layout)
             {
-                if (args.NewValue is FormLayout layout)
+                if (layout == FormLayout.Inline)
                 {
-                    if (layout == FormLayout.Inline)
-                    {
-                        LayoutCaseForm.MinWidth            = 0;
-                        LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    }
-                    else
-                    {
-                        LayoutCaseForm.MinWidth            = 600;
-                        LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Left;
-                    }
+                    LayoutCaseForm.MinWidth            = 0;
+                    LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Stretch;
+                }
+                else
+                {
+                    LayoutCaseForm.MinWidth            = 600;
+                    LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Left;
                 }
             }
-        };
+        }
     }
     
     public void HandleFormLayoutOptionCheckedChanged(object? sender, OptionCheckedChangedEventArgs args)
