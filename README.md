@@ -192,10 +192,10 @@ You can start using it in your own projects
 <atom:Window xmlns="https://github.com/avaloniaui"
              xmlns:atom="https://atomui.net"
              xmlns:antdicons="https://atomui.net/icons/antdesign">
-    <atom:Space Orientation="Horizontal">
-        <atom:Button ButtonType="Primary">Get Started</atom:Button>
-        <atom:Button Icon="{antdicons:AntDesignIconProvider StarOutlined}">Star on GitHub</atom:Button>
-    </atom:Space>
+  <atom:Space Orientation="Horizontal">
+    <atom:Button ButtonType="Primary">Get Started</atom:Button>
+    <atom:Button Icon="{antdicons:AntDesignIconProvider StarOutlined}">Star on GitHub</atom:Button>
+  </atom:Space>
 </atom:Window>
 ```
 
@@ -213,10 +213,9 @@ dotnet run --project controlgallery/AtomUIGallery.Desktop/AtomUIGallery.Desktop.
 
 <div style="height:50px"></div>
 
-
 #### Simple Examples
 
-AtomUI's gallery project can be quite large and complex, and if you're new to AtomUI, you might feel overwhelmed. You can visit 
+AtomUI's gallery project can be quite large and complex, and if you're new to AtomUI, you might feel overwhelmed. You can visit
 
 [AtomUI/AtomUI.Examples](https://github.com/AtomUI/AtomUI.Samples)
 
@@ -248,6 +247,16 @@ limited to internal company projects, commercial projects developed by individua
 projects) are free when using binary links</strong>. If you want to customize AtomUI based on source code, you need to
 modify the open source code or purchase a commercial license. If you need a commercial license, please contact: Beijing
 Qinware Technology Co., Ltd.
+
+#### Special thanks
+
+<div>
+    <div align="left">
+      <h1>RoutinAI</h1>
+       <img width="154" height="151" src="./resources/images/readme/RoutinAI.png"/>
+    </div>
+[RoutinAI](https://routin.ai/) is an enterprise-grade unified LLM API gateway that provides a single, type-safe interface to access over 100 leading large language models from the GPT, Claude, and Gemini families, including models such as gpt-5.4, claude-opus-4-6, and gemini-3.1-pro-preview. It eliminates the complexity of managing multiple AI vendors by providing zero-latency edge routing, seamless model switching without code modifications, unified billing, and centralized governance with spending caps and access policies.
+</div>
 
 ### 🤝 Contributing
 
