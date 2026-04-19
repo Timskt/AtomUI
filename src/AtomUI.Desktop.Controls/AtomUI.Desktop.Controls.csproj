@@ -13,7 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Svg.Controls.Avalonia" />
         <PackageReference Include="ReactiveUI.Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
     </ItemGroup>
@@ -29,11 +28,6 @@
                           OutputItemType="Analyzer" 
                           ReferenceOutputAssembly="false"
                           PrivateAssets="all" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="ScrollViewer\Themes\AvaScrollBarTheme.axaml" />
-      <AdditionalFiles Include="ScrollViewer\Themes\AvaScrollViewerTheme.axaml" />
     </ItemGroup>
     
 </Project>

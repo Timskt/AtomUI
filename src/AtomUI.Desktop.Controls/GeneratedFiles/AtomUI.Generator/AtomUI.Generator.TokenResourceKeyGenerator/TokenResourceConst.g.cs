@@ -84,21 +84,6 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         SeparatorMargin
     }
 
-    public enum ButtonSpinnerTokenKind
-    {
-        ControlWidth,
-        FilledHandleBg,
-        HandleActiveBg,
-        HandleBg,
-        HandleBorderColor,
-        HandleHoverColor,
-        HandleIconSize,
-        HandleWidth,
-        InputFontSize,
-        InputFontSizeLG,
-        InputFontSizeSM
-    }
-
     public enum ButtonTokenKind
     {
         BorderColorDisabled,
@@ -153,6 +138,21 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         TextTextActiveColor,
         TextTextColor,
         TextTextHoverColor
+    }
+
+    public enum ButtonSpinnerTokenKind
+    {
+        ControlWidth,
+        FilledHandleBg,
+        HandleActiveBg,
+        HandleBg,
+        HandleBorderColor,
+        HandleHoverColor,
+        HandleIconSize,
+        HandleWidth,
+        InputFontSize,
+        InputFontSizeLG,
+        InputFontSizeSM
     }
 
     public enum CalendarTokenKind
@@ -590,11 +590,6 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         TopLevelItemSelectedColor
     }
 
-    public enum MessageBoxTokenKind
-    {
-        StyleIconSize
-    }
-
     public enum MessageTokenKind
     {
         CardHeight,
@@ -603,6 +598,11 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         MessageIconMargin,
         MessageIconSize,
         MessageTopMargin
+    }
+
+    public enum MessageBoxTokenKind
+    {
+        StyleIconSize
     }
 
     public enum NavMenuTokenKind
@@ -751,6 +751,13 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         PaginationQuickJumperInputWidth
     }
 
+    public enum PopupHostTokenKind
+    {
+        BorderRadius,
+        BoxShadows,
+        MarginToAnchor
+    }
+
     public enum PopupConfirmTokenKind
     {
         ButtonContainerMargin,
@@ -760,13 +767,6 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         PopupMinHeight,
         PopupMinWidth,
         TitleMargin
-    }
-
-    public enum PopupHostTokenKind
-    {
-        BorderRadius,
-        BoxShadows,
-        MarginToAnchor
     }
 
     public enum AddOnDecoratedBoxTokenKind
@@ -1338,17 +1338,6 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         }
     }
 
-    public class ButtonSpinnerTokenResourceExtension : TokenResourceExtension<ButtonSpinnerTokenKind>
-    {
-        public ButtonSpinnerTokenResourceExtension()
-        {
-        }
-
-        public ButtonSpinnerTokenResourceExtension(ButtonSpinnerTokenKind kind) : base(kind)
-        {
-        }
-    }
-
     public class ButtonTokenResourceExtension : TokenResourceExtension<ButtonTokenKind>
     {
         public ButtonTokenResourceExtension()
@@ -1356,6 +1345,17 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         }
 
         public ButtonTokenResourceExtension(ButtonTokenKind kind) : base(kind)
+        {
+        }
+    }
+
+    public class ButtonSpinnerTokenResourceExtension : TokenResourceExtension<ButtonSpinnerTokenKind>
+    {
+        public ButtonSpinnerTokenResourceExtension()
+        {
+        }
+
+        public ButtonSpinnerTokenResourceExtension(ButtonSpinnerTokenKind kind) : base(kind)
         {
         }
     }
@@ -1657,17 +1657,6 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         }
     }
 
-    public class MessageBoxTokenResourceExtension : TokenResourceExtension<MessageBoxTokenKind>
-    {
-        public MessageBoxTokenResourceExtension()
-        {
-        }
-
-        public MessageBoxTokenResourceExtension(MessageBoxTokenKind kind) : base(kind)
-        {
-        }
-    }
-
     public class MessageTokenResourceExtension : TokenResourceExtension<MessageTokenKind>
     {
         public MessageTokenResourceExtension()
@@ -1675,6 +1664,17 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         }
 
         public MessageTokenResourceExtension(MessageTokenKind kind) : base(kind)
+        {
+        }
+    }
+
+    public class MessageBoxTokenResourceExtension : TokenResourceExtension<MessageBoxTokenKind>
+    {
+        public MessageBoxTokenResourceExtension()
+        {
+        }
+
+        public MessageBoxTokenResourceExtension(MessageBoxTokenKind kind) : base(kind)
         {
         }
     }
@@ -1734,17 +1734,6 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         }
     }
 
-    public class PopupConfirmTokenResourceExtension : TokenResourceExtension<PopupConfirmTokenKind>
-    {
-        public PopupConfirmTokenResourceExtension()
-        {
-        }
-
-        public PopupConfirmTokenResourceExtension(PopupConfirmTokenKind kind) : base(kind)
-        {
-        }
-    }
-
     public class PopupHostTokenResourceExtension : TokenResourceExtension<PopupHostTokenKind>
     {
         public PopupHostTokenResourceExtension()
@@ -1752,6 +1741,17 @@ namespace AtomUI.Desktop.Controls.DesignTokens
         }
 
         public PopupHostTokenResourceExtension(PopupHostTokenKind kind) : base(kind)
+        {
+        }
+    }
+
+    public class PopupConfirmTokenResourceExtension : TokenResourceExtension<PopupConfirmTokenKind>
+    {
+        public PopupConfirmTokenResourceExtension()
+        {
+        }
+
+        public PopupConfirmTokenResourceExtension(PopupConfirmTokenKind kind) : base(kind)
         {
         }
     }

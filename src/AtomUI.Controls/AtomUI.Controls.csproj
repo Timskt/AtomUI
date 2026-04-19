@@ -15,6 +15,7 @@
         <PackageReference Include="Avalonia" />
         <PackageReference Include="Svg.Controls.Avalonia" />
         <PackageReference Include="SkiaSharp.QrCode" />
+        <PackageReference Include="SkiaSharp" />
     </ItemGroup>
 
     <ItemGroup>

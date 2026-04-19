@@ -38,7 +38,6 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" />
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics"/>
-        <PackageReference Include="CommunityToolkit.Mvvm"/>
     </ItemGroup>
     
     <ItemGroup>

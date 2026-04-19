@@ -220,7 +220,7 @@ public abstract class AbstractQRCode : TemplatedControl
             QRCodeEccLevel.H => ECCLevel.H,
             _                => ECCLevel.M
         };
-        var       qrcode  = QRCodeGenerator.CreateQrCode(Value, eccLevel, quietZoneSize: 0);
+        var       qrcode  = new QRCodeGenerator().CreateQrCode(Value, eccLevel, quietZoneSize: 0);
         var       info    = new SKImageInfo(Size, Size);
         using var surface = SKSurface.Create(info);
         var       canvas  = surface.Canvas;
