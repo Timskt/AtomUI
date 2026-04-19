@@ -1,12 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using AtomUI.Animations;
 using AtomUI.Reflection;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
@@ -109,67 +106,18 @@ public abstract class AbstractIconButton : AvaloniaButton, IMotionAwareControl
         AffectsMeasure<AbstractIconButton>(IconProperty);
         AffectsRender<AbstractIconButton>(IconBrushProperty);
     }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
     
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(RenderTransformProperty)
-                ];
-                NotifyConfigureTransitions(Transitions);
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected virtual void NotifyConfigureTransitions(Transitions transitions)
-    {
-    }
-
     protected bool IsFlyoutOpen()
     {
         return IsFlyoutOpenFieldInfo.Value.GetValue(this) as bool? ?? false;
     }
-    
+
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
         e.Handled = !IsPassthroughMouseEvent;
     }
-    
+
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
