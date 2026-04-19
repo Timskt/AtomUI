@@ -1,12 +1,7 @@
-﻿using AtomUI.Animations;
-using AtomUI.Controls.Primitives;
-using AtomUI.Theme.Styling;
+﻿using AtomUI.Controls.Primitives;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Controls;
@@ -102,27 +97,6 @@ internal class CheckBoxIndicator : TemplatedControl
         AffectsArrange<CheckBoxIndicator>(TristateMarkSizeProperty);
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(TristateMarkBrushProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(CheckedMarkRenderTransformProperty, SharedTokenKind.MotionDurationMid,
-                        new BackEaseOut())
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(StdPseudoClass.Checked, State == CheckBoxIndicatorState.Checked);
@@ -147,26 +121,6 @@ internal class CheckBoxIndicator : TemplatedControl
                 _waveSpiritDecorator?.Play();
             }
         }
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
