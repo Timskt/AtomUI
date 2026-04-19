@@ -1,9 +1,7 @@
 using System.Diagnostics;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.VisualTree;
@@ -208,13 +206,12 @@ internal class RateItem : TemplatedControl
             builder.AppendScale(HoverScale, HoverScale);
             SetCurrentValue(HoverRenderTransformProperty, builder.Build());
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        ConfigureCharacterBrushes();
     }
 
     private void ConfigureCharacterBrushes()
@@ -222,7 +219,27 @@ internal class RateItem : TemplatedControl
         SetCurrentValue(CharacterBgBrushProperty, BuildCharacterVisualBrush(StarBgColor));
         SetCurrentValue(CharacterBrushProperty, BuildCharacterVisualBrush(StarColor));
     }
-    
+
+    private void ConfigureStarClip()
+    {
+        if (IsAllowHalf)
+        {
+            if (SelectedState == RateItemSelectedState.HalfSelected)
+            {
+                var geometry = new RectangleGeometry(new Rect(0, 0, Width / 2, Height));
+                SetCurrentValue(StarClipProperty, geometry);
+            }
+            else
+            {
+                SetCurrentValue(StarClipProperty, null);
+            }
+        }
+        else
+        {
+            SetCurrentValue(StarClipProperty, null);
+        }
+    }
+
     private VisualBrush BuildCharacterVisualBrush(IBrush? brush)
     {
         Control? charControl = null;
@@ -264,60 +281,5 @@ internal class RateItem : TemplatedControl
         {
             Visual = charControl,
         };
-    }
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        ConfigureCharacterBrushes();
-    }
-
-    private void ConfigureStarClip()
-    {
-        if (IsAllowHalf)
-        {
-            if (SelectedState == RateItemSelectedState.HalfSelected)
-            {
-                var geometry = new RectangleGeometry(new Rect(0, 0, Width / 2, Height));
-                SetCurrentValue(StarClipProperty, geometry);
-            }
-            else
-            {
-                SetCurrentValue(StarClipProperty, null);
-            }
-        }
-        else
-        {
-            SetCurrentValue(StarClipProperty, null);
-        }
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(RenderTransformProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 }

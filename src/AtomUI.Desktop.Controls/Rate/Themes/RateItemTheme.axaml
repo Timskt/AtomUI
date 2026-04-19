@@ -26,6 +26,14 @@
         <Setter Property="ClipToBounds" Value="False"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="Transparent"/>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
         
         <Style Selector="^[SizeType=Large]">
             <Setter Property="Width" Value="{atom:RateTokenResource StarSizeLG}"/>
