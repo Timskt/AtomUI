@@ -113,7 +113,7 @@ internal class AddOnDecoratedBoxToken : AbstractControlDesignToken
         Padding = new Thickness(SharedToken.UniformlyPaddingSM - lineWidth,
             Math.Round((SharedToken.ControlHeight - fontSize * lineHeight) / 2 * 10) / 10 - lineWidth);
         PaddingSM = new Thickness(SharedToken.ControlPaddingHorizontalSM - lineWidth,
-            Math.Round((SharedToken.ControlHeightSM - fontSize * lineHeight) / 2 * 10) / 10 - lineWidth);
+            Math.Round((SharedToken.ControlHeightSM - fontSize * lineHeight) / 2 * 10) / 10 - lineWidth * 2);
         PaddingLG = new Thickness(SharedToken.ControlPaddingHorizontal - lineWidth,
             Math.Ceiling((SharedToken.ControlHeightLG - fontSizeLG * lineHeightLG) / 2 * 10) / 10 -
             lineWidth);

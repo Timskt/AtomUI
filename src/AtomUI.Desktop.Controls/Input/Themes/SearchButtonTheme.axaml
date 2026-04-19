@@ -8,7 +8,7 @@
     <ControlTheme.BasedOn>
         <themes:ButtonTheme TargetType="{x:Type atom:SearchButton}" />
     </ControlTheme.BasedOn>
-
+    
     <Style Selector="^:is(atom|SearchButton)[ButtonType=Text]">
         <Style Selector="^[StyleVariant=Filled]">
             <Setter Property="Background"
