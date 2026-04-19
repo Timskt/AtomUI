@@ -321,7 +321,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <atom:TextBlock VerticalAlignment="Center">Form variant:</atom:TextBlock>
                     <atom:Segmented SelectionChanged="HandleFormStyleVariantChanged">
-                        <atom:SegmentedItem IsSelected="True" Tag="{x:Static atom:InputControlStyleVariant.Outline}">outlined</atom:SegmentedItem>
+                        <atom:SegmentedItem IsSelected="True" Tag="{x:Static atom:InputControlStyleVariant.Outlined}">outlined</atom:SegmentedItem>
                         <atom:SegmentedItem Tag="{x:Static atom:InputControlStyleVariant.Filled}">filled</atom:SegmentedItem>
                         <atom:SegmentedItem Tag="{x:Static atom:InputControlStyleVariant.Borderless}">borderless</atom:SegmentedItem>
                         <atom:SegmentedItem Tag="{x:Static atom:InputControlStyleVariant.Underlined}">underlined</atom:SegmentedItem>

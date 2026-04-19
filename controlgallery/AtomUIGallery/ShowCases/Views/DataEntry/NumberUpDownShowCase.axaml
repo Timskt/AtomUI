@@ -88,7 +88,7 @@
             Title="Variants"
             Description="Variants of NumberUpDown.">
             <StackPanel Orientation="Vertical" Spacing="10">
-                <atom:NumericUpDown Value="3" StyleVariant="Outline" />
+                <atom:NumericUpDown Value="3" StyleVariant="Outlined" />
                 <atom:NumericUpDown Value="3" StyleVariant="Filled" />
                 <atom:NumericUpDown Value="3" StyleVariant="Borderless" />
             </StackPanel>
@@ -99,7 +99,7 @@
             Title="Disabled"
             Description="Variants of NumberUpDown of disabled style.">
             <StackPanel Orientation="Vertical" Spacing="10">
-                <atom:NumericUpDown Value="3" StyleVariant="Outline" IsEnabled="False"/>
+                <atom:NumericUpDown Value="3" StyleVariant="Outlined" IsEnabled="False"/>
                 <atom:NumericUpDown Value="3" StyleVariant="Filled" IsEnabled="False"/>
                 <atom:NumericUpDown Value="3" StyleVariant="Borderless" IsEnabled="False"/>
             </StackPanel>

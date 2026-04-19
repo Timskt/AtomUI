@@ -61,7 +61,7 @@
                     Value="{atom:SharedTokenResource ColorWarningText}" />
         </Style>
         
-        <Style Selector="^[StyleVariant=Outline]">
+        <Style Selector="^[StyleVariant=Outlined]">
             <Setter Property="Background"
                     Value="{atom:SpaceTokenResource AddonBg}" />
             <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />

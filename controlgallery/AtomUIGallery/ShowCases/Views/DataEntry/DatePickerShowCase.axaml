@@ -103,7 +103,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <atom:DatePicker Status="Default"
                                      PlaceholderText="Select time" />
-                    <atom:RangeDatePicker StyleVariant="Outline"
+                    <atom:RangeDatePicker StyleVariant="Outlined"
                                           Status="Default"
                                           PlaceholderText="Start date"
                                           SecondaryPlaceholderText="End date"
@@ -113,7 +113,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <atom:DatePicker Status="Warning"
                                      PlaceholderText="Select time" />
-                    <atom:RangeDatePicker StyleVariant="Outline"
+                    <atom:RangeDatePicker StyleVariant="Outlined"
                                           Status="Warning"
                                           PlaceholderText="Start date"
                                           SecondaryPlaceholderText="End date"
@@ -123,7 +123,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <atom:DatePicker Status="Error"
                                      PlaceholderText="Select time" />
-                    <atom:RangeDatePicker StyleVariant="Outline"
+                    <atom:RangeDatePicker StyleVariant="Outlined"
                                           Status="Error"
                                           PlaceholderText="Start date"
                                           SecondaryPlaceholderText="End date"
@@ -138,9 +138,9 @@
             Description="Bordered-less style component.">
             <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <atom:DatePicker StyleVariant="Outline"
+                    <atom:DatePicker StyleVariant="Outlined"
                                      PlaceholderText="Outline" />
-                    <atom:RangeDatePicker StyleVariant="Outline"
+                    <atom:RangeDatePicker StyleVariant="Outlined"
                                           SecondaryPlaceholderText="End date"
                                           IsNeedConfirm="True"
                                           ClockIdentifier="HourClock24"

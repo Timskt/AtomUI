@@ -16,7 +16,7 @@
             Title="Variants"
             Description="Variants of Mentions, there are four variants: outlined filled borderless and underlined.">
             <StackPanel Orientation="Vertical" Spacing="10">
-                <atom:Mentions HorizontalAlignment="Stretch" StyleVariant="Outline" PlaceholderText="Outlined"/>
+                <atom:Mentions HorizontalAlignment="Stretch" StyleVariant="Outlined" PlaceholderText="Outlined"/>
                 <atom:Mentions HorizontalAlignment="Stretch" StyleVariant="Filled" PlaceholderText="Filled"/>
                 <atom:Mentions HorizontalAlignment="Stretch" StyleVariant="Borderless" PlaceholderText="Borderless"/>
                 <atom:Mentions HorizontalAlignment="Stretch" StyleVariant="Underlined" PlaceholderText="Underlined"/>

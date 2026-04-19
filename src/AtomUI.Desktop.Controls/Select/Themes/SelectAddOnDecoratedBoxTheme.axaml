@@ -55,7 +55,7 @@
                 </Style>
             </Style>
 
-            <Style Selector="^[StyleVariant=Outline]">
+            <Style Selector="^[StyleVariant=Outlined]">
                 <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
 
                 <Style Selector="^[IsInnerBoxHover=True]">

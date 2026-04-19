@@ -265,7 +265,7 @@
                     x:DataType="viewModels:CascaderViewModel"
                     PlaceholderText="Please select"
                     IsAllowClear="True"
-                    StyleVariant="Outline">
+                    StyleVariant="Outlined">
                     <atom:Cascader.OptionTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}"
                                           x:DataType="atom:ICascaderOption">

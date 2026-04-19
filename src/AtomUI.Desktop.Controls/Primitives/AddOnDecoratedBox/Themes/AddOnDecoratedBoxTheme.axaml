@@ -70,7 +70,7 @@
             </DockPanel>
         </ControlTemplate>
     </Setter>
-
+    
     <Style Selector="^:is(atom|AddOnDecoratedBox)">
         <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -196,7 +196,7 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Background" Value="Transparent" />
 
-        <Style Selector="^[StyleVariant=Outline]">
+        <Style Selector="^[StyleVariant=Outlined]">
             <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
 
             <Style Selector="^[IsInnerBoxHover=True]">
@@ -461,7 +461,7 @@
                         Value="{atom:SharedTokenResource ColorTextDisabled}" />
             </Style>
             
-            <Style Selector="^[StyleVariant=Outline]">
+            <Style Selector="^[StyleVariant=Outlined]">
                 <Setter Property="Background"
                         Value="{atom:SharedTokenResource ColorBgContainerDisabled}" />
                 <Setter Property="BorderBrush"

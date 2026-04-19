@@ -673,7 +673,7 @@ public class NumericUpDown : AvaloniaNumericUpDown,
             addOnDecoratedBox = _buttonSpinner?.DecoratedBox;
         }
         
-        if (addOnDecoratedBox == null || StyleVariant != InputControlStyleVariant.Outline)
+        if (addOnDecoratedBox == null || StyleVariant != InputControlStyleVariant.Outlined)
         {
             return 0.0;
         }

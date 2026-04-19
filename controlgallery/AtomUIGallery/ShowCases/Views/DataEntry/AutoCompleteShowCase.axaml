@@ -75,7 +75,7 @@
             <StackPanel Spacing="10">
                 <atom:AutoComplete Width="200"
                                    Name="OutlineAutoComplete"
-                                   StyleVariant="Outline"
+                                   StyleVariant="Outlined"
                                    PlaceholderText="Outline"/>
                 <atom:AutoComplete Width="200"  
                                    Name="FilledAutoComplete"

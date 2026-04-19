@@ -301,7 +301,7 @@ internal class AddOnDecoratedBox : ContentControl,
     
     protected virtual void UpdatePseudoClasses()
     {
-        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outline);
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outlined);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Filled, StyleVariant == InputControlStyleVariant.Filled);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
     }
@@ -468,7 +468,7 @@ internal class AddOnDecoratedBox : ContentControl,
                 bottomRight: bottomRightRadius);
         }
         
-        if (StyleVariant == InputControlStyleVariant.Outline ||
+        if (StyleVariant == InputControlStyleVariant.Outlined ||
             StyleVariant == InputControlStyleVariant.Filled)
         {
             var topThickness    = BorderThickness.Top;

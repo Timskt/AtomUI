@@ -215,7 +215,7 @@ public class TextArea : AvaloniaTextBox,
     {
         PseudoClasses.Set(StdPseudoClass.Error, Status == InputControlStatus.Error);
         PseudoClasses.Set(StdPseudoClass.Warning, Status == InputControlStatus.Warning);
-        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outline);
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outlined);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Filled, StyleVariant == InputControlStyleVariant.Filled);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
     }
