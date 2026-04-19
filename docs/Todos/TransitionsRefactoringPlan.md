@@ -95,7 +95,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 | 3 | ~~Switch/AbstractToggleSwitch.cs~~ | ~~KnobMovingRect(Rect), OnContentOffset(Point), OffContentOffset(Point), GrooveBackground(SolidColorBrush), SwitchOpacity(Double)~~ | ✅ |
 | 4 | ~~Switch/SwitchKnob.cs~~ | ~~Background(SolidColorBrush), Width(Double), Height(Double)~~ | ✅ |
 | 5 | ~~ProgressBar/AbstractProgressBar.cs~~ | ~~Background(SolidColorBrush), IndicatorBarBrush(SolidColorBrush)~~ | ✅ |
-| 6 | Spin/AbstractSpin.cs | DotBrush(SolidColorBrush) | |
+| 6 | ~~Spin/AbstractSpin.cs~~ | ~~DotBrush(SolidColorBrush)~~ | ✅ |
 | 7 | CheckBox/Converters/CheckBoxIndicator.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush) | |
 | 8 | Segmented/AbstractSegmented.cs | Background(SolidColorBrush) | |
 | 9 | Segmented/AbstractSegmentedItem.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
@@ -226,6 +226,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 - [ ] 第 1 批：AtomUI.Controls 基础控件（16 个）
   - [x] 4 | Switch/SwitchKnob.cs | Background(SolidColorBrush), Width(Double), Height(Double) | ✅ 已完成
   - [x] 5 | ProgressBar/AbstractProgressBar.cs | Background(SolidColorBrush), IndicatorBarBrush(SolidColorBrush) | ✅ 已完成
+  - [x] 6 | Spin/AbstractSpin.cs | DotBrush(SolidColorBrush) | ✅ 已完成
 - [ ] 第 2 批：AtomUI.Desktop.Controls Part A（19 个）
 - [ ] 第 3 批：AtomUI.Desktop.Controls Part B（18 个）
 - [ ] 第 4 批：AtomUI.Desktop.Controls Part C（17 个）
