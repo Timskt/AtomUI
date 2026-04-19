@@ -1,12 +1,8 @@
-﻿using AtomUI.Animations;
-using AtomUI.Controls.Primitives;
+﻿using AtomUI.Controls.Primitives;
 using AtomUI.Media;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -146,43 +142,11 @@ internal class RadioIndicator : TemplatedControl
             RadioDotEffectSizeProperty);
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         RadioDotEffectSize = CalculateDotSize(IsEnabled, IsChecked.HasValue && IsChecked.Value);
         UpdatePseudoClasses();
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(RadioBorderBrushProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(RadioDotEffectSizeProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(RadioBackgroundProperty,
-                        SharedTokenKind.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -210,14 +174,6 @@ internal class RadioIndicator : TemplatedControl
                 change.Property == IsEnabledProperty)
             {
                 RadioDotEffectSize = CalculateDotSize(IsEnabled, IsChecked.HasValue && IsChecked.Value);
-            }
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
             }
         }
     }
