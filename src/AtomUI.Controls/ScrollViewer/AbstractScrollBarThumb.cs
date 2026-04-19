@@ -1,8 +1,5 @@
-using AtomUI.Animations;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 
 namespace AtomUI.Controls.Commons;
@@ -42,47 +39,4 @@ public abstract class AbstractScrollBarThumb : Thumb, IMotionAwareControl
 
     #endregion
     
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(WidthProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(HeightProperty),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(false);
-            }
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
 }

@@ -13,6 +13,16 @@
         </ControlTemplate>
     </Setter>
 
+    <Style Selector="^[IsMotionEnabled=True]">
+        <Setter Property="Transitions">
+            <Transitions>
+                <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                <DoubleTransition Property="Width" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                <DoubleTransition Property="Height" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
     <Style Selector="^:is(atom|ScrollBarThumb)">
         <Setter Property="Background" Value="{atom:ScrollViewerTokenResource ThumbBg}" />
         <Setter Property="CornerRadius"

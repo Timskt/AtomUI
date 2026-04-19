@@ -90,7 +90,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 
 | # | C# 文件 | 需要迁移的 Transitions | 备注 |
 |---|---------|----------------------|------|
-| 1 | ScrollViewer/AbstractScrollBarThumb.cs | Background(SolidColorBrush), Width(Double), Height(Double) | |
+| 1 | ~~ScrollViewer/AbstractScrollBarThumb.cs~~ | ~~Background(SolidColorBrush), Width(Double), Height(Double)~~ | ✅ |
 | 2 | ScrollViewer/AbstractScrollViewer.cs | ScrollBarsSeparatorOpacity(Double), ScrollBarOpacity(Double) | OnPropertyChanged 有其他逻辑 |
 | 3 | Switch/AbstractToggleSwitch.cs | KnobMovingRect(Rect), OnContentOffset(Point), OffContentOffset(Point), GrooveBackground(SolidColorBrush), GrooveBorderBrush(SolidColorBrush) | |
 | 4 | Switch/SwitchKnob.cs | Background(SolidColorBrush), Width(Double), Height(Double) | |
