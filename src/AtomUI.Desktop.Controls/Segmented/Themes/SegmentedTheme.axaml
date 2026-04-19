@@ -47,7 +47,16 @@
             <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
             <Setter Property="SelectedThumbCornerRadius" Value="{atom:SharedTokenResource BorderRadiusXS}" />
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <PointTransition Property="SelectedThumbPos" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <SizeTransition Property="SelectedThumbSize" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
         <Setter Property="ItemTemplate">
             <DataTemplate>
                 <atom:TextBlock Text="{Binding}" />

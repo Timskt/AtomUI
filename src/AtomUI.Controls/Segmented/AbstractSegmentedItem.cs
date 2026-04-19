@@ -1,11 +1,9 @@
-﻿using AtomUI.Animations;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 
 namespace AtomUI.Controls.Commons;
 
@@ -89,18 +87,6 @@ public abstract class AbstractSegmentedItem : ContentControl, ISelectable
         UpdatePseudoClasses();
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -108,32 +94,6 @@ public abstract class AbstractSegmentedItem : ContentControl, ISelectable
         if (change.Property == IconProperty)
         {
             UpdatePseudoClasses();
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);    
-            }
-        }
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
         }
     }
     

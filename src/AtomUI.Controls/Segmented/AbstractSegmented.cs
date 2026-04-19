@@ -1,9 +1,7 @@
 ﻿using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -224,25 +222,6 @@ public abstract class AbstractSegmented : SelectingItemsControl,
     {
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<PointTransition>(SelectedThumbPosProperty),
-                    TransitionUtils.CreateTransition<SizeTransition>(SelectedThumbSizeProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
     internal bool UpdateSelectionFromPointerEvent(Control source, PointerEventArgs e)
     {
         return UpdateSelectionFromEventSource(
@@ -261,30 +240,6 @@ public abstract class AbstractSegmented : SelectingItemsControl,
             SelectedThumbBoxShadows);
     }
 
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(false);
-            }
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     #region 实现 FormItem 接口
     
     private EventHandler? _formValueChanged;
