@@ -8,11 +8,11 @@
         <ResourceInclude Source="InputClearIconButtonTheme.axaml" />
         <ResourceInclude Source="RevealButtonTheme.axaml" />
         <ResourceInclude Source="TextAreaDecoratedBoxTheme.axaml" />
+        <ResourceInclude Source="LineEditTheme.axaml" />
         <ResourceInclude Source="SearchEditTheme.axaml" />
+        <ResourceInclude Source="TextAreaTheme.axaml" />
         <ResourceInclude Source="ResizeHandleTheme.axaml" />
     </ResourceDictionary.MergedDictionaries>
     <themes:TextBoxTheme x:Key="{x:Type atom:TextBox}" TargetType="atom:TextBox"/>
-    <themes:LineEditTheme x:Key="{x:Type atom:LineEdit}" TargetType="atom:LineEdit"/>
-    <themes:TextAreaTheme x:Key="{x:Type atom:TextArea}" TargetType="atom:TextArea"/>
     <themes:SearchButtonTheme x:Key="{x:Type atom:SearchButton}" TargetType="atom:SearchButton"/>
 </ResourceDictionary>

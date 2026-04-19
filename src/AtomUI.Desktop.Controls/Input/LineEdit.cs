@@ -100,7 +100,7 @@ public class LineEdit : TextBox,
     {
         PseudoClasses.Set(StdPseudoClass.Error, Status == InputControlStatus.Error);
         PseudoClasses.Set(StdPseudoClass.Warning, Status == InputControlStatus.Warning);
-        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outline);
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outlined);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Filled, StyleVariant == InputControlStyleVariant.Filled);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
     }
@@ -129,7 +129,7 @@ public class LineEdit : TextBox,
             return 0.0;
         }
 
-        if (_addOnDecoratedBox == null || _addOnDecoratedBox.StyleVariant != InputControlStyleVariant.Outline)
+        if (_addOnDecoratedBox == null || _addOnDecoratedBox.StyleVariant != InputControlStyleVariant.Outlined)
         {
             return 0.0;
         }

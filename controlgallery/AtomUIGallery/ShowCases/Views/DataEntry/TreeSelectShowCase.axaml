@@ -117,7 +117,7 @@
                 <atom:TreeSelect HorizontalAlignment="Stretch"
                                  IsAllowClear="True"
                                  PlaceholderText="Please select"
-                                 StyleVariant="Outline" />
+                                 StyleVariant="Outlined" />
                 <atom:TreeSelect HorizontalAlignment="Stretch"
                                  IsAllowClear="True"
                                  PlaceholderText="Please select"

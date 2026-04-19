@@ -108,7 +108,7 @@
             Title="Variants"
             Description="Variants of Input.">
             <StackPanel Orientation="Vertical" Spacing="10">
-                <atom:ComboBox StyleVariant="Outline" PlaceholderText="Please select" Width="300">
+                <atom:ComboBox StyleVariant="Outlined" PlaceholderText="Please select" Width="300">
                     <atom:ComboBoxItem>床前明月光</atom:ComboBoxItem>
                     <atom:ComboBoxItem>疑是地上霜</atom:ComboBoxItem>
                     <atom:ComboBoxItem>举头望明月</atom:ComboBoxItem>

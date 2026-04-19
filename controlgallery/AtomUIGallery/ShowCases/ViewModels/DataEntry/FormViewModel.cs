@@ -30,7 +30,7 @@ public class FormViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _isFormDisabled, value);
     }
     
-    private InputControlStyleVariant _formStyleVariant = InputControlStyleVariant.Outline;
+    private InputControlStyleVariant _formStyleVariant = InputControlStyleVariant.Outlined;
 
     public InputControlStyleVariant FormStyleVariant
     {

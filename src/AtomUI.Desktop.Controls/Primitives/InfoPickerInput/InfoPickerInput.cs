@@ -630,7 +630,7 @@ public abstract class InfoPickerInput : TemplatedControl,
             return 0.0;
         }
 
-        if (_addOnDecoratedBox == null || _addOnDecoratedBox.StyleVariant != InputControlStyleVariant.Outline)
+        if (_addOnDecoratedBox == null || _addOnDecoratedBox.StyleVariant != InputControlStyleVariant.Outlined)
         {
             return 0.0;
         }

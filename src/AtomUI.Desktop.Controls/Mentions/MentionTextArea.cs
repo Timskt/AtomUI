@@ -62,6 +62,8 @@ internal class MentionTextArea : TextArea
 
     #endregion
 
+    protected override Type StyleKeyOverride => typeof(TextArea);
+
     private TextPresenter? _textPresenter;
     internal Mentions? Owner;
     private Rect? _currentTriggerBounds;

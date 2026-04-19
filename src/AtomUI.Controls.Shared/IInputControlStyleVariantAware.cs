@@ -11,5 +11,5 @@ public abstract class InputControlStyleVariantProperty
 {
     public const string StyleVariantPropertyName = "StyleVariant";
     public static readonly StyledProperty<InputControlStyleVariant> StyleVariantProperty =
-        AvaloniaProperty.Register<StyledElement, InputControlStyleVariant>(StyleVariantPropertyName, InputControlStyleVariant.Outline);
+        AvaloniaProperty.Register<StyledElement, InputControlStyleVariant>(StyleVariantPropertyName, InputControlStyleVariant.Outlined);
 }

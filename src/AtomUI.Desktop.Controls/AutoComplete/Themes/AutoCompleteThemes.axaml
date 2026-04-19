@@ -5,6 +5,5 @@
         <ResourceInclude Source="AutoCompleteTheme.axaml" />
         <ResourceInclude Source="AutoCompleteSearchEditTheme.axaml" />
         <ResourceInclude Source="AutoCompleteTextAreaTheme.axaml" />
-        <ResourceInclude Source="AutoCompleteTextAreaBoxTheme.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

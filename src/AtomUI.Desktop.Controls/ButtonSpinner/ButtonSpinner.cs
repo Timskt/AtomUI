@@ -511,7 +511,7 @@ public class ButtonSpinner : Spinner,
             return 0.0;
         }
     
-        if (DecoratedBox == null || DecoratedBox.StyleVariant != InputControlStyleVariant.Outline)
+        if (DecoratedBox == null || DecoratedBox.StyleVariant != InputControlStyleVariant.Outlined)
         {
             return 0.0;
         }

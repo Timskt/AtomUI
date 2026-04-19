@@ -1,103 +1,101 @@
-<ControlTheme xmlns="https://github.com/avaloniaui"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:atom="https://atomui.net"
-              x:Class="AtomUI.Desktop.Controls.Themes.TextAreaTheme"
-              x:ClassModifier="internal"
-              TargetType="atom:TextArea">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:atom="https://atomui.net"
+    x:ClassModifier="internal">
+    <ControlTheme x:Key="{x:Type atom:TextArea}" TargetType="atom:TextArea">
 
-    <Setter Property="Template">
-        <ControlTemplate TargetType="atom:TextArea">
-            <DockPanel LastChildFill="True"
-                       Height="{TemplateBinding Height}">
-                <atom:TextBlock Name="TextCountIndicator"
-                                DockPanel.Dock="Bottom"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Right"
-                                Text="{TemplateBinding CountText}"
-                                IsVisible="{TemplateBinding IsShowCount}" />
-                <Panel>
-                    <atom:TextAreaDecoratedBox
-                        Name="{x:Static atom:AddOnDecoratedBox.AddOnDecoratedBoxPart}"
-                        ContentLeftAddOn="{TemplateBinding InnerLeftContent}"
-                        ContentLeftAddOnTemplate="{TemplateBinding InnerLeftContentTemplate}"
-                        StyleVariant="{TemplateBinding StyleVariant}"
-                        SizeType="{TemplateBinding SizeType}"
-                        Status="{TemplateBinding Status}"
-                        Focusable="True"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        IsResizable="{TemplateBinding IsResizable}"
-                        IsAllowAutoHide="{TemplateBinding ScrollViewer.AllowAutoHide}"
-                        HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
-                        IsScrollChainingEnabled="{TemplateBinding ScrollViewer.IsScrollChainingEnabled}">
-                        <atom:TextAreaDecoratedBox.ContentRightAddOn>
-                            <StackPanel Orientation="Vertical"
-                                        Spacing="{atom:SharedTokenResource UniformlyPaddingXXS}">
-                                <atom:InputClearIconButton
-                                    Name="{x:Static atom:TextAreaThemeConstants.ClearButtonPart}"
-                                    IsMotionEnabled="{Binding IsMotionEnabled, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
-                                    IsVisible="{Binding IsEffectiveShowClearButton, RelativeSource={RelativeSource AncestorType=atom:TextArea}}" 
+        <Setter Property="Template">
+            <ControlTemplate TargetType="atom:TextArea">
+                <DockPanel LastChildFill="True"
+                           Height="{TemplateBinding Height}">
+                    <atom:TextBlock Name="TextCountIndicator"
+                                    DockPanel.Dock="Bottom"
                                     VerticalAlignment="Center"
-                                    Icon="{Binding ClearIcon, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"/>
-                                <ContentPresenter
-                                    Name="FormFeedBack"
-                                    VerticalAlignment="Stretch"
-                                    VerticalContentAlignment="Center"
                                     HorizontalAlignment="Right"
-                                    IsVisible="{Binding FormFeedback, Converter={x:Static ObjectConverters.IsNotNull}, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
-                                    Content="{Binding FormFeedback, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"/>
-                                <ContentPresenter
-                                    VerticalAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    HorizontalAlignment="Right"
-                                    Focusable="False"
-                                    Content="{Binding InnerRightContent, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
-                                    IsVisible="False" />
-                            </StackPanel>
-                        </atom:TextAreaDecoratedBox.ContentRightAddOn>
+                                    Text="{TemplateBinding CountText}"
+                                    IsVisible="{TemplateBinding IsShowCount}" />
+                    <Panel>
+                        <atom:TextAreaDecoratedBox
+                            Name="{x:Static atom:AddOnDecoratedBox.AddOnDecoratedBoxPart}"
+                            ContentLeftAddOn="{TemplateBinding InnerLeftContent}"
+                            ContentLeftAddOnTemplate="{TemplateBinding InnerLeftContentTemplate}"
+                            StyleVariant="{TemplateBinding StyleVariant}"
+                            SizeType="{TemplateBinding SizeType}"
+                            Status="{TemplateBinding Status}"
+                            Focusable="True"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            IsResizable="{TemplateBinding IsResizable}"
+                            IsAllowAutoHide="{TemplateBinding ScrollViewer.AllowAutoHide}"
+                            HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                            VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                            IsScrollChainingEnabled="{TemplateBinding ScrollViewer.IsScrollChainingEnabled}">
+                            <atom:TextAreaDecoratedBox.ContentRightAddOn>
+                                <StackPanel Orientation="Vertical"
+                                            Spacing="{atom:SharedTokenResource UniformlyPaddingXXS}">
+                                    <atom:InputClearIconButton
+                                        Name="{x:Static atom:TextAreaThemeConstants.ClearButtonPart}"
+                                        IsMotionEnabled="{Binding IsMotionEnabled, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
+                                        IsVisible="{Binding IsEffectiveShowClearButton, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
+                                        VerticalAlignment="Center"
+                                        Icon="{Binding ClearIcon, RelativeSource={RelativeSource AncestorType=atom:TextArea}}" />
+                                    <ContentPresenter
+                                        Name="FormFeedBack"
+                                        VerticalAlignment="Stretch"
+                                        VerticalContentAlignment="Center"
+                                        HorizontalAlignment="Right"
+                                        IsVisible="{Binding FormFeedback, Converter={x:Static ObjectConverters.IsNotNull}, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
+                                        Content="{Binding FormFeedback, RelativeSource={RelativeSource AncestorType=atom:TextArea}}" />
+                                    <ContentPresenter
+                                        VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        HorizontalAlignment="Right"
+                                        Focusable="False"
+                                        Content="{Binding InnerRightContent, RelativeSource={RelativeSource AncestorType=atom:TextArea}}"
+                                        IsVisible="False" />
+                                </StackPanel>
+                            </atom:TextAreaDecoratedBox.ContentRightAddOn>
 
-                        <Panel Name="ContentLayout">
-                            <atom:TextBlock
-                                Name="Placeholder"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Text="{TemplateBinding PlaceholderText}"
-                                Foreground="{TemplateBinding PlaceholderForeground}"
-                                LineHeight="{TemplateBinding LineHeight}"
-                                TextAlignment="{TemplateBinding TextAlignment}"
-                                TextWrapping="{TemplateBinding TextWrapping}"
-                                IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
-                            <TextPresenter
-                                Name="PART_TextPresenter"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
-                                CaretBrush="{TemplateBinding CaretBrush}"
-                                CaretIndex="{TemplateBinding CaretIndex}"
-                                LineHeight="{TemplateBinding LineHeight}"
-                                PasswordChar="{TemplateBinding PasswordChar}"
-                                RevealPassword="{TemplateBinding RevealPassword}"
-                                SelectionBrush="{TemplateBinding SelectionBrush}"
-                                SelectionStart="{TemplateBinding SelectionStart}"
-                                SelectionEnd="{TemplateBinding SelectionEnd}"
-                                SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-                                Text="{TemplateBinding Text, Mode=TwoWay}"
-                                TextAlignment="{TemplateBinding TextAlignment}"
-                                TextWrapping="{TemplateBinding TextWrapping}" 
-                                Focusable="False"/>
-                        </Panel>
-                    </atom:TextAreaDecoratedBox>
-                    <atom:ResizeHandle Name="{x:Static atom:TextAreaThemeConstants.ResizeHandle}"
-                                       HorizontalAlignment="Right"
-                                       VerticalAlignment="Bottom"
-                                       Cursor="SizeNorthSouth" />
-                </Panel>
-            </DockPanel>
-        </ControlTemplate>
-    </Setter>
-
-    <Style Selector="^:is(atom|TextArea)">
+                            <Panel Name="ContentLayout">
+                                <atom:TextBlock
+                                    Name="Placeholder"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Text="{TemplateBinding PlaceholderText}"
+                                    Foreground="{TemplateBinding PlaceholderForeground}"
+                                    LineHeight="{TemplateBinding LineHeight}"
+                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                    TextWrapping="{TemplateBinding TextWrapping}"
+                                    IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                <TextPresenter
+                                    Name="PART_TextPresenter"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                    CaretBrush="{TemplateBinding CaretBrush}"
+                                    CaretIndex="{TemplateBinding CaretIndex}"
+                                    LineHeight="{TemplateBinding LineHeight}"
+                                    PasswordChar="{TemplateBinding PasswordChar}"
+                                    RevealPassword="{TemplateBinding RevealPassword}"
+                                    SelectionBrush="{TemplateBinding SelectionBrush}"
+                                    SelectionStart="{TemplateBinding SelectionStart}"
+                                    SelectionEnd="{TemplateBinding SelectionEnd}"
+                                    SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                    Text="{TemplateBinding Text, Mode=TwoWay}"
+                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                    TextWrapping="{TemplateBinding TextWrapping}"
+                                    Focusable="False" />
+                            </Panel>
+                        </atom:TextAreaDecoratedBox>
+                        <atom:ResizeHandle Name="{x:Static atom:TextAreaThemeConstants.ResizeHandle}"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Bottom"
+                                           Cursor="SizeNorthSouth" />
+                    </Panel>
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
 
         <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="Background" Value="Transparent" />
@@ -173,7 +171,8 @@
                     Value="2 0 2 0" />
         </Style>
 
-        <Style Selector="^ /template/ StackPanel#PART_LeftAddOnLayout, ^ /template/ StackPanel#PART_RightAddOnLayout">
+        <Style
+            Selector="^ /template/ StackPanel#PART_LeftAddOnLayout, ^ /template/ StackPanel#PART_RightAddOnLayout">
             <Setter Property="Spacing"
                     Value="{atom:SharedTokenResource UniformlyPaddingXXS}" />
         </Style>
@@ -186,5 +185,5 @@
             <Setter Property="Foreground"
                     Value="{atom:SharedTokenResource ColorTextDisabled}" />
         </Style>
-    </Style>
-</ControlTheme>
+    </ControlTheme>
+</ResourceDictionary>
