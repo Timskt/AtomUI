@@ -53,6 +53,16 @@
         <Setter Property="IsLiteMode" Value="False" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="ScrollBarsSeparatorOpacity" Value="0" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="ScrollBarsSeparatorOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <DoubleTransition Property="ScrollBarOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
         <Style Selector="^[IsExpanded=true]">
             <Setter Property="ScrollBarsSeparatorOpacity" Value="1" />
         </Style>

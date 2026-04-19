@@ -1,12 +1,10 @@
 using System.Diagnostics;
 using AtomUI.Controls.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
-using Avalonia.Interactivity;
 
 namespace AtomUI.Controls.Commons;
 
@@ -64,36 +62,9 @@ public abstract class AbstractScrollViewer : AvaloniaScrollViewer, IMotionAwareC
         });
     }
     
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(ScrollBarsSeparatorOpacityProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ScrollBarOpacityProperty),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(false);
-            }
-        }
-
         if (change.Property == AllowAutoHideProperty)
         {
             if (AllowAutoHide)
@@ -106,18 +77,6 @@ public abstract class AbstractScrollViewer : AvaloniaScrollViewer, IMotionAwareC
                 _pointerMoveSubscription = null;
             }
         }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     private void HandleScrollBarDragStarted()
