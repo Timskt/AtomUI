@@ -33,26 +33,6 @@
         
         <atom:NavMenuNode Header="{gallery:CaseNavigationLangResource Layout}"
                           Icon="{antdicons:AntDesignIconProvider Kind=LayoutOutlined}">
-            <atom:NavMenuNode ItemKey="{x:Static viewmodels:BoxPanelViewModel.ID}">
-                <atom:NavMenuNode.HeaderTemplate>
-                    <DataTemplate>
-                        <atom:FlexPanel Direction="Row"
-                                        AlignItems="Center"
-                                        JustifyContent="FlexStart"
-                                        HorizontalAlignment="Stretch">
-                            <TextBlock atom:Flex.Grow="1"
-                                       Text="{gallery:CaseNavigationLangResource Layout_BoxPanel}"
-                                       VerticalAlignment="Center" />
-                            <atom:Tag TagColor="red"
-                                      IsBordered="False"
-                                      Padding="4,0"
-                                      VerticalAlignment="Center"
-                                      Margin="8,0,0,0"
-                                      Text="{gallery:CaseNavigationLangResource Layout_BoxPanel_DeprecatedTag}" />
-                        </atom:FlexPanel>
-                    </DataTemplate>
-                </atom:NavMenuNode.HeaderTemplate>
-            </atom:NavMenuNode>
             <atom:NavMenuNode Header="{gallery:CaseNavigationLangResource Layout_FlexPanel}"
                               ItemKey="{x:Static viewmodels:FlexPanelViewModel.ID}" />
             <atom:NavMenuNode Header="{gallery:CaseNavigationLangResource Layout_Grid}"

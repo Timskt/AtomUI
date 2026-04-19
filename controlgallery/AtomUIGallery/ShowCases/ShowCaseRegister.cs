@@ -41,7 +41,6 @@ public sealed class ShowCaseViewModule : IViewModule
 
     private static void RegisterLayoutCases(DefaultViewLocator locator)
     {
-        locator.Map<BoxPanelViewModel, BoxPanelShowCase>(() => new BoxPanelShowCase());
         locator.Map<FlexPanelViewModel, FlexPanelShowCase>(() => new FlexPanelShowCase());
         locator.Map<GridViewModel, GridShowCase>(() => new GridShowCase());
         locator.Map<SpaceViewModel, SpaceShowCase>(() => new SpaceShowCase());

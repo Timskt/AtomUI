@@ -19,7 +19,6 @@ internal class en_US : LanguageProvider
     public const string General_CustomizeTheme = "CustomizeTheme";
     
     public const string Layout = "Layout";
-    public const string Layout_BoxPanel = "BoxPanel";
     public const string Layout_BoxPanel_DeprecatedTag = "Deprecated";
     public const string Layout_FlexPanel = "FlexPanel";
     public const string Layout_Grid = "Grid";

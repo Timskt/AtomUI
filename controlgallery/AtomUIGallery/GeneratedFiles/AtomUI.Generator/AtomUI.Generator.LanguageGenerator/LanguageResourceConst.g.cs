@@ -70,7 +70,6 @@ namespace AtomUIGallery.Localization
         General_Separator,
         General_SplitButton,
         Layout,
-        Layout_BoxPanel,
         Layout_BoxPanel_DeprecatedTag,
         Layout_BoxPanel_DeprecationNotice,
         Layout_FlexPanel,
