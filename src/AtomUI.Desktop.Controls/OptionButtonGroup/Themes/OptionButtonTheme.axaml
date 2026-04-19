@@ -72,8 +72,16 @@
         <Style Selector="^ /template/ atom|WaveSpiritDecorator#PART_WaveSpirit">
             <Setter Property="WaveType" Value="RoundRectWave" />
         </Style>
-
         <Style Selector="^[ButtonStyle=Solid]">
+            <Style Selector="^[IsMotionEnabled=True]">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    </Transitions>
+                </Setter>
+            </Style>
             <Style Selector="^:checked">
                 <Setter Property="Foreground"
                         Value="{atom:OptionButtonTokenResource ButtonSolidCheckedColor}" />
@@ -123,6 +131,14 @@
         </Style>
 
         <Style Selector="^[ButtonStyle=Outline]">
+            <Style Selector="^[IsMotionEnabled=True]">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    </Transitions>
+                </Setter>
+            </Style>
             <Setter Property="Background" Value="Transparent" />
             <Style Selector="^:checked">
                 <Setter Property="Foreground"
@@ -158,7 +174,7 @@
                         Value="{atom:SharedTokenResource ColorTextDisabled}" />
                 <Setter Property="Background"
                         Value="{atom:SharedTokenResource ColorBgContainerDisabled}" />
-                
+
                 <Style Selector="^:checked">
                     <Setter Property="Foreground"
                             Value="{atom:OptionButtonTokenResource ButtonCheckedColorDisabled}" />

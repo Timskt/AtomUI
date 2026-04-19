@@ -1,14 +1,11 @@
 using System.Diagnostics;
-using AtomUI.Animations;
 using AtomUI.Controls.Primitives;
 using AtomUI.Controls.Utils;
 using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 
@@ -140,46 +137,12 @@ public abstract class AbstractOptionButton : AvaloniaRadioButton
                 CornerRadius = BuildCornerRadius(GroupPositionTrait, _originCornerRadius!.Value);
             }
         }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     private void HandleSizeTypeChanged()
     {
         _originCornerRadius = CornerRadius;
         CornerRadius        = BuildCornerRadius(GroupPositionTrait, _originCornerRadius!.Value);
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                var transitions = new Transitions();
-                if (ButtonStyle == OptionButtonStyle.Solid)
-                {
-                    transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty));
-                }
-                else if (ButtonStyle == OptionButtonStyle.Outline)
-                {
-                    transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty));
-                }
-
-                transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty));
-                Transitions = transitions;
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
     }
 
     private CornerRadius BuildCornerRadius(OptionButtonPositionTrait positionTrait, CornerRadius cornerRadius)
@@ -257,18 +220,6 @@ public abstract class AbstractOptionButton : AvaloniaRadioButton
             BackgroundSizing.InnerBorderEdge,
             Background,
             BorderBrush);
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
