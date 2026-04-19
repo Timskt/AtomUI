@@ -1,14 +1,10 @@
-using AtomUI.Animations;
 using AtomUI.Theme.Styling;
 using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -275,18 +271,6 @@ public abstract class AbstractProgressBar : RangeBase,
         _effectiveSizeType = SizeType;
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -302,14 +286,6 @@ public abstract class AbstractProgressBar : RangeBase,
         else if (change.Property == IsIndeterminateProperty)
         {
             UpdatePseudoClasses();
-        }
-
-        if (IsLoaded)
-        { 
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
 
         HandlePropertyChangedForStyle(change);
@@ -370,32 +346,6 @@ public abstract class AbstractProgressBar : RangeBase,
     protected virtual void NotifyHandleExtraInfoVisibility()
     {
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(ValueProperty,
-                        SharedTokenKind.MotionDurationVerySlow, new ExponentialEaseOut()),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(StrokeBrushProperty,
-                        SharedTokenKind.MotionDurationFast),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKind.MotionDurationFast)
-                ];
-
-                NotifyConfigureTransitions(ref transitions);
-                Transitions = transitions;
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
 
     private void HandlePropertyChangedForStyle(AvaloniaPropertyChangedEventArgs change)
     {
@@ -425,10 +375,6 @@ public abstract class AbstractProgressBar : RangeBase,
             }
         }
         NotifyPropertyChanged(change);
-    }
-
-    protected virtual void NotifyConfigureTransitions(ref Transitions transitions)
-    {
     }
 
     private void UpdatePseudoClasses()

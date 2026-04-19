@@ -24,6 +24,16 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Value" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationVerySlow}" Easing="ExponentialEaseOut" />
+                    <atom:SolidColorBrushTransition Property="StrokeBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                </Transitions>
+            </Setter>
+        </Style>
         
         <Style Selector="^[IsEnabled=True]">
             <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLabel}" />
