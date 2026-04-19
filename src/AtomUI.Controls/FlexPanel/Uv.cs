@@ -1,6 +1,6 @@
 using Avalonia;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 internal struct Uv
 {

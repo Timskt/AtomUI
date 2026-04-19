@@ -1,4 +1,4 @@
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 /// <summary>
 /// Defines how flex items are aligned along the cross axis

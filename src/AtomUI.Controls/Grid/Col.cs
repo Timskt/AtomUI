@@ -1,10 +1,10 @@
-using AtomUI.Controls;
+using AtomUI.Desktop.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class Col : ContentControl
 {

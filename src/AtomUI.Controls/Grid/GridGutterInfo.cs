@@ -1,7 +1,7 @@
 using System.Globalization;
 using AtomUI.Controls;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public record GridGutterInfo
 {

@@ -1,10 +1,8 @@
-
-
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 /// <summary>
 /// A panel that arranges child controls using CSS FlexBox principles.

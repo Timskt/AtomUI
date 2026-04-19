@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 [TypeConverter(typeof(GridColSizeConverter))]
 public record GridColSize

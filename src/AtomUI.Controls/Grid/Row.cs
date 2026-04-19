@@ -2,7 +2,7 @@ using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class Row : Panel
 {

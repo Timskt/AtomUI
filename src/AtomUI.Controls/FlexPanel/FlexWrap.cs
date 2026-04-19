@@ -1,4 +1,4 @@
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 /// <summary>
 /// Defines how flex items wrap when they exceed the container size

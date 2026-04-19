@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Layout;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public static class Flex
 {

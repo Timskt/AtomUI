@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using AtomUI.Controls;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 [TypeConverter(typeof(GridGutterConverter))]
 public record GridGutter

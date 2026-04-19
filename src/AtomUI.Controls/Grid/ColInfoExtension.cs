@@ -1,6 +1,6 @@
 using Avalonia.Markup.Xaml;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public class ColInfoExtension : MarkupExtension
 {

@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace AtomUI.Desktop.Controls;
+namespace AtomUI.Controls;
 
 public readonly struct FlexBasis : IEquatable<FlexBasis>
 {
