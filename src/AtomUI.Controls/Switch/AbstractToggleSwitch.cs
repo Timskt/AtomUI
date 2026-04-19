@@ -5,7 +5,6 @@ using AtomUI.Data;
 using AtomUI.Media;
 using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Presenters;
@@ -16,6 +15,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.Rendering;
+using Avalonia.Threading;
 
 namespace AtomUI.Controls;
 
@@ -251,39 +251,6 @@ public abstract class AbstractToggleSwitch : ToggleButton,
         IsCheckedProperty.Changed.AddClassHandler<AbstractToggleSwitch>((toggleSwitch, args) => toggleSwitch.NotifyFormValueChanged(args.NewValue as bool?));
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<RectTransition>(KnobMovingRectProperty),
-                    TransitionUtils.CreateTransition<PointTransition>(OnContentOffsetProperty),
-                    TransitionUtils.CreateTransition<PointTransition>(OffContentOffsetProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(GrooveBackgroundProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(SwitchOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected override Size MeasureOverride(Size availableSize)
     {
         base.MeasureOverride(availableSize);
@@ -367,7 +334,14 @@ public abstract class AbstractToggleSwitch : ToggleButton,
 
         if (_switchKnob is not null)
         {
-            _switchKnob.KnobSize = KnobSize;
+            // 延迟更新 KnobSize，让 Transition 动画有时间完成
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                if (_switchKnob is not null)
+                {
+                    _switchKnob.KnobSize = KnobSize;
+                }
+            });
         }
     }
 
@@ -431,13 +405,6 @@ public abstract class AbstractToggleSwitch : ToggleButton,
             _isCheckedChanged = true;
         }
 
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

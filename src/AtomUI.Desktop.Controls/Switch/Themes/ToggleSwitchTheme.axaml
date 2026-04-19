@@ -10,9 +10,6 @@
                     <atom:WaveSpiritDecorator Name="PART_WaveSpirit"/>
                     <Canvas Name="PART_MainContainer"
                             ClipToBounds="True">
-                        <atom:SwitchKnob Name="PART_SwitchKnob"
-                                         IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
-                                         IsCheckedState="{TemplateBinding IsChecked}" />
                         <ContentPresenter Name="PART_OnContentPresenter"
                                           Content="{TemplateBinding OnContent}"
                                           ContentTemplate="{TemplateBinding OnContentTemplate}"
@@ -21,6 +18,9 @@
                                           Content="{TemplateBinding OffContent}"
                                           ContentTemplate="{TemplateBinding OffContentTemplate}"
                                           IsVisible="{TemplateBinding OffContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        <atom:SwitchKnob Name="PART_SwitchKnob"
+                                         IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
+                                         IsCheckedState="{TemplateBinding IsChecked}" />
                     </Canvas>
                 </Panel>
             </ControlTemplate>
@@ -40,6 +40,18 @@
         </Style>
 
         <Setter Property="TrackPadding" Value="{atom:ToggleSwitchTokenResource TrackPadding}" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:RectTransition Property="KnobMovingRect" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <PointTransition Property="OnContentOffset" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <PointTransition Property="OffContentOffset" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <atom:SolidColorBrushTransition Property="GrooveBackground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <DoubleTransition Property="SwitchOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                </Transitions>
+            </Setter>
+        </Style>
 
         <Style Selector="^[IsLoading=True], ^:disabled">
             <Setter Property="SwitchOpacity"

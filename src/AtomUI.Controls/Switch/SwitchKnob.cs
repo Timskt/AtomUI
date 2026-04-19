@@ -130,17 +130,17 @@ internal class SwitchKnob : TemplatedControl
     {
         UseLayoutRounding = false;
     }
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 
     public void NotifyStartLoading()
@@ -233,14 +233,6 @@ internal class SwitchKnob : TemplatedControl
                 };
             }
         }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -296,25 +288,6 @@ internal class SwitchKnob : TemplatedControl
             using var bgOpacity               = context.PushOpacity(_loadingBgOpacity);
 
             context.DrawArc(pen, loadingRect, 0, 90);
-        }
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(KnobRenderWidthProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(OpacityProperty),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
         }
     }
 }

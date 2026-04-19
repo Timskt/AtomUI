@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Animation;
 
-namespace AtomUI.Media;
+namespace AtomUI.Animations;
 
 public class RectTransition : InterpolatingTransitionBase<Rect>
 {

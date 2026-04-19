@@ -92,8 +92,8 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 |---|---------|----------------------|------|
 | 1 | ~~ScrollViewer/AbstractScrollBarThumb.cs~~ | ~~Background(SolidColorBrush), Width(Double), Height(Double)~~ | ✅ |
 | 2 | ~~ScrollViewer/AbstractScrollViewer.cs~~ | ~~ScrollBarsSeparatorOpacity(Double), ScrollBarOpacity(Double)~~ | ✅ |
-| 3 | Switch/AbstractToggleSwitch.cs | KnobMovingRect(Rect), OnContentOffset(Point), OffContentOffset(Point), GrooveBackground(SolidColorBrush), GrooveBorderBrush(SolidColorBrush) | |
-| 4 | Switch/SwitchKnob.cs | Background(SolidColorBrush), Width(Double), Height(Double) | |
+| 3 | ~~Switch/AbstractToggleSwitch.cs~~ | ~~KnobMovingRect(Rect), OnContentOffset(Point), OffContentOffset(Point), GrooveBackground(SolidColorBrush), SwitchOpacity(Double)~~ | ✅ |
+| 4 | ~~Switch/SwitchKnob.cs~~ | ~~Background(SolidColorBrush), Width(Double), Height(Double)~~ | ✅ |
 | 5 | ProgressBar/AbstractProgressBar.cs | Background(SolidColorBrush), IndicatorBarBrush(SolidColorBrush) | 有 `NotifyConfigureTransitions` 虚方法，子类可扩展 |
 | 6 | Spin/AbstractSpin.cs | DotBrush(SolidColorBrush) | |
 | 7 | CheckBox/Converters/CheckBoxIndicator.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush) | |
@@ -224,6 +224,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 ## 进度跟踪
 
 - [ ] 第 1 批：AtomUI.Controls 基础控件（16 个）
+  - [x] 4 | Switch/SwitchKnob.cs | Background(SolidColorBrush), Width(Double), Height(Double) | ✅ 已完成
 - [ ] 第 2 批：AtomUI.Desktop.Controls Part A（19 个）
 - [ ] 第 3 批：AtomUI.Desktop.Controls Part B（18 个）
 - [ ] 第 4 批：AtomUI.Desktop.Controls Part C（17 个）
