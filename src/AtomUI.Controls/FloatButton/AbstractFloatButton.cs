@@ -1,11 +1,9 @@
-using AtomUI.Animations;
 using AtomUI.Controls.Primitives;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Controls.Commons;
@@ -228,7 +226,7 @@ public abstract class AbstractFloatButton : AvaloniaButton, IMotionAwareControl
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        var size = base.MeasureOverride(availableSize);
+        var size       = base.MeasureOverride(availableSize);
         var effectSize = Math.Max(size.Width, size.Height);
         return new Size(effectSize, effectSize);
     }
@@ -243,16 +241,8 @@ public abstract class AbstractFloatButton : AvaloniaButton, IMotionAwareControl
             UpdatePseudoClasses();
         }
 
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-        
         if (change.Property == IsEmbedModeProperty ||
-                 change.Property == ParentProperty)
+            change.Property == ParentProperty)
         {
             SetupParentLayer(Parent);
             if (_overlayLayer != null)
@@ -301,33 +291,6 @@ public abstract class AbstractFloatButton : AvaloniaButton, IMotionAwareControl
         {
             PseudoClasses.Set(ButtonPseudoClass.IconOnly, true);
         }
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     protected virtual void ConfigureDefaultIcon()
@@ -385,8 +348,8 @@ public abstract class AbstractFloatButton : AvaloniaButton, IMotionAwareControl
                                            double offsetX,
                                            double offsetY)
     {
-        var width   = floatControl.DesiredSize.Width;
-        var height  = floatControl.DesiredSize.Height;
+        var width         = floatControl.DesiredSize.Width;
+        var height        = floatControl.DesiredSize.Height;
         var targetOffsetX = 0.0d;
         var targetOffsetY = 0.0d;
         if (placement == FloatButtonPlacement.Left)
