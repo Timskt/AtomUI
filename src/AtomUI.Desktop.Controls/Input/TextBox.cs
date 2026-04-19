@@ -1,7 +1,6 @@
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
-using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -195,7 +194,7 @@ public class TextBox : AvaloniaTextBox,
 
     public TextBox()
     {
-        this.RegisterTokenResourceScope(LineEditToken.ScopeProvider);
+        // this.RegisterTokenResourceScope(LineEditToken.ScopeProvider);
     }
 
     protected override void OnInitialized()
@@ -210,7 +209,7 @@ public class TextBox : AvaloniaTextBox,
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-
+    
         if (change.Property == AcceptsReturnProperty ||
             change.Property == IsReadOnlyProperty ||
             change.Property == TextProperty ||

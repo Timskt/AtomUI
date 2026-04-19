@@ -18,7 +18,9 @@ internal class AutoCompleteTextAreaBox : TextArea
         get => GetValue(IsDropDownOpenProperty);
         set => SetValue(IsDropDownOpenProperty, value);
     }
-    
+
+    protected override Type StyleKeyOverride => typeof(TextArea);
+
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);

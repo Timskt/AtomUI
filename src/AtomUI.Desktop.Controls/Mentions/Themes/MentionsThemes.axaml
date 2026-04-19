@@ -3,6 +3,5 @@
                     x:ClassModifier="internal">
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="MentionsTheme.axaml" />
-        <ResourceInclude Source="MentionTextAreaTheme.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

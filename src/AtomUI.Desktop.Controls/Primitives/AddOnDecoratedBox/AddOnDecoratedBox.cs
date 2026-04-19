@@ -1,7 +1,6 @@
 using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives.Themes;
-using AtomUI.Theme;
 using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Animation;
@@ -14,6 +13,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Metadata;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -295,7 +295,6 @@ internal class AddOnDecoratedBox : ContentControl,
 
     public AddOnDecoratedBox()
     {
-        this.RegisterTokenResourceScope(AddOnDecoratedBoxToken.ScopeProvider);
         ConfigureInstanceStyles();
     }
     
@@ -344,36 +343,40 @@ internal class AddOnDecoratedBox : ContentControl,
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        
-        if (change.Property == StyleVariantProperty)
-        {
-            UpdatePseudoClasses();
-            ConfigureInnerBoxBorderThickness();
-        }
 
-        if (change.Property == LeftAddOnProperty || 
-            change.Property == RightAddOnProperty ||
-            change.Property == CornerRadiusProperty ||
-            change.Property == StyleVariantProperty ||
-            change.Property == CompactSpaceItemPositionProperty ||
-            change.Property == CompactSpaceOrientationProperty)
+        if (this.IsAttachedToVisualTree())
         {
-            ConfigureInnerBoxCornerRadius();
-        }
-
-        if (change.Property == BorderThicknessProperty)
-        {
-            ConfigureInnerBoxBorderThickness();
+            if (change.Property == StyleVariantProperty)
+            {
+                UpdatePseudoClasses();
+                ConfigureInnerBoxBorderThickness();
+            }
+    
+            if (change.Property == LeftAddOnProperty || 
+                change.Property == RightAddOnProperty ||
+                change.Property == CornerRadiusProperty ||
+                change.Property == StyleVariantProperty ||
+                change.Property == CompactSpaceItemPositionProperty ||
+                change.Property == CompactSpaceOrientationProperty)
+            {
+                ConfigureInnerBoxCornerRadius();
+            }
+    
+            if (change.Property == BorderThicknessProperty)
+            {
+                ConfigureInnerBoxBorderThickness();
+            }
+        
+            if (change.Property == CornerRadiusProperty || 
+                change.Property == BorderThicknessProperty ||
+                change.Property == StyleVariantProperty ||
+                change.Property == CompactSpaceItemPositionProperty ||
+                change.Property == CompactSpaceOrientationProperty)
+            {
+                ConfigureAddOnBorderInfo();
+            }
         }
         
-        if (change.Property == CornerRadiusProperty || 
-            change.Property == BorderThicknessProperty ||
-            change.Property == StyleVariantProperty ||
-            change.Property == CompactSpaceItemPositionProperty ||
-            change.Property == CompactSpaceOrientationProperty)
-        {
-            ConfigureAddOnBorderInfo();
-        }
         if (IsLoaded)
         {
             if (change.Property == IsMotionEnabledProperty)
