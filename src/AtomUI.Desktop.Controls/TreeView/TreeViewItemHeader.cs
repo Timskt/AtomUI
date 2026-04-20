@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -424,14 +423,6 @@ internal class TreeViewItemHeader : ContentControl
         {
             BuildFilterHighlightRuns();
         }
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
     
     private void SetupSwitcherButtonIconMode()
@@ -466,25 +457,6 @@ internal class TreeViewItemHeader : ContentControl
         PseudoClasses.Set(TreeViewPseudoClass.NodeToggleTypeRadio, newValue == ItemToggleType.Radio);
         PseudoClasses.Set(TreeViewPseudoClass.NodeToggleTypeCheckBox, newValue == ItemToggleType.CheckBox);
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ContentFrameBackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -506,18 +478,6 @@ internal class TreeViewItemHeader : ContentControl
         Debug.Assert(_nodeSwitcherButton != null);
         var point = _nodeSwitcherButton.TranslatePoint(new Point(0, 0), relativeTo) ?? default;
         return new Rect(point, _nodeSwitcherButton.Bounds.Size);
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     private void HandleHeaderPresenterEntered(object? sender, PointerEventArgs? args)
