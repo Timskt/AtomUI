@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Threading;
 
 namespace AtomUI.Desktop.Controls;
@@ -13,22 +12,22 @@ internal class OverlayDialogMask : TemplatedControl
 {
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<OverlayDialogMask>();
-    
+
     public static readonly StyledProperty<TimeSpan> AnimationDurationProperty =
         AvaloniaProperty.Register<OverlayDialogMask, TimeSpan>(nameof(AnimationDuration));
-    
+
     public bool IsMotionEnabled
     {
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
     }
-    
+
     public TimeSpan AnimationDuration
     {
         get => GetValue(AnimationDurationProperty);
         set => SetValue(AnimationDurationProperty, value);
     }
-    
+
     private readonly DialogLayer _dialogLayer;
 
     public OverlayDialogMask(DialogLayer dialogLayer, Dialog dialog)
@@ -62,30 +61,25 @@ internal class OverlayDialogMask : TemplatedControl
             _dialogLayer.SizeChanged -= HandleDialogLayerSizeChanged;
         }, AnimationDuration);
     }
-    
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ConfigureTransitions(false);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 
         if (IsLoaded)
         {
-            if (change.Property == IsMotionEnabledProperty)
+            if (change.Property == IsMotionEnabledProperty ||
+                change.Property == AnimationDurationProperty)
             {
                 ConfigureTransitions(true);
             }
         }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     private void ConfigureTransitions(bool force)

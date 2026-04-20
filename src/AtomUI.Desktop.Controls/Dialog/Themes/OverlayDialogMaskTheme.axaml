@@ -13,6 +13,5 @@
         <Setter Property="Opacity" Value="0"/>
         <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgMask}"/>
         <Setter Property="AnimationDuration" Value="{atom:SharedTokenResource MotionDurationMid}"/>
-        
     </ControlTheme>
 </ResourceDictionary>
