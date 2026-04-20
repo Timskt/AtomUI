@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -6,6 +7,7 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Styling;
 
 namespace AtomUI.Desktop.Controls;
@@ -204,6 +206,18 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
             var width = _frame?.Bounds.Width ?? 0.0;
             SetCurrentValue(EffectiveProgressWidthProperty, width * ProgressValue);
         }
-     
+
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

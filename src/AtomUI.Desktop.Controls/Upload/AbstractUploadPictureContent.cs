@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
@@ -107,5 +108,17 @@ internal class AbstractUploadPictureContent : TemplatedControl, IMotionAwareCont
         {
             SetCurrentValue(CornerRadiusProperty, new CornerRadius(cornerRadius));
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

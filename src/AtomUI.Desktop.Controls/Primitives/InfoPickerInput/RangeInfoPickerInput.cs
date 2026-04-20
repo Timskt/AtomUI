@@ -1,10 +1,12 @@
-﻿using AtomUI.Desktop.Controls.Primitives.Themes;
+﻿using AtomUI.Animations;
+using AtomUI.Desktop.Controls.Primitives.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input.Raw;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls.Primitives;
 
@@ -338,12 +340,24 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
     {
         if (DecoratedBox is not null)
         {
-            SetCurrentValue(IsClearButtonVisibleProperty, DecoratedBox.IsInnerBoxHover && 
-                                                          InfoInputBox?.IsReadOnly == false && 
+            SetCurrentValue(IsClearButtonVisibleProperty, DecoratedBox.IsInnerBoxHover &&
+                                                          InfoInputBox?.IsReadOnly == false &&
                                                           InfoInputBox.Text?.Length > 0 &&
                                                           SecondaryInfoInputBox?.IsReadOnly == false &&
                                                           SecondaryInfoInputBox?.Text?.Length > 0);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }
 

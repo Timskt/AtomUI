@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using AtomUI.Animations;
 using AtomUI.Controls.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Controls.Commons;
 
@@ -93,6 +95,18 @@ public abstract class AbstractScrollViewer : AvaloniaScrollViewer, IMotionAwareC
         }
     }
     
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
+    }
+
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);

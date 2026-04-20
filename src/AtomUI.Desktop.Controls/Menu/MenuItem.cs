@@ -1,4 +1,5 @@
-﻿using AtomUI.Controls;
+﻿using AtomUI.Animations;
+using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Reflection;
 using Avalonia;
@@ -357,5 +358,17 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
     private void ConfigureMaxPopupHeight()
     {
         SetCurrentValue(MaxPopupHeightProperty, ItemHeight * DisplayPageSize + PopupPadding.Top + PopupPadding.Bottom);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

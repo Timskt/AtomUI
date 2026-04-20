@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -105,5 +106,17 @@ internal class CardActionPanel : TemplatedControl
             
             context.DrawLine(new Pen(BorderBrush, lineWidth), startPoint, endPoint);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

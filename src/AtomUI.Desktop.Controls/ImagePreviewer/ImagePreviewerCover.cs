@@ -1,6 +1,8 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -45,6 +47,18 @@ internal class ImagePreviewerCover : ContentControl, IMotionAwareControl
         get => GetValue(MaskOpacityProperty);
         set => SetValue(MaskOpacityProperty, value);
     }
-    
+
     #endregion
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
+    }
 }

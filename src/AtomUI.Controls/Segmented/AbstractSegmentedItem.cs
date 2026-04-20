@@ -1,9 +1,11 @@
-﻿using Avalonia;
+﻿using AtomUI.Animations;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Controls.Commons;
 
@@ -100,5 +102,17 @@ public abstract class AbstractSegmentedItem : ContentControl, ISelectable
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(SegmentedPseudoClass.HasIcon, Icon is not null);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -1,6 +1,8 @@
+using AtomUI.Animations;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 
 namespace AtomUI.Controls.Commons;
@@ -137,5 +139,17 @@ public abstract class AbstractHyperLinkButton : AvaloniaButton,
                 }
             });
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

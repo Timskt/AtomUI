@@ -1,7 +1,9 @@
-﻿using AtomUI.Controls;
+﻿using AtomUI.Animations;
+using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -91,5 +93,17 @@ public class ComboBoxItem : AvaloniaComboBoxItem
             }
         }
         _pointerDownPoint = s_invalidPoint;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -1,8 +1,10 @@
-﻿using Avalonia;
+﻿using AtomUI.Animations;
+using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Interactivity;
 using Avalonia.Metadata;
 
 namespace AtomUI.Controls.Commons;
@@ -153,5 +155,17 @@ public abstract class AbstractSpin : ContentControl, IMotionAwareControl
     {
         base.OnApplyTemplate(e);
         SetCurrentValue(IsCustomIndicatorProperty, CustomIndicator != null || CustomIndicatorTemplate != null);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
@@ -273,5 +274,17 @@ public class TabItem : HeaderedContentControl, ISelectable
         {
             SetCurrentValue(LineMaskMarginProperty, new Thickness(0, 1, 0, 1));
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

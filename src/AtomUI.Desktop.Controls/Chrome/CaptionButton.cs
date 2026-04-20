@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Theme;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Utilities;
 
 namespace AtomUI.Desktop.Controls;
@@ -119,5 +121,17 @@ internal class CaptionButton : AvaloniaButton
     {
         base.OnPointerMoved(e);
         e.Handled = true;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

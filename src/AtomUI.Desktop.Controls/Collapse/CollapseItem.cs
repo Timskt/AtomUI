@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
@@ -12,6 +13,7 @@ using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
@@ -373,5 +375,17 @@ public class CollapseItem : HeaderedContentControl,
     {
         PseudoClasses.Set(CollapseItemPseudoClass.CustomHeaderPadding, HeaderPadding != null);
         PseudoClasses.Set(CollapseItemPseudoClass.CustomContentPadding, ContentPadding != null);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

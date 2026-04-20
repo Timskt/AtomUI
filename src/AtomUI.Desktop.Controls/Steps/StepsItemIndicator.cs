@@ -1,8 +1,10 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Media;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -239,5 +241,17 @@ internal class StepsItemIndicator : TemplatedControl
                 context.DrawArc(pen, progressRect, startAngle, indicatorAngle);
             }
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

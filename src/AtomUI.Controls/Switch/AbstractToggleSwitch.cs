@@ -616,4 +616,16 @@ public abstract class AbstractToggleSwitch : ToggleButton,
     {
     }
     #endregion
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
+    }
 }

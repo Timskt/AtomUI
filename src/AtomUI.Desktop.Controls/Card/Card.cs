@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
@@ -365,5 +366,17 @@ public class Card : HeaderedContentControl,
             }
         }
         SetCurrentValue(ActionsPanelVisibleProperty, Actions.Count > 0);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

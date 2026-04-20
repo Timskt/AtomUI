@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
@@ -249,5 +250,17 @@ internal class BaseCalendarDayButton : AvaloniaButton
         {
             CalendarDayButtonMouseUp?.Invoke(this, e);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -1,5 +1,5 @@
-﻿using AtomUI.Controls;
-using AtomUI.Theme.Styling;
+﻿using AtomUI.Animations;
+using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Interactivity;
 
@@ -22,15 +22,12 @@ internal class HeadTextButton : AvaloniaButton
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        this.EnableTransitions();
     }
 
-    protected override void OnUnloaded(RoutedEventArgs e)
+    protected override void OnInitialized()
     {
-        base.OnUnloaded(e);
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
+        base.OnInitialized();
+        this.DisableTransitions();
     }
 }

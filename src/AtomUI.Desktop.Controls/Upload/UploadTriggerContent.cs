@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
@@ -157,5 +158,17 @@ internal class UploadTriggerContent : ContentControl, IMotionAwareControl
     {
         base.OnApplyTemplate(e);
         _trigger = e.NameScope.Find<ContentPresenter>(UploadTriggerContentThemeConstants.TriggerPart);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

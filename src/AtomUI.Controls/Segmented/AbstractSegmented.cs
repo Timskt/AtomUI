@@ -1,7 +1,9 @@
-﻿using Avalonia;
+﻿using AtomUI.Animations;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -279,4 +281,16 @@ public abstract class AbstractSegmented : SelectingItemsControl,
     {
     }
     #endregion
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
+    }
 }

@@ -1,5 +1,7 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -19,5 +21,16 @@ public class TimeViewCell : AvaloniaListBoxItem
     }
 
     #endregion
-    
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
+    }
 }

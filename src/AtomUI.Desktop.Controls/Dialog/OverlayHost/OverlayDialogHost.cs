@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reactive.Disposables;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
@@ -870,5 +871,17 @@ internal class OverlayDialogHost : ContentControl,
     {
         _dialogMask.SetCurrentValue(OverlayDialogMask.ZIndexProperty, zindex - 1);
         SetCurrentValue(ZIndexProperty, zindex);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

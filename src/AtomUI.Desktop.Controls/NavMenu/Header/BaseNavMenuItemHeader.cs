@@ -1,8 +1,10 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -127,5 +129,17 @@ public class BaseNavMenuItemHeader : TemplatedControl
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(NavMenuItemPseudoClass.Icon, Icon is not null);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

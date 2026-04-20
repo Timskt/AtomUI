@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Icons.AntDesign;
@@ -242,5 +243,17 @@ internal class NodeSwitcherButton : ToggleButton
             return;
         }
         base.Toggle();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

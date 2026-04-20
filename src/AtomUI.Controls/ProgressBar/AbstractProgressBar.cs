@@ -1,10 +1,11 @@
-using AtomUI.Theme.Styling;
+using AtomUI.Animations;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -407,5 +408,17 @@ public abstract class AbstractProgressBar : RangeBase,
 
     protected virtual void NotifyPrepareDrawingContext(DrawingContext context)
     {
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

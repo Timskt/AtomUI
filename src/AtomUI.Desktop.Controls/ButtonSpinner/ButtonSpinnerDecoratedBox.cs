@@ -1,8 +1,10 @@
+using AtomUI.Animations;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
@@ -363,5 +365,17 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
             ContentLeftShift = 0.0;
             ContentRightShift = 0.0;
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

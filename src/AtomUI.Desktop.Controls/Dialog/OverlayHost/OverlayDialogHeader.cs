@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -214,5 +215,17 @@ internal class OverlayDialogHeader : TemplatedControl, IMotionAwareControl
     {
         base.OnDetachedFromVisualTree(e);
         _disposables?.Dispose();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

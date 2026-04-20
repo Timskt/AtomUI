@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
@@ -354,10 +355,17 @@ public class CascaderViewItem : TemplatedControl, ISelectable, IListItemVirtuali
             IsLeaf = AttachedOption?.Children.Count == 0;
         }
     }
-    
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        this.EnableTransitions();
         ConfigureIsLeaf();
     }
     

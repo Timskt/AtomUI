@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
@@ -119,5 +120,17 @@ public class UploadDefaultDropArea : TemplatedControl, IMotionAwareControl
         {
             SetCurrentValue(DropIconProperty, new InboxOutlined());
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

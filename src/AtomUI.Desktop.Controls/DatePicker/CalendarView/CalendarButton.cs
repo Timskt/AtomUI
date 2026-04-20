@@ -1,9 +1,11 @@
-﻿using AtomUI.Controls;
+﻿using AtomUI.Animations;
+using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using AvaloniaButton = Avalonia.Controls.Button;
 
 namespace AtomUI.Desktop.Controls.CalendarView;
@@ -193,5 +195,17 @@ internal sealed class CalendarButton : AvaloniaButton
         {
             CalendarLeftMouseButtonUp?.Invoke(this, e);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

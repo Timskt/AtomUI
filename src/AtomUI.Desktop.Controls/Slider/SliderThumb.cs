@@ -1,4 +1,5 @@
-﻿using AtomUI.Controls;
+﻿using AtomUI.Animations;
+using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls.Metadata;
@@ -204,5 +205,17 @@ public class SliderThumb : TemplatedControl
         var outlinePen       = new Pen(OutlineBrush, OutlineThickness.Left);
         var outlinePenRadius = ThumbCircleSize / 2 + BorderThickness.Left / 2 + OutlineThickness.Left / 2;
         context.DrawEllipse(null, outlinePen, centerPos, outlinePenRadius, outlinePenRadius);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

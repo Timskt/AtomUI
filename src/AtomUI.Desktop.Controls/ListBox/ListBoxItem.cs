@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Data;
 using Avalonia;
@@ -212,6 +213,13 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
     {
         base.OnInitialized();
         ConfigureSelectedIndicator();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 
     private void ConfigureSelectedIndicator()

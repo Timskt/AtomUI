@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Media;
 using AtomUI.Utils;
@@ -625,16 +626,18 @@ public class SliderTrack : TemplatedControl
         
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        this.EnableTransitions();
     }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-    }
-
+    
     private Vector CalculateThumbAdjustment(SliderThumb thumb, Rect newThumbBounds)
     {
         var thumbDelta = newThumbBounds.Position - thumb.Bounds.Position;

@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
@@ -155,5 +156,17 @@ internal class PaginationNavItem : ContentControl, ISelectable
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(StdPseudoClass.Pressed, IsPressed);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -1,8 +1,8 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives.Themes;
 using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
@@ -659,17 +659,15 @@ internal class AddOnDecoratedBox : ContentControl,
         }
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-    }
-
-    protected virtual void NotifyCreateTransitions(Transitions transitions)
-    {
+        this.EnableTransitions();
     }
 }

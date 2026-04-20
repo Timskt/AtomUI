@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls;
@@ -322,5 +323,17 @@ public class HyperLinkTextBlock : TemplatedControl, IMotionAwareControl
             _commandCanExecute = canExecute;
             UpdateIsEffectivelyEnabled();
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }
