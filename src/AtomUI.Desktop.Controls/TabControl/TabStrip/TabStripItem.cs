@@ -1,11 +1,9 @@
 ﻿using System.Diagnostics;
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
@@ -141,43 +139,11 @@ public class TabStripItem : AvaloniaTabStripItem
 
         base.OnApplyTemplate(e);
         _closeButton   = e.NameScope.Find<IconButton>(TabStripItemThemeConstants.ItemCloseButtonPart);
-        
+
         if (_closeButton is not null)
         {
             _closeButton.Click += HandleCloseRequest;
         }
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(CloseButtonOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     private void HandleCloseRequest(object? sender, RoutedEventArgs args)
@@ -199,14 +165,6 @@ public class TabStripItem : AvaloniaTabStripItem
             }
         }
 
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-        
         if (change.Property == IconProperty ||
             change.Property == CloseIconProperty)
         {
