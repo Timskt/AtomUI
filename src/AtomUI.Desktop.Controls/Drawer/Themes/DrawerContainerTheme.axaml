@@ -36,6 +36,14 @@
                 Value="{atom:SharedTokenResource MotionDurationSlow}" />
         <Setter Property="MaskBgColor"
                 Value="{atom:SharedTokenResource ColorBgMask}" />
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

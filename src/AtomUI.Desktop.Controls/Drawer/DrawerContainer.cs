@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
@@ -12,7 +11,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
@@ -448,46 +446,5 @@ internal class DrawerContainer : ContentControl
             }
             _infoContainer.RenderTransform = _originInfoContainerTransform;
         }
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 }
