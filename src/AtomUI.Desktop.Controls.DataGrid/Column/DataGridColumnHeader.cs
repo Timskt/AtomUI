@@ -5,7 +5,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Utils;
 using Avalonia;
@@ -18,7 +17,6 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Utilities;
 
@@ -928,14 +926,6 @@ internal partial class DataGridColumnHeader : ContentControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-
         if (change.Property == CanUserSortProperty ||
             change.Property == IsSeparatorsVisibleProperty ||
             change.Property == CanUserFilterProperty)
@@ -948,35 +938,5 @@ internal partial class DataGridColumnHeader : ContentControl
     private void ConfigureIndicatorLayoutVisible()
     {
         SetCurrentValue(IndicatorLayoutVisibleProperty, CanUserSort || (IsSeparatorsVisible && CanUserFilter && OwningColumn?.Filters.Count > 0));
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 }
