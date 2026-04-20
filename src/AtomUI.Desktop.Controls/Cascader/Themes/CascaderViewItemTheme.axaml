@@ -128,5 +128,13 @@
             <Setter Property="Width" Value="{atom:SharedTokenResource FontSizeIcon}" />
             <Setter Property="Height" Value="{atom:SharedTokenResource FontSizeIcon}" />
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </Style>
 </ControlTheme>
