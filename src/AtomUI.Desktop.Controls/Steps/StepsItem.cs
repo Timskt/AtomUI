@@ -1,17 +1,12 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 
@@ -309,13 +304,6 @@ public class StepsItem : HeaderedContentControl, ISelectable
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);    
-            }
-        }
 
         if (change.Property == IsFinishedProperty)
         {
@@ -339,40 +327,6 @@ public class StepsItem : HeaderedContentControl, ISelectable
     private void ConfigureEffectiveShowProgress()
     {
         SetCurrentValue(IsEffectiveShowProgressProperty, IsShowProgress && Style != StepsStyle.Inline && Icon == null &&IndicatorType != StepsItemIndicatorType.Dot);
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(SubTitleForegroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(DescriptionForegroundProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(NavIndicatorLineRenderTransformProperty, SharedTokenKind.MotionDurationMid, new CubicEaseOut())
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     protected override void OnPointerEntered(PointerEventArgs e)
