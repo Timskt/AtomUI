@@ -426,6 +426,14 @@ public class SplitButton : ContentControl,
                 menuFlyout.ClickHideFlyoutPredicate = null;
             }
 
+            // Close the flyout before disposing bindings to prevent
+            // InvalidOperationException when placement properties revert
+            // and the popup tries to update position with a detached target.
+            if (flyout.IsOpen)
+            {
+                flyout.Hide();
+            }
+
             _flyoutBindingDisposables?.Dispose();
             _flyoutBindingDisposables = null;
         }
