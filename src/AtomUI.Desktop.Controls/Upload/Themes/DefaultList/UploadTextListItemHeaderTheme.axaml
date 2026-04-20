@@ -79,11 +79,19 @@
 
         <Style Selector="^:pointerover">
             <Setter Property="Background" Value="{atom:SharedTokenResource ControlItemBgHover}" />
-            
+
             <Style Selector="^ /template/ atom|IconButton#DeleteAction">
                 <Setter Property="IsVisible" Value="True" />
             </Style>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

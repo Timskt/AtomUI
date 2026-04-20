@@ -70,15 +70,23 @@
             <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
                 <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorTextDisabled}"/>
             </Style>
-            
+
             <Style Selector="^ /template/ ContentPresenter#HeaderContentPresenter">
                 <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}"/>
             </Style>
-        
+
             <Style Selector="^ /template/ ContentPresenter#SubHeaderContentPresenter">
                 <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}"/>
             </Style>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

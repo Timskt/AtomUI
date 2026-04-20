@@ -1,8 +1,6 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -77,42 +75,5 @@ internal class UploadTextListItemHeader : TemplatedControl, IMotionAwareControl
         {
             SetCurrentValue(EffectiveLineHeightProperty, RelativeLineHeight * FontSize);
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 }

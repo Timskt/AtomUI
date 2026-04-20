@@ -42,6 +42,14 @@
         <Style Selector="^ /template/ atom|IconButton:pointerover">
             <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="MaskOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationSlow}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </Style>
 
 </ControlTheme>
