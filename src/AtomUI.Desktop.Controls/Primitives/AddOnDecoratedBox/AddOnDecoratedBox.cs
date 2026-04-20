@@ -1,4 +1,3 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives.Themes;
 using AtomUI.Theme.Styling;
@@ -305,41 +304,6 @@ internal class AddOnDecoratedBox : ContentControl,
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
     }
     
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BorderBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty)
-                ];
-                NotifyCreateTransitions(Transitions);
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected virtual void NotifyCreateTransitions(Transitions transitions)
-    {
-    }
-    
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -374,14 +338,6 @@ internal class AddOnDecoratedBox : ContentControl,
                 change.Property == CompactSpaceOrientationProperty)
             {
                 ConfigureAddOnBorderInfo();
-            }
-        }
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
             }
         }
     }
