@@ -1,4 +1,3 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Automation;
@@ -151,35 +150,10 @@ public class ListViewItem : ContentControl,
         FocusableProperty.OverrideDefaultValue<ListViewItem>(true);
         AutomationProperties.IsOffscreenBehaviorProperty.OverrideDefaultValue<ListViewItem>(IsOffscreenBehavior.FromClip);
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
 
         if (change.Property == IsSelectedProperty ||
             change.Property == IsShowSelectedIndicatorProperty)
@@ -197,18 +171,6 @@ public class ListViewItem : ContentControl,
     private void ConfigureSelectedIndicator()
     {
         SetCurrentValue(IsSelectedIndicatorVisibleProperty, IsShowSelectedIndicator && IsSelected);
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     protected override void OnPointerPressed(PointerPressedEventArgs e)
