@@ -37,6 +37,6 @@
         <Setter Property="SecondaryStrokeBrush" Value="{atom:IconTokenResource SecondaryStrokeColor}" />
         <Setter Property="FallbackBrush" Value="White" />
         <Setter Property="FillAnimationDuration" Value="{atom:SharedTokenResource MotionDurationMid}" />
-        
+
     </ControlTheme>
 </ResourceDictionary>
