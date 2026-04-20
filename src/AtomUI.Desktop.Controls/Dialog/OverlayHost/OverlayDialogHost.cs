@@ -4,7 +4,6 @@ using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -18,7 +17,6 @@ using Avalonia.VisualTree;
 using AtomUI.Desktop.Controls.DialogPositioning;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
-using Avalonia.Animation.Easings;
 using Avalonia.Media.Transformation;
 
 namespace AtomUI.Desktop.Controls;
@@ -503,13 +501,6 @@ internal class OverlayDialogHost : ContentControl,
         {
             ConfigureEffectiveFooterVisible();
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     private void ConfigureEffectiveFooterVisible()
@@ -873,37 +864,6 @@ internal class OverlayDialogHost : ContentControl,
         }
 
         ConfigureEffectiveFooterVisible();
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                var easing = new CircularEaseOut();
-                Transitions = [
-                    TransitionUtils.CreateTransition<DoubleTransition>(OpacityProperty, AnimationDuration, easing),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(RenderTransformProperty, AnimationDuration, easing),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
     }
     
     internal void NotifyChangeZIndex(int zindex)
