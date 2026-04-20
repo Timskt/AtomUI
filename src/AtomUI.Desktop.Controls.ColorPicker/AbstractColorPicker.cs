@@ -1,4 +1,3 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Media;
 using AtomUI.Theme;
@@ -9,7 +8,6 @@ using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input.Raw;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -316,19 +314,11 @@ public abstract class AbstractColorPicker : AvaloniaButton,
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-
         if (change.Property == IsShowTextProperty || change.Property == FormatProperty)
         {
             GenerateValueText();
         }
-        
+
         else if (change.Property == CornerRadiusProperty ||
                  change.Property == CompactSpaceItemPositionProperty ||
                  change.Property == CompactSpaceOrientationProperty)
@@ -339,36 +329,6 @@ public abstract class AbstractColorPicker : AvaloniaButton,
 
     protected abstract void GenerateValueText();
     protected abstract void GenerateColorBlockBackground();
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
