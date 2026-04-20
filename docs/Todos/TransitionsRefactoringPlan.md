@@ -1,4 +1,4 @@
-# Transitions 重构计划：从 C# 代码迁移到 XAML 主题 [进度: 68/76 完成]
+# Transitions 重构计划：从 C# 代码迁移到 XAML 主题 [进度: 70/76 完成]
 
 ## 背景
 
@@ -154,13 +154,13 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 | 52 | ~~Breadcrumb/BreadcrumbItem.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
 | 53 | ~~ComboBox/ComboBoxItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
 
-### 第 4 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part C [✅ 15/17 完成]
+### 第 4 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part C [✅ 17/17 完成]
 
 | # | C# 文件 | 需要迁移的 Transitions | 备注 |
 |---|---------|----------------------|------|
 | 54 | ~~Drawer/DrawerInfoContainer.cs~~ | ~~RenderTransform(TransformOperations)~~ | ✅ |
 | 55 | ~~Drawer/DrawerContainer.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
-| 56 | SplitView/SplitView.cs | Width(Double) 或 Height(Double) | ⚠️ 特殊：使用自定义属性 `PaneOpenTransitions`/`PaneCloseTransitions`，非标准 `Transitions` |
+| 56 | ~~SplitView/SplitView.cs~~ | ~~Width(Double) 或 Height(Double)~~ | ✅ 保留 C# 动态配置（PaneOpenMotionDuration/PaneCloseMotionDuration） |
 | 57 | ~~ListBox/ListBoxItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
 | 58 | ~~TabControl/TabItem.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
 | 59 | ~~TabControl/TabControl.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
@@ -170,7 +170,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 | 63 | ~~Chrome/CaptionButton.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
 | 64 | ~~Chrome/WindowTitleBar.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
 | 65 | ~~Pagination/PaginationNavItem.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ |
-| 66 | ButtonSpinner/ButtonSpinnerDecoratedBox.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush) | ⚠️ 方法名为 `ConfigureTransitionsForEnabledState`，非标准命名 |
+| 66 | ~~ButtonSpinner/ButtonSpinnerDecoratedBox.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ 包含父类 transitions 和自己的 HandleOpacity/HandleOffset/ContentLeftShift/ContentRightShift |
 | 67 | ~~Primitives/AddOnDecoratedBox/AddOnDecoratedBox.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
 | 68 | ~~Primitives/InfoPickerInput/RangeInfoPickerInput.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ |
 | 69 | ~~ImagePreviewer/ImageViewer.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
@@ -279,10 +279,10 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
   - [x] 51 | Statistic/StatisticCountUp.cs | ✅ 已完成
   - [x] 52 | Breadcrumb/BreadcrumbItem.cs | ✅ 已完成
   - [x] 53 | ComboBox/ComboBoxItem.cs | ✅ 已完成
-- [x] 第 4 批：AtomUI.Desktop.Controls Part C（15 个）✅ 大部分完成
+- [x] 第 4 批：AtomUI.Desktop.Controls Part C（17 个）✅ 全部完成
   - [x] 54 | Drawer/DrawerInfoContainer.cs | ✅ 已完成
   - [x] 55 | Drawer/DrawerContainer.cs | ✅ 已完成
-  - [ ] 56 | SplitView/SplitView.cs | ⏳ 特殊处理（自定义属性）
+  - [x] 56 | SplitView/SplitView.cs | ✅ 已完成
   - [x] 57 | ListBox/ListBoxItem.cs | ✅ 已完成
   - [x] 58 | TabControl/TabItem.cs | ✅ 已完成
   - [x] 59 | TabControl/TabControl.cs | ✅ 已完成
@@ -292,7 +292,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
   - [x] 63 | Chrome/CaptionButton.cs | ✅ 已完成
   - [x] 64 | Chrome/WindowTitleBar.cs | ✅ 已完成
   - [x] 65 | Pagination/PaginationNavItem.cs | ✅ 已完成
-  - [ ] 66 | ButtonSpinner/ButtonSpinnerDecoratedBox.cs | ⏳ 特殊处理（非标准命名）
+  - [x] 66 | ButtonSpinner/ButtonSpinnerDecoratedBox.cs | ✅ 已完成
   - [x] 67 | Primitives/AddOnDecoratedBox/AddOnDecoratedBox.cs | ✅ 已完成
   - [x] 68 | Primitives/InfoPickerInput/RangeInfoPickerInput.cs | ✅ 已完成
   - [x] 69 | ImagePreviewer/ImageViewer.cs | ✅ 已完成
