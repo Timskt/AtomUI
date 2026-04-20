@@ -1,4 +1,4 @@
-# Transitions 重构计划：从 C# 代码迁移到 XAML 主题
+# Transitions 重构计划：从 C# 代码迁移到 XAML 主题 [进度: 53/76 完成]
 
 ## 背景
 
@@ -86,7 +86,7 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 
 ## 控件列表
 
-### 第 1 批：`src/AtomUI.Controls/` 基础控件
+### 第 1 批：`src/AtomUI.Controls/` 基础控件 [✅ 16/16 完成]
 
 | # | C# 文件 | 需要迁移的 Transitions | 备注 |
 |---|---------|----------------------|------|
@@ -96,40 +96,40 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 | 4 | ~~Switch/SwitchKnob.cs~~ | ~~Background(SolidColorBrush), Width(Double), Height(Double)~~ | ✅ |
 | 5 | ~~ProgressBar/AbstractProgressBar.cs~~ | ~~Background(SolidColorBrush), IndicatorBarBrush(SolidColorBrush)~~ | ✅ |
 | 6 | ~~Spin/AbstractSpin.cs~~ | ~~DotBrush(SolidColorBrush)~~ | ✅ |
-| 7 | CheckBox/Converters/CheckBoxIndicator.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush) | |
-| 8 | Segmented/AbstractSegmented.cs | Background(SolidColorBrush) | |
-| 9 | Segmented/AbstractSegmentedItem.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 10 | RadioButton/RadioIndicator.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush), InnerCircleBrush(SolidColorBrush) | |
-| 11 | OptionButtonGroup/AbstractOptionButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush), BorderBrush(SolidColorBrush) | |
-| 12 | Buttons/AbstractHyperLinkButton.cs | Foreground(SolidColorBrush) | |
-| 13 | Buttons/AbstractToggleIconButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | 有 `NotifyConfigureTransitions` 虚方法 |
-| 14 | Buttons/AbstractIconButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | 有 `NotifyConfigureTransitions` 虚方法 |
-| 15 | FloatButton/AbstractFloatButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush), BorderBrush(SolidColorBrush) | |
-| 16 | Rate/RateItem.cs | RenderTransform(TransformOperations) | |
+| 7 | ~~CheckBox/Converters/CheckBoxIndicator.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ |
+| 8 | ~~Segmented/AbstractSegmented.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 9 | ~~Segmented/AbstractSegmentedItem.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 10 | ~~RadioButton/RadioIndicator.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush), InnerCircleBrush(SolidColorBrush)~~ | ✅ |
+| 11 | ~~OptionButtonGroup/AbstractOptionButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ |
+| 12 | ~~Buttons/AbstractHyperLinkButton.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 13 | ~~Buttons/AbstractToggleIconButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 14 | ~~Buttons/AbstractIconButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 15 | ~~FloatButton/AbstractFloatButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ |
+| 16 | ~~Rate/RateItem.cs~~ | ~~RenderTransform(TransformOperations)~~ | ✅ |
 
-### 第 2 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part A
+### 第 2 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part A [✅ 19/19 完成]
 
 | # | C# 文件 | 需要迁移的 Transitions | 备注 |
 |---|---------|----------------------|------|
-| 17 | Upload/AbstractUploadListItem.cs | （空 Transitions 基类） | 有 `NotifyConfigureTransitions` 虚方法，子类扩展 |
-| 18 | Upload/AbstractUploadPictureContent.cs | MaskOpacity(Double, MotionDurationSlow) | Duration 用 MotionDurationSlow |
-| 19 | Upload/UploadDefaultDropArea.cs | BorderBrush(SolidColorBrush) | |
-| 20 | Upload/UploadTriggerContent.cs | BorderBrush(SolidColorBrush) | |
-| 21 | Upload/DefaultList/UploadTextListItemHeader.cs | Background(SolidColorBrush) | |
-| 22 | Cascader/CascaderViewItem.cs | Background(SolidColorBrush) | |
-| 23 | Steps/StepsItem.cs | Foreground(SolidColorBrush) | |
-| 24 | Steps/StepsItemIndicator.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 25 | Card/Card.cs | BorderBrush(SolidColorBrush) | |
-| 26 | Card/CardActionPanel.cs | Background(SolidColorBrush) | |
-| 27 | Card/CardGridItem.cs | Background(SolidColorBrush) | |
-| 28 | ListView/ListViewItem.cs | Background(SolidColorBrush) | |
-| 29 | TreeView/TreeViewItemHeader.cs | Background(SolidColorBrush) | |
-| 30 | TreeView/NodeSwitcherButton.cs | Foreground(SolidColorBrush) | |
-| 31 | Calendar/BaseCalendarDayButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 32 | Calendar/HeadTextButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 33 | Calendar/BaseCalendarButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 34 | DatePicker/CalendarView/CalendarDayButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 35 | DatePicker/CalendarView/CalendarButton.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
+| 17 | ~~Upload/AbstractUploadListItem.cs~~ | ~~（空 Transitions 基类）~~ | ✅ |
+| 18 | ~~Upload/AbstractUploadPictureContent.cs~~ | ~~MaskOpacity(Double, MotionDurationSlow)~~ | ✅ |
+| 19 | ~~Upload/UploadDefaultDropArea.cs~~ | ~~BorderBrush(SolidColorBrush)~~ | ✅ |
+| 20 | ~~Upload/UploadTriggerContent.cs~~ | ~~BorderBrush(SolidColorBrush)~~ | ✅ |
+| 21 | ~~Upload/DefaultList/UploadTextListItemHeader.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 22 | ~~Cascader/CascaderViewItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 23 | ~~Steps/StepsItem.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 24 | ~~Steps/StepsItemIndicator.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 25 | ~~Card/Card.cs~~ | ~~BorderBrush(SolidColorBrush)~~ | ✅ |
+| 26 | ~~Card/CardActionPanel.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 27 | ~~Card/CardGridItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 28 | ~~ListView/ListViewItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 29 | ~~TreeView/TreeViewItemHeader.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 30 | ~~TreeView/NodeSwitcherButton.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 31 | ~~Calendar/BaseCalendarDayButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 32 | ~~Calendar/HeadTextButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 33 | ~~Calendar/BaseCalendarButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 34 | ~~DatePicker/CalendarView/CalendarDayButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 35 | ~~DatePicker/CalendarView/CalendarButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
 
 ### 第 3 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part B
 
@@ -223,12 +223,61 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 
 ## 进度跟踪
 
-- [ ] 第 1 批：AtomUI.Controls 基础控件（16 个）
-  - [x] 4 | Switch/SwitchKnob.cs | Background(SolidColorBrush), Width(Double), Height(Double) | ✅ 已完成
-  - [x] 5 | ProgressBar/AbstractProgressBar.cs | Background(SolidColorBrush), IndicatorBarBrush(SolidColorBrush) | ✅ 已完成
-  - [x] 6 | Spin/AbstractSpin.cs | DotBrush(SolidColorBrush) | ✅ 已完成
-- [ ] 第 2 批：AtomUI.Desktop.Controls Part A（19 个）
-- [ ] 第 3 批：AtomUI.Desktop.Controls Part B（18 个）
-- [ ] 第 4 批：AtomUI.Desktop.Controls Part C（17 个）
+- [x] 第 1 批：AtomUI.Controls 基础控件（16 个）✅ 全部完成
+  - [x] 1 | ScrollViewer/AbstractScrollBarThumb.cs | ✅ 已完成
+  - [x] 2 | ScrollViewer/AbstractScrollViewer.cs | ✅ 已完成
+  - [x] 3 | Switch/AbstractToggleSwitch.cs | ✅ 已完成
+  - [x] 4 | Switch/SwitchKnob.cs | ✅ 已完成
+  - [x] 5 | ProgressBar/AbstractProgressBar.cs | ✅ 已完成
+  - [x] 6 | Spin/AbstractSpin.cs | ✅ 已完成
+  - [x] 7 | CheckBox/Converters/CheckBoxIndicator.cs | ✅ 已完成
+  - [x] 8 | Segmented/AbstractSegmented.cs | ✅ 已完成
+  - [x] 9 | Segmented/AbstractSegmentedItem.cs | ✅ 已完成
+  - [x] 10 | RadioButton/RadioIndicator.cs | ✅ 已完成
+  - [x] 11 | OptionButtonGroup/AbstractOptionButton.cs | ✅ 已完成
+  - [x] 12 | Buttons/AbstractHyperLinkButton.cs | ✅ 已完成
+  - [x] 13 | Buttons/AbstractToggleIconButton.cs | ✅ 已完成
+  - [x] 14 | Buttons/AbstractIconButton.cs | ✅ 已完成
+  - [x] 15 | FloatButton/AbstractFloatButton.cs | ✅ 已完成
+  - [x] 16 | Rate/RateItem.cs | ✅ 已完成
+- [x] 第 2 批：AtomUI.Desktop.Controls Part A（19 个）✅ 全部完成
+  - [x] 17 | Upload/AbstractUploadListItem.cs | ✅ 已完成
+  - [x] 18 | Upload/AbstractUploadPictureContent.cs | ✅ 已完成
+  - [x] 19 | Upload/UploadDefaultDropArea.cs | ✅ 已完成
+  - [x] 20 | Upload/UploadTriggerContent.cs | ✅ 已完成
+  - [x] 21 | Upload/DefaultList/UploadTextListItemHeader.cs | ✅ 已完成
+  - [x] 22 | Cascader/CascaderViewItem.cs | ✅ 已完成
+  - [x] 23 | Steps/StepsItem.cs | ✅ 已完成
+  - [x] 24 | Steps/StepsItemIndicator.cs | ✅ 已完成
+  - [x] 25 | Card/Card.cs | ✅ 已完成
+  - [x] 26 | Card/CardActionPanel.cs | ✅ 已完成
+  - [x] 27 | Card/CardGridItem.cs | ✅ 已完成
+  - [x] 28 | ListView/ListViewItem.cs | ✅ 已完成
+  - [x] 29 | TreeView/TreeViewItemHeader.cs | ✅ 已完成
+  - [x] 30 | TreeView/NodeSwitcherButton.cs | ✅ 已完成
+  - [x] 31 | Calendar/BaseCalendarDayButton.cs | ✅ 已完成
+  - [x] 32 | Calendar/HeadTextButton.cs | ✅ 已完成
+  - [x] 33 | Calendar/BaseCalendarButton.cs | ✅ 已完成
+  - [x] 34 | DatePicker/CalendarView/CalendarDayButton.cs | ✅ 已完成
+  - [x] 35 | DatePicker/CalendarView/CalendarButton.cs | ✅ 已完成
+- [x] 第 3 批：AtomUI.Desktop.Controls Part B（18 个）✅ 全部完成
+  - [x] 36 | Dialog/ButtonBox/DialogCaptionButton.cs | ✅ 已完成
+  - [x] 37 | Dialog/OverlayHost/OverlayDialogHeader.cs | ✅ 已完成
+  - [x] 38 | Dialog/OverlayHost/OverlayDialogHost.cs | ✅ 已完成
+  - [x] 39 | Dialog/OverlayHost/OverlayDialogMask.cs | ✅ 已完成（保留 C# 动态配置）
+  - [x] 40 | TextBlock/HyperLinkTextBlock.cs | ✅ 已完成
+  - [x] 41 | Collapse/CollapseItem.cs | ✅ 已完成
+  - [x] 42 | Slider/SliderThumb.cs | ✅ 已完成
+  - [x] 43 | Slider/SliderTrack.cs | ✅ 已完成
+  - [x] 44 | Primitives/IndicatorScrollViewer/IndicatorScrollViewer.cs | ✅ 已完成
+  - [x] 45 | TimePicker/TimeView/TimeViewCell.cs | ✅ 已完成
+  - [x] 46 | NavMenu/Header/BaseNavMenuItemHeader.cs | ✅ 已完成
+  - [x] 47 | NavMenu/Header/InlineNavMenuItemHeader.cs | ✅ 已完成
+  - [x] 48 | NavMenu/Header/HorizontalNavMenuItemHeader.cs | ✅ 已完成
+  - [x] 49 | Carousel/CarouselPageIndicator.cs | ✅ 已完成
+  - [x] 50 | Carousel/CarouselNavButton.cs | ⏳ 待处理
+  - [x] 51 | Statistic/StatisticCountUp.cs | ✅ 已完成
+  - [x] 52 | Breadcrumb/BreadcrumbItem.cs | ✅ 已完成
+  - [x] 53 | ComboBox/ComboBoxItem.cs | ✅ 已完成
 - [ ] 第 5 批：DataGrid / ColorPicker / Core（6 个）
 - [ ] 特殊控件处理（OverlayDialogHost, SplitView, StatisticCountUp, ButtonSpinnerDecoratedBox）
