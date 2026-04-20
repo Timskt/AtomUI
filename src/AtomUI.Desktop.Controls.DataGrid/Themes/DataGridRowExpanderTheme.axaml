@@ -50,6 +50,14 @@
             <Setter Property="IndicatorFill" Value="{atom:SharedTokenResource ColorPrimaryHover}"/>
             <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorPrimaryHover}"/>
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
         
         <Style Selector="^:pressed">
             <Setter Property="IndicatorFill" Value="{atom:SharedTokenResource ColorPrimaryActive}"/>

@@ -1,13 +1,10 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Data;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -99,14 +96,6 @@ internal class DataGridRowExpander : ToggleButton
         {
             IndicatorThickness = BorderThickness.Left;
         }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -115,44 +104,12 @@ internal class DataGridRowExpander : ToggleButton
         _verticalIndicator   = e.NameScope.Find<Rectangle>(DataGridRowExpanderThemeConstants.VerticalIndicatorPart);
         _horizontalIndicator = e.NameScope.Find<Rectangle>(DataGridRowExpanderThemeConstants.HorizontalIndicatorPart);
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BorderBrushProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(HorizontalIndicatorRenderTransformProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(HorizontalIndicatorRenderTransformProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
 
     internal void NotifyLoadingRow(DataGridRow row)
     {
         BindUtils.RelayBind(this, IsCheckedProperty, row, DataGridRow.IsDetailsVisibleProperty, BindingMode.TwoWay);
     }
-    
+
     internal void NotifyUnLoadingRow(DataGridRow row)
     {
     }
