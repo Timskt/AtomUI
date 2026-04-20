@@ -4,7 +4,6 @@ using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls;
@@ -13,7 +12,6 @@ using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
-using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
@@ -303,14 +301,6 @@ public class CollapseItem : HeaderedContentControl,
         {
             UpdatePseudoClasses();
         }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     private void HandleSelectedChanged()
@@ -377,36 +367,6 @@ public class CollapseItem : HeaderedContentControl,
         }
 
         return false;
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<ThicknessTransition>(HeaderBorderThicknessProperty),
-                    TransitionUtils.CreateTransition<ThicknessTransition>(ContentBorderThicknessProperty),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     private void UpdatePseudoClasses()

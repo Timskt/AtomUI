@@ -234,5 +234,14 @@
             </Style>
         </Style>
 
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <ThicknessTransition Property="HeaderBorderThickness" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <ThicknessTransition Property="ContentBorderThickness" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>
