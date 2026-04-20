@@ -1,4 +1,4 @@
-# Transitions 重构计划：从 C# 代码迁移到 XAML 主题 [进度: 70/76 完成]
+# Transitions 重构计划：从 C# 代码迁移到 XAML 主题 [进度: 76/76 完成 ✅]
 
 ## 背景
 
@@ -176,16 +176,16 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 | 69 | ~~ImagePreviewer/ImageViewer.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
 | 70 | ~~ImagePreviewer/ImagePreviewerCover.cs~~ | ~~MaskOpacity(Double)~~ | ✅ |
 
-### 第 5 批：DataGrid / ColorPicker / Core
+### 第 5 批：DataGrid / ColorPicker / Core [✅ 6/6 完成]
 
 | # | C# 文件 | 需要迁移的 Transitions | 备注 |
 |---|---------|----------------------|------|
-| 71 | DataGrid/Row/DataGridRow.cs | Background(SolidColorBrush) | |
-| 72 | DataGrid/Column/DataGridColumnHeader.cs | Background(SolidColorBrush) | OnPropertyChanged 有其他逻辑 |
-| 73 | DataGrid/Column/DataGridRowExpander.cs | Foreground(SolidColorBrush) | |
-| 74 | ColorPicker/AbstractColorPicker.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush) | |
-| 75 | ColorPicker/PaletteColorItem.cs | BorderBrush(SolidColorBrush) | |
-| 76 | Core/Controls/Icon/Icon.cs | Foreground(SolidColorBrush) | 有 `IconModeChanged` 额外触发，需确认 |
+| 71 | ~~DataGrid/Row/DataGridRow.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 72 | ~~DataGrid/Column/DataGridColumnHeader.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 73 | ~~DataGrid/Column/DataGridRowExpander.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 74 | ~~ColorPicker/AbstractColorPicker.cs~~ | ~~BorderBrush(SolidColorBrush)~~ | ✅ |
+| 75 | ~~ColorPicker/PaletteColorItem.cs~~ | ~~BorderBrush(SolidColorBrush)~~ | ✅ |
+| 76 | ~~Core/Controls/Icon/Icon.cs~~ | ~~StrokeBrush/FillBrush/SecondaryFillBrush/SecondaryStrokeBrush/FallbackBrush(SolidColorBrush)~~ | ✅ 保留 C# 动态配置（FillAnimationDuration 属性） |
 
 ---
 
@@ -297,5 +297,11 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
   - [x] 68 | Primitives/InfoPickerInput/RangeInfoPickerInput.cs | ✅ 已完成
   - [x] 69 | ImagePreviewer/ImageViewer.cs | ✅ 已完成
   - [x] 70 | ImagePreviewer/ImagePreviewerCover.cs | ✅ 已完成
-- [ ] 第 5 批：DataGrid / ColorPicker / Core（6 个）
-- [ ] 特殊控件处理（SplitView, ButtonSpinnerDecoratedBox）
+- [x] 第 5 批：DataGrid / ColorPicker / Core（6 个）✅ 全部完成
+  - [x] 71 | DataGrid/Row/DataGridRow.cs | ✅ 已完成
+  - [x] 72 | DataGrid/Column/DataGridColumnHeader.cs | ✅ 已完成
+  - [x] 73 | DataGrid/Column/DataGridRowExpander.cs | ✅ 已完成
+  - [x] 74 | ColorPicker/AbstractColorPicker.cs | ✅ 已完成
+  - [x] 75 | ColorPicker/PaletteColorItem.cs | ✅ 已完成
+  - [x] 76 | Core/Controls/Icon/Icon.cs | ✅ 已完成
+- [x] 特殊控件处理（SplitView, ButtonSpinnerDecoratedBox）✅ 已完成

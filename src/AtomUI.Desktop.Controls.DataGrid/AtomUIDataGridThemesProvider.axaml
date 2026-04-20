@@ -11,7 +11,7 @@
         <ResourceInclude Source="Themes/DataGridRowHeaderTheme.axaml" />
         <ResourceInclude Source="Themes/DataGridRowTheme.axaml" />
         <ResourceInclude Source="Themes/DataGridRowReorderHandle.axaml" />
-        <ResourceInclude Source="Themes/DataGridRowExpander.axaml" />
+        <ResourceInclude Source="Themes/DataGridRowExpanderTheme.axaml" />
         <ResourceInclude Source="Themes/DataGridTopLeftColumnHeaderTheme.axaml" />
         <ResourceInclude Source="Themes/DataGridOperationButtons.axaml" />
         <ResourceInclude Source="Themes/Filters/DataGridSortIndicatorTheme.axaml" />
