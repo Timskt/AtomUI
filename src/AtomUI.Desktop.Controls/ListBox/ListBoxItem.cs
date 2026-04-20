@@ -1,4 +1,3 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Controls.Data;
 using Avalonia;
@@ -183,36 +182,10 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
     private Point _pointerDownPoint = s_invalidPoint;
     int IListItemVirtualizingContextAware.VirtualIndex { get; set; } = -1;
     bool IListItemVirtualizingContextAware.VirtualContextOperating { get; set; }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-
         if (change.Property == IsSelectedProperty ||
             change.Property == IsShowSelectedIndicatorProperty)
         {
@@ -245,19 +218,7 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
     {
         SetCurrentValue(IsSelectedIndicatorVisibleProperty, IsShowSelectedIndicator && IsSelected);
     }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
 
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         _pointerDownPoint = s_invalidPoint;
