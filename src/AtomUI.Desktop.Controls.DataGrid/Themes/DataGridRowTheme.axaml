@@ -68,7 +68,15 @@
         
         <Style Selector="^[IsDragging=False]">
             <Setter Property="Background" Value="{atom:DataGridTokenResource TableBg}" />
-            
+
+            <Style Selector="^[IsMotionEnabled=True]">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    </Transitions>
+                </Setter>
+            </Style>
+
             <Style Selector="^[IsSelected=True]">
                 <Setter Property="Background"
                         Value="{atom:DataGridTokenResource TableSelectedRowBg}" />
