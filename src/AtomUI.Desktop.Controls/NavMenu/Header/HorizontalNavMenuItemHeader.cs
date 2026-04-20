@@ -1,8 +1,5 @@
-using AtomUI.Animations;
-using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
@@ -81,11 +78,5 @@ public class HorizontalNavMenuItemHeader : BaseNavMenuItemHeader
             _activeIndicator.RenderTransform = new ScaleTransform(ActiveBarScaleX, 1.0);
             _activeIndicator.RenderTransformOrigin = RelativePoint.Center;
         }
-    }
-    
-    protected override void NotifyConfigureTransitions(Transitions transitions)
-    {
-        base.NotifyConfigureTransitions(transitions);
-        transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(ActiveBarColorProperty));
     }
 }
