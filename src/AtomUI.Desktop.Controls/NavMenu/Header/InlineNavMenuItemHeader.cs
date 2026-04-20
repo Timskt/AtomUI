@@ -1,6 +1,4 @@
-using AtomUI.Controls;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -44,10 +42,4 @@ public class InlineNavMenuItemHeader : BaseNavMenuItemHeader
         set => SetValue(MenuIndicatorRenderTransformProperty, value);
     }
     #endregion
-
-    protected override void NotifyConfigureTransitions(Transitions transitions)
-    {
-        base.NotifyConfigureTransitions(transitions);
-        transitions.Add(TransitionUtils.CreateTransition<TransformOperationsTransition>(MenuIndicatorRenderTransformProperty));
-    }
 }
