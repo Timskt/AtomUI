@@ -42,7 +42,16 @@
         <Style Selector="^:pointerover">
             <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorFill}" />
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <TransformOperationsTransition Property="CheckedMarkRenderTransform" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" Easing="BackEaseOut" />
+                </Transitions>
+            </Setter>
+        </Style>
+
         <Style Selector="^ /template/ atom|Icon#PART_CheckedMark">
             <Setter Property="Width" Value="{atom:ColorPickerTokenResource CheckedMarkSize}" />
             <Setter Property="Height" Value="{atom:ColorPickerTokenResource CheckedMarkSize}" />
