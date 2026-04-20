@@ -55,6 +55,13 @@
             <Setter Property="Foreground" Value="{atom:DialogTokenResource HeaderColor}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>
