@@ -1,13 +1,10 @@
 ﻿using System.Globalization;
-using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using AvaloniaButton = Avalonia.Controls.Button;
 
 namespace AtomUI.Desktop.Controls.CalendarView;
@@ -244,38 +241,6 @@ internal sealed class CalendarDayButton : AvaloniaButton
         UpdatePseudoClasses();
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty,
-                        SharedTokenKind.MotionDurationFast),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKind.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     private void UpdatePseudoClasses()
     {
         if (_ignoringMouseOverState)
@@ -351,20 +316,13 @@ internal sealed class CalendarDayButton : AvaloniaButton
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
 
         if (change.Property == IsRangeStartProperty ||
             change.Property == IsRangeEndProperty ||
             change.Property == IsRangeMiddleProperty)
         {
             UpdatePseudoClasses();
-           
+
         }
         if (change.Property == IsRangeStartProperty ||
             change.Property == IsRangeEndProperty ||
