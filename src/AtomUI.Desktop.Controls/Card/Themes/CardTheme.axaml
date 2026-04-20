@@ -161,5 +161,13 @@
             </Style>
         </Style>
 
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:BoxShadowsTransition Property="BoxShadow" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

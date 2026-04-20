@@ -2,14 +2,12 @@ using System.Collections.Specialized;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using BoxShadowsTransition = AtomUI.Animations.BoxShadowsTransition;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -248,13 +246,6 @@ public class Card : HeaderedContentControl,
             ConfigureContentCornerRadius();
             ConfigureHeaderBorderThickness();
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     private void ConfigureContentType()
@@ -339,37 +330,6 @@ public class Card : HeaderedContentControl,
         ConfigureContentType();
         ConfigureContentCornerRadius();
         ConfigureHeaderBorderThickness();
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<BoxShadowsTransition>(BoxShadowProperty,
-                        SharedTokenKind.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     private void UpdatePseudoClasses()

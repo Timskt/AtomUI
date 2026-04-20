@@ -1,6 +1,4 @@
-using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -85,35 +83,10 @@ public class CardGridItem : ContentControl
     }
 
     #endregion
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<BoxShadowsTransition>(BoxShadowProperty, SharedTokenKind.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(false);
-            }
-        }
 
         if (change.Property == RowProperty)
         {
@@ -131,17 +104,5 @@ public class CardGridItem : ContentControl
         {
             Grid.SetRowSpan(this, RowSpan);
         }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 }

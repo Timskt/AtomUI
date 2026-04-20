@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -54,18 +53,6 @@ internal class CardActionPanel : TemplatedControl
         }
     }
 
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-
     private void HandleActionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (_uniformGrid != null)
@@ -97,36 +84,6 @@ internal class CardActionPanel : TemplatedControl
                     throw new NotSupportedException();
             }
         }
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     public override void Render(DrawingContext context)
