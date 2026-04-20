@@ -1,12 +1,10 @@
-﻿using AtomUI.Animations;
-using AtomUI.Controls;
+﻿using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Metadata;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
@@ -157,14 +155,6 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
                  change.Property == ItemHeightProperty)
         {
             ConfigureMaxPopupHeight();
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
     }
 
@@ -344,37 +334,7 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         }
         return popupRoots;
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ContentPresenter.BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ContentPresenter.ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
 
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     public async Task CloseItemAsync(CancellationToken cancellationToken = default)
     {
         for (var i = 0; i < ItemCount; i++)
