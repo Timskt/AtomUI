@@ -131,28 +131,28 @@ protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs chang
 | 34 | ~~DatePicker/CalendarView/CalendarDayButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
 | 35 | ~~DatePicker/CalendarView/CalendarButton.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
 
-### 第 3 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part B
+### 第 3 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part B [✅ 18/18 完成]
 
 | # | C# 文件 | 需要迁移的 Transitions | 备注 |
 |---|---------|----------------------|------|
-| 36 | Dialog/ButtonBox/DialogCaptionButton.cs | Background(SolidColorBrush) | |
-| 37 | Dialog/OverlayHost/OverlayDialogHeader.cs | Foreground(SolidColorBrush) | |
-| 38 | Dialog/OverlayHost/OverlayDialogHost.cs | Opacity(Double), RenderTransform(TransformOperations) | ⚠️ 使用自定义 Duration 和 CircularEaseOut Easing，需确认 XAML 写法 |
-| 39 | Dialog/OverlayHost/OverlayDialogMask.cs | Opacity(Double) | |
-| 40 | TextBlock/HyperLinkTextBlock.cs | Foreground(SolidColorBrush) | |
-| 41 | Collapse/CollapseItem.cs | Background(SolidColorBrush) | |
-| 42 | Slider/SliderThumb.cs | Background(SolidColorBrush), BorderBrush(SolidColorBrush) | |
-| 43 | Slider/SliderTrack.cs | Background(SolidColorBrush) | |
-| 44 | Primitives/IndicatorScrollViewer/IndicatorScrollViewer.cs | LeftIndicatorOpacity(Double), RightIndicatorOpacity(Double) | |
-| 45 | TimePicker/TimeView/TimeViewCell.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | |
-| 46 | NavMenu/Header/BaseNavMenuItemHeader.cs | Background(SolidColorBrush), Foreground(SolidColorBrush) | 有 `NotifyConfigureTransitions` 虚方法 |
-| 47 | NavMenu/Header/InlineNavMenuItemHeader.cs | 继承基类 + MenuIndicatorRenderTransform(TransformOperations) | 覆写 `NotifyConfigureTransitions` |
-| 48 | NavMenu/Header/HorizontalNavMenuItemHeader.cs | 继承基类 + ActiveBarColor(SolidColorBrush) | 覆写 `NotifyConfigureTransitions` |
-| 49 | Carousel/CarouselPageIndicator.cs | Background(SolidColorBrush) | |
-| 50 | Carousel/CarouselNavButton.cs | 继承自 AbstractIconButton | 覆写 `NotifyConfigureTransitions` |
-| 51 | Statistic/StatisticCountUp.cs | ⚠️ 特殊：AnimatingValue 动画，非标准 Transitions | 需单独分析，可能不适合迁移 |
-| 52 | Breadcrumb/BreadcrumbItem.cs | Foreground(SolidColorBrush) | |
-| 53 | ComboBox/ComboBoxItem.cs | Background(SolidColorBrush) | |
+| 36 | ~~Dialog/ButtonBox/DialogCaptionButton.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 37 | ~~Dialog/OverlayHost/OverlayDialogHeader.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 38 | ~~Dialog/OverlayHost/OverlayDialogHost.cs~~ | ~~Opacity(Double), RenderTransform(TransformOperations)~~ | ✅ 使用 MotionDurationMid 和 CircularEaseOut Easing |
+| 39 | ~~Dialog/OverlayHost/OverlayDialogMask.cs~~ | ~~Opacity(Double)~~ | ✅ 保留 C# 动态配置（AnimationDuration 属性） |
+| 40 | ~~TextBlock/HyperLinkTextBlock.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 41 | ~~Collapse/CollapseItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 42 | ~~Slider/SliderThumb.cs~~ | ~~Background(SolidColorBrush), BorderBrush(SolidColorBrush)~~ | ✅ |
+| 43 | ~~Slider/SliderTrack.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 44 | ~~Primitives/IndicatorScrollViewer/IndicatorScrollViewer.cs~~ | ~~LeftIndicatorOpacity(Double), RightIndicatorOpacity(Double)~~ | ✅ 包含基类 ScrollViewer transitions |
+| 45 | ~~TimePicker/TimeView/TimeViewCell.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 46 | ~~NavMenu/Header/BaseNavMenuItemHeader.cs~~ | ~~Background(SolidColorBrush), Foreground(SolidColorBrush)~~ | ✅ |
+| 47 | ~~NavMenu/Header/InlineNavMenuItemHeader.cs~~ | ~~继承基类 + MenuIndicatorRenderTransform(TransformOperations)~~ | ✅ 包含基类 transitions |
+| 48 | ~~NavMenu/Header/HorizontalNavMenuItemHeader.cs~~ | ~~继承基类 + ActiveBarColor(SolidColorBrush)~~ | ✅ 包含基类 transitions |
+| 49 | ~~Carousel/CarouselPageIndicator.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
+| 50 | Carousel/CarouselNavButton.cs | 继承自 AbstractIconButton | ⏳ 待处理 |
+| 51 | ~~Statistic/StatisticCountUp.cs~~ | ~~AnimatingValue(Double, MotionDurationVerySlow, ExponentialEaseOut)~~ | ✅ 特殊：总是应用 transitions |
+| 52 | ~~Breadcrumb/BreadcrumbItem.cs~~ | ~~Foreground(SolidColorBrush)~~ | ✅ |
+| 53 | ~~ComboBox/ComboBoxItem.cs~~ | ~~Background(SolidColorBrush)~~ | ✅ |
 
 ### 第 4 批：`src/AtomUI.Desktop.Controls/` 桌面控件 - Part C
 
