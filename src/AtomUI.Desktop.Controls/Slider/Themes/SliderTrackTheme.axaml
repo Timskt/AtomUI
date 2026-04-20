@@ -17,5 +17,15 @@
             <Setter Property="MarkLabelBrush"
                     Value="{atom:SharedTokenResource ColorTextDisabled}" />
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="TrackGrooveBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <atom:SolidColorBrushTransition Property="TrackBarBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <atom:SolidColorBrushTransition Property="MarkBorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>

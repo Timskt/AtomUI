@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Media;
 using AtomUI.Utils;
@@ -333,25 +332,6 @@ public class SliderTrack : TemplatedControl
         return !double.IsInfinity(value.StartValue) && !double.IsNaN(value.StartValue) &&
                !double.IsInfinity(value.EndValue) && !double.IsNaN(value.EndValue);
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(TrackGrooveBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(TrackBarBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(MarkBorderBrushProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
 
     private void HandleRangeModeChanged()
     {
@@ -642,25 +622,17 @@ public class SliderTrack : TemplatedControl
             CalculateMaxMarkSize();
         }
         
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
+        
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
-        Transitions = null;
     }
 
     private Vector CalculateThumbAdjustment(SliderThumb thumb, Rect newThumbBounds)
