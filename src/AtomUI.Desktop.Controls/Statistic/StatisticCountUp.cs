@@ -1,9 +1,5 @@
-using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -109,28 +105,10 @@ public class StatisticCountUp : TemplatedControl
             SetCurrentValue(FormattedValueProperty, effectiveValue);
         }
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (force || Transitions == null)
-        {
-            Transitions =
-            [
-                TransitionUtils.CreateTransition<DoubleTransition>(AnimatingValueProperty, SharedTokenKind.MotionDurationVerySlow, new ExponentialEaseOut())
-            ];
-        }
-    }
-    
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
         AnimatingValue = EndValue;
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 }
