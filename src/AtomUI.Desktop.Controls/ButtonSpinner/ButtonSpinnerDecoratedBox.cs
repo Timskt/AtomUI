@@ -1,8 +1,4 @@
-using AtomUI.Animations;
-using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -288,12 +284,10 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
             if (!IsEffectivelyEnabled)
             {
                 _mouseMoveDisposable?.Dispose();
-                Transitions = null;
             }
             else
             {
                 ConfigureMoveProcessor();
-                ConfigureTransitionsForEnabledState();
             }
             UpdateHandleVisualState();
         }
@@ -312,15 +306,6 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
         {
             UpdateHandleVisualState();
         }
-    }
-    
-    protected override void NotifyCreateTransitions(Transitions transitions)
-    {
-        base.NotifyCreateTransitions(transitions);
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOpacityProperty));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOffsetProperty, SharedTokenKind.MotionDurationMid));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentLeftShiftProperty, SharedTokenKind.MotionDurationMid));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentRightShiftProperty, SharedTokenKind.MotionDurationMid));
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -377,22 +362,6 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
         {
             ContentLeftShift = 0.0;
             ContentRightShift = 0.0;
-        }
-    }
-
-    private void ConfigureTransitionsForEnabledState()
-    {
-        if (IsMotionEnabled)
-        {
-            if (Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BorderBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty)
-                ];
-                NotifyCreateTransitions(Transitions);
-            }
         }
     }
 }

@@ -106,12 +106,26 @@
         </Setter>
 
         <Style Selector="^:is(atom|ButtonSpinnerDecoratedBox)">
-            
+
             <Setter Property="SpinnerBorderThickness"
                     Value="{atom:SharedTokenResource BorderThickness}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="SpinnerHandleWidth"
                     Value="{atom:ButtonSpinnerTokenResource HandleWidth}" />
+
+            <Style Selector="^[IsMotionEnabled=True]">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="HandleOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="HandleOffset" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="ContentLeftShift" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="ContentRightShift" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    </Transitions>
+                </Setter>
+            </Style>
+
             <Style Selector="^[ButtonSpinnerLocation=Left]">
                 <Style Selector="^ /template/ ContentPresenter#PART_SpinnerHandle">
                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -122,11 +136,11 @@
                     <Setter Property="HorizontalAlignment" Value="Right" />
                 </Style>
             </Style>
-            
+
             <Style Selector="^ /template/ atom|ButtonSpinnerContentPanel#ContentLayout">
                 <Setter Property="HorizontalSpacing" Value="{atom:SharedTokenResource SpacingXXS}" />
             </Style>
-            
+
             <Style Selector="^[SizeType=Large]">
                 <Setter Property="ContentPadding"
                         Value="{atom:AddOnDecoratedBoxTokenResource PaddingLG}" />
@@ -145,7 +159,7 @@
                             Value="{Binding EffectiveContentPadding, RelativeSource={RelativeSource TemplatedParent}}" />
                 </Style>
             </Style>
-           
+
         </Style>
     </ControlTheme>
 </ResourceDictionary>
