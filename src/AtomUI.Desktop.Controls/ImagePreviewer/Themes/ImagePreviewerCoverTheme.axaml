@@ -40,6 +40,14 @@
         <Style Selector="^:pointerover">
             <Setter Property="MaskOpacity" Value="1" />
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="MaskOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationSlow}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>
