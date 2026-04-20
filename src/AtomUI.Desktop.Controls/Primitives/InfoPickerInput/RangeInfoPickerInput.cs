@@ -1,13 +1,10 @@
-﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives.Themes;
+﻿using AtomUI.Desktop.Controls.Primitives.Themes;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input.Raw;
-using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls.Primitives;
 
@@ -113,37 +110,6 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
     {
         base.OnDetachedFromVisualTree(e);
         _topLevel = null;
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(PickerIndicatorOffsetXProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(RangePickerIndicatorOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     protected override bool FlyoutOpenPredicate(RawPointerEventArgs args)
@@ -281,7 +247,7 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
         {
             if (change.Property == IsMotionEnabledProperty)
             {
-                ConfigureTransitions(true);
+                // Transitions now handled by XAML theme
             }
         }
     }

@@ -156,5 +156,14 @@
             </Style>
         </Style>
 
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="PickerIndicatorOffsetX" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="RangePickerIndicatorOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </Style>
 </ControlTheme>
