@@ -193,5 +193,13 @@
                 <Setter Property="VerticalAlignment" Value="Top" />
             </Style>
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="SelectedIndicatorRenderTransform" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationSlow}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>
