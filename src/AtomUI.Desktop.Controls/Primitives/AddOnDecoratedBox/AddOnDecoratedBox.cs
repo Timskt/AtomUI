@@ -658,4 +658,18 @@ internal class AddOnDecoratedBox : ContentControl,
             Styles.Add(disabledStyle);
         }
     }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+    }
+
+    protected virtual void NotifyCreateTransitions(Transitions transitions)
+    {
+    }
 }
