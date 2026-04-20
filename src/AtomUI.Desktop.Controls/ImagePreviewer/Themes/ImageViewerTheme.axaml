@@ -47,5 +47,15 @@
         <Style Selector="^ /template/ Image#PART_ImageRenderer">
             <Setter Property="Cursor" Value="DragMove" />
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="ImageRenderTransform" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="ImageTranslateX" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                    <DoubleTransition Property="ImageTranslateY" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>

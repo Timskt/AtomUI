@@ -1,8 +1,6 @@
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -365,15 +363,6 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
     {
         base.OnPropertyChanged(change);
         
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty ||
-                change.Property == SuppressTransformAnimationProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-        
         if (change.Property == ImageScaleXProperty ||
             change.Property == ImageScaleYProperty ||
             change.Property == ImageRotateProperty)
@@ -445,43 +434,6 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
         builder.AppendScale(ImageScaleX, ImageScaleY);
         builder.AppendRotate(ImageRotate);
         ImageRenderTransform = builder.Build();
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (SuppressTransformAnimation)
-        {
-            Transitions = null;
-            return;
-        }
-
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(ImageRenderTransformProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateXProperty, SharedTokenKind.MotionDurationFast),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateYProperty, SharedTokenKind.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     protected override void OnPointerMoved(PointerEventArgs e)
