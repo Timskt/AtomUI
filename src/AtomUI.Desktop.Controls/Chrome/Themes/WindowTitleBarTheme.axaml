@@ -165,6 +165,14 @@
             <Setter Property="Width" Value="{atom:ChromeTokenResource LogoSize}" />
             <Setter Property="Height" Value="{atom:ChromeTokenResource LogoSize}" />
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </Style>
 
 </ControlTheme>
