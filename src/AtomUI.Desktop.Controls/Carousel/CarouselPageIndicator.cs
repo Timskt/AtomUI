@@ -6,7 +6,6 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Mixins;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using Avalonia.Styling;
 
 namespace AtomUI.Desktop.Controls;
@@ -110,13 +109,6 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
 
         if (change.Property == IsShowTransitionProgressProperty)
         {
@@ -135,38 +127,7 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
             ConfigureProgressWidth();
         }
     }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(WidthProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(FrameOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
     
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);

@@ -57,5 +57,14 @@
                 </Style>
             </Style>
         </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Width" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="FrameOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>
