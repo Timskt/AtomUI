@@ -1,4 +1,7 @@
-﻿using AtomUI.Desktop.Controls;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Controls;
+using AtomUI.Desktop.Controls;
 using AtomUI.Icons.AntDesign;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia;
@@ -22,12 +25,19 @@ public partial class NotificationShowCase : ReactiveUserControl<NotificationView
     
     public NotificationShowCase()
     {
-        this.WhenActivated(disposables => { });
+        this.WhenActivated(disposables =>
+        {
+            HoverOptionGroup.OptionCheckedChanged += HandleHoverOptionGroupCheckedChanged;
+            Disposable.Create(() =>
+            {
+                HoverOptionGroup.OptionCheckedChanged -= HandleHoverOptionGroupCheckedChanged;
+            }).DisposeWith(disposables);
+        });
         InitializeComponent();
-        HoverOptionGroup.OptionCheckedChanged += HandleHoverOptionGroupCheckedChanged;
+        
     }
     
-        private void HandleHoverOptionGroupCheckedChanged(object? sender, OptionCheckedChangedEventArgs args)
+    private void HandleHoverOptionGroupCheckedChanged(object? sender, OptionCheckedChangedEventArgs args)
     {
         if (_basicManager is not null)
         {
@@ -86,6 +96,18 @@ public partial class NotificationShowCase : ReactiveUserControl<NotificationView
             Position = NotificationPosition.BottomRight,
             MaxItems = 3
         };
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _basicManager?.Dispose();
+        _topLeftManager?.Dispose();
+        _topManager?.Dispose();
+        _topRightManager?.Dispose();
+        _bottomLeftManager?.Dispose();
+        _bottomManager?.Dispose();
+        _bottomRightManager?.Dispose();
     }
 
     private void ShowSimpleNotification(object? sender, RoutedEventArgs e)

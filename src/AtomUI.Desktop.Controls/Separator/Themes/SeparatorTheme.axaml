@@ -6,7 +6,7 @@
     <ControlTheme x:Key="{x:Type atom:Separator}" TargetType="atom:Separator">
         <Setter Property="Template">
             <ControlTemplate>
-                <atom:TextBlock Name="{x:Static atom:SeparatorThemeConstants.TitlePart}"
+                <atom:TextBlock Name="PART_Title"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        Padding="0"
@@ -17,22 +17,22 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="TitleColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextHeading}}" />
-        <Setter Property="LineColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
+        <Setter Property="TitleColor" Value="{atom:SharedTokenResource ColorTextHeading}" />
+        <Setter Property="LineColor" Value="{atom:SharedTokenResource ColorSplit}" />
         
-        <Setter Property="TextPaddingInline" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.TextPaddingInline}}" />
-        <Setter Property="OrientationMarginPercent" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.OrientationMarginPercent}}" />
-        <Setter Property="LineWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+        <Setter Property="TextPaddingInline" Value="{atom:SeparatorTokenResource TextPaddingInline}" />
+        <Setter Property="OrientationMarginPercent" Value="{atom:SeparatorTokenResource OrientationMarginPercent}" />
+        <Setter Property="LineWidth" Value="{atom:SharedTokenResource LineWidth}" />
         
         <Style Selector="^[IsPlain=True]">
             <Style Selector="^ /template/ atom|TextBlock#PART_Title">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+                <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
                 <Setter Property="FontWeight" Value="Normal" />
             </Style>
         </Style>
         <Style Selector="^[IsPlain=False]">
             <Style Selector="^ /template/ atom|TextBlock#PART_Title">
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+                <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeLG}" />
                 <Setter Property="FontWeight" Value="500" />
             </Style>
         </Style>
@@ -46,20 +46,20 @@
             
             <Style Selector="^:not(:has-title)">
                 <Style Selector="^[SizeType=Small]">
-                    <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.HorizontalMarginBlockSM}}"/>
+                    <Setter Property="Margin" Value="{atom:SeparatorTokenResource HorizontalMarginBlockSM}"/>
                 </Style>
             
                 <Style Selector="^[SizeType=Middle]">
-                    <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.HorizontalMarginBlock}}"/>
+                    <Setter Property="Margin" Value="{atom:SeparatorTokenResource HorizontalMarginBlock}"/>
                 </Style>
             
                 <Style Selector="^[SizeType=Large]">
-                    <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.HorizontalMarginBlockLG}}"/>
+                    <Setter Property="Margin" Value="{atom:SeparatorTokenResource HorizontalMarginBlockLG}"/>
                 </Style>
             </Style>
             <Style Selector="^:has-title">
                 <Style Selector="^[SizeType=Small]">
-                    <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.HorizontalWithTextGutterMargin}}"/>
+                    <Setter Property="Margin" Value="{atom:SeparatorTokenResource HorizontalWithTextGutterMargin}"/>
                 </Style>
             </Style>
   
@@ -72,7 +72,7 @@
                 <Setter Property="IsVisible" Value="False" />
             </Style>
             
-            <Setter Property="VerticalMarginInline" Value="{DynamicResource {x:Static atom:SeparatorTokenKey.VerticalMarginInline}}"/>
+            <Setter Property="VerticalMarginInline" Value="{atom:SeparatorTokenResource VerticalMarginInline}"/>
         </Style>
         
     </ControlTheme>

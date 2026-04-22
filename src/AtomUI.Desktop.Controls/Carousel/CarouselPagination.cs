@@ -1,7 +1,4 @@
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -54,8 +51,6 @@ internal class CarouselPagination : SelectingItemsControl
         set => SetValue(ItemSpacingProperty, value);
     }
     #endregion
-    
-    private readonly Dictionary<CarouselPageIndicator, CompositeDisposable> _itemsBindingDisposables = new();
 
     static CarouselPagination()
     {
@@ -64,29 +59,7 @@ internal class CarouselPagination : SelectingItemsControl
     
     public CarouselPagination()
     {
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
-        SelectionMode                     =  SelectionMode.Single;
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is CarouselPageIndicator indicator)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(indicator, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(indicator);
-                        }
-                    }
-                }
-            }
-        }
+        SelectionMode = SelectionMode.Single;
     }
 
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
@@ -104,8 +77,6 @@ internal class CarouselPagination : SelectingItemsControl
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is CarouselPageIndicator pageIndicator)
         {
-            var disposables = new CompositeDisposable(2);
-            
             if (item != null && item is not Visual)
             {
                 if (!pageIndicator.IsSet(CarouselPageIndicator.ContentProperty))
@@ -116,21 +87,14 @@ internal class CarouselPagination : SelectingItemsControl
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, pageIndicator, CarouselPageIndicator.ContentTemplateProperty));
+                pageIndicator[!CarouselPageIndicator.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, pageIndicator, CarouselPageIndicator.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowTransitionProgressProperty, pageIndicator, CarouselPageIndicator.IsShowTransitionProgressProperty));
-            disposables.Add(BindUtils.RelayBind(this, AutoPlaySpeedProperty, pageIndicator, CarouselPageIndicator.AutoPlaySpeedProperty));
-            
-            PreparePageIndicator(pageIndicator, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(pageIndicator, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(pageIndicator);
-            }
-            _itemsBindingDisposables.Add(pageIndicator, disposables);
+            pageIndicator[!IsMotionEnabledProperty]          = this[!IsMotionEnabledProperty];
+            pageIndicator[!IsShowTransitionProgressProperty] = this[!IsShowTransitionProgressProperty];
+            pageIndicator[!AutoPlaySpeedProperty]            = this[!AutoPlaySpeedProperty];
+        
+            PreparePageIndicator(pageIndicator, item, index);
         }
         else
         {
@@ -138,7 +102,7 @@ internal class CarouselPagination : SelectingItemsControl
         }
     }
     
-    protected virtual void PreparePageIndicator(CarouselPageIndicator pageIndicator, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PreparePageIndicator(CarouselPageIndicator pageIndicator, object? item, int index)
     {
     }
     

@@ -225,9 +225,7 @@ public class CalendarModeChangedEventArgs : RoutedEventArgs
 /// </remarks>
 [TemplatePart(CalendarThemeConstants.CalendarItemPart, typeof(CalendarItem))]
 [TemplatePart(CalendarThemeConstants.RootPart, typeof(Panel))]
-public class Calendar : TemplatedControl,
-                        IMotionAwareControl,
-                        IControlSharedTokenResourcesHost
+public class Calendar : TemplatedControl, IMotionAwareControl
 {
     
     #region 公共属性定义
@@ -587,8 +585,6 @@ public class Calendar : TemplatedControl,
     }
 
     internal DateTime DisplayDateInternal { get; set; }
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CalendarToken.ID;
 
     #endregion
     
@@ -626,7 +622,7 @@ public class Calendar : TemplatedControl,
     /// </summary>
     public Calendar()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CalendarToken.ScopeProvider);
         SetCurrentValue(DisplayDateProperty, DateTime.Today);
         UpdateDisplayDate(this, DisplayDate, DateTime.MinValue);
         BlackoutDates = new CalendarBlackoutDatesCollection(this);

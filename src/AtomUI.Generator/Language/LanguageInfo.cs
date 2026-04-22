@@ -2,8 +2,11 @@
 
 internal class LanguageInfo
 {
+    /// <summary>
+    /// 生成的结果类枚举和标记扩展存放的命名空间
+    /// </summary>
+    public string? TargetNamespace { get; internal set; }
     public string Namespace { get; internal set; } = string.Empty;
-    public string ResourceCatalog { get; internal set; } = string.Empty;
     public string LanguageId { get; internal set; } = string.Empty;
     public string LanguageCode { get; internal set; } = string.Empty;
     public string ClassName { get; internal set; } = string.Empty;

@@ -1,5 +1,5 @@
 ﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls;
+using AtomUI.Controls.Data;
 using Avalonia.Controls;
 using ReactiveUI;
 
@@ -7,7 +7,7 @@ namespace AtomUIGallery.ShowCases.ViewModels;
 
 public class ListViewModel : ReactiveObject, IRoutableViewModel
 {
-    public static TreeNodeKey ID = "List";
+    public static EntityKey ID = "List";
     
     public IScreen HostScreen { get; }
     
@@ -77,12 +77,20 @@ public class ListViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _selectionMode, value);
     }
     
-    private List<IListBoxItemData>? _basicListBoxItems;
+    private List<IListItemData>? _basicListBoxItems;
     
-    public List<IListBoxItemData>? BasicListBoxItems
+    public List<IListItemData>? BasicListBoxItems
     {
         get => _basicListBoxItems;
         set => this.RaiseAndSetIfChanged(ref _basicListBoxItems, value);
+    }
+    
+    private List<IListItemData>? _paginationListItems;
+    
+    public List<IListItemData>? PaginationListItems
+    {
+        get => _paginationListItems;
+        set => this.RaiseAndSetIfChanged(ref _paginationListItems, value);
     }
     
     public ListViewModel(IScreen screen)

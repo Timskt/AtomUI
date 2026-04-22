@@ -18,19 +18,27 @@
             </ControlTemplate>
         </Setter>
         <Setter Property="Padding" Value="0, 1, 0, 0"/>
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeightLG}}"/>
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}"/>
+        <Setter Property="MinHeight" Value="{atom:SharedTokenResource ControlHeightLG}"/>
+        <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}"/>
      
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}"/>
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDescription}"/>
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorderSecondary}"/>
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}"/>
         <Style Selector="^:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorPrimary}"/>
         </Style>
         
         <Style Selector="^ /template/ Border#Frame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:CardTokenKey.ActionsBg}}"/>
+            <Setter Property="Background" Value="{atom:CardTokenResource ActionsBg}"/>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

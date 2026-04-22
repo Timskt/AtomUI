@@ -28,32 +28,32 @@
         </Setter>
         
         <Setter Property="ClipToBounds" Value="True"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"/>
-        <Setter Property="SpinnerBorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}"/>
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}"/>
+        <Setter Property="SpinnerBorderThickness" Value="{atom:SharedTokenResource BorderThickness}"/>
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgContainer}"/>
         <Style
             Selector="^ /template/ atom|IconButton#PART_IncreaseButton, ^ /template/ atom|IconButton#PART_DecreaseButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleIconSize}}" />
+            <Setter Property="IconWidth" Value="{atom:ButtonSpinnerTokenResource HandleIconSize}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleIconSize}}" />
+                    Value="{atom:ButtonSpinnerTokenResource HandleIconSize}" />
         </Style>
         
         <Style
             Selector="^ /template/ atom|IconButton#PART_IncreaseButton:pointerover, ^ /template/ atom|IconButton#PART_DecreaseButton:pointerover">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleHoverColor}}" />
+                    Value="{atom:ButtonSpinnerTokenResource HandleHoverColor}" />
         </Style>
         
         <Style
             Selector="^ /template/ atom|IconButton#PART_IncreaseButton:pressed, ^ /template/ atom|IconButton#PART_DecreaseButton:pressed">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryActive}}" />
+                    Value="{atom:SharedTokenResource ColorPrimaryActive}" />
         </Style>
         
         <Style
             Selector="^ /template/ atom|IconButton#PART_IncreaseButton:pressed, ^ /template/ atom|IconButton#PART_DecreaseButton:pressed">
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleActiveBg}}" />
+                    Value="{atom:ButtonSpinnerTokenResource HandleActiveBg}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

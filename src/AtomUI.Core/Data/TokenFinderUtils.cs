@@ -40,7 +40,7 @@ internal static class TokenFinderUtils
         {
             if (current is IThemeConfigProvider configProvider)
             {
-                token = configProvider.GetControlToken(tokenId, catalog);
+                token = configProvider.GetControlToken(tokenId);
                 if (token is not null)
                 {
                     break;
@@ -55,7 +55,7 @@ internal static class TokenFinderUtils
             var theme = ThemeManager.Current?.ActivatedTheme;
             if (theme is not null)
             {
-                token = theme.GetControlToken(tokenId, catalog);
+                token = theme.GetControlToken(tokenId);
             }
         }
 

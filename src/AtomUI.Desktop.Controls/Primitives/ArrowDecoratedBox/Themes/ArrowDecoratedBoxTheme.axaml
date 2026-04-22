@@ -8,19 +8,19 @@
             <DockPanel Name="ContentLayout" LastChildFill="True">
                 <Panel Name="ArrowPositionLayout">
                     <LayoutTransformControl
-                        Name="{x:Static atom:ArrowDecoratedBoxThemeConstants.ArrowIndicatorLayoutPart}"
+                        Name="PART_ArrowIndicatorLayout"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsVisible="{TemplateBinding IsShowArrow}"
                         Opacity="{TemplateBinding ArrowOpacity}">
                         <atom:ArrowIndicator
-                            Name="{x:Static atom:ArrowDecoratedBoxThemeConstants.ArrowIndicatorPart}"
+                            Name="PART_ArrowIndicator"
                             FilledColor="{TemplateBinding Background}" 
                             ArrowSize="{TemplateBinding ArrowSize}"/>
                     </LayoutTransformControl>
                 </Panel>
                 <Border
-                    Name="{x:Static atom:ArrowDecoratedBoxThemeConstants.ContentDecoratorPart}"
+                    Name="PART_ContentDecorator"
                     Margin="0"
                     BackgroundSizing="{TemplateBinding BackgroundSizing}"
                     Background="{TemplateBinding Background}"
@@ -36,13 +36,13 @@
     </Setter>
 
     <Style Selector="^:is(atom|ArrowDecoratedBox)">
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:ArrowDecoratedBoxTokenKey.Padding}}" />
-        <Setter Property="ArrowSize" Value="{DynamicResource {x:Static atom:ArrowDecoratedBoxTokenKey.ArrowSize}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorText}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
+        <Setter Property="MinHeight" Value="{atom:SharedTokenResource ControlHeight}" />
+        <Setter Property="Padding" Value="{atom:ArrowDecoratedBoxTokenResource Padding}" />
+        <Setter Property="ArrowSize" Value="{atom:ArrowDecoratedBoxTokenResource ArrowSize}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadius}" />
 
         <Style Selector="^[ArrowDirection=Top]">
             <Style Selector="^ /template/ Panel#ArrowPositionLayout">

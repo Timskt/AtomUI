@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Diagnostics;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.DataLoad;
-using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -29,8 +27,7 @@ public enum CascaderViewExpandTrigger
 }
 
 public partial class CascaderView : TemplatedControl, 
-                                    IMotionAwareControl,
-                                    IControlSharedTokenResourcesHost
+                                    IMotionAwareControl
 {
     #region 公共属性定义
     public static readonly StyledProperty<IEnumerable<ICascaderOption>?> OptionsSourceProperty =
@@ -298,13 +295,9 @@ public partial class CascaderView : TemplatedControl,
         set => SetAndRaise(IsMaxSelectReachedProperty, ref _isMaxSelectReached, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TreeViewToken.ID;
-    
     #endregion
     
     private readonly ItemCollection _options = new();
-    private static readonly IList Empty = Array.Empty<object>();
     private bool _ignoreSyncSelectedOptions;
     private StackPanel? _itemsPanel;
     private int _ignoreExpandAndCollapseLevel;
@@ -325,7 +318,7 @@ public partial class CascaderView : TemplatedControl,
     
     public CascaderView()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(CascaderToken.ScopeProvider);
         _options.CollectionChanged += HandleCollectionChanged;
     }
     
@@ -384,7 +377,7 @@ public partial class CascaderView : TemplatedControl,
         var                    segments     = path.Segments;
         var                    count        = path.Segments.Count;
         var                    isPathValid  = true;
-        IList<ICascaderOption> currentItems = _options.Cast<ICascaderOption>().ToList();
+        IEnumerable<ICascaderOption> currentItems = _options.Cast<ICascaderOption>().ToList();
         
         var                          options    = new List<ICascaderOption>();
         for (var i = 0; i < count; i++)
@@ -481,7 +474,7 @@ public partial class CascaderView : TemplatedControl,
     
     private void SelectTargetOption(ICascaderOption option)
     {
-        var isLeaf = option.IsLeaf || option.Children.Count == 0;
+        var isLeaf = option.IsLeaf || !option.Children.Any();
     
         if (!isLeaf && !IsAllowSelectParent)
         {
@@ -648,6 +641,34 @@ public partial class CascaderView : TemplatedControl,
 
             default:
                 break;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        
+        // 清理所有 level list 中的 disposable
+        if (_itemsPanel != null)
+        {
+            foreach (var child in _itemsPanel.Children)
+            {
+                if (child is CascaderViewLevelList levelList)
+                {
+                    levelList.NotifyDetachedFromVisualTree();
+                }
+            }
+        }
+        
+        // 清理所有待处理的异步加载操作
+        if (_loadingTokens != null)
+        {
+            foreach (var cts in _loadingTokens)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+            _loadingTokens.Clear();
         }
     }
 }

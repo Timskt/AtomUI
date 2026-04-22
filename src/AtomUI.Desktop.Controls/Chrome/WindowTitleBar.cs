@@ -3,7 +3,6 @@ using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -19,7 +18,6 @@ namespace AtomUI.Desktop.Controls;
 [PseudoClasses(StdPseudoClass.Active)]
 [PseudoClasses(StdPseudoClass.Normal, StdPseudoClass.Minimized, StdPseudoClass.Maximized, StdPseudoClass.Fullscreen)]
 public class WindowTitleBar : TemplatedControl, 
-                              IControlSharedTokenResourcesHost,
                               IMotionAwareControl, 
                               IOperationSystemAware
 {
@@ -125,13 +123,6 @@ public class WindowTitleBar : TemplatedControl,
 
     #endregion
 
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ChromeToken.ID;
-
-    #endregion
-
     private CaptionButtonGroup? _captionButtonGroup;
     private CompositeDisposable? _disposables;
 
@@ -144,7 +135,7 @@ public class WindowTitleBar : TemplatedControl,
     public WindowTitleBar()
     {
         this.ConfigureOsType();
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ChromeToken.ScopeProvider);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -161,6 +152,9 @@ public class WindowTitleBar : TemplatedControl,
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
+
+        _disposables?.Dispose();
+        _disposables = null;
 
         if (VisualRoot is Window window)
         {
@@ -186,37 +180,9 @@ public class WindowTitleBar : TemplatedControl,
     {
         base.OnDetachedFromVisualTree(e);
         _disposables?.Dispose();
+        _disposables = null;
         _captionButtonGroup?.Detach();
         _captionButtonGroup = null;
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -228,18 +194,6 @@ public class WindowTitleBar : TemplatedControl,
         }
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     void IOperationSystemAware.SetOsType(OsType osType)
     {
         SetValue(OsTypeProperty, osType);
@@ -248,5 +202,17 @@ public class WindowTitleBar : TemplatedControl,
     void IOperationSystemAware.SetOsVersion(Version version)
     {
         SetValue(OsVersionProperty, version);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

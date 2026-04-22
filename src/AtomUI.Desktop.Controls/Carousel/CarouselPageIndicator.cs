@@ -1,3 +1,4 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -110,13 +111,6 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
 
         if (change.Property == IsShowTransitionProgressProperty)
         {
@@ -135,38 +129,7 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
             ConfigureProgressWidth();
         }
     }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(WidthProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(FrameOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
     
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -217,20 +180,21 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
     {
         base.OnDetachedFromVisualTree(e);
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
     }
 
     private void HandleSelectChanged()
     {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         if (IsSelected && IsShowTransitionProgress)
         {
-            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             _animation?.RunAsync(this, _cancellationTokenSource.Token);
         }
         else
         {
-            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = null;
         }
     }
@@ -242,6 +206,18 @@ internal class CarouselPageIndicator : ContentControl, ISelectable
             var width = _frame?.Bounds.Width ?? 0.0;
             SetCurrentValue(EffectiveProgressWidthProperty, width * ProgressValue);
         }
-     
+
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

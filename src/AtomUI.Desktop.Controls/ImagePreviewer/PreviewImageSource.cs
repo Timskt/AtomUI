@@ -9,7 +9,7 @@ internal enum PreviewImageSourceType
     Svg, Bitmap
 }
 
-internal record PreviewImageSource
+internal record PreviewImageSource : IDisposable
 {
     public PreviewImageSourceType Type { get; }
     public string? SvgContent { get; }
@@ -47,4 +47,9 @@ internal record PreviewImageSource
     
     public bool IsSvg => Type == PreviewImageSourceType.Svg;
     public bool IsBitmap => Type == PreviewImageSourceType.Bitmap;
+
+    public void Dispose()
+    {
+        (Bitmap as IDisposable)?.Dispose();
+    }
 }

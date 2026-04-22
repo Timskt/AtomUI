@@ -4,8 +4,6 @@ internal class ControlTokenConfigInfo
 {
     public bool EnableAlgorithm { get; set; } = false;
     
-    public string? Catalog { get; set; }
-    
     public string TokenId { get; set; } = string.Empty;
     
     public IDictionary<string, string> Tokens { get; set; }
@@ -21,7 +19,6 @@ internal class ControlTokenConfigInfo
     {
         var cloned = new ControlTokenConfigInfo();
         cloned.EnableAlgorithm = EnableAlgorithm;
-        cloned.Catalog         = Catalog;
         cloned.TokenId         = TokenId;
         foreach (var key in Tokens.Keys)
         {

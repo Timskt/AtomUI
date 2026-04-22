@@ -77,42 +77,17 @@ internal class UploadTextListItemHeader : TemplatedControl, IMotionAwareControl
         {
             SetCurrentValue(EffectiveLineHeightProperty, RelativeLineHeight * FontSize);
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
-    
-    private void ConfigureTransitions(bool force)
+
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
-    
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 }

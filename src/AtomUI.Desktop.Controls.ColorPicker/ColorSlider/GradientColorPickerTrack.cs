@@ -342,6 +342,18 @@ internal class GradientColorPickerTrack : AbstractColorPickerSliderTrack
         }
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        foreach (var thumb in Thumbs)
+        {
+            LogicalChildren.Remove(thumb);
+            VisualChildren.Remove(thumb);
+        }
+        Thumbs.Clear();
+        SetCurrentValue(ActivatedThumbProperty, null);
+    }
+
     private IgnorePropertyChanged BeginIgnoringPropertyChanged() => new IgnorePropertyChanged(this);
     
     private readonly struct IgnorePropertyChanged : IDisposable

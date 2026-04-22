@@ -27,13 +27,13 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFillAlter}}"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}"/>
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.Padding}}"/>
-        <Setter Property="Header" Value="{DynamicResource {x:Static uploadlang:UploadLangResourceKey.DragUploadHead}}"/>
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}"/>
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorFillAlter}"/>
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}"/>
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}"/>
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}"/>
+        <Setter Property="Padding" Value="{atom:SharedTokenResource Padding}"/>
+        <Setter Property="Header" Value="{atom:UploadLangResource DragUploadHead}"/>
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}"/>
         <Setter Property="DragDrop.AllowDrop" Value="True"/>
         
         <Style Selector="^ /template/ atom|DashedBorder#Frame">
@@ -41,44 +41,52 @@
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:UploadTokenKey.DragIconSize}}"/>
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:UploadTokenKey.DragIconSize}}"/>
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:UploadTokenKey.DragIconMargin}}"/>
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorPrimary}"/>
+            <Setter Property="Width" Value="{atom:UploadTokenResource DragIconSize}"/>
+            <Setter Property="Height" Value="{atom:UploadTokenResource DragIconSize}"/>
+            <Setter Property="Margin" Value="{atom:UploadTokenResource DragIconMargin}"/>
         </Style>
         
         <Style Selector="^:pointerover">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryHover}}"/>
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorPrimaryHover}"/>
         </Style>
         
         <Style Selector="^ /template/ ContentPresenter#HeaderContentPresenter">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextHeading}}"/>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}"/>
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:UploadTokenKey.DragHeaderMargin}}"/>
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextHeading}"/>
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeLG}"/>
+            <Setter Property="Margin" Value="{atom:UploadTokenResource DragHeaderMargin}"/>
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
         
         <Style Selector="^ /template/ ContentPresenter#SubHeaderContentPresenter">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}"/>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}"/>
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDescription}"/>
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}"/>
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
         
         <Style Selector="^:disabled">
             <Style Selector="^ /template/ atom|IconPresenter#IconPresenter">
-                <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}"/>
+                <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorTextDisabled}"/>
             </Style>
-            
+
             <Style Selector="^ /template/ ContentPresenter#HeaderContentPresenter">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}"/>
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}"/>
             </Style>
-        
+
             <Style Selector="^ /template/ ContentPresenter#SubHeaderContentPresenter">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}"/>
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}"/>
             </Style>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

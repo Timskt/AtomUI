@@ -36,7 +36,7 @@ internal class TransformTrackingHelper : IDisposable
         if (visual != null)
         {
             visual.AttachedToVisualTree   += OnAttachedToVisualTree;
-            visual.DetachedFromVisualTree -= OnDetachedFromVisualTree;
+            visual.DetachedFromVisualTree += OnDetachedFromVisualTree;
             if (visual.GetVisualRoot() is not null)
             {
                 SubscribeToParents();

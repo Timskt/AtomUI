@@ -9,7 +9,6 @@ using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Input;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
@@ -40,14 +39,13 @@ public enum AutoCompletePlacementMode
 public delegate object? AutoCompleteFilterValueSelector(IAutoCompleteOption option);
 
 [PseudoClasses(AutoCompletePseudoClass.CandidatePopupOpen)]
-public class AbstractAutoComplete : TemplatedControl, 
-                                    IControlSharedTokenResourcesHost, 
-                                    ISizeTypeAware,
-                                    IMotionAwareControl,
-                                    IFormItemAware,
-                                    IInputControlStatusAware,
-                                    IInputControlStyleVariantAware,
-                                    IFormItemFeedbackAware
+public abstract class AbstractAutoComplete : TemplatedControl, 
+                                             ISizeTypeAware,
+                                             IMotionAwareControl,
+                                             IFormItemAware,
+                                             IInputControlStatusAware,
+                                             IInputControlStyleVariantAware,
+                                             IFormItemFeedbackAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<PathIcon?> ClearIconProperty =
@@ -145,12 +143,6 @@ public class AbstractAutoComplete : TemplatedControl,
             nameof(FilterValue),
             o => o.FilterValue,
             unsetValue: string.Empty);
-    
-    public static readonly StyledProperty<ValueFilterMode> FilterModeProperty =
-        AvaloniaProperty.Register<AbstractAutoComplete, ValueFilterMode>(
-            nameof(FilterMode),
-            defaultValue: ValueFilterMode.StartsWith,
-            validate: IsValidFilterMode);
     
     public static readonly StyledProperty<AutoCompleteFilterValueSelector?> FilterValueSelectorProperty =
         AvaloniaProperty.Register<AbstractAutoComplete, AutoCompleteFilterValueSelector?>(
@@ -359,12 +351,6 @@ public class AbstractAutoComplete : TemplatedControl,
         }
     }
     
-    public ValueFilterMode FilterMode
-    {
-        get => GetValue(FilterModeProperty);
-        set => SetValue(FilterModeProperty, value);
-    }
-    
     public AutoCompleteFilterValueSelector? FilterValueSelector
     {
         get => GetValue(FilterValueSelectorProperty);
@@ -491,11 +477,6 @@ public class AbstractAutoComplete : TemplatedControl,
             o => o.PopupPlacement,
             (o, v) => o.PopupPlacement = v);
     
-    internal static readonly DirectProperty<AbstractAutoComplete, IValueFilter?> EffectiveFilterProperty =
-        AvaloniaProperty.RegisterDirect<AbstractAutoComplete, IValueFilter?>(nameof(EffectiveFilter),
-            o => o.EffectiveFilter,
-            (o, v) => o.EffectiveFilter = v);
-    
     internal static readonly StyledProperty<FormValidateFeedback?> FormFeedbackProperty = 
         AvaloniaProperty.Register<AbstractAutoComplete, FormValidateFeedback?>(nameof(FormFeedback));
     
@@ -545,14 +526,6 @@ public class AbstractAutoComplete : TemplatedControl,
     {
         get => _placementMode;
         set => SetAndRaise(PopupPlacementProperty, ref _placementMode, value);
-    }
-    
-    private IValueFilter? _effectiveFilter;
-
-    internal IValueFilter? EffectiveFilter
-    {
-        get => _effectiveFilter;
-        set => SetAndRaise(EffectiveFilterProperty, ref _effectiveFilter, value);
     }
     
     internal FormValidateFeedback? FormFeedback
@@ -631,11 +604,9 @@ public class AbstractAutoComplete : TemplatedControl,
             }
         }
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => AutoCompleteToken.ID;
 
     #endregion
+    
     private readonly ItemCollection _options = new();
     private protected DispatcherTimer? _delayTimer;
     private protected AvaloniaTextBox? _textInputBox;
@@ -657,26 +628,23 @@ public class AbstractAutoComplete : TemplatedControl,
     private bool _ignoreTextSelectionChange;
     private bool _skipSelectedOptionTextUpdate;
     private bool _isFocused;
-    
+    private Window? _attachedWindow;
     static AbstractAutoComplete()
     {
         IsTabStopProperty.OverrideDefaultValue<AbstractAutoComplete>(false);
         FocusableProperty.OverrideDefaultValue<AbstractAutoComplete>(true);
-        
         SelectedOptionProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleSelectedOptionPropertyChanged(e));
         IsDropDownOpenProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleIsDropDownOpenChanged(e));
         MinimumPopulateDelayProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleMinimumPopulateDelayChanged(e));
         PlacementProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandlePlacementChanged());
         ValueProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleValuePropertyChanged(e));
         OptionsSourceProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleItemsSourceChanged(e));
-        FilterModeProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleFilterModePropertyChanged(e));
-        FilterProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleFilterPropertyChanged(e));
         FilterValueProperty.Changed.AddClassHandler<AbstractAutoComplete>((x,e) => x.HandleFilterValuePropertyChanged(e));
     }
 
     public AbstractAutoComplete()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(AutoCompleteToken.ScopeProvider);
         Options.CollectionChanged += HandleOptionsChanged;
     }
 
@@ -684,6 +652,10 @@ public class AbstractAutoComplete : TemplatedControl,
     {
         base.OnInitialized();
         HandlePlacementChanged();
+        if (Filter == null)
+        {
+            SetCurrentValue(FilterProperty, ValueFilterFactory.BuildFilter(ValueFilterMode.StartsWith));
+        }
     }
 
     protected override void OnGotFocus(GotFocusEventArgs e)
@@ -758,10 +730,10 @@ public class AbstractAutoComplete : TemplatedControl,
         
             _userCalledPopulate = false;
         
-            var TextInputBoxContextMenuIsOpen = TextInputBox?.ContextFlyout?.IsOpen == true || TextInputBox?.ContextMenu?.IsOpen == true;
+            var textInputBoxContextMenuIsOpen = TextInputBox?.ContextFlyout?.IsOpen == true || TextInputBox?.ContextMenu?.IsOpen == true;
             var contextMenuIsOpen = ContextFlyout?.IsOpen == true || ContextMenu?.IsOpen == true;
         
-            if (!TextInputBoxContextMenuIsOpen && !contextMenuIsOpen && ClearSelectionOnLostFocus)
+            if (!textInputBoxContextMenuIsOpen && !contextMenuIsOpen && ClearSelectionOnLostFocus)
             {
                 ClearTextInputBoxSelection();
             }
@@ -868,29 +840,20 @@ public class AbstractAutoComplete : TemplatedControl,
     {
         var newValue = (TimeSpan)e.NewValue!;
 
-        // Stop any existing timer
+        // Always clean up the old timer first
         if (_delayTimer != null)
         {
             _delayTimer.Stop();
-
-            if (newValue == TimeSpan.Zero)
-            {
-                _delayTimer.Tick -= PopulateDropDown;
-                _delayTimer      =  null;
-            }
+            _delayTimer.Tick -= PopulateDropDown;
+            _delayTimer      =  null;
         }
 
+        // Create a new timer with the new delay value if needed
         if (newValue > TimeSpan.Zero)
         {
-            // Create or clear a dispatcher timer instance
-            if (_delayTimer == null)
-            {
-                _delayTimer      =  new DispatcherTimer();
-                _delayTimer.Tick += PopulateDropDown;
-            }
-
-            // Set the new tick interval
-            _delayTimer.Interval = newValue;
+            _delayTimer           =  new DispatcherTimer();
+            _delayTimer.Interval  =  newValue;
+            _delayTimer.Tick      += PopulateDropDown;
         }
     }
 
@@ -1096,20 +1059,13 @@ public class AbstractAutoComplete : TemplatedControl,
             var text = Value ?? string.Empty;
         
             // Determine if any filtering mode is on
-            bool filtering = EffectiveFilter != null;
+            bool filtering = Filter != null;
         
             var items = Options;
         
             // cache properties
             var newViewItems = new Collection<IAutoCompleteOption>();
-        
-            // if the mode is objectFiltering and itemFilter is null, we throw an exception
-            if (FilterMode == ValueFilterMode.Custom && Filter is null)
-            {
-                throw new Exception(
-                    "ItemFilter property can not be null when FilterMode has value ValueFilterMode.Custom");
-            }
-        
+            
             foreach (var item in items)
             {
                 if (item is IAutoCompleteOption option)
@@ -1122,12 +1078,9 @@ public class AbstractAutoComplete : TemplatedControl,
         
                     var inResults = !filtering;
 
-                    if (EffectiveFilter != null)
+                    if (!inResults)
                     {
-                        if (!inResults)
-                        {
-                            inResults = EffectiveFilter.Filter(GetValueByOption(option), text);
-                        }
+                        inResults = Filter?.Filter(GetValueByOption(option), text) ?? true;
                     }
               
                     if (inResults)
@@ -1138,7 +1091,6 @@ public class AbstractAutoComplete : TemplatedControl,
             }
             
             _view = newViewItems;
-            
             if (_candidateList != null)
             {
                 if (_candidateList.ItemsSource != _view)
@@ -1158,52 +1110,6 @@ public class AbstractAutoComplete : TemplatedControl,
     private static bool IsValidMinimumPrefixLength(int value) => value >= -1;
     private static bool IsValidMinimumPopulateDelay(TimeSpan value) => value.TotalMilliseconds >= 0.0;
     private static bool IsValidMaxDropDownHeight(double value) => value >= 0.0;
-
-    private static bool IsValidFilterMode(ValueFilterMode mode)
-    {
-        switch (mode)
-        {
-            case ValueFilterMode.None:
-            case ValueFilterMode.StartsWith:
-            case ValueFilterMode.StartsWithCaseSensitive:
-            case ValueFilterMode.StartsWithOrdinal:
-            case ValueFilterMode.StartsWithOrdinalCaseSensitive:
-            case ValueFilterMode.Contains:
-            case ValueFilterMode.ContainsCaseSensitive:
-            case ValueFilterMode.ContainsOrdinal:
-            case ValueFilterMode.ContainsOrdinalCaseSensitive:
-            case ValueFilterMode.Equals:
-            case ValueFilterMode.EqualsCaseSensitive:
-            case ValueFilterMode.EqualsOrdinal:
-            case ValueFilterMode.EqualsOrdinalCaseSensitive:
-            case ValueFilterMode.Custom:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    private void HandleFilterModePropertyChanged(AvaloniaPropertyChangedEventArgs e)
-    {
-        var mode = (ValueFilterMode)e.NewValue!;
-        // Sets the filter predicate for the new value
-        EffectiveFilter = ValueFilterFactory.BuildFilter(mode) ?? Filter;
-    }
-    
-    private void HandleFilterPropertyChanged(AvaloniaPropertyChangedEventArgs e)
-    {
-        var value = e.NewValue as AutoCompleteFilterPredicate<object>;
-
-        // If null, revert to the "None" predicate
-        if (value == null)
-        {
-            SetCurrentValue(FilterModeProperty, ValueFilterMode.None);
-        }
-        else
-        {
-            SetCurrentValue(FilterModeProperty, ValueFilterMode.Custom);
-        }
-    }
 
     protected virtual void NotifyDropDownOpening(CancelEventArgs eventArgs)
     {
@@ -1396,6 +1302,7 @@ public class AbstractAutoComplete : TemplatedControl,
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel is Window window)
         {
+            _attachedWindow    =  window;
             window.Deactivated += HandleWindowDeactivated;
         }
     }
@@ -1403,11 +1310,12 @@ public class AbstractAutoComplete : TemplatedControl,
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel is Window window)
+        if (_attachedWindow != null)
         {
-            window.Deactivated -= HandleWindowDeactivated;
+            _attachedWindow.Deactivated -= HandleWindowDeactivated;
         }
+
+        _attachedWindow = null;
     }
     
     private void HandleWindowDeactivated(object? sender, EventArgs e)
@@ -1455,10 +1363,7 @@ public class AbstractAutoComplete : TemplatedControl,
         _subscriptionsOnOpen = new CompositeDisposable(2);
         this.GetObservable(IsVisibleProperty).Subscribe(HandleIsVisibleChanged).DisposeWith(_subscriptionsOnOpen);
         this.GetObservable(IsEnabledProperty).Subscribe(HandleIsEnabledChanged).DisposeWith(_subscriptionsOnOpen);
-        foreach (var parent in this.GetVisualAncestors().OfType<Control>())
-        {
-            parent.GetObservable(IsVisibleProperty).Subscribe(HandleIsVisibleChanged).DisposeWith(_subscriptionsOnOpen);
-        }
+        this.SubscribeAncestorIsVisible(HandleIsVisibleChanged, _subscriptionsOnOpen);
         NotifyDropDownOpened(EventArgs.Empty);
         var selectedItem = TryGetMatch(Value, _view, ValueFilterFactory.BuildFilter(ValueFilterMode.EqualsCaseSensitive));
         CandidateList!.SelectedItem = selectedItem;
@@ -1626,7 +1531,7 @@ public class AbstractAutoComplete : TemplatedControl,
                     // performance on the lookup. It assumes that the
                     // FilterMode the user has selected is an acceptable
                     // case sensitive matching function for their scenario.
-                    var top = FilterMode == ValueFilterMode.StartsWith || FilterMode == ValueFilterMode.StartsWithCaseSensitive
+                    var top = Filter?.Mode == ValueFilterMode.StartsWith || Filter?.Mode == ValueFilterMode.StartsWithCaseSensitive
                         ? _view[0]
                         : TryGetMatch(value, _view, ValueFilterFactory.BuildFilter(ValueFilterMode.StartsWith));
                 
@@ -1634,7 +1539,7 @@ public class AbstractAutoComplete : TemplatedControl,
                     if (top != null)
                     {
                         newSelectedItem = top;
-                        var topString = (top.Value ?? top.Header ?? top.Key)?.ToString();
+                        var topString = (top.Content ?? top.Header ?? top.ItemKey)?.ToString();
                 
                         // Only replace partially when the two words being the same
                         int minLength = Math.Min(topString?.Length ?? 0, Value?.Length ?? 0);
@@ -1712,7 +1617,7 @@ public class AbstractAutoComplete : TemplatedControl,
         }
         else
         {
-            value = option.Header?.ToString() ?? option.Value?.ToString() ?? option.Key;
+            value = option.Header?.ToString() ?? option.Content?.ToString() ?? option.ItemKey?.ToString();
         }
         return value;
     }
@@ -1727,7 +1632,7 @@ public class AbstractAutoComplete : TemplatedControl,
         }
         else if (newItem is IAutoCompleteOption option)
         {
-            text = option.Value?.ToString() ?? option.Header?.ToString() ?? option.Key;
+            text = option.Content?.ToString() ?? option.Header?.ToString() ?? option.ItemKey?.ToString();
         }
         // Update the Text property and the TextInputBox values
         UpdateValue(text);

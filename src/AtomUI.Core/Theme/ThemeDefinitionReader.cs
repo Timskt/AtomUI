@@ -30,7 +30,6 @@ internal class ThemeDefinitionReader
     
     private const string ControlTokenElementName = "ControlToken";
     private const string IdAttrName = "Id";
-    private const string CatalogName = "Catalog";
     private const string AlgorithmAttrName = "EnableAlgorithm";
 
     public ThemeDefinitionReader(Theme theme)
@@ -133,8 +132,7 @@ internal class ThemeDefinitionReader
         if (name == ControlTokenElementName)
         {
             var tokenId = _currentControlToken!.TokenId;
-            var catalog = _currentControlToken.Catalog;
-            _currentDef?.ControlTokens.Add(Theme.GenerateTokenQualifiedKey(tokenId, catalog), _currentControlToken!);
+            _currentDef?.ControlTokens.Add(tokenId, _currentControlToken!);
             _currentControlToken = null;
             _inControlTokenCtx   = false;
         }
@@ -208,12 +206,6 @@ internal class ThemeDefinitionReader
             }
         }
         
-        var catalogAttr = reader.GetAttribute(CatalogName);
-
-        if (catalogAttr is not null)
-        {
-            _currentControlToken.Catalog = catalogAttr.Trim();
-        }
         _currentControlToken.EnableAlgorithm = useAlgorithm;
     }
 

@@ -168,8 +168,8 @@ internal class CaptionButtonGroup : TemplatedControl, IOperationSystemAware
         {
             return;
         }
-           
-        HostWindow                                      = hostWindow;
+
+        HostWindow = hostWindow;
         
         _disposables = new CompositeDisposable(7);
         _disposables.Add(BindUtils.RelayBind(hostWindow, Window.IsFullScreenCaptionButtonEnabledProperty, this, IsFullScreenCaptionButtonEnabledProperty));

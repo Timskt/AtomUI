@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -7,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class AlertToken : AbstractControlDesignToken
 {
     public const string ID = "Alert";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public AlertToken()
         : base(ID)
@@ -80,4 +83,6 @@ internal class AlertToken : AbstractControlDesignToken
         CloseIconSize = SharedToken.FontSizeIcon + 2;
         IconSize      = SharedToken.FontSizeLG;
     }
+    
+    protected override Type GetTokenKindType() => typeof(AlertTokenKind);
 }

@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class SegmentedToken : AbstractControlDesignToken
 {
     public const string ID = "Segmented";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public SegmentedToken()
         : base(ID)
@@ -102,4 +105,6 @@ internal class SegmentedToken : AbstractControlDesignToken
         ItemMinHeight   = SharedToken.ControlHeight - TrackPadding.Top - TrackPadding.Bottom;
         ItemMinHeightSM = SharedToken.ControlHeightSM - TrackPadding.Top - TrackPadding.Bottom;
     }
+    
+    protected override Type GetTokenKindType() => typeof(SegmentedTokenKind);
 }

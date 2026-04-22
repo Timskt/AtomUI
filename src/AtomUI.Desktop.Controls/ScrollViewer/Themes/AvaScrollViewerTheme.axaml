@@ -7,23 +7,23 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
-                    <ScrollContentPresenter Name="PART_ContentPresenter"
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Background="{TemplateBinding Background}"
-                                            HorizontalSnapPointsType="{TemplateBinding HorizontalSnapPointsType}"
-                                            VerticalSnapPointsType="{TemplateBinding VerticalSnapPointsType}"
-                                            HorizontalSnapPointsAlignment="{TemplateBinding HorizontalSnapPointsAlignment}"
-                                            VerticalSnapPointsAlignment="{TemplateBinding VerticalSnapPointsAlignment}"
-                                            Padding="{TemplateBinding Padding}"
-                                            ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}">
-                        <ScrollContentPresenter.GestureRecognizers>
-                            <ScrollGestureRecognizer
-                                CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
-                                CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
-                                IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_ContentPresenter}" />
-                        </ScrollContentPresenter.GestureRecognizers>
-                    </ScrollContentPresenter>
+                    <atom:ScopeAwareOverlayLayerPanel Grid.Row="0" Grid.Column="0" ClipToBounds="False">
+                        <ScrollContentPresenter Name="PART_ContentPresenter"
+                                                Background="{TemplateBinding Background}"
+                                                HorizontalSnapPointsType="{TemplateBinding HorizontalSnapPointsType}"
+                                                VerticalSnapPointsType="{TemplateBinding VerticalSnapPointsType}"
+                                                HorizontalSnapPointsAlignment="{TemplateBinding HorizontalSnapPointsAlignment}"
+                                                VerticalSnapPointsAlignment="{TemplateBinding VerticalSnapPointsAlignment}"
+                                                Padding="{TemplateBinding Padding}"
+                                                ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}">
+                            <ScrollContentPresenter.GestureRecognizers>
+                                <ScrollGestureRecognizer
+                                    CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
+                                    CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
+                                    IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_ContentPresenter}" />
+                            </ScrollContentPresenter.GestureRecognizers>
+                        </ScrollContentPresenter>
+                    </atom:ScopeAwareOverlayLayerPanel>
                     <ScrollBar Name="PART_HorizontalScrollBar"
                                Orientation="Horizontal"
                                Grid.Row="1"
@@ -37,7 +37,7 @@
                     <Panel Name="ScrollBarsSeparator"
                            Grid.Row="1"
                            Grid.Column="1"
-                           Background="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}"
+                           Background="{atom:SharedTokenResource ColorBgContainer}"
                            Opacity="0">
                         <Panel.Transitions>
                             <Transitions>
@@ -50,7 +50,7 @@
         </Setter>
         
         <Setter Property="Background" Value="Transparent" />
-        
+        <Setter Property="ClipToBounds" Value="False" />
         <Style Selector="^[IsExpanded=true] /template/ Panel#ScrollBarsSeparator">
             <Setter Property="Opacity" Value="1" />
         </Style>

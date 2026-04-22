@@ -2,25 +2,26 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
+    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:Timeline}" TargetType="atom:Timeline">
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Name="{x:Static atom:TimelineThemeConstants.FramePart}"
+                <Border Name="Frame"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}"
                         Padding="{TemplateBinding Padding}">
-                    <atom:ScrollViewer Name="{x:Static atom:TimelineThemeConstants.ScrollViewerPart}"
+                    <atom:ScrollViewer Name="ScrollViewer"
                                        IsLiteMode="{TemplateBinding atom:ScrollViewer.IsLiteMode}"
                                        AllowAutoHide="{TemplateBinding atom:ScrollViewer.AllowAutoHide}"
                                        HorizontalScrollBarVisibility="Disabled"
                                        VerticalScrollBarVisibility="Auto"
                                        IsScrollChainingEnabled="{TemplateBinding atom:ScrollViewer.IsScrollChainingEnabled}">
-                        <ItemsPresenter Name="{x:Static atom:TimelineThemeConstants.ItemsPresenterPart}">
+                        <ItemsPresenter Name="ItemsPresenter">
                             <ItemsPresenter.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <atom:TimelineStackPanel
+                                    <atomc:TimelineStackPanel
                                         IsReverse="{Binding IsReverse, RelativeSource={RelativeSource AncestorType=atom:Timeline}}" />
                                 </ItemsPanelTemplate>
                             </ItemsPresenter.ItemsPanel>
@@ -33,9 +34,9 @@
         <Setter Property="atom:ScrollViewer.AllowAutoHide" Value="True" />
         <Setter Property="atom:ScrollViewer.IsScrollChainingEnabled" Value="False" />
         <Setter Property="TemplatedControl.BorderBrush"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+                Value="{atom:SharedTokenResource ColorBorder}" />
         <Setter Property="TemplatedControl.Background"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+                Value="{atom:SharedTokenResource ColorBgContainer}" />
 
     </ControlTheme>
 </ResourceDictionary>

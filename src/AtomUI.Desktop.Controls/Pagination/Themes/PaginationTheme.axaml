@@ -9,7 +9,8 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Name="{x:Static atom:PaginationThemeConstants.RootLayoutPart}"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal"
+                            IsVisible="{TemplateBinding IsEffectiveVisible}">
                     <ContentPresenter Name="{x:Static atom:PaginationThemeConstants.TotalInfoPresenterPart}"
                                       IsVisible="{TemplateBinding IsShowTotalInfo}"
                                       Content="{TemplateBinding TotalInfoText, Mode=Default, Converter={StaticResource StringToTextBlockConverter}}" />
@@ -27,9 +28,9 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}"/>
-        <Setter Property="PageText" Value="{DynamicResource {x:Static paginationLang:PaginationLangResourceKey.PageText}}"/>
-        <Setter Property="TotalInfoTemplate" Value="{DynamicResource {x:Static paginationLang:PaginationLangResourceKey.TotalInfoFormat}}"/>
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}"/>
+        <Setter Property="PageText" Value="{atom:PaginationLangResource PageText}"/>
+        <Setter Property="TotalInfoTemplate" Value="{atom:PaginationLangResource TotalInfoFormat}"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Style Selector="^[Align=Start]">
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -43,22 +44,22 @@
         
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayout">
-                <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}"/>
+                <Setter Property="Spacing" Value="{atom:PaginationTokenResource PaginationLayoutSpacing}"/>
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayout">
-                <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}"/>
+                <Setter Property="Spacing" Value="{atom:PaginationTokenResource PaginationLayoutSpacing}"/>
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayout">
-                <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutMiniSpacing}}"/>
+                <Setter Property="Spacing" Value="{atom:PaginationTokenResource PaginationLayoutMiniSpacing}"/>
             </Style>
         </Style>
         <Style Selector="^:disabled">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:PaginationTokenKey.ItemActiveColorDisabled}}" />
+                    Value="{atom:PaginationTokenResource ItemActiveColorDisabled}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

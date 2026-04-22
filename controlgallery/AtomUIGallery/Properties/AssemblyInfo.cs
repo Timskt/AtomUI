@@ -1,3 +1,4 @@
+using AtomUI.Theme.Language;
 using Avalonia.Metadata;
 
 [assembly: XmlnsPrefix("https://atomui.net/oss-controls/gallery", "gallery")]
@@ -6,3 +7,5 @@ using Avalonia.Metadata;
 [assembly: XmlnsDefinition("https://atomui.net/oss-controls/gallery", "AtomUIGallery")]
 [assembly: XmlnsDefinition("https://atomui.net/oss-controls/gallery", "AtomUIGallery.ShowCases.Views")]
 [assembly: XmlnsDefinition("https://atomui.net/oss-controls/gallery", "AtomUIGallery.ShowCases.ShowCaseControls")]
+[assembly: XmlnsDefinition("https://atomui.net/oss-controls/gallery", "AtomUIGallery.Localization")]
+[assembly: LanguageSgMetaInfo("AtomUIGallery.Localization")]

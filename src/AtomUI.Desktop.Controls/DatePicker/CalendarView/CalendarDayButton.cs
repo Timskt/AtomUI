@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -244,38 +243,6 @@ internal sealed class CalendarDayButton : AvaloniaButton
         UpdatePseudoClasses();
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty,
-                        SharedTokenKey.MotionDurationFast),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKey.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     private void UpdatePseudoClasses()
     {
         if (_ignoringMouseOverState)
@@ -351,20 +318,13 @@ internal sealed class CalendarDayButton : AvaloniaButton
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
 
         if (change.Property == IsRangeStartProperty ||
             change.Property == IsRangeEndProperty ||
             change.Property == IsRangeMiddleProperty)
         {
             UpdatePseudoClasses();
-           
+
         }
         if (change.Property == IsRangeStartProperty ||
             change.Property == IsRangeEndProperty ||
@@ -389,5 +349,17 @@ internal sealed class CalendarDayButton : AvaloniaButton
         {
             SetCurrentValue(EffectiveCornerRadiusProperty, CornerRadius);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

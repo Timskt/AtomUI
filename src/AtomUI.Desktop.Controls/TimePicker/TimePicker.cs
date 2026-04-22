@@ -1,11 +1,11 @@
 ﻿using System.Reactive.Disposables;
+using AtomUI.Controls.Utils;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -21,7 +21,7 @@ public enum ClockIdentifierType
     HourClock24
 }
 
-public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
+public class TimePicker : InfoPickerInput
 {
     #region 公共属性定义
 
@@ -94,18 +94,40 @@ public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
 
     #region 内部属性定义
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
+    internal static readonly DirectProperty<TimePicker, string?> AmTextProperty =
+        AvaloniaProperty.RegisterDirect<TimePicker, string?>(nameof(AmText),
+            o => o.AmText,
+            (o, v) => o.AmText = v);
+    
+    internal static readonly DirectProperty<TimePicker, string?> PmTextProperty =
+        AvaloniaProperty.RegisterDirect<TimePicker, string?>(nameof(PmText),
+            o => o.PmText,
+            (o, v) => o.PmText = v);
 
-    string IControlSharedTokenResourcesHost.TokenId => TimePickerToken.ID;
+    private string? _amText;
 
+    internal string? AmText
+    {
+        get => _amText;
+        set => SetAndRaise(AmTextProperty, ref _amText, value);
+    }
+    
+    private string? _pmText;
+
+    internal string? PmText
+    {
+        get => _pmText;
+        set => SetAndRaise(AmTextProperty, ref _pmText, value);
+    }
+    
     #endregion
-
+    
     private TimePickerPresenter? _pickerPresenter;
     private CompositeDisposable? _flyoutBindingDisposables;
     
     public TimePicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TimePickerToken.ScopeProvider);
     }
     
     static TimePicker()
@@ -176,7 +198,7 @@ public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
     private void ClearHoverSelectedInfo()
     {
         Text = DateTimeUtils.FormatTimeSpan(SelectedTime,
-            ClockIdentifier == ClockIdentifierType.HourClock12);
+            ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
     }
 
     private void HandleHoverTimeChanged(object? sender, TimeSelectedEventArgs args)
@@ -184,7 +206,7 @@ public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
         if (args.Time.HasValue)
         {
             Text = DateTimeUtils.FormatTimeSpan(args.Time.Value,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
         }
         else
         {
@@ -226,7 +248,7 @@ public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
         if (change.Property == SelectedTimeProperty)
         {
             Text = DateTimeUtils.FormatTimeSpan(SelectedTime,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
         }
         else if (change.Property == FontSizeProperty ||
                  change.Property == FontFamilyProperty ||
@@ -270,7 +292,7 @@ public class TimePicker : InfoPickerInput, IControlSharedTokenResourcesHost
         else
         {
             var text = DateTimeUtils.FormatTimeSpan(TimeSpan.Zero,
-                ClockIdentifier == ClockIdentifierType.HourClock12);
+                ClockIdentifier == ClockIdentifierType.HourClock12, AmText, PmText);
             var preferredInputWidth = TextUtils.CalculateTextSize(text, FontSize, FontFamily, FontStyle, FontWeight).Width;
             if (PlaceholderText != null)
             {

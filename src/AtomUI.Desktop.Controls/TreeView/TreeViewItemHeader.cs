@@ -17,31 +17,31 @@ namespace AtomUI.Desktop.Controls;
 internal class TreeViewItemHeader : ContentControl
 {
     public static readonly StyledProperty<bool> IsExpandedProperty =
-        TreeItem.IsExpandedProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.IsExpandedProperty.AddOwner<TreeViewItemHeader>();
     
     public static readonly StyledProperty<PathIcon?> IconProperty =
-        TreeItem.IconProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.IconProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly StyledProperty<bool?> IsCheckedProperty =
-        TreeItem.IsCheckedProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.IsCheckedProperty.AddOwner<TreeViewItemHeader>();
     
     public static readonly StyledProperty<bool> IsSelectedProperty =
-        TreeItem.IsSelectedProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.IsSelectedProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly StyledProperty<PathIcon?> SwitcherExpandIconProperty =
-        TreeItem.SwitcherExpandIconProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.SwitcherExpandIconProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly StyledProperty<PathIcon?> SwitcherCollapseIconProperty =
-        TreeItem.SwitcherCollapseIconProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.SwitcherCollapseIconProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly StyledProperty<PathIcon?> SwitcherRotationIconProperty =
-        TreeItem.SwitcherRotationIconProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.SwitcherRotationIconProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly StyledProperty<PathIcon?> SwitcherLoadingIconProperty =
-        TreeItem.SwitcherLoadingIconProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.SwitcherLoadingIconProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly StyledProperty<PathIcon?> SwitcherLeafIconProperty =
-        TreeItem.SwitcherLeafIconProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.SwitcherLeafIconProperty.AddOwner<TreeViewItemHeader>();
 
     public static readonly DirectProperty<TreeViewItemHeader, bool> IsLeafProperty =
         AvaloniaProperty.RegisterDirect<TreeViewItemHeader, bool>(nameof(IsLeaf),
@@ -49,13 +49,16 @@ internal class TreeViewItemHeader : ContentControl
             (o, v) => o.IsLeaf = v);
 
     public static readonly StyledProperty<bool> IsLoadingProperty =
-        TreeItem.IsLoadingProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.IsLoadingProperty.AddOwner<TreeViewItemHeader>();
     
     public static readonly StyledProperty<bool> IsIndicatorEnabledProperty =
-        TreeItem.IsIndicatorEnabledProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.IsIndicatorEnabledProperty.AddOwner<TreeViewItemHeader>();
     
     public static readonly StyledProperty<string?> GroupNameProperty =
-        TreeItem.GroupNameProperty.AddOwner<TreeViewItemHeader>();
+        TreeViewItem.GroupNameProperty.AddOwner<TreeViewItemHeader>();
+    
+    public static readonly StyledProperty<bool> IsMaskedProperty =
+        AvaloniaProperty.Register<TreeViewItemHeader, bool>(nameof(IsMasked));
     
     public bool IsExpanded
     {
@@ -129,6 +132,12 @@ internal class TreeViewItemHeader : ContentControl
     {
         get => GetValue(GroupNameProperty);
         set => SetValue(GroupNameProperty, value);
+    }
+    
+    public bool IsMasked
+    {
+        get => GetValue(IsMaskedProperty);
+        set => SetValue(IsMaskedProperty, value);
     }
     
     public bool IsIndicatorEnabled
@@ -415,14 +424,6 @@ internal class TreeViewItemHeader : ContentControl
         {
             BuildFilterHighlightRuns();
         }
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
     
     private void SetupSwitcherButtonIconMode()
@@ -457,25 +458,6 @@ internal class TreeViewItemHeader : ContentControl
         PseudoClasses.Set(TreeViewPseudoClass.NodeToggleTypeRadio, newValue == ItemToggleType.Radio);
         PseudoClasses.Set(TreeViewPseudoClass.NodeToggleTypeCheckBox, newValue == ItemToggleType.CheckBox);
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ContentFrameBackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -497,18 +479,6 @@ internal class TreeViewItemHeader : ContentControl
         Debug.Assert(_nodeSwitcherButton != null);
         var point = _nodeSwitcherButton.TranslatePoint(new Point(0, 0), relativeTo) ?? default;
         return new Rect(point, _nodeSwitcherButton.Bounds.Size);
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     private void HandleHeaderPresenterEntered(object? sender, PointerEventArgs? args)
@@ -684,5 +654,17 @@ internal class TreeViewItemHeader : ContentControl
         }
 
         return false;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

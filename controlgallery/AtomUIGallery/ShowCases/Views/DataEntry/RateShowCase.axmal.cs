@@ -1,4 +1,6 @@
-using AtomUI.Desktop.Controls;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
@@ -16,6 +18,12 @@ public partial class RateShowCase : ReactiveUserControl<RateViewModel>
                 viewModel.Tooltips = [
                     "terrible", "bad", "normal", "good", "wonderful"
                 ];
+                this.OneWayBind(viewModel, vm => vm.Tooltips, v => v.ToolTipRate.ToolTips)
+                    .DisposeWith(disposables);
+                Disposable.Create(() =>
+                {
+                    viewModel.Tooltips = null;
+                }).DisposeWith(disposables);
             }
         });
         InitializeComponent();

@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls;
@@ -270,6 +270,12 @@ public class CollapseItem : HeaderedContentControl,
         SetupDefaultExpandIcon();
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        InAnimating = false;
+    }
+
     private void SetupDefaultExpandIcon()
     {
         if (ExpandIcon is null)
@@ -296,14 +302,6 @@ public class CollapseItem : HeaderedContentControl,
             change.Property == HeaderPaddingProperty)
         {
             UpdatePseudoClasses();
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
     }
 
@@ -373,39 +371,21 @@ public class CollapseItem : HeaderedContentControl,
         return false;
     }
     
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<ThicknessTransition>(HeaderBorderThicknessProperty),
-                    TransitionUtils.CreateTransition<ThicknessTransition>(ContentBorderThicknessProperty),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(CollapseItemPseudoClass.CustomHeaderPadding, HeaderPadding != null);
         PseudoClasses.Set(CollapseItemPseudoClass.CustomContentPadding, ContentPadding != null);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

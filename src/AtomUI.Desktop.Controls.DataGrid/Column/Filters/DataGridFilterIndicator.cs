@@ -1,10 +1,9 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Data;
-using AtomUI.Desktop.Controls.DataGridLocalization;
 using AtomUI.Data;
+using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
 using Avalonia.Controls;
@@ -53,11 +52,27 @@ internal class DataGridFilterIndicator : IconButton
         set => SetValue(FilterMultipleProperty, value);
     }
     #endregion
+
+    #region 内部属性定义
+
+    internal static readonly DirectProperty<DataGridFilterIndicator, string?> SelectedAllTextProperty =
+        AvaloniaProperty.RegisterDirect<DataGridFilterIndicator, string?>(
+            nameof(SelectedAllText),
+            o => o.SelectedAllText,
+            (o, v) => o.SelectedAllText = v);
+    
+    internal string? SelectedAllText
+    {
+        get => _selectedAllText;
+        set => SetAndRaise(SelectedAllTextProperty, ref _selectedAllText, value);
+    }
+    private string? _selectedAllText;
+
+    #endregion
     
     private DataGridColumn? _owningColumn;
     private static int _indicatorSeed = 0;
     private readonly string _treeRadioCheckGroupName;
-    private CompositeDisposable? _bindingDisposables;
 
     internal DataGridColumn? OwningColumn
     {
@@ -131,8 +146,6 @@ internal class DataGridFilterIndicator : IconButton
        
         if (FilterMode == DataGridFilterMode.Menu && Flyout is not DataGridMenuFilterFlyout)
         {
-            _bindingDisposables?.Dispose();
-            _bindingDisposables = new CompositeDisposable();
             var menuFlyout = new DataGridMenuFilterFlyout
             {
                 IsShowArrow               = false,
@@ -140,8 +153,8 @@ internal class DataGridFilterIndicator : IconButton
                 IsDetectMouseClickEnabled = false,
                 ShouldUseOverlayLayer = true,
             };
-            _bindingDisposables.Add(BindUtils.RelayBind(owningGrid, MotionAwareControlProperty.IsMotionEnabledProperty, menuFlyout,
-                MotionAwareControlProperty.IsMotionEnabledProperty));
+            menuFlyout[!MotionAwareControlProperty.IsMotionEnabledProperty] =
+                owningGrid[!MotionAwareControlProperty.IsMotionEnabledProperty];
             var menuItems = BuildMenuItems(OwningColumn.Filters.ToList());
             foreach (var menuItem in menuItems)
             {
@@ -154,8 +167,6 @@ internal class DataGridFilterIndicator : IconButton
         }
         else if (FilterMode == DataGridFilterMode.Tree && Flyout is not DataGridTreeFilterFlyout)
         {
-            _bindingDisposables?.Dispose();
-            _bindingDisposables = new CompositeDisposable();
             var treeFlyout = new DataGridTreeFilterFlyout
             {
                 IsShowArrow               = false,
@@ -163,19 +174,17 @@ internal class DataGridFilterIndicator : IconButton
                 IsDetectMouseClickEnabled = false,
                 ShouldUseOverlayLayer         = true
             };
-            _bindingDisposables.Add(BindUtils.RelayBind(this, FilterMultipleProperty, treeFlyout, DataGridTreeFilterFlyout.ToggleTypeProperty, (v) =>
-            {
-                return v ? ItemToggleType.CheckBox : ItemToggleType.Radio;
-            }));
-            _bindingDisposables.Add(BindUtils.RelayBind(owningGrid, MotionAwareControlProperty.IsMotionEnabledProperty, treeFlyout,
-                MotionAwareControlProperty.IsMotionEnabledProperty));
-            var treeItems         = BuildTreeItems(OwningColumn.Filters.ToList());
+            BindUtils.RelayBind(this, FilterMultipleProperty, treeFlyout, DataGridTreeFilterFlyout.ToggleTypeProperty,
+                (v) =>
+                {
+                    return v ? ItemToggleType.CheckBox : ItemToggleType.Radio;
+                });
+            treeFlyout[!MotionAwareControlProperty.IsMotionEnabledProperty] = owningGrid[!MotionAwareControlProperty.IsMotionEnabledProperty];
+            var treeItems = BuildTreeItems(OwningColumn.Filters.ToList());
             if (FilterMultiple)
             {
-                var selectAllTreeItem = new DataGridFilterTreeItem();
-                LanguageResourceBinder.CreateBinding(selectAllTreeItem, DataGridFilterTreeItem.HeaderProperty,
-                    DataGridLangResourceKey.SelectAllFilterItems);
-              
+                var selectAllTreeItem = new DataGridFilterTreeViewItem();
+                selectAllTreeItem[!DataGridFilterTreeViewItem.HeaderProperty] = this[!SelectedAllTextProperty];
                 foreach (var treeItem in treeItems)
                 {
                     selectAllTreeItem.Items.Add(treeItem);
@@ -207,10 +216,10 @@ internal class DataGridFilterIndicator : IconButton
                 FilterValue      = item.Value,
                 StaysOpenOnClick = true
             };
-            _bindingDisposables?.Add(BindUtils.RelayBind(this, FilterMultipleProperty, menuItem, MenuItem.ToggleTypeProperty, (v) =>
+            BindUtils.RelayBind(this, FilterMultipleProperty, menuItem, MenuItem.ToggleTypeProperty, (v) =>
             {
                 return v ? MenuItemToggleType.CheckBox : MenuItemToggleType.Radio;
-            }, BindingPriority.Template));
+            }, BindingPriority.Template);
             menuItems.Add(menuItem);
             if (item.Children.Count > 0)
             {
@@ -225,12 +234,12 @@ internal class DataGridFilterIndicator : IconButton
         return menuItems;
     }
 
-    private List<DataGridFilterTreeItem> BuildTreeItems(List<DataGridFilterItem> filterItems)
+    private List<DataGridFilterTreeViewItem> BuildTreeItems(List<DataGridFilterItem> filterItems)
     {
-        var treeItems = new List<DataGridFilterTreeItem>();
+        var treeItems = new List<DataGridFilterTreeViewItem>();
         foreach (var item in filterItems)
         {
-            var treeItem = new DataGridFilterTreeItem()
+            var treeItem = new DataGridFilterTreeViewItem
             {
                 Header      = item.Text,
                 FilterValue = item.Value,

@@ -36,33 +36,41 @@
         <Setter Property="Focusable" Value="False" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:ChromeTokenKey.CaptionButtonPadding}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveColor}}" />
+        <Setter Property="Padding" Value="{atom:ChromeTokenResource CaptionButtonPadding}" />
+        <Setter Property="Foreground" Value="{atom:ChromeTokenResource ActiveColor}" />
         
         <Style Selector="^ /template/ atom|IconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveColor}}" />
+            <Setter Property="IconBrush" Value="{atom:ChromeTokenResource ActiveColor}" />
         </Style>
         
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveBgColor}}" />
+        <Setter Property="Background" Value="{atom:ChromeTokenResource ActiveBgColor}" />
        
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveHoverBgColor}}" />
+            <Setter Property="Background" Value="{atom:ChromeTokenResource ActiveHoverBgColor}" />
         </Style>
         
         <Style Selector="^:pressed">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActivePressedBgColor}}" />
+            <Setter Property="Background" Value="{atom:ChromeTokenResource ActivePressedBgColor}" />
         </Style>
         
         <Style Selector="^[IsWindowActive=False]">
             <Style Selector="^ /template/ atom|IconPresenter">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:ChromeTokenKey.InactiveColor}}" />
+                        Value="{atom:ChromeTokenResource InactiveColor}" />
             </Style>
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.InactiveBgColor}}" />
+            <Setter Property="Background" Value="{atom:ChromeTokenResource InactiveBgColor}" />
             <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.InactiveHoverBgColor}}" />
+                <Setter Property="Background" Value="{atom:ChromeTokenResource InactiveHoverBgColor}" />
             </Style>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -6,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class TreeSelectToken : AbstractControlDesignToken
 {
     public const string ID = "TreeSelect";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 最小的弹窗的宽度
@@ -22,4 +25,6 @@ internal class TreeSelectToken : AbstractControlDesignToken
         base.CalculateTokenValues(isDarkMode);
         MinPopupWidth = 300;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TreeSelectTokenKind);
 }

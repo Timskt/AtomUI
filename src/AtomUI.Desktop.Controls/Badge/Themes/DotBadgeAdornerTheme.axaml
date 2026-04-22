@@ -2,23 +2,24 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
+    xmlns:atomcommons="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:DotBadgeAdorner}" TargetType="atom:DotBadgeAdorner">
         <Setter Property="Template">
             <ControlTemplate>
                 <DockPanel
-                    Name="{x:Static atom:DotBadgeAdornerThemeConstants.RootLayoutPart}"
+                    Name="RootLayout"
                     LastChildFill="True"
                     ClipToBounds="False">
                     <atom:MotionActor
-                        Name="{x:Static atom:DotBadgeAdornerThemeConstants.IndicatorMotionActorPart}"
+                        Name="PART_MotionActor"
                         ClipToBounds="False"
                         DockPanel.Dock="Left">
-                        <atom:DotBadgeIndicator
-                            Name="{x:Static atom:DotBadgeAdornerThemeConstants.IndicatorPart}"
+                        <atomcommons:DotBadgeIndicator
+                            Name="Indicator"
                             BadgeDotColor="{TemplateBinding BadgeDotColor}" />
                     </atom:MotionActor>
-                    <Label Name="{x:Static atom:DotBadgeAdornerThemeConstants.LabelPart}"
+                    <Label Name="Label"
                            Content="{TemplateBinding Text}"
                            IsVisible="{TemplateBinding IsAdornerMode, Converter={x:Static BoolConverters.Not}}" />
                 </DockPanel>
@@ -26,47 +27,47 @@
         </Setter>
 
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="BadgeDotColor" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeColor}}" />
-        <Setter Property="MotionDuration" Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationMid}}" />
+        <Setter Property="BadgeDotColor" Value="{atom:BadgeTokenResource BadgeColor}" />
+        <Setter Property="MotionDuration" Value="{atom:SharedTokenResource MotionDurationMid}" />
 
         <Style Selector="^[IsAdornerMode=True]">
-            <Style Selector="^ /template/ DockPanel#PART_RootLayout">
+            <Style Selector="^ /template/ DockPanel#RootLayout">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="VerticalAlignment" Value="Top" />
             </Style>
         </Style>
 
-        <Style Selector="^ /template/ Label#PART_Label">
+        <Style Selector="^ /template/ Label#Label">
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:BadgeTokenKey.DotBadgeLabelMargin}}" />
+            <Setter Property="Margin" Value="{atom:BadgeTokenResource DotBadgeLabelMargin}" />
         </Style>
         
-        <Style Selector="^ /template/ atom|MotionActor#PART_IndicatorMotionActor">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:BadgeTokenKey.DotSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:BadgeTokenKey.DotSize}}" />
+        <Style Selector="^ /template/ atom|MotionActor#PART_MotionActor">
+            <Setter Property="Width" Value="{atom:BadgeTokenResource DotSize}" />
+            <Setter Property="Height" Value="{atom:BadgeTokenResource DotSize}" />
         </Style>
         
         <Style Selector="^[Status=Error]">
-            <Setter Property="BadgeDotColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+            <Setter Property="BadgeDotColor" Value="{atom:SharedTokenResource ColorError}" />
         </Style>
              
         <Style Selector="^[Status=Success]">
-            <Setter Property="BadgeDotColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSuccess}}" />
+            <Setter Property="BadgeDotColor" Value="{atom:SharedTokenResource ColorSuccess}" />
         </Style>
              
         <Style Selector="^[Status=Warning]">
-            <Setter Property="BadgeDotColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarning}}" />
+            <Setter Property="BadgeDotColor" Value="{atom:SharedTokenResource ColorWarning}" />
         </Style>
              
         <Style Selector="^[Status=Processing]">
-            <Setter Property="BadgeDotColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorInfo}}" />
+            <Setter Property="BadgeDotColor" Value="{atom:SharedTokenResource ColorInfo}" />
         </Style>
         
         <Style Selector="^[Status=Default]">
-            <Setter Property="BadgeDotColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+            <Setter Property="BadgeDotColor" Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -27,6 +28,9 @@ internal class DialogCaptionButton : AvaloniaButton
     
     public static readonly StyledProperty<bool> IsCheckedProperty = 
         AvaloniaProperty.Register<CaptionButton, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay, defaultValue:false);
+    
+    public static readonly StyledProperty<IBrush?> IconBrushProperty =
+        IconPresenter.IconBrushProperty.AddOwner<DialogCaptionButton>();
     
     public PathIcon? NormalIcon
     {
@@ -57,6 +61,12 @@ internal class DialogCaptionButton : AvaloniaButton
         get => GetValue(IsCheckedProperty);
         set => SetValue(IsCheckedProperty, value);
     }
+    
+    public IBrush? IconBrush
+    {
+        get => GetValue(IconBrushProperty);
+        set => SetValue(IconBrushProperty, value);
+    }
 
     #endregion
     
@@ -72,45 +82,16 @@ internal class DialogCaptionButton : AvaloniaButton
     }
     
     #endregion
-    
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+
+    protected override void OnInitialized()
     {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        this.EnableTransitions();
     }
 }

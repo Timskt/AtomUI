@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.Primitives.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
 namespace AtomUI.Desktop.Controls.Primitives;
@@ -7,6 +9,7 @@ namespace AtomUI.Desktop.Controls.Primitives;
 internal class InfoPickerInputToken : AbstractControlDesignToken
 {
     public const string ID = "InfoPickerInput";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     public InfoPickerInputToken()
         : base(ID)
@@ -29,4 +32,6 @@ internal class InfoPickerInputToken : AbstractControlDesignToken
         RangePickerArrowMargin        = new Thickness(SharedToken.UniformlyMarginXS, 0);
         RangePickerIndicatorThickness = SharedToken.LineWidthFocus;
     }
+    
+    protected override Type GetTokenKindType() => typeof(InfoPickerInputTokenKind);
 }

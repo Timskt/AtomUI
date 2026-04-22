@@ -1,4 +1,6 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,6 +11,7 @@ namespace AtomUI.Desktop.Controls;
 internal class DataGridToken : AbstractControlDesignToken
 {
     public const string ID = "DataGrid";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     public DataGridToken()
         : base(ID)
@@ -190,6 +193,11 @@ internal class DataGridToken : AbstractControlDesignToken
     /// 分页器的外边距
     /// </summary>
     public Thickness PaginationMargin { get; set; }
+    
+    /// <summary>
+    /// 分页器的外边距（小号）
+    /// </summary>
+    public Thickness PaginationMarginSM { get; set; }
 
     #region 内部 Token
 
@@ -369,6 +377,9 @@ internal class DataGridToken : AbstractControlDesignToken
         });
         ColumnReorderActiveBg = colorFillContentSolid;
 
-        PaginationMargin = new Thickness(0, SharedToken.UniformlyMargin);
+        PaginationMargin   = new Thickness(0, SharedToken.UniformlyMargin);
+        PaginationMarginSM = new Thickness(0, SharedToken.UniformlyMarginXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(DataGridTokenKind);
 }

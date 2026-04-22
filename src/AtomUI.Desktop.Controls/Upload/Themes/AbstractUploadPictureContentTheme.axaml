@@ -7,26 +7,26 @@
     <Style Selector="^:is(atom|AbstractUploadPictureContent)">
         <Setter Property="Background" Value="Transparent" />
 
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXS}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextSecondary}}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
+        <Setter Property="Padding" Value="{atom:SharedTokenResource PaddingXS}" />
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextSecondary}" />
         
         <Style Selector="^[Status=Failed]">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorError}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorError}" />
         </Style>
         
         <Style Selector="^[Status=Cancelled]">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorError}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorError}" />
         </Style>
         
         <Style Selector="^ /template/ Border#Mask">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgMask}" />
             <Setter Property="TemplatedControl.Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+                    Value="{atom:SharedTokenResource ColorTextLightSolid}" />
         </Style>
 
         <Style Selector="^:pointerover">
@@ -34,13 +34,21 @@
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource FontSizeLG}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource FontSizeLG}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton:pointerover">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
+        </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="MaskOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationSlow}" />
+                </Transitions>
+            </Setter>
         </Style>
     </Style>
 

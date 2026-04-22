@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
+using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -24,6 +25,7 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
     private int _transitionFromIndex = -1;
     private CancellationTokenSource? _transition;
     private EventHandler? _scrollInvalidated;
+    private bool _isMeasureQueued;
 
     bool ILogicalScrollable.CanHorizontallyScroll { get; set; }
     bool ILogicalScrollable.CanVerticallyScroll { get; set; }
@@ -38,9 +40,13 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
         get => _offset;
         set
         {
-            if ((int)_offset.X != value.X)
+            if (!MathUtils.AreClose(_offset.X, value.X))
             {
-                InvalidateMeasure();
+                if (!_isMeasureQueued)
+                {
+                    _isMeasureQueued = true;
+                    InvalidateMeasure();
+                }
             }
             _offset = value;
         }
@@ -84,6 +90,7 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
 
     protected override Size MeasureOverride(Size availableSize)
     {
+        _isMeasureQueued = false;
         var items = Items;
         var index = (int)_offset.X;
 
@@ -96,10 +103,13 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
                 // Cancel any already running transition, and recycle the element we're transitioning from.
                 if (cancelTransition)
                 {
-                    _transition!.Cancel();
+                    _transition?.Cancel();
+                    _transition?.Dispose();
                     _transition = null;
                     if (_transitionFrom is not null)
+                    {
                         RecycleElement(_transitionFrom);
+                    }
                     _transitionFrom      = null;
                     _transitionFromIndex = -1;
                 }
@@ -267,7 +277,11 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
                 break;
         }
 
-        InvalidateMeasure();
+        if (!_isMeasureQueued)
+        {
+            _isMeasureQueued = true;
+            InvalidateMeasure();
+        }
     }
 
     private Control GetOrCreateElement(IReadOnlyList<object?> items, int index)
@@ -395,6 +409,7 @@ internal class VirtualizingCarouselPanel: VirtualizingPanel, ILogicalScrollable
         {
             RecycleElement(_transitionFrom);
         }
+        _transition?.Dispose();
         _transition          = null;
         _transitionFrom      = null;
         _transitionFromIndex = -1;

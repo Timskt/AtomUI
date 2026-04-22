@@ -1,19 +1,10 @@
 using AtomUI.Theme;
-using AtomUI.Utils;
-using Avalonia.Controls;
 
 namespace AtomUI.Desktop.Controls;
 
-public class SkeletonTitle : SkeletonLine, IControlSharedTokenResourcesHost
+public class SkeletonTitle : SkeletonLine
 {
     protected override Type StyleKeyOverride { get; } = typeof(SkeletonLine);
-    
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SkeletonToken.ID;
-
-    #endregion
     
     static SkeletonTitle()
     {
@@ -22,6 +13,6 @@ public class SkeletonTitle : SkeletonLine, IControlSharedTokenResourcesHost
     
     public SkeletonTitle()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SkeletonToken.ScopeProvider);
     }
 }

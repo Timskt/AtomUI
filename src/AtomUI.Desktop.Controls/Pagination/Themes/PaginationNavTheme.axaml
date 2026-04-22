@@ -22,7 +22,7 @@
         </Setter>
         
         <Style Selector="^[SizeType=Large], ^[SizeType=Middle]">
-            <Setter Property="ItemSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyMarginXS}}"/>
+            <Setter Property="ItemSpacing" Value="{atom:SharedTokenResource UniformlyMarginXS}"/>
         </Style>
     </ControlTheme>
 </ResourceDictionary>

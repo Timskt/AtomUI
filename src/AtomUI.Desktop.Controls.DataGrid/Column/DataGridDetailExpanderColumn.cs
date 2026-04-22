@@ -25,7 +25,7 @@ public sealed class DataGridDetailExpanderColumn : DataGridColumn
     {
         Debug.Assert(OwningGrid != null);
         var expander = new DataGridRowExpander();
-        BindUtils.RelayBind(OwningGrid, DataGrid.IsMotionEnabledProperty, expander, DataGridRowExpander.IsMotionEnabledProperty);
+        expander[!DataGridRowExpander.IsMotionEnabledProperty] = OwningGrid[!DataGrid.IsMotionEnabledProperty];
         return expander;
     }
     

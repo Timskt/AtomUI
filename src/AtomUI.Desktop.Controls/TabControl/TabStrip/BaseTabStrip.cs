@@ -1,9 +1,5 @@
-﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Controls;
-using AtomUI.Data;
+﻿using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,8 +15,7 @@ using AvaloniaTabStrip = Avalonia.Controls.Primitives.TabStrip;
 
 public abstract class BaseTabStrip : AvaloniaTabStrip, 
                                      ISizeTypeAware,
-                                     IMotionAwareControl,
-                                     IControlSharedTokenResourcesHost
+                                     IMotionAwareControl
 {
     private static readonly FuncTemplate<Panel?> DefaultPanel =
         new(() => new StackPanel());
@@ -174,12 +169,7 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
         get => _effectiveHeaderPadding;
         set => SetAndRaise(EffectiveHeaderPaddingProperty, ref _effectiveHeaderPadding, value);
     }
-    
-    private protected readonly Dictionary<TabStripItem, CompositeDisposable> ItemsBindingDisposables = new();
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TabControlToken.ID;
-    
+
     #endregion
 
     static BaseTabStrip()
@@ -192,8 +182,7 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
 
     public BaseTabStrip()
     {
-        this.RegisterResources();
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
+        this.RegisterTokenResourceScope(TabControlToken.ScopeProvider);
     }
     
     public bool CloseTab(TabStripItem tabStripItem)
@@ -235,42 +224,21 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
         return true;
     }
     
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is TabStripItem tabItem)
-                    {
-                        if (ItemsBindingDisposables.TryGetValue(tabItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            ItemsBindingDisposables.Remove(tabItem);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     protected override void PrepareContainerForItemOverride(Control container, object? item, int index)
     {
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is TabStripItem tabStripItem)
         {
-            var disposables = new CompositeDisposable(4);
             tabStripItem.TabStripPlacement = TabStripPlacement;
-            
+
             if (item != null && item is not Visual)
             {
                 if (!tabStripItem.IsSet(TabStripItem.ContentProperty))
                 {
                     tabStripItem.SetCurrentValue(TabStripItem.ContentProperty, item);
                 }
-                
+
                 if (item is ITabItemData tabItemData)
                 {
                     if (!tabStripItem.IsSet(TabStripItem.IconProperty))
@@ -302,20 +270,13 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
 
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, tabStripItem, TabItem.ContentTemplateProperty));
+                tabStripItem[!TabItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, tabStripItem, TabStripItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, tabStripItem, TabStripItem.IsMotionEnabledProperty));
-            
-            PrepareTabStripItem(tabStripItem, item, index, disposables);
-            
-            if (ItemsBindingDisposables.TryGetValue(tabStripItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                ItemsBindingDisposables.Remove(tabStripItem);
-            }
-            ItemsBindingDisposables.Add(tabStripItem, disposables);
+
+            tabStripItem[!TabStripItem.SizeTypeProperty] = this[!SizeTypeProperty];
+            tabStripItem[!TabStripItem.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+
+            PrepareTabStripItem(tabStripItem, item, index);
             ConfigureTabStripItem(tabStripItem);
         }
         else
@@ -324,7 +285,7 @@ public abstract class BaseTabStrip : AvaloniaTabStrip,
         }
     }
 
-    protected virtual void PrepareTabStripItem(TabStripItem tabStripItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareTabStripItem(TabStripItem tabStripItem, object? item, int index)
     {
     }
 

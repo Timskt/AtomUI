@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
+using AtomUI.Controls.Utils;
 using AtomUI.Data;
-using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.MotionScene;
 using AtomUI.Theme.Styling;
 using AtomUI.Utils;
@@ -15,7 +15,6 @@ using Avalonia.Input;
 using Avalonia.Input.Raw;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
@@ -163,7 +162,6 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     private IDisposable? _selfLightDismissDisposable;
     private IManagedPopupPositionerPopup? _managedPopupPositioner;
     private bool _ignoreIsOpenChanged;
-    private CompositeDisposable? _hostDecoratorDisposable;
 
     // 在翻转之后或者恢复正常，会有属性的变动，在变动之后捕捉动画需要等一个事件循环，保证布局已经生效
     private bool _openAnimating;
@@ -188,6 +186,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     public Popup()
     {
         this.ConfigureMotionBindingStyle();
+        TokenResourceBinder.CreateTokenBinding(this, MaskShadowsProperty, SharedTokenKind.BoxShadowsSecondary);
+        TokenResourceBinder.CreateTokenBinding(this, MotionDurationProperty, SharedTokenKind.MotionDurationMid);
         Closed += HandleClosed;
         Opened += HandleOpened;
         if (this is IPopupHostProvider popupHostProvider)
@@ -201,20 +201,10 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
                 popupHostProvider.PopupHostChanged += HandlePopupHostChanged;
             }
         }
-
-        ConfigureInstanceStyles();
     }
 
-    private void ConfigureInstanceStyles()
-    {
-        var style = new Style();
-        style.Add(MaskShadowsProperty, SharedTokenKey.BoxShadowsSecondary);
-        style.Add(MotionDurationProperty, SharedTokenKey.MotionDurationMid);
-    }
-    
     private void HandlePopupHostChanged(IPopupHost? popupHost)
     {
-        _hostDecoratorDisposable?.Dispose();
         _placementAwareDecorator = null;
         if (popupHost is PopupRoot popupRoot)
         {
@@ -227,13 +217,13 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
             _placementAwareDecorator = overlayPopupHost.FindDescendantOfType<PlacementAwareDecorator>();
             var popupContent = overlayPopupHost.FindDescendantOfType<OverlayPopupContent>();
             Debug.Assert(popupContent != null);
-            BindUtils.RelayBind(this, IsFlippedProperty, popupContent, OverlayPopupContent.IsFlippedProperty);
+            
+            popupContent[!OverlayPopupContent.IsFlippedProperty] = this[!IsFlippedProperty];
         }
         if (_placementAwareDecorator != null)
         {
-            _hostDecoratorDisposable = new CompositeDisposable(2);
-            _hostDecoratorDisposable.Add(BindUtils.RelayBind(this, MarginToAnchorProperty, _placementAwareDecorator, PlacementAwareDecorator.MarginToAnchorProperty));
-            _hostDecoratorDisposable.Add(BindUtils.RelayBind(this, HostDecoratorDirectionProperty, _placementAwareDecorator, PlacementAwareDecorator.MarginPlacementProperty));
+            _placementAwareDecorator[!PlacementAwareDecorator.MarginToAnchorProperty]  = this[!MarginToAnchorProperty];
+            _placementAwareDecorator[!PlacementAwareDecorator.MarginPlacementProperty] = this[!HostDecoratorDirectionProperty];
         }
     }
     
@@ -245,6 +235,7 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     private void HandleClosed(object? sender, EventArgs? args)
     {
         _selfLightDismissDisposable?.Dispose();
+        _selfLightDismissDisposable = null;
         if (IgnoreFirstDetected)
         {
             _firstDetected = true;
@@ -331,8 +322,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
     {
         if (!IsLightDismissEnabled)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-            _selfLightDismissDisposable = inputManager.Process.Subscribe(HandleMouseClick);
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as  IInputManager;
+            _selfLightDismissDisposable = inputManager?.Process.Subscribe(HandleMouseClick);
         }
         else
         {
@@ -390,7 +381,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
             {
                 if (pointerEventArgs.Type == RawPointerEventType.LeftButtonUp)
                 {
-                    if ((IgnoreFirstDetected && _firstDetected) || _openAnimating)
+                    // TODO 这个逻辑要优化
+                    if ((IgnoreFirstDetected && _firstDetected) || pointerEventArgs.IsPointLogicalIn(PlacementTarget) || _openAnimating)
                     {
                         if (IgnoreFirstDetected && _firstDetected)
                         {
@@ -612,8 +604,8 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
             if ((direction == PopupHostMarginPlacement.Top && flipInfo.bottom) ||
                 (direction == PopupHostMarginPlacement.Bottom && flipInfo.top))
             {
-                flipPlacement = GetFlipPlacement(Placement, false, true);
-                IsFlipped     = true;
+                flipPlacement  = GetFlipPlacement(Placement, false, true);
+                IsFlipped      = true;
             }
             else if ((direction == PopupHostMarginPlacement.Left && flipInfo.right) ||
                      (direction == PopupHostMarginPlacement.Right && flipInfo.left))
@@ -813,11 +805,11 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
         });
     }
 
-    public async Task MotionAwareOpenAsync()
+    public async Task MotionAwareOpenAsync(CancellationToken cancellationToken = default)
     {
         var tcs = new TaskCompletionSource<bool>();
         MotionAwareOpen(() => tcs.SetResult(true));
-        await tcs.Task;
+        await tcs.Task.WaitAsync(cancellationToken);
     }
 
     public void MotionAwareClose(Action? closed = null)
@@ -949,11 +941,11 @@ public class Popup : AvaloniaPopup, IMotionAwareControl
         });
     }
 
-    public async Task MotionAwareCloseAsync()
+    public async Task MotionAwareCloseAsync(CancellationToken cancellationToken = default)
     {
         var tcs = new TaskCompletionSource<bool>();
         MotionAwareClose(() => tcs.SetResult(true));
-        await tcs.Task;
+        await tcs.Task.WaitAsync(cancellationToken);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

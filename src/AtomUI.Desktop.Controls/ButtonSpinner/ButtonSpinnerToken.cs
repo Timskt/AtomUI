@@ -1,4 +1,6 @@
-﻿using AtomUI.Media;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ButtonSpinnerToken : LineEditToken
 {
     public new const string ID = "ButtonSpinner";
-
+    public new static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public ButtonSpinnerToken()
         : this(ID)
     {
@@ -72,4 +75,6 @@ internal class ButtonSpinnerToken : LineEditToken
         HandleHoverColor  = SharedToken.ColorPrimary;
         HandleBorderColor = SharedToken.ColorBorder;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ButtonSpinnerTokenKind);
 }

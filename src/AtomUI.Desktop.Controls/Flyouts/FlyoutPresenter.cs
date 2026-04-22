@@ -1,28 +1,18 @@
 ﻿using AtomUI.Theme;
-using AtomUI.Utils;
-using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class FlyoutPresenter : ArrowDecoratedBox,
-                               IControlSharedTokenResourcesHost
+public class FlyoutPresenter : ArrowDecoratedBox
 {
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FlyoutHostToken.ID;
-
-    #endregion
-    
     // 我们在这里并没有增加任何元素或者样式
     protected override Type StyleKeyOverride => typeof(ArrowDecoratedBox);
 
     public FlyoutPresenter()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FlyoutHostToken.ScopeProvider);
         SetValue(CursorProperty, new Cursor(StandardCursorType.Arrow), BindingPriority.Template);
     }
     

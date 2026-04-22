@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -36,4 +37,6 @@ internal class PopupHostToken : AbstractControlDesignToken
         BorderRadius   = SharedToken.BorderRadiusLG;
         MarginToAnchor = SharedToken.UniformlyMarginXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(PopupHostTokenKind);
 }

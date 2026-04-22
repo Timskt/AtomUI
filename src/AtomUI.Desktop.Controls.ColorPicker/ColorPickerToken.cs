@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 public class ColorPickerToken : AbstractControlDesignToken
 {
     public const string ID = "ColorPicker";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// ColorPicker 宽度
@@ -186,4 +189,6 @@ public class ColorPickerToken : AbstractControlDesignToken
         TransparentBgSize                  = SharedToken.SizeXS;
         ColorPickerPresetColorGroupPadding = new Thickness(0, SharedToken.UniformlyPaddingXXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ColorPickerTokenKind);
 }

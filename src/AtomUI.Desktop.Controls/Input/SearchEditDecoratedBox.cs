@@ -1,6 +1,4 @@
-﻿using System.Reactive.Disposables;
-using AtomUI.Data;
-using AtomUI.Desktop.Controls.Primitives.Themes;
+﻿using AtomUI.Desktop.Controls.Primitives.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -43,7 +41,6 @@ internal class SearchEditDecoratedBox : AddOnDecoratedBox
     
     private Button? _searchButton;
     internal SearchEdit? OwningSearchEdit { get; set; }
-    private CompositeDisposable? _bindingDisposables;
 
     protected override void NotifyAddOnBorderInfoCalculated()
     {
@@ -63,10 +60,6 @@ internal class SearchEditDecoratedBox : AddOnDecoratedBox
 
         if (_searchButton != null)
         {
-            _bindingDisposables?.Dispose();
-            _bindingDisposables = new CompositeDisposable(2);
-            _bindingDisposables.Add(BindUtils.RelayBind(this, RightAddOnBorderThicknessProperty, _searchButton, BorderThicknessProperty));
-            _bindingDisposables.Add(BindUtils.RelayBind(this, RightAddOnCornerRadiusProperty, _searchButton, CornerRadiusProperty));
             _searchButton.Click += HandleSearchButtonClick;
         }
     }

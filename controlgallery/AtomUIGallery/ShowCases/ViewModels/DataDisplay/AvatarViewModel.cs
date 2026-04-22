@@ -1,3 +1,4 @@
+using System.Reactive;
 using System.Reactive.Disposables;
 using AtomUI.Controls;
 using ReactiveUI;
@@ -6,11 +7,11 @@ namespace AtomUIGallery.ShowCases.ViewModels;
 
 public class AvatarViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
 {
-    public static TreeNodeKey ID = "Avatar";
-    public ViewModelActivator Activator { get; }
-    public IScreen HostScreen { get; }
+    public static EntityKey ID = "Avatar";
 
-    public string UrlPathSegment { get; } = ID.ToString();
+    public ViewModelActivator Activator  { get; }
+    public IScreen            HostScreen { get; }
+    public string             UrlPathSegment { get; } = ID.ToString();
 
     private string? _avatarText;
 
@@ -37,19 +38,27 @@ public class AvatarViewModel : ReactiveObject, IRoutableViewModel, IActivatableV
     }
 
     private int _textCurrentIndex = 0;
-    private int _gapCurrentIndex = 0;
+    private int _gapCurrentIndex  = 0;
 
-    private List<string> _userList;
-    private List<string> _colorList;
-    private List<double> _gapList;
+    private readonly List<string> _userList;
+    private readonly List<string> _colorList;
+    private readonly List<double> _gapList;
+    
+    public ReactiveCommand<Unit, Unit> ChangeUserCommand { get; }
+    public ReactiveCommand<Unit, Unit> ChangeGapCommand  { get; }
 
     public AvatarViewModel(IScreen screen)
     {
         Activator  = new ViewModelActivator();
         HostScreen = screen;
+
         _userList  = ["U", "Lucy", "Tom", "Edward"];
         _colorList = ["#f56a00", "#7265e6", "#ffbf00", "#00a2ae"];
         _gapList   = [4, 3, 2, 1];
+
+        ChangeUserCommand = ReactiveCommand.Create(SetupAvatarText);
+        ChangeGapCommand  = ReactiveCommand.Create(SetupAvatarGap);
+
         this.WhenActivated((CompositeDisposable disposables) =>
         {
             SetupAvatarText();
@@ -59,7 +68,7 @@ public class AvatarViewModel : ReactiveObject, IRoutableViewModel, IActivatableV
 
     private void SetupAvatarText()
     {
-        var index = (_textCurrentIndex++) % 4;
+        var index        = (_textCurrentIndex++) % 4;
         AvatarText       = _userList[index];
         AvatarBackground = _colorList[index];
     }
@@ -68,15 +77,5 @@ public class AvatarViewModel : ReactiveObject, IRoutableViewModel, IActivatableV
     {
         var index = (_gapCurrentIndex++) % 4;
         AvatarGap = _gapList[index];
-    }
-
-    public void HandleChangeUserClicked(object? sender, EventArgs e)
-    {
-        SetupAvatarText();
-    }
-
-    public void HandleChangeGapClicked(object? sender, EventArgs e)
-    {
-        SetupAvatarGap();
     }
 }

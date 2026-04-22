@@ -1,6 +1,8 @@
-﻿using AtomUIGallery.ShowCases.ViewModels;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Controls;
+using AtomUIGallery.ShowCases.ViewModels;
 using ReactiveUI;
-using AtomUI.Desktop.Controls;
 using Avalonia.Interactivity;
 using ReactiveUI.Avalonia;
 using RadioButton = Avalonia.Controls.RadioButton;
@@ -11,16 +13,24 @@ public partial class TimelineShowCase : ReactiveUserControl<TimelineViewModel>
 {
     public TimelineShowCase()
     {
-        this.WhenActivated(disposables => { });
+        this.WhenActivated(disposables =>
+        {
+            ModeLeft.IsCheckedChanged      += ModeChecked;
+            ModeRight.IsCheckedChanged     += ModeChecked;
+            ModeAlternate.IsCheckedChanged += ModeChecked;
+            ReverseButton.Click            += ReverseButtonClick;
+
+            Disposable.Create(() =>
+            {
+                ModeLeft.IsCheckedChanged      -= ModeChecked;
+                ModeRight.IsCheckedChanged     -= ModeChecked;
+                ModeAlternate.IsCheckedChanged -= ModeChecked;
+                ReverseButton.Click            -= ReverseButtonClick;
+            }).DisposeWith(disposables);
+        });
         InitializeComponent();
         
-        ModeLeft.IsCheckedChanged += ModeChecked;
         
-        ModeRight.IsCheckedChanged += ModeChecked;
-        
-        ModeAlternate.IsCheckedChanged += ModeChecked;
-        
-        ReverseButton.Click += ReverseButtonClick;
     }
     
     private void ReverseButtonClick(object? sender, RoutedEventArgs e)

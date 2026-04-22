@@ -13,7 +13,6 @@ using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Input;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -33,8 +32,7 @@ namespace AtomUI.Desktop.Controls;
 public delegate object? MentionsFilterValueSelector(IMentionOption option);
 
 [PseudoClasses(MentionPseudoClass.CandidatePopupOpen)]
-public class Mentions : TemplatedControl, 
-                        IControlSharedTokenResourcesHost,
+public class Mentions : TemplatedControl,
                         IMotionAwareControl,
                         IFormItemAware,
                         IInputControlStatusAware,
@@ -506,9 +504,6 @@ public class Mentions : TemplatedControl,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MentionsToken.ID;
     #endregion
     
     private static bool IsValidMinimumPopulateDelay(TimeSpan value) => value.TotalMilliseconds >= 0.0;
@@ -527,6 +522,7 @@ public class Mentions : TemplatedControl,
     private bool _ignorePropertyChange;
     private IDisposable? _collectionChangeSubscription;
     private CancellationTokenSource? _populationCancellationTokenSource;
+    private Window? _attachedWindow;
     
     static Mentions()
     {
@@ -538,12 +534,12 @@ public class Mentions : TemplatedControl,
         PlacementProperty.Changed.AddClassHandler<Mentions>((mentions,e) => mentions.ConfigurePopupPlacement());
         OptionsSourceProperty.Changed.AddClassHandler<Mentions>((mentions,e) => mentions.HandleItemsSourceChanged((IEnumerable?)e.NewValue));
         OptionFilterValueProperty.Changed.AddClassHandler<Mentions>((mentions,e) => mentions.HandleOptionFilterValueChanged());
-        ValueProperty.Changed.AddClassHandler<Mentions>(((mentions, args) => mentions.HandleValueChanged()));
+        ValueProperty.Changed.AddClassHandler<Mentions>((mentions, args) => mentions.HandleValueChanged());
     }
     
     public Mentions()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MentionsToken.ScopeProvider);
     }
 
     private void HandleIsDropDownOpenChanged(AvaloniaPropertyChangedEventArgs e)
@@ -570,29 +566,20 @@ public class Mentions : TemplatedControl,
     {
         var newValue = (TimeSpan)e.NewValue!;
 
-        // Stop any existing timer
+        // Always clean up the old timer first
         if (_delayTimer != null)
         {
             _delayTimer.Stop();
-
-            if (newValue == TimeSpan.Zero)
-            {
-                _delayTimer.Tick -= PopulateDropDown;
-                _delayTimer      =  null;
-            }
+            _delayTimer.Tick -= PopulateDropDown;
+            _delayTimer      =  null;
         }
 
+        // Create a new timer with the new delay value if needed
         if (newValue > TimeSpan.Zero)
         {
-            // Create or clear a dispatcher timer instance
-            if (_delayTimer == null)
-            {
-                _delayTimer      =  new DispatcherTimer();
-                _delayTimer.Tick += PopulateDropDown;
-            }
-
-            // Set the new tick interval
-            _delayTimer.Interval = newValue;
+            _delayTimer           =  new DispatcherTimer();
+            _delayTimer.Interval  =  newValue;
+            _delayTimer.Tick      += PopulateDropDown;
         }
     }
     
@@ -977,6 +964,7 @@ public class Mentions : TemplatedControl,
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel is Window window)
         {
+            _attachedWindow    =  window;
             window.Deactivated += HandleWindowDeactivated;
         }
     }
@@ -984,11 +972,12 @@ public class Mentions : TemplatedControl,
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel is Window window)
+        if (_attachedWindow != null)
         {
-            window.Deactivated -= HandleWindowDeactivated;
+            _attachedWindow.Deactivated -= HandleWindowDeactivated;
         }
+
+        _attachedWindow = null;
     }
     
     private void HandleWindowDeactivated(object? sender, EventArgs e)
@@ -1089,10 +1078,7 @@ public class Mentions : TemplatedControl,
         _subscriptionsOnOpen = new CompositeDisposable(2);
         this.GetObservable(IsVisibleProperty).Subscribe(HandleIsVisibleChanged).DisposeWith(_subscriptionsOnOpen);
         this.GetObservable(IsEnabledProperty).Subscribe(HandleIsEnabledChanged).DisposeWith(_subscriptionsOnOpen);
-        foreach (var parent in this.GetVisualAncestors().OfType<Control>())
-        {
-            parent.GetObservable(IsVisibleProperty).Subscribe(HandleIsVisibleChanged).DisposeWith(_subscriptionsOnOpen);
-        }
+        this.SubscribeAncestorIsVisible(HandleIsVisibleChanged, _subscriptionsOnOpen);
         NotifyDropDownOpened(EventArgs.Empty);
         _textArea?.Focus();
     }

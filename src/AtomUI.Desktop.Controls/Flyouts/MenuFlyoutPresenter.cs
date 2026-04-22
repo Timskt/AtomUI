@@ -1,10 +1,6 @@
-﻿using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Reactive.Disposables;
+﻿using System.Diagnostics;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Platform;
@@ -18,7 +14,6 @@ namespace AtomUI.Desktop.Controls;
 public class MenuFlyoutPresenter : MenuBase,
                                    IArrowAwareShadowMaskInfoProvider,
                                    IMotionAwareControl,
-                                   IControlSharedTokenResourcesHost,
                                    ISizeTypeAware
 {
     #region 公共属性定义
@@ -117,14 +112,10 @@ public class MenuFlyoutPresenter : MenuBase,
         get => GetValue(MaxPopupHeightProperty);
         set => SetValue(MaxPopupHeightProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
 
     #endregion
     
     private ArrowDecoratedBox? _arrowDecoratedBox;
-    private readonly Dictionary<MenuItem, CompositeDisposable> _itemsBindingDisposables = new();
 
     static MenuFlyoutPresenter()
     {
@@ -134,36 +125,13 @@ public class MenuFlyoutPresenter : MenuBase,
     public MenuFlyoutPresenter()
         : base(new DefaultMenuInteractionHandler(true))
     {
-        this.RegisterResources();
-        Items.CollectionChanged += HandleCollectionChanged;
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
     }
 
     public MenuFlyoutPresenter(IMenuInteractionHandler menuInteractionHandler)
         : base(menuInteractionHandler)
     {
-        this.RegisterResources();
-        Items.CollectionChanged += HandleCollectionChanged;
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is MenuItem menuItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(menuItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(menuItem);
-                        }
-                    }
-                }
-            }
-        }
+        this.RegisterTokenResourceScope(MenuToken.ScopeProvider);
     }
 
     public override void Close()
@@ -211,8 +179,6 @@ public class MenuFlyoutPresenter : MenuBase,
     {
         if (container is MenuItem menuItem)
         {
-            var disposables = new CompositeDisposable(5);
-            
             if (item != null && item is not Visual)
             {
                 if (!menuItem.IsSet(MenuItem.HeaderProperty))
@@ -244,23 +210,16 @@ public class MenuFlyoutPresenter : MenuBase,
              
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, MenuItem.HeaderTemplateProperty));
+                menuItem[!MenuItem.HeaderTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuItem, MenuItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, MenuItem.ItemTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, menuItem, MenuItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, DisplayPageSizeProperty, menuItem, MenuItem.DisplayPageSizeProperty));
-            disposables.Add(BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, menuItem, MenuItem.ShouldUseOverlayLayerProperty));
-            
-            PrepareMenuItem(menuItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(menuItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(menuItem);
-            }
-            _itemsBindingDisposables.Add(menuItem, disposables);
+            menuItem[!MenuItem.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+            menuItem[!MenuItem.ItemTemplateProperty]          = this[!ItemTemplateProperty];
+            menuItem[!MenuItem.SizeTypeProperty]              = this[!SizeTypeProperty];
+            menuItem[!MenuItem.DisplayPageSizeProperty]       = this[!DisplayPageSizeProperty];
+            menuItem[!MenuItem.ShouldUseOverlayLayerProperty] = this[!ShouldUseOverlayLayerProperty];
+          
+            PrepareMenuItem(menuItem, item, index);
         }
         else if (container is MenuSeparator menuSeparator)
         {
@@ -274,7 +233,7 @@ public class MenuFlyoutPresenter : MenuBase,
         base.PrepareContainerForItemOverride(container, item, index);
     }
     
-    protected virtual void PrepareMenuItem(MenuItem menuItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareMenuItem(MenuItem menuItem, object? item, int index)
     {
     }
     
@@ -368,7 +327,7 @@ public class MenuFlyoutPresenter : MenuBase,
         return _arrowDecoratedBox.ArrowIndicatorLayoutBounds;
     }
     
-    ArrowDecoratedBox IArrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox()
+    AbstractArrowDecoratedBox IArrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox()
     {
         Debug.Assert(_arrowDecoratedBox != null);
         return _arrowDecoratedBox;

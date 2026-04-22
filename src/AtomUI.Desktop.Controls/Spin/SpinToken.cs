@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -6,7 +8,8 @@ namespace AtomUI.Desktop.Controls;
 internal class SpinToken : AbstractControlDesignToken
 {
     public const string ID = "Spin";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public SpinToken()
         : base(ID)
     {
@@ -63,4 +66,6 @@ internal class SpinToken : AbstractControlDesignToken
         IndicatorSizeSM   = indicatorSizeSM + 1;
         IndicatorSizeLG   = indicatorSizeLG + 4;
     }
+    
+    protected override Type GetTokenKindType() => typeof(SpinTokenKind);
 }

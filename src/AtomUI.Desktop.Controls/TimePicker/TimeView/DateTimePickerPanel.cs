@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AtomUI.Controls;
 using AtomUI.Data;
+using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Desktop.Controls.TimePickerLang;
 using Avalonia;
 using Avalonia.Controls;
@@ -643,8 +644,8 @@ internal class DateTimePickerPanel : Panel,
                 return new TimeSpan(0, 0, value).ToString(ItemFormat);
             case DateTimePickerPanelType.TimePeriod:
                 return value == MinimumValue
-                    ? LanguageResourceBinder.GetLangResource(TimePickerLangResourceKey.AMText)!
-                    : LanguageResourceBinder.GetLangResource(TimePickerLangResourceKey.PMText)!;
+                    ? LanguageResourceBinder.GetLangResource(TimePickerLangResourceKind.AMText)!
+                    : LanguageResourceBinder.GetLangResource(TimePickerLangResourceKind.PMText)!;
             default:
                 return "";
         }

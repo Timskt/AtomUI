@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class RadioButtonToken : AbstractControlDesignToken
 {
     public const string ID = "RadioButton";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 单选框大小，除去文字部分的
     /// </summary>
@@ -61,4 +64,6 @@ internal class RadioButtonToken : AbstractControlDesignToken
         RadioBgColor = colorPrimary;
         TextMargin   = new Thickness(SharedToken.UniformlyMarginXS, 0, SharedToken.UniformlyMarginXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(RadioButtonTokenKind);
 }

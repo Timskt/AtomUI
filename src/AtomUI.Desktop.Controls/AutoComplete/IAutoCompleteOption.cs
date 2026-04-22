@@ -1,7 +1,8 @@
+using AtomUI.Controls.Data;
+
 namespace AtomUI.Desktop.Controls;
 
-public interface IAutoCompleteOption : IListBoxItemData
+public interface IAutoCompleteOption : IListItemData
 {
-    string? Key { get; }
     object? Header { get; }
 }

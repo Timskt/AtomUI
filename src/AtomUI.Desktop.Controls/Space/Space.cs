@@ -1,16 +1,11 @@
-// This source file is adapted from the Windows Presentation Foundation project. 
-// (https://github.com/dotnet/wpf/) 
-// 
-// Licensed to The Avalonia Project under MIT License, courtesy of The .NET Foundation.
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reactive.Disposables;
 using AtomUI.Controls;
+using AtomUI.Data;
 using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme;
-using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -18,7 +13,6 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Metadata;
-using Avalonia.Styling;
 using Avalonia.Utilities;
 using Avalonia.VisualTree;
 
@@ -44,7 +38,6 @@ public enum SpaceItemsAlignment
 
 public class Space : Control,
                      IChildIndexProvider, 
-                     IControlSharedTokenResourcesHost, 
                      ICustomizableSizeTypeAware,
                      INavigableContainer
 {
@@ -133,6 +126,7 @@ public class Space : Control,
         {
             if (_childIndexChanged is null)
             {
+                Children.PropertyChanged -= HandleChildrenPropertyChanged;
                 Children.PropertyChanged += HandleChildrenPropertyChanged;
             }
             _childIndexChanged += value;
@@ -152,9 +146,7 @@ public class Space : Control,
     
     #region 内部属性定义
     private EventHandler<ChildIndexChangedEventArgs>? _childIndexChanged;
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SpaceToken.ID;
+    private CompositeDisposable? _spacingBindings;
     #endregion
     
     static Space()
@@ -171,40 +163,36 @@ public class Space : Control,
     
     public Space()
     {
-        this.RegisterResources();
-        ConfigureInstanceStyle();
+        this.RegisterTokenResourceScope(SpaceToken.ScopeProvider);
+        ApplySpacingTokenBinding();
         Children.CollectionChanged += HandleChildrenChanged;
     }
 
-    private void ConfigureInstanceStyle()
+    private void ApplySpacingTokenBinding()
     {
+        _spacingBindings?.Dispose();
+        var tokenKind = SizeType switch
         {
-            var middleStyle = new Style(x =>
-                x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Middle));
-            middleStyle.Add(ItemSpacingProperty, SpaceTokenKey.GapMiddleSize);
-            middleStyle.Add(LineSpacingProperty, SpaceTokenKey.GapMiddleSize);
-            Styles.Add(middleStyle);
-        }
+            CustomizableSizeType.Small  => SpaceTokenKind.GapSmallSize,
+            CustomizableSizeType.Middle => SpaceTokenKind.GapMiddleSize,
+            CustomizableSizeType.Large  => SpaceTokenKind.GapLargeSize,
+            _                           => SpaceTokenKind.GapSmallSize
+        };
+        _spacingBindings = new CompositeDisposable
         {
-            var smallStyle = new Style(x =>
-                x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Small));
-            smallStyle.Add(ItemSpacingProperty, SpaceTokenKey.GapSmallSize);
-            smallStyle.Add(LineSpacingProperty, SpaceTokenKey.GapSmallSize);
-            Styles.Add(smallStyle);
-        }
-        {
-            var largeStyle = new Style(x =>
-                x.PropertyEquals(SizeTypeProperty, CustomizableSizeType.Large));
-            largeStyle.Add(ItemSpacingProperty, SpaceTokenKey.GapLargeSize);
-            largeStyle.Add(LineSpacingProperty, SpaceTokenKey.GapLargeSize);
-            Styles.Add(largeStyle);
-        }
+            TokenResourceBinder.CreateTokenBinding(this, ItemSpacingProperty, tokenKind),
+            TokenResourceBinder.CreateTokenBinding(this, LineSpacingProperty, tokenKind)
+        };
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (this.IsAttachedToVisualTree())
+        if (change.Property == SizeTypeProperty)
+        {
+            ApplySpacingTokenBinding();
+        }
+        else if (this.IsAttachedToVisualTree())
         {
             if (change.Property == SplitTemplateProperty)
             {
@@ -222,7 +210,7 @@ public class Space : Control,
                 case NotifyCollectionChangedAction.Add:
                     if (!IsItemsHost)
                     {
-                        LogicalChildren.InsertRange(e.NewStartingIndex, e.NewItems!.OfType<Control>().ToList());
+                        LogicalChildren.InsertRange(e.NewStartingIndex, e.NewItems!.OfType<Control>());
                     }
                     VisualChildren.InsertRange(e.NewStartingIndex, e.NewItems!.OfType<Visual>());
                     break;
@@ -238,7 +226,7 @@ public class Space : Control,
                 case NotifyCollectionChangedAction.Remove:
                     if (!IsItemsHost)
                     {
-                        LogicalChildren.RemoveAll(e.OldItems!.OfType<Control>().ToList());
+                        LogicalChildren.RemoveAll(e.OldItems!.OfType<Control>());
                     }
                     VisualChildren.RemoveAll(e.OldItems!.OfType<Visual>());
                     break;

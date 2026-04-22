@@ -1,0 +1,15 @@
+namespace AtomUI.Controls;
+
+public interface IFormItemAware
+{
+    event EventHandler ValueChanged;
+    void SetFormValue(object? value);
+    object? GetFormValue();
+    void ClearFormValue();
+    void NotifyValidateStatus(FormValidateStatus status);
+}
+
+public interface IFormItemFeedbackAware
+{
+    void SetFeedbackControl(FormValidateFeedback? value);
+}

@@ -1,8 +1,8 @@
+using System.Collections;
+using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -10,12 +10,12 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
 public class Upload : ContentControl, 
                       IMotionAwareControl,
-                      IControlSharedTokenResourcesHost,
                       IFormItemAware
 {
     #region 公共属性定义
@@ -157,7 +157,7 @@ public class Upload : ContentControl,
         set => SetValue(IsMotionEnabledProperty, value);
     }
     
-    public AvaloniaList<UploadTaskInfo> TaskInfoList { get; } = new ();
+    public AvaloniaList<UploadTaskInfo> TaskInfoList { get; private set; } = new ();
     
     #endregion
     
@@ -178,20 +178,30 @@ public class Upload : ContentControl,
     #region 公共回调函数定义
     public Func<UploadFileInfo, bool>? IsImageFilePredicate { get; set; }
     #endregion
-    
+
     #region 内部属性定义
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => UploadToken.ID;
+    internal static readonly DirectProperty<Upload, IEnumerable?> CurrentTaskListProperty =
+        AvaloniaProperty.RegisterDirect<Upload, IEnumerable?>(
+            nameof(CurrentTaskList),
+            o => o.CurrentTaskList,
+            (o, v) => o.CurrentTaskList = v);
 
+    private IEnumerable? _currentTaskList;
+
+    internal IEnumerable? CurrentTaskList
+    {
+        get => _currentTaskList;
+        set => SetAndRaise(CurrentTaskListProperty, ref _currentTaskList, value);
+    }
     #endregion
     
-    private ItemsControl? _uploadListControl;
     private FileUploadScheduler _uploadScheduler;
     private static readonly Regex ImageExtensionRegex = 
         new (@"\.(webp|svg|png|gif|jpg|jpeg|jfif|bmp|dpg|ico|heic|heif)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     private bool _defaultTaskListApplied;
+    private CancellationTokenSource? _uploadCts;
 
     static Upload()
     {
@@ -217,8 +227,28 @@ public class Upload : ContentControl,
     
     public Upload()
     {
-        this.RegisterResources();
-        _uploadScheduler = new FileUploadScheduler();
+        this.RegisterTokenResourceScope(UploadToken.ScopeProvider);
+        _uploadScheduler               =  new FileUploadScheduler();
+        TaskInfoList.CollectionChanged += HandleTaskListChanged;
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        // Create a new CancellationTokenSource when attached to visual tree
+        _uploadCts = new CancellationTokenSource();
+    }
+
+    private void HandleTaskListChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (TaskInfoList.Count == 0)
+        {
+            CurrentTaskList = null;
+        }
+        else
+        {
+            CurrentTaskList = TaskInfoList.ToArray();
+        }
     }
 
     protected virtual void OpenFileDialog()
@@ -429,11 +459,6 @@ public class Upload : ContentControl,
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        _uploadListControl = e.NameScope.Find<ItemsControl>(UploadThemeConstants.UploadListPart);
-        if (_uploadListControl != null)
-        {
-            _uploadListControl.ItemsSource = TaskInfoList;
-        }
         ConfigurePictureTriggerTask();
     }
 
@@ -499,11 +524,26 @@ public class Upload : ContentControl,
             }
         }
     }
+
+    public async Task ResetAsync(CancellationToken cancellationToken = default)
+    {
+        await CancelAllUploadTaskAsync(cancellationToken);
+        TaskInfoList = new();
+    }
+
+    public void Reset()
+    {
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            await CancelAllUploadTaskAsync();
+        });
+    }
     
-    private async Task CancelAllUploadTaskAsync()
+    private async Task CancelAllUploadTaskAsync(CancellationToken cancellationToken = default)
     {
         for (int i = _allTaskList.Count - 1; i >= 0; i--)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var taskInfo = TaskInfoList[i];
             if (taskInfo.Status != FileUploadStatus.Uploading || taskInfo.UploadTask == null)
             {
@@ -529,6 +569,14 @@ public class Upload : ContentControl,
         {
             OpenFileDialog();
         }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _uploadCts?.Cancel();
+        _uploadCts?.Dispose();
+        _uploadCts = null;
     }
 
     protected override void OnLoaded(RoutedEventArgs e)

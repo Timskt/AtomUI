@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class TreeFlyoutToken : AbstractControlDesignToken
 {
     public const string ID = "TreeFlyout";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     public TreeFlyoutToken()
         : base(ID)
@@ -55,4 +58,6 @@ internal class TreeFlyoutToken : AbstractControlDesignToken
         PopupContentPadding = new Thickness(SharedToken.UniformlyPaddingXXS, SharedToken.BorderRadiusLG.TopLeft / 2);
         PopupBgColor        = SharedToken.ColorBgElevated;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TreeFlyoutTokenKind);
 }

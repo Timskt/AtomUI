@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class SpaceToken : AbstractControlDesignToken
 {
     public const string ID = "Space";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 小间距尺寸
@@ -60,4 +63,6 @@ internal class SpaceToken : AbstractControlDesignToken
         AddOnPaddingSM = new Thickness(SharedToken.ControlPaddingHorizontalSM, 0);
         AddOnPaddingLG = new Thickness(SharedToken.ControlPaddingHorizontal, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(SpaceTokenKind);
 }

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
+using AtomUI.Theme.Styling;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -8,8 +10,11 @@ namespace AtomUI.Theme.TokenSystem;
 /// <summary>
 /// 所有的组件 Token 定义是除了全局的 Token 的之外的专属于当前的组件的 Token 值
 /// </summary>
-public abstract class AbstractControlDesignToken : AbstractDesignToken, IControlDesignToken
+public abstract class AbstractControlDesignToken : AbstractDesignToken,
+                                                   IControlDesignToken,
+                                                   IControlTokenResourceScopeProvider
 {
+    public string Id => _id;
     protected DesignToken SharedToken;
 
     private string _id;
@@ -26,11 +31,6 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken, IControl
         _sharedResourceDeltaDictionary = new ResourceDictionary();
     }
 
-    public string GetId()
-    {
-        return _id;
-    }
-
     public void AssignSharedToken(DesignToken sharedToken)
     {
         SharedToken = sharedToken;
@@ -38,27 +38,36 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken, IControl
 
     public override void BuildResourceDictionary(IResourceDictionary dictionary)
     {
-        var type = GetType();
+        var tokenKindType = GetTokenKindType();
+        var type          = GetType();
         // internal 这里也考虑进去，还是具体的 Token 自己处理？
         var tokenProperties = type.GetProperties(BindingFlags.Public |
                                                  BindingFlags.NonPublic |
                                                  BindingFlags.Instance |
-                                                 BindingFlags.FlattenHierarchy);
-        var ns                     = type.Namespace;
-        var tokenResourceNamespace = GetTokenResourceCatalog();
-        foreach (var property in tokenProperties)
+                                                 BindingFlags.FlattenHierarchy)
+                                  .ToDictionary(x => x.Name);
+        if (tokenKindType != null)
         {
-            var tokenName  = $"{ns}.{_id}.{property.Name}";
-            var tokenValue = property.GetValue(this);
-            if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
-                tokenValue is not null)
+            foreach (var value in Enum.GetValues(tokenKindType))
             {
-                tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
-            }
-
-            dictionary[new TokenResourceKey(tokenName, tokenResourceNamespace)] = tokenValue;
+                var tokenName = Enum.GetName(tokenKindType, value);
+                Debug.Assert(tokenName != null);
+                if (tokenProperties.TryGetValue(tokenName, out var property))
+                {
+                    var tokenValue = property.GetValue(this);
+                    if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
+                        tokenValue is not null)
+                    {
+                        tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                    }
+                    dictionary[value] = tokenValue;
+                }
+                else
+                {
+                    throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
+                }
+            } 
         }
-        
     }
 
     internal void BuildSharedResourceDeltaDictionary(DesignToken globalSharedToken)
@@ -74,6 +83,7 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken, IControl
                                                             BindingFlags.NonPublic |
                                                             BindingFlags.Instance |
                                                             BindingFlags.FlattenHierarchy);
+        var sharedTokenKindType = typeof(SharedTokenKind);
         foreach (var property in tokenProperties)
         {
             var name                   = property.Name;
@@ -93,9 +103,14 @@ public abstract class AbstractControlDesignToken : AbstractDesignToken, IControl
                 }
             }
 
-            _sharedResourceDeltaDictionary[new TokenResourceKey(name)] = localSharedTokenValue;
+            if (Enum.TryParse(sharedTokenKindType, name, out var sharedTokenKind))
+            {
+                _sharedResourceDeltaDictionary[sharedTokenKind] = localSharedTokenValue;
+            }
         }
     }
+
+    protected abstract Type GetTokenKindType();
 
     /// <summary>
     /// 一般 control token 尽量不继承, 先看看

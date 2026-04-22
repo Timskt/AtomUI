@@ -36,7 +36,7 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Focusable" Value="False" />
@@ -47,46 +47,46 @@
         </Style>
         
         <Style Selector="^ /template/ atom|SliderTrack#PART_Track">
-            <Setter Property="TrackGrooveBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.RailBg}}" />
-            <Setter Property="TrackBarBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.TrackBg}}" />
-            <Setter Property="MarkBorderBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.MarkBorderColor}}" />
+            <Setter Property="TrackGrooveBrush" Value="{atom:SliderTokenResource RailBg}" />
+            <Setter Property="TrackBarBrush" Value="{atom:SliderTokenResource TrackBg}" />
+            <Setter Property="MarkBorderBrush" Value="{atom:SliderTokenResource MarkBorderColor}" />
             <Setter Property="MarkBorderActiveBrush"
-                    Value="{DynamicResource {x:Static atom:SliderTokenKey.MarkBorderColorActive}}" />
+                    Value="{atom:SliderTokenResource MarkBorderColorActive}" />
         </Style>
         <Style Selector="^:pointerover">
             <Style Selector="^ /template/ atom|SliderThumb[IsFocused=False]:not(:pointerover)">
                 <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static atom:SliderTokenKey.ThumbCircleBorderHoverColor}}" />
+                        Value="{atom:SliderTokenResource ThumbCircleBorderHoverColor}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ atom|SliderTrack[Orientation=Horizontal]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SliderTokenKey.SliderPaddingHorizontal}}" />
+            <Setter Property="Padding" Value="{atom:SliderTokenResource SliderPaddingHorizontal}" />
         </Style>
 
         <Style Selector="^ /template/ atom|SliderTrack[Orientation=Vertical]">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:SliderTokenKey.SliderPaddingVertical}}" />
+            <Setter Property="Padding" Value="{atom:SliderTokenResource SliderPaddingVertical}" />
         </Style>
 
         <Style Selector="^ /template/ atom|SliderTrack:pointerover">
-            <Setter Property="TrackGrooveBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.RailHoverBg}}" />
-            <Setter Property="TrackBarBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.TrackHoverBg}}" />
+            <Setter Property="TrackGrooveBrush" Value="{atom:SliderTokenResource RailHoverBg}" />
+            <Setter Property="TrackBarBrush" Value="{atom:SliderTokenResource TrackHoverBg}" />
             <Setter Property="MarkBorderBrush"
-                    Value="{DynamicResource {x:Static atom:SliderTokenKey.MarkBorderColorHover}}" />
+                    Value="{atom:SliderTokenResource MarkBorderColorHover}" />
             <Setter Property="Cursor" Value="Hand" />
         </Style>
 
         <Style Selector="^:disabled">
             <Style Selector="^ /template/ atom|SliderTrack">
-                <Setter Property="TrackBarBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.TrackBgDisabled}}" />
-                <Setter Property="MarkBorderActiveBrush" Value="{DynamicResource {x:Static atom:SliderTokenKey.ThumbCircleBorderColorDisabled}}" />
+                <Setter Property="TrackBarBrush" Value="{atom:SliderTokenResource TrackBgDisabled}" />
+                <Setter Property="MarkBorderActiveBrush" Value="{atom:SliderTokenResource ThumbCircleBorderColorDisabled}" />
                 <Setter Property="MarkBorderBrush"
-                        Value="{DynamicResource {x:Static atom:SliderTokenKey.ThumbCircleBorderColorDisabled}}" />
+                        Value="{atom:SliderTokenResource ThumbCircleBorderColorDisabled}" />
             </Style>
             
             <Style Selector="^ /template/ atom|SliderThumb">
                 <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static atom:SliderTokenKey.ThumbCircleBorderColorDisabled}}" />
+                        Value="{atom:SliderTokenResource ThumbCircleBorderColorDisabled}" />
             </Style>
         </Style>
     </ControlTheme>

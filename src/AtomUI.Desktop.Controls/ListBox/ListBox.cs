@@ -1,7 +1,6 @@
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
+using AtomUI.Controls.Data;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
@@ -19,12 +18,11 @@ using AvaloniaListBox = Avalonia.Controls.ListBox;
 public class ListBox : AvaloniaListBox,
                        ISizeTypeAware,
                        IMotionAwareControl,
-                       IControlSharedTokenResourcesHost,
                        IListVirtualizingContextAware
 {
     #region 公共属性定义
-    public static readonly StyledProperty<bool> IsItemSelectableProperty =
-        AvaloniaProperty.Register<ListBox, bool>(nameof(IsItemSelectable), true);
+    public static readonly StyledProperty<bool> IsSelectableProperty =
+        AvaloniaProperty.Register<ListBox, bool>(nameof(IsSelectable), true);
     
     public static readonly StyledProperty<SizeType> SizeTypeProperty =
         SizeTypeControlProperty.SizeTypeProperty.AddOwner<ListBox>();
@@ -59,23 +57,14 @@ public class ListBox : AvaloniaListBox,
     public static readonly StyledProperty<bool> IsShowEmptyIndicatorProperty =
         AvaloniaProperty.Register<ListBox, bool>(nameof(IsShowEmptyIndicator), true);
     
-    public static readonly DirectProperty<ListBox, IListBoxItemFilter?> ItemFilterProperty =
-        AvaloniaProperty.RegisterDirect<ListBox, IListBoxItemFilter?>(
-            nameof(ItemFilter),
-            o => o.ItemFilter,
-            (o, v) => o.ItemFilter = v);
+    public static readonly StyledProperty<IListBoxItemFilter?> ItemFilterProperty =
+        AvaloniaProperty.Register<ListBox, IListBoxItemFilter?>(nameof(ItemFilter));
     
-    public static readonly DirectProperty<ListBox, object?> ItemFilterValueProperty =
-        AvaloniaProperty.RegisterDirect<ListBox, object?>(
-            nameof(ItemFilterValue),
-            o => o.ItemFilterValue,
-            (o, v) => o.ItemFilterValue = v);
+    public static readonly StyledProperty<object?> ItemFilterValueProperty =
+        AvaloniaProperty.Register<ListBox, object?>(nameof(ItemFilterValue));
     
-    public static readonly DirectProperty<ListBox, TextBlockHighlightStrategy> ItemFilterHighlightStrategyProperty =
-        AvaloniaProperty.RegisterDirect<ListBox, TextBlockHighlightStrategy>(
-            nameof(ItemFilterHighlightStrategy),
-            o => o.ItemFilterHighlightStrategy,
-            (o, v) => o.ItemFilterHighlightStrategy = v);
+    public static readonly StyledProperty<TextBlockHighlightStrategy> ItemFilterHighlightStrategyProperty =
+        AvaloniaProperty.Register<ListBox, TextBlockHighlightStrategy>(nameof(ItemFilterHighlightStrategy), TextBlockHighlightStrategy.All);
     
     public static readonly DirectProperty<ListBox, int> FilterResultCountProperty =
         AvaloniaProperty.RegisterDirect<ListBox, int>(nameof(FilterResultCount),
@@ -88,10 +77,10 @@ public class ListBox : AvaloniaListBox,
     public static readonly StyledProperty<IBrush?> FilterHighlightForegroundProperty =
         AvaloniaProperty.Register<ListBox, IBrush?>(nameof(FilterHighlightForeground));
     
-    public bool IsItemSelectable
+    public bool IsSelectable
     {
-        get => GetValue(IsItemSelectableProperty);
-        set => SetValue(IsItemSelectableProperty, value);
+        get => GetValue(IsSelectableProperty);
+        set => SetValue(IsSelectableProperty, value);
     }
     
     public SizeType SizeType
@@ -160,31 +149,25 @@ public class ListBox : AvaloniaListBox,
         get => GetValue(IsShowEmptyIndicatorProperty);
         set => SetValue(IsShowEmptyIndicatorProperty, value);
     }
-    
-    private IListBoxItemFilter? _itemFilter;
-    
+
     public IListBoxItemFilter? ItemFilter
     {
-        get => _itemFilter;
-        set => SetAndRaise(ItemFilterProperty, ref _itemFilter, value);
+        get => GetValue(ItemFilterProperty);
+        set => SetValue(ItemFilterProperty, value);
     }
-
-    private object? _itemFilterValue;
     
     public object? ItemFilterValue
     {
-        get => _itemFilterValue;
-        set => SetAndRaise(ItemFilterValueProperty, ref _itemFilterValue, value);
+        get => GetValue(ItemFilterValueProperty);
+        set => SetValue(ItemFilterValueProperty, value);
     }
-    
-    private TextBlockHighlightStrategy _itemFilterHighlightStrategy = TextBlockHighlightStrategy.All;
     
     public TextBlockHighlightStrategy ItemFilterHighlightStrategy
     {
-        get => _itemFilterHighlightStrategy;
-        set => SetAndRaise(ItemFilterHighlightStrategyProperty, ref _itemFilterHighlightStrategy, value);
+        get => GetValue(ItemFilterHighlightStrategyProperty);
+        set => SetValue(ItemFilterHighlightStrategyProperty, value);
     }
-    
+
     private int _filterResultCount;
     
     public int FilterResultCount
@@ -211,6 +194,7 @@ public class ListBox : AvaloniaListBox,
     #region 公共事件定义
 
     public event EventHandler<ListBoxItemClickedEventArgs>? ItemClicked;
+    public event EventHandler<ItemCountChangedEventArgs>? ItemCountChanged;
 
     #endregion
 
@@ -241,26 +225,22 @@ public class ListBox : AvaloniaListBox,
         get => _isEffectiveEmptyVisible;
         set => SetAndRaise(IsEffectiveEmptyVisibleProperty, ref _isEffectiveEmptyVisible, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ListBoxToken.ID;
 
     #endregion
     
-    private protected readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
     private protected readonly Dictionary<object, bool> _filterContext = new();
     private protected readonly Dictionary<object, IDictionary<object, object?>> _virtualRestoreContext = new();
 
     static ListBox()
     {
         ListBoxItem.ClickedEvent.AddClassHandler<ListBox>((list, args) => list.HandleListBoxItemClicked(args));
-        IsItemSelectableProperty.Changed.AddClassHandler<ListBox>((list, args) => list.HandleIsItemSelectableChanged(args));
+        IsSelectableProperty.Changed.AddClassHandler<ListBox>((list, args) => list.HandleIsSelectableChanged(args));
+        ItemCountProperty.Changed.AddClassHandler<ListBox>((list, args) => list.HandleItemCountChanged());
     }
     
     public ListBox()
     {
-        this.RegisterResources();
-        LogicalChildren.CollectionChanged += HandleChildrenChanged;
+        this.RegisterTokenResourceScope(ListBoxToken.ScopeProvider);
         Items.CollectionChanged += HandleItemCollectionChanged;
     }
 
@@ -274,20 +254,6 @@ public class ListBox : AvaloniaListBox,
 
         ConfigureEmptyIndicator();
         ConfigureIsFiltering();
-    }
-
-    private void HandleChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    DisposableListItem(item);
-                }
-            }
-        }
     }
     
     private void HandleItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -319,7 +285,7 @@ public class ListBox : AvaloniaListBox,
         }
     }
 
-    private void HandleIsItemSelectableChanged(AvaloniaPropertyChangedEventArgs e)
+    private void HandleIsSelectableChanged(AvaloniaPropertyChangedEventArgs e)
     {
         if (e.NewValue is bool && (bool)e.NewValue == false)
         {
@@ -333,15 +299,6 @@ public class ListBox : AvaloniaListBox,
     {
         IsFiltering = ItemFilter != null && ItemFilterValue != null;
     }
-
-    private protected void DisposableListItem(object item)
-    {
-        if (_itemsBindingDisposables.TryGetValue(item, out var disposable))
-        {
-            disposable.Dispose();
-            _itemsBindingDisposables.Remove(item);
-        }
-    }
     
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
     {
@@ -354,7 +311,7 @@ public class ListBox : AvaloniaListBox,
     {
         if (container is ListBoxItem listBoxItem && item != null && item is not Visual)
         {
-            if (item is IListBoxItemData itemData)
+            if (item is IListItemData itemData)
             {
                 NotifyRestoreDefaultContext(listBoxItem, itemData);
             }
@@ -371,55 +328,46 @@ public class ListBox : AvaloniaListBox,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is ListBoxItem listBoxItem)
         {
-            var disposables = new CompositeDisposable(8);
-
-            if (this is IListVirtualizingContextAware listVirtualizingContextAwareControl && 
-                listBoxItem is IListItemVirtualizingContextAware virtualListItem)
+            if (ItemTemplate != null)
             {
-                virtualListItem.VirtualIndex = index;
-                if (_virtualRestoreContext.TryGetValue(index, out var context))
-                {
-                    listVirtualizingContextAwareControl.RestoreVirtualizingContext(listBoxItem, context);
-                    _virtualRestoreContext.Remove(index);
-                }
-                else
-                {
-                    if (item is IListBoxItemData itemData)
-                    {
-                        NotifyRestoreDefaultContext(listBoxItem, itemData);
-                    }
-                }
+                listBoxItem[!ListBoxItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
-            else
+            listBoxItem[!ListBoxItem.SizeTypeProperty]                  = this[!SizeTypeProperty];
+            listBoxItem[!ListBoxItem.IsMotionEnabledProperty]           = this[!IsMotionEnabledProperty];
+            listBoxItem[!ListBoxItem.SelectedIndicatorProperty]         = this[!SelectedIndicatorProperty];
+            listBoxItem[!ListBoxItem.ItemHoverBgProperty]               = this[!ItemHoverBgProperty];
+            listBoxItem[!ListBoxItem.ItemSelectedBgProperty]            = this[!ItemSelectedBgProperty];
+            listBoxItem[!ListBoxItem.IsShowSelectedIndicatorProperty]   = this[!IsShowSelectedIndicatorProperty];
+            listBoxItem[!ListBoxItem.FilterHighlightStrategyProperty]   = this[!ItemFilterHighlightStrategyProperty];
+            listBoxItem[!ListBoxItem.FilterHighlightForegroundProperty] = this[!FilterHighlightForegroundProperty];
+           
+            PrepareListBoxItem(listBoxItem, item, index);
+
+            var originMotionEnabled = false;
+            try
             {
-                if (item is IListBoxItemData itemData)
+                originMotionEnabled = listBoxItem.IsMotionEnabled;
+                listBoxItem.SetCurrentValue(IsMotionEnabledProperty, false);
+                if (item is IListItemData itemData)
                 {
                     NotifyRestoreDefaultContext(listBoxItem, itemData);
                 }
-            }
-            
-            if (ItemTemplate != null)
-            {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, listBoxItem, ListBoxItem.ContentTemplateProperty));
-            }
-            
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, listBoxItem, ListBoxItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, listBoxItem, ListBoxItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, SelectedIndicatorProperty, listBoxItem, ListBoxItem.SelectedIndicatorProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemHoverBgProperty, listBoxItem, ListBoxItem.ItemHoverBgProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemSelectedBgProperty, listBoxItem, ListBoxItem.ItemSelectedBgProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowSelectedIndicatorProperty, listBoxItem, ListBoxItem.IsShowSelectedIndicatorProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemFilterHighlightStrategyProperty, listBoxItem, ListBoxItem.FilterHighlightStrategyProperty));
-            disposables.Add(BindUtils.RelayBind(this, FilterHighlightForegroundProperty, listBoxItem, ListBoxItem.FilterHighlightForegroundProperty));
-            
-            PrepareListBoxItem(listBoxItem, item, index, disposables);
 
-            if (_itemsBindingDisposables.TryGetValue(listBoxItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(listBoxItem);
+                if (this is IListVirtualizingContextAware listVirtualizingContextAwareControl &&
+                    listBoxItem is IListItemVirtualizingContextAware virtualListItem)
+                {
+                    virtualListItem.VirtualIndex = index;
+                    if (_virtualRestoreContext.TryGetValue(index, out var context))
+                    {
+                        listVirtualizingContextAwareControl.RestoreVirtualizingContext(listBoxItem, context);
+                        _virtualRestoreContext.Remove(index);
+                    }
+                }
             }
-            _itemsBindingDisposables.Add(listBoxItem, disposables);
+            finally
+            {
+                listBoxItem.SetCurrentValue(IsMotionEnabledProperty, originMotionEnabled);
+            }
         }
         else
         {
@@ -427,7 +375,7 @@ public class ListBox : AvaloniaListBox,
         }
     }
     
-    protected virtual void PrepareListBoxItem(ListBoxItem listBoxItem, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareListBoxItem(ListBoxItem listBoxItem, object? item, int index)
     {
     }
     
@@ -450,7 +398,7 @@ public class ListBox : AvaloniaListBox,
     
     protected internal virtual bool UpdateSelectionFromPointerEvent(Control source, PointerEventArgs e)
     {
-        if (IsItemSelectable)
+        if (IsSelectable)
         {
             // TODO: use TopLevel.PlatformSettings here, but first need to update our tests to use TopLevels. 
             var hotkeys = Application.Current!.PlatformSettings?.HotkeyConfiguration;
@@ -566,7 +514,7 @@ public class ListBox : AvaloniaListBox,
     
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        if (IsItemSelectable)
+        if (IsSelectable)
         {
             var hotkeys = Application.Current!.PlatformSettings?.HotkeyConfiguration;
             var ctrl    = hotkeys is not null && e.KeyModifiers.HasAllFlags(hotkeys.CommandModifiers);
@@ -599,29 +547,49 @@ public class ListBox : AvaloniaListBox,
         
         base.OnKeyDown(e);
     }
+    
+    private void HandleItemCountChanged()
+    {
+        ItemCountChanged?.Invoke(this, new ItemCountChangedEventArgs(ItemCount));
+    }
 
     #region 虚拟化上下文管理
     protected sealed override void ClearContainerForItemOverride(Control element)
     {
-        if (this is IListVirtualizingContextAware list && element is IListItemVirtualizingContextAware listItem)
+        var originMotionEnabled = false; 
+        try
         {
-            var context = new Dictionary<object, object?>();
-            list.SaveVirtualizingContext(element, context);
-            _virtualRestoreContext.Add(listItem.VirtualIndex, context);
-            list.ClearContainerValues(element);
+            if (element is IMotionAwareControl motionAwareControl)
+            {
+                originMotionEnabled = motionAwareControl.IsMotionEnabled;
+                element.SetCurrentValue(IsMotionEnabledProperty, false);
+            }
+        
+            if (this is IListVirtualizingContextAware list && element is IListItemVirtualizingContextAware listItem)
+            {
+                var context = new Dictionary<object, object?>();
+                list.SaveVirtualizingContext(element, context);
+                _virtualRestoreContext.Add(listItem.VirtualIndex, context);
+                list.ClearContainerValues(element);
+            }
+
+            base.ClearContainerForItemOverride(element);
         }
-     
-        base.ClearContainerForItemOverride(element);
+        finally
+        {
+            if (element is IMotionAwareControl)
+            {
+                element.SetCurrentValue(IsMotionEnabledProperty, originMotionEnabled);
+            }
+        }
     }
     
-    protected virtual void NotifyRestoreDefaultContext(ListBoxItem item, IListBoxItemData itemData)
+    protected virtual void NotifyRestoreDefaultContext(ListBoxItem item, IListItemData itemData)
     {
         if (!item.IsSet(ListBoxItem.ContentProperty))
         {
             item.SetCurrentValue(ListBoxItem.ContentProperty, itemData);
         }
-        item.SetCurrentValue(ListBoxItem.IsSelectedProperty, itemData.IsSelected);
-        item.SetCurrentValue(ListBoxItem.IsEnabledProperty, itemData.IsEnabled);
     }
 
     protected virtual void NotifyClearContainerForVirtualizingContext(ListBoxItem item)
@@ -636,11 +604,13 @@ public class ListBox : AvaloniaListBox,
 
     protected virtual void NotifyRestoreVirtualizingContext(ListBoxItem item, IDictionary<object, object?> context)
     {
-        if (context.TryGetValue(ListBoxItem.IsEnabledProperty, out var value))
         {
-            if (value is bool isEnabled)
+            if (context.TryGetValue(ListBoxItem.IsEnabledProperty, out var value))
             {
-                item.SetCurrentValue(ListBoxItem.IsEnabledProperty, isEnabled);
+                if (value is bool isEnabled)
+                {
+                    item.SetCurrentValue(ListBoxItem.IsEnabledProperty, isEnabled);
+                }
             }
         }
     }
@@ -663,7 +633,7 @@ public class ListBox : AvaloniaListBox,
 
     void IListVirtualizingContextAware.RestoreDefaultContext(Control item, object defaultContext)
     {
-        if (item is ListBoxItem listBoxItem && defaultContext is IListBoxItemData listBoxItemData)
+        if (item is ListBoxItem listBoxItem && defaultContext is IListItemData listBoxItemData)
         {
             ListVirtualizingContextAwareUtils.ExecuteWithinContextClosure(listBoxItem, listItem => NotifyRestoreDefaultContext(listItem, listBoxItemData));
         }

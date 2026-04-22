@@ -76,24 +76,21 @@ internal class ColorSpectrum : TemplatedControl
     /// </summary>
     public static readonly StyledProperty<int> MinHueProperty =
         AvaloniaProperty.Register<ColorSpectrum, int>(
-            nameof(MinHue),
-            0);
+            nameof(MinHue));
 
     /// <summary>
     /// Defines the <see cref="MinSaturation"/> property.
     /// </summary>
     public static readonly StyledProperty<int> MinSaturationProperty =
         AvaloniaProperty.Register<ColorSpectrum, int>(
-            nameof(MinSaturation),
-            0);
+            nameof(MinSaturation));
 
     /// <summary>
     /// Defines the <see cref="MinValue"/> property.
     /// </summary>
     public static readonly StyledProperty<int> MinValueProperty =
         AvaloniaProperty.Register<ColorSpectrum, int>(
-            nameof(MinValue),
-            0);
+            nameof(MinValue));
 
     /// <summary>
     /// Defines the <see cref="Shape"/> property.
@@ -249,10 +246,10 @@ internal class ColorSpectrum : TemplatedControl
     /// </summary>
     public event EventHandler<ColorChangedEventArgs>? ColorChanged;
 
-    private bool _updatingColor = false;
-    private bool _updatingHsvColor = false;
-    private bool _isPointerPressed = false;
-    private bool _shouldShowLargeSelection = false;
+    private bool _updatingColor;
+    private bool _updatingHsvColor;
+    private bool _isPointerPressed;
+    private bool _shouldShowLargeSelection;
     private List<Hsv> _hsvValues = new List<Hsv>();
     private ColorComponent _thirdComponent = ColorComponent.Component3; // HsvComponent.Value
 
@@ -286,18 +283,17 @@ internal class ColorSpectrum : TemplatedControl
     // associated with the last call to CreateBitmapsAndColorMap(),
     // in order to function properly while the asynchronous bitmap creation
     // is in progress.
-    private ColorSpectrumComponents _componentsFromLastBitmapCreation = ColorSpectrumComponents.SaturationValue;
-    private double _imageWidthFromLastBitmapCreation = 0.0;
-    private double _imageHeightFromLastBitmapCreation = 0.0;
-    private int _minHueFromLastBitmapCreation = 0;
-    private int _maxHueFromLastBitmapCreation = 0;
-    private int _minSaturationFromLastBitmapCreation = 0;
-    private int _maxSaturationFromLastBitmapCreation = 0;
-    private int _minValueFromLastBitmapCreation = 0;
-    private int _maxValueFromLastBitmapCreation = 0;
+    private ColorSpectrumComponents _componentsFromLastBitmapCreation;
+    private double _imageWidthFromLastBitmapCreation;
+    private double _imageHeightFromLastBitmapCreation;
+    private int _minHueFromLastBitmapCreation;
+    private int _maxHueFromLastBitmapCreation;
+    private int _minSaturationFromLastBitmapCreation;
+    private int _maxSaturationFromLastBitmapCreation;
+    private int _minValueFromLastBitmapCreation;
+    private int _maxValueFromLastBitmapCreation;
 
     private Color _oldColor = Color.FromArgb(255, 255, 255, 255);
-    private HsvColor _oldHsvColor = HsvColor.FromAhsv(0.0f, 0.0f, 1.0f, 1.0f);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ColorSpectrum"/> class.
@@ -342,7 +338,9 @@ internal class ColorSpectrum : TemplatedControl
         {
             _layoutRootDisposable = _layoutRoot.GetObservable(BoundsProperty).Subscribe(_ => 
             {
-                CreateBitmapsAndColorMap();
+#pragma warning disable CS4014
+                CreateBitmapsAndColorMapAsync();
+#pragma warning restore CS4014
             });
         }
 
@@ -363,7 +361,7 @@ internal class ColorSpectrum : TemplatedControl
         // If we haven't yet created our bitmaps, do so now.
         if (_hsvValues.Count == 0)
         {
-            CreateBitmapsAndColorMap();
+            _ = CreateBitmapsAndColorMapAsync();
         }
 
         UpdateEllipse();
@@ -389,7 +387,6 @@ internal class ColorSpectrum : TemplatedControl
 
         // OnAttachedToVisualTree is called after OnApplyTemplate so events cannot be connected here
     }
-    
 
     /// <summary>
     /// Explicitly unregisters all events connected in OnApplyTemplate().
@@ -459,8 +456,10 @@ internal class ColorSpectrum : TemplatedControl
             switch (Components)
             {
                 case ColorSpectrumComponents.SaturationHue:
+#pragma warning disable CS0162
                 case ColorSpectrumComponents.ValueHue:
                     incrementComponent = HsvComponent.Hue;
+#pragma warning restore CS0162
                     break;
 
                 case ColorSpectrumComponents.HueSaturation:
@@ -614,8 +613,6 @@ internal class ColorSpectrum : TemplatedControl
             {
                 SetColor();
             }
-
-            _oldHsvColor = change.GetOldValue<HsvColor>();
         }
         else if (change.Property == MinHueProperty ||
                  change.Property == MaxHueProperty)
@@ -639,7 +636,7 @@ internal class ColorSpectrum : TemplatedControl
             if (components != ColorSpectrumComponents.SaturationValue &&
                 components != ColorSpectrumComponents.ValueSaturation)
             {
-                CreateBitmapsAndColorMap();
+                _ = CreateBitmapsAndColorMapAsync();
             }
         }
         else if (change.Property == MinSaturationProperty ||
@@ -664,7 +661,7 @@ internal class ColorSpectrum : TemplatedControl
             if (components != ColorSpectrumComponents.HueValue &&
                 components != ColorSpectrumComponents.ValueHue)
             {
-                CreateBitmapsAndColorMap();
+                _ = CreateBitmapsAndColorMapAsync();
             }
         }
         else if (change.Property == MinValueProperty ||
@@ -689,12 +686,12 @@ internal class ColorSpectrum : TemplatedControl
             if (components != ColorSpectrumComponents.HueSaturation &&
                 components != ColorSpectrumComponents.SaturationHue)
             {
-                CreateBitmapsAndColorMap();
+                _ = CreateBitmapsAndColorMapAsync();
             }
         }
         else if (change.Property == ShapeProperty)
         {
-            CreateBitmapsAndColorMap();
+            _ = CreateBitmapsAndColorMapAsync();
         }
         else if (change.Property == ComponentsProperty)
         {
@@ -715,7 +712,7 @@ internal class ColorSpectrum : TemplatedControl
                     break;
             }
 
-            CreateBitmapsAndColorMap();
+            _ = CreateBitmapsAndColorMapAsync();
         }
 
         base.OnPropertyChanged(change);
@@ -916,9 +913,9 @@ internal class ColorSpectrum : TemplatedControl
         }
 
         // Remember the bitmap size follows physical device pixels
-        var    scale              = LayoutHelper.GetLayoutScale(this);
-        double xPosition          = point.Position.X * scale;
-        double yPosition          = point.Position.Y * scale;
+        var    scale     = LayoutHelper.GetLayoutScale(this);
+        double xPosition = point.Position.X * scale;
+        double yPosition = point.Position.Y * scale;
 
         // Now we need to find the index into the array of HSL values at each point in the spectrum m_image.
         int x     = (int)Math.Round(xPosition);
@@ -1132,168 +1129,176 @@ internal class ColorSpectrum : TemplatedControl
         args.Handled = true;
     }
 
-    private async void CreateBitmapsAndColorMap()
+    private async Task CreateBitmapsAndColorMapAsync()
     {
-        if (_layoutRoot == null ||
-            _sizingPanel == null ||
-            _inputTarget == null ||
-            _spectrumRectangle == null ||
-            _spectrumOverlayRectangle == null
-            /*|| SharedHelpers.IsInDesignMode*/)
+        try
         {
-            return;
-        }
+            if (_layoutRoot == null ||
+                _sizingPanel == null ||
+                _inputTarget == null ||
+                _spectrumRectangle == null ||
+                _spectrumOverlayRectangle == null)
+            {
+                return;
+            }
 
-        double width  = _layoutRoot.Bounds.Width;
-        double height = _layoutRoot.Bounds.Height;
+            double width  = _layoutRoot.Bounds.Width;
+            double height = _layoutRoot.Bounds.Height;
 
-        if (width == 0 || height == 0)
-        {
-            return;
-        }
+            if (width == 0 || height == 0)
+            {
+                return;
+            }
         
-        _sizingPanel.Width               = width;
-        _sizingPanel.Height              = height;
-        _inputTarget.Width               = width;
-        _inputTarget.Height              = height;
-        _spectrumRectangle.Width         = width;
-        _spectrumRectangle.Height        = height;
-        _spectrumOverlayRectangle.Width  = width;
-        _spectrumOverlayRectangle.Height = height;
+            _sizingPanel.Width               = width;
+            _sizingPanel.Height              = height;
+            _inputTarget.Width               = width;
+            _inputTarget.Height              = height;
+            _spectrumRectangle.Width         = width;
+            _spectrumRectangle.Height        = height;
+            _spectrumOverlayRectangle.Width  = width;
+            _spectrumOverlayRectangle.Height = height;
 
-        HsvColor                hsvColor      = HsvColor;
-        int                     minHue        = MinHue;
-        int                     maxHue        = MaxHue;
-        int                     minSaturation = MinSaturation;
-        int                     maxSaturation = MaxSaturation;
-        int                     minValue      = MinValue;
-        int                     maxValue      = MaxValue;
-        ColorSpectrumComponents components    = Components;
+            HsvColor                hsvColor      = HsvColor;
+            int                     minHue        = MinHue;
+            int                     maxHue        = MaxHue;
+            int                     minSaturation = MinSaturation;
+            int                     maxSaturation = MaxSaturation;
+            int                     minValue      = MinValue;
+            int                     maxValue      = MaxValue;
+            ColorSpectrumComponents components    = Components;
 
-        // If min >= max, then by convention, min is the only number that a property can have.
-        if (minHue >= maxHue)
-        {
-            maxHue = minHue;
-        }
-
-        if (minSaturation >= maxSaturation)
-        {
-            maxSaturation = minSaturation;
-        }
-
-        if (minValue >= maxValue)
-        {
-            maxValue = minValue;
-        }
-
-        Hsv hsv = new Hsv(hsvColor);
-            
-        // In Avalonia, Bounds returns the actual device-independent pixel size of a control.
-        // However, this is not necessarily the size of the control rendered on a display.
-        // A desktop or application scaling factor may be applied which must be accounted for here.
-        // Remember bitmaps in Avalonia are rendered mapping to actual device pixels, not the device-
-        // independent pixels of controls.
-        var scale         = LayoutHelper.GetLayoutScale(this);
-        int pixelWidth    = (int)Math.Round(width * scale);
-        int pixelHeight   = (int)Math.Round(height * scale);
-        var pixelCount    = pixelWidth * pixelHeight;
-        var pixelDataSize = pixelCount * 4;
-        // We'll only save pixel data for the middle bitmaps if our third dimension is hue.
-        var middleBitmapsSize =
-            components is ColorSpectrumComponents.ValueSaturation or ColorSpectrumComponents.SaturationValue
-                ? pixelDataSize : 0;
-
-        var       newHsvValues     = new List<Hsv>(pixelCount);
-        using var bgraMinPixelData = new PooledList<byte>(pixelDataSize, ClearMode.Never);
-        using var bgraMaxPixelData = new PooledList<byte>(pixelDataSize, ClearMode.Never);
-        // The middle 4 are only needed and used in the case of hue as the third dimension.
-        // Saturation and luminosity need only a min and max.
-        using var bgraMiddle1PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
-        using var bgraMiddle2PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
-        using var bgraMiddle3PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
-        using var bgraMiddle4PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
-
-        await Task.Run(() =>
-        {
-            // As the user perceives it, every time the third dimension not represented in the ColorSpectrum changes,
-            // the ColorSpectrum will visually change to accommodate that value.  For example, if the ColorSpectrum handles hue and luminosity,
-            // and the saturation externally goes from 1.0 to 0.5, then the ColorSpectrum will visually change to look more washed out
-            // to represent that third dimension's new value.
-            // Internally, however, we don't want to regenerate the ColorSpectrum bitmap every single time this happens, since that's very expensive.
-            // In order to make it so that we don't have to, we implement an optimization where, rather than having only one bitmap,
-            // we instead have multiple that we blend together using opacity to create the effect that we want.
-            // In the case where the third dimension is saturation or luminosity, we only need two: one bitmap at the minimum value
-            // of the third dimension, and one bitmap at the maximum.  Then we set the second's opacity at whatever the value of
-            // the third dimension is - e.g., a saturation of 0.5 implies an opacity of 50%.
-            // In the case where the third dimension is hue, we need six: one bitmap corresponding to red, yellow, green, cyan, blue, and purple.
-            // We'll then blend between whichever colors our hue exists between - e.g., an orange color would use red and yellow with an opacity of 50%.
-            // This optimization does incur slightly more startup time initially since we have to generate multiple bitmaps at once instead of only one,
-            // but the running time savings after that are *huge* when we can just set an opacity instead of generating a brand new bitmap.
-            for (int y = 0; y < pixelHeight; ++y)
+            // If min >= max, then by convention, min is the only number that a property can have.
+            if (minHue >= maxHue)
             {
-                for (int x = 0; x < pixelWidth; ++x)
+                maxHue = minHue;
+            }
+
+            if (minSaturation >= maxSaturation)
+            {
+                maxSaturation = minSaturation;
+            }
+
+            if (minValue >= maxValue)
+            {
+                maxValue = minValue;
+            }
+
+            Hsv hsv = new Hsv(hsvColor);
+            
+            // In Avalonia, Bounds returns the actual device-independent pixel size of a control.
+            // However, this is not necessarily the size of the control rendered on a display.
+            // A desktop or application scaling factor may be applied which must be accounted for here.
+            // Remember bitmaps in Avalonia are rendered mapping to actual device pixels, not the device-
+            // independent pixels of controls.
+            var scale         = LayoutHelper.GetLayoutScale(this);
+            int pixelWidth    = (int)Math.Round(width * scale);
+            int pixelHeight   = (int)Math.Round(height * scale);
+            var pixelCount    = pixelWidth * pixelHeight;
+            var pixelDataSize = pixelCount * 4;
+            // We'll only save pixel data for the middle bitmaps if our third dimension is hue.
+            var middleBitmapsSize =
+                components is ColorSpectrumComponents.ValueSaturation or ColorSpectrumComponents.SaturationValue
+                    ? pixelDataSize : 0;
+
+            var       newHsvValues     = new List<Hsv>(pixelCount);
+            using var bgraMinPixelData = new PooledList<byte>(pixelDataSize, ClearMode.Never);
+            using var bgraMaxPixelData = new PooledList<byte>(pixelDataSize, ClearMode.Never);
+            // The middle 4 are only needed and used in the case of hue as the third dimension.
+            // Saturation and luminosity need only a min and max.
+            using var bgraMiddle1PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
+            using var bgraMiddle2PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
+            using var bgraMiddle3PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
+            using var bgraMiddle4PixelData = new PooledList<byte>(middleBitmapsSize, ClearMode.Never);
+
+            await Task.Run(() =>
+            {
+                // As the user perceives it, every time the third dimension not represented in the ColorSpectrum changes,
+                // the ColorSpectrum will visually change to accommodate that value.  For example, if the ColorSpectrum handles hue and luminosity,
+                // and the saturation externally goes from 1.0 to 0.5, then the ColorSpectrum will visually change to look more washed out
+                // to represent that third dimension's new value.
+                // Internally, however, we don't want to regenerate the ColorSpectrum bitmap every single time this happens, since that's very expensive.
+                // In order to make it so that we don't have to, we implement an optimization where, rather than having only one bitmap,
+                // we instead have multiple that we blend together using opacity to create the effect that we want.
+                // In the case where the third dimension is saturation or luminosity, we only need two: one bitmap at the minimum value
+                // of the third dimension, and one bitmap at the maximum.  Then we set the second's opacity at whatever the value of
+                // the third dimension is - e.g., a saturation of 0.5 implies an opacity of 50%.
+                // In the case where the third dimension is hue, we need six: one bitmap corresponding to red, yellow, green, cyan, blue, and purple.
+                // We'll then blend between whichever colors our hue exists between - e.g., an orange color would use red and yellow with an opacity of 50%.
+                // This optimization does incur slightly more startup time initially since we have to generate multiple bitmaps at once instead of only one,
+                // but the running time savings after that are *huge* when we can just set an opacity instead of generating a brand new bitmap.
+                for (int y = 0; y < pixelHeight; ++y)
                 {
-                    FillPixelForBox(
-                        x, y, hsv, pixelWidth, pixelHeight, components, minHue, maxHue, minSaturation, maxSaturation, minValue, maxValue,
-                        bgraMinPixelData, bgraMiddle1PixelData, bgraMiddle2PixelData, bgraMiddle3PixelData, bgraMiddle4PixelData, bgraMaxPixelData,
-                        newHsvValues);
+                    for (int x = 0; x < pixelWidth; ++x)
+                    {
+                        FillPixelForBox(
+                            x, y, hsv, pixelWidth, pixelHeight, components, minHue, maxHue, minSaturation, maxSaturation, minValue, maxValue,
+                            bgraMinPixelData, bgraMiddle1PixelData, bgraMiddle2PixelData, bgraMiddle3PixelData, bgraMiddle4PixelData, bgraMaxPixelData,
+                            newHsvValues);
+                    }
                 }
-            }
-        });
+            });
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            ColorSpectrumComponents components2 = Components;
-            _minBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMinPixelData, pixelWidth, pixelHeight);
-            _maxBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMaxPixelData, pixelWidth, pixelHeight);
-
-            switch (components2)
+            await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                case ColorSpectrumComponents.HueValue:
-                case ColorSpectrumComponents.ValueHue:
-                    _saturationMinimumBitmap?.Dispose();
-                    _saturationMinimumBitmap = _minBitmap;
-                    _saturationMaximumBitmap?.Dispose();
-                    _saturationMaximumBitmap = _maxBitmap;
-                    break;
-                case ColorSpectrumComponents.HueSaturation:
-                case ColorSpectrumComponents.SaturationHue:
-                    _valueBitmap?.Dispose();
-                    _valueBitmap = _maxBitmap;
-                    break;
-                case ColorSpectrumComponents.ValueSaturation:
-                case ColorSpectrumComponents.SaturationValue:
-                    _hueRedBitmap?.Dispose();
-                    _hueRedBitmap = _minBitmap;
-                    _hueYellowBitmap?.Dispose();
-                    _hueYellowBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle1PixelData, pixelWidth, pixelHeight);
-                    _hueGreenBitmap?.Dispose();
-                    _hueGreenBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle2PixelData, pixelWidth, pixelHeight);
-                    _hueCyanBitmap?.Dispose();
-                    _hueCyanBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle3PixelData, pixelWidth, pixelHeight);
-                    _hueBlueBitmap?.Dispose();
-                    _hueBlueBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle4PixelData, pixelWidth, pixelHeight);
-                    _huePurpleBitmap?.Dispose();
-                    _huePurpleBitmap = _maxBitmap;
-                    break;
-            }
+                ColorSpectrumComponents components2 = Components;
+                _minBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMinPixelData, pixelWidth, pixelHeight);
+                _maxBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMaxPixelData, pixelWidth, pixelHeight);
+
+                switch (components2)
+                {
+                    case ColorSpectrumComponents.HueValue:
+                    case ColorSpectrumComponents.ValueHue:
+                        _saturationMinimumBitmap?.Dispose();
+                        _saturationMinimumBitmap = _minBitmap;
+                        _saturationMaximumBitmap?.Dispose();
+                        _saturationMaximumBitmap = _maxBitmap;
+                        break;
+                    case ColorSpectrumComponents.HueSaturation:
+                    case ColorSpectrumComponents.SaturationHue:
+                        _valueBitmap?.Dispose();
+                        _valueBitmap = _maxBitmap;
+                        break;
+                    case ColorSpectrumComponents.ValueSaturation:
+                    case ColorSpectrumComponents.SaturationValue:
+                        _hueRedBitmap?.Dispose();
+                        _hueRedBitmap = _minBitmap;
+                        _hueYellowBitmap?.Dispose();
+                        _hueYellowBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle1PixelData, pixelWidth, pixelHeight);
+                        _hueGreenBitmap?.Dispose();
+                        _hueGreenBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle2PixelData, pixelWidth, pixelHeight);
+                        _hueCyanBitmap?.Dispose();
+                        _hueCyanBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle3PixelData, pixelWidth, pixelHeight);
+                        _hueBlueBitmap?.Dispose();
+                        _hueBlueBitmap = ColorPickerHelpers.CreateBitmapFromPixelData(bgraMiddle4PixelData, pixelWidth, pixelHeight);
+                        _huePurpleBitmap?.Dispose();
+                        _huePurpleBitmap = _maxBitmap;
+                        break;
+                }
             
-            _componentsFromLastBitmapCreation    = Components;
-            _imageWidthFromLastBitmapCreation    = pixelWidth;
-            _imageHeightFromLastBitmapCreation   = pixelHeight;
-            _minHueFromLastBitmapCreation        = MinHue;
-            _maxHueFromLastBitmapCreation        = MaxHue;
-            _minSaturationFromLastBitmapCreation = MinSaturation;
-            _maxSaturationFromLastBitmapCreation = MaxSaturation;
-            _minValueFromLastBitmapCreation      = MinValue;
-            _maxValueFromLastBitmapCreation      = MaxValue;
+                _componentsFromLastBitmapCreation    = Components;
+                _imageWidthFromLastBitmapCreation    = pixelWidth;
+                _imageHeightFromLastBitmapCreation   = pixelHeight;
+                _minHueFromLastBitmapCreation        = MinHue;
+                _maxHueFromLastBitmapCreation        = MaxHue;
+                _minSaturationFromLastBitmapCreation = MinSaturation;
+                _maxSaturationFromLastBitmapCreation = MaxSaturation;
+                _minValueFromLastBitmapCreation      = MinValue;
+                _maxValueFromLastBitmapCreation      = MaxValue;
 
-            _hsvValues = newHsvValues;
+                _hsvValues = newHsvValues;
 
-            UpdateBitmapSources();
-            UpdateEllipse();
-        });
+                UpdateBitmapSources();
+                UpdateEllipse();
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in CreateBitmapsAndColorMapAsync: {ex.Message}");
+            // Handle exception gracefully without crashing
+        }
     }
+
 
     private static void FillPixelForBox(
         double x,

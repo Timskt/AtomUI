@@ -1,10 +1,11 @@
 using AtomUI.Controls;
+using AtomUI.Controls.Commons;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 
 namespace AtomUI.Desktop.Controls;
 
-internal class SelectTag : Tag
+internal class SelectTag : AbstractTag
 {
     public static readonly StyledProperty<SizeType> SizeTypeProperty =
         SizeTypeControlProperty.SizeTypeProperty.AddOwner<SelectTag>();
@@ -33,6 +34,6 @@ internal class SelectRemainInfoTag : SelectTag
     
     public void SetRemainText(int remainCount)
     {
-        TagText = $"+ {remainCount} ...";
+        Text = $"+ {remainCount} ...";
     }
 }

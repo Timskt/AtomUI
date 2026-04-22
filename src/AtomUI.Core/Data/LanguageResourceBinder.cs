@@ -1,5 +1,4 @@
-﻿using AtomUI.Theme.Language;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Styling;
@@ -8,11 +7,12 @@ namespace AtomUI.Data;
 
 public static class LanguageResourceBinder
 {
-    public static IDisposable CreateBinding(AvaloniaObject target,
-                                            AvaloniaProperty targetProperty,
-                                            LanguageResourceKey resourceKey,
-                                            BindingPriority priority = BindingPriority.Template,
-                                            Func<object?, object?>? converter = null)
+    public static IDisposable CreateBinding<TResourceKind>(AvaloniaObject target,
+                                                           AvaloniaProperty targetProperty,
+                                                           TResourceKind resourceKey,
+                                                           BindingPriority priority = BindingPriority.Template,
+                                                           Func<object?, object?>? converter = null)
+        where TResourceKind : Enum
     {
         var application = Application.Current;
         if (application is null)
@@ -25,8 +25,9 @@ public static class LanguageResourceBinder
 
         return target.Bind(targetProperty, observable, priority);
     }
-
-    public static string? GetLangResource(LanguageResourceKey resourceKey, ThemeVariant? themeVariant = null)
+    
+    public static string? GetLangResource<TResourceKind>(TResourceKind resourceKey, ThemeVariant? themeVariant = null)
+        where TResourceKind : Enum
     {
         var application = Application.Current;
         if (application is null)

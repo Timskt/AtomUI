@@ -1,6 +1,5 @@
 ﻿using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Interactivity;
 
@@ -20,45 +19,15 @@ internal class HeadTextButton : AvaloniaButton
         set => SetValue(IsMotionEnabledProperty, value);
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty,
-                        SharedTokenKey.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
+        this.EnableTransitions();
     }
 
-    protected override void OnUnloaded(RoutedEventArgs e)
+    protected override void OnInitialized()
     {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
 }

@@ -21,13 +21,13 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}"/>
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}"/>
         <Setter Property="ClipToBounds" Value="False"/>
         <Style Selector="^[FormLayout=Inline]">
-            <Setter Property="FormLayoutSpacing" Value="{DynamicResource {x:Static atom:FormTokenKey.InlineItemSpacing}}" />
+            <Setter Property="FormLayoutSpacing" Value="{atom:FormTokenResource InlineItemSpacing}" />
         </Style>
-        <Setter Property="ErrorMessageForeground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorErrorText}}" />
-        <Setter Property="WarningMessageForeground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarningText}}" />
+        <Setter Property="ErrorMessageForeground" Value="{atom:SharedTokenResource ColorErrorText}" />
+        <Setter Property="WarningMessageForeground" Value="{atom:SharedTokenResource ColorWarningText}" />
         
         <Setter Property="FeedbackTemplate">
             <DataTemplate DataType="atom:Form">
@@ -45,23 +45,23 @@
         <Setter Property="SuccessFeedbackTemplate">
             <DataTemplate>
                 <antdicons:CheckCircleFilled
-                    FillBrush="{DynamicResource {x:Static atom:SharedTokenKey.ColorSuccess}}"
-                    Width="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"
-                    Height="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"/>
+                    FillBrush="{atom:SharedTokenResource ColorSuccess}"
+                    Width="{atom:SharedTokenResource IconSize}"
+                    Height="{atom:SharedTokenResource IconSize}"/>
             </DataTemplate>
         </Setter>
         <Setter Property="ErrorFeedbackTemplate">
             <DataTemplate>
                 <antdicons:CloseCircleFilled
-                    FillBrush="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}"
-                    Width="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"
-                    Height="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"/>
+                    FillBrush="{atom:SharedTokenResource ColorError}"
+                    Width="{atom:SharedTokenResource IconSize}"
+                    Height="{atom:SharedTokenResource IconSize}"/>
             </DataTemplate>
         </Setter>
         <Setter Property="WarningFeedbackTemplate">
             <DataTemplate>
                 <antdicons:ExclamationCircleFilled
-                    FillBrush="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarning}}"
+                    FillBrush="{atom:SharedTokenResource ColorWarning}"
                     />
             </DataTemplate>
         </Setter>
@@ -69,7 +69,7 @@
             <DataTemplate>
                 <antdicons:LoadingOutlined
                     LoadingAnimation="Spin"
-                    StrokeBrush="{DynamicResource {x:Static atom:SharedTokenKey.ColorIcon}}"/>
+                    StrokeBrush="{atom:SharedTokenResource ColorIcon}"/>
             </DataTemplate>
         </Setter>
         

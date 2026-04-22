@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
 namespace AtomUI.Desktop.Controls;
@@ -7,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class ArrowDecoratedBoxToken : AbstractControlDesignToken
 {
     public const string ID = "ArrowDecoratedBox";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     /// <summary>
     /// 箭头三角形大小
@@ -29,4 +32,6 @@ internal class ArrowDecoratedBoxToken : AbstractControlDesignToken
         ArrowSize = SharedToken.SizePopupArrow / 1.3;
         Padding   = SharedToken.PaddingXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ArrowDecoratedBoxTokenKind);
 }

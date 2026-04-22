@@ -7,7 +7,7 @@ namespace AtomUIGallery.ShowCases.ViewModels;
 
 public class SelectViewModel : ReactiveObject, IRoutableViewModel
 {
-    public static TreeNodeKey ID = "Select";
+    public static EntityKey ID = "Select";
     
     public IScreen HostScreen { get; }
     
@@ -21,9 +21,9 @@ public class SelectViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _randomOptions, value);
     }
     
-    private List<ISelectOption> _basicSelectedOptions = [];
+    private List<ISelectOption>? _basicSelectedOptions = [];
 
-    public List<ISelectOption> BasicSelectedOptions
+    public List<ISelectOption>? BasicSelectedOptions
     {
         get => _basicSelectedOptions;
         set => this.RaiseAndSetIfChanged(ref _basicSelectedOptions, value);
@@ -76,22 +76,22 @@ public class SelectOptionsAsyncLoader : ISelectOptionsAsyncLoader
         options.Add(new SelectOption()
         {
             Header = "Jack",
-            Value = "jack"
+            Content = "jack"
         });
         options.Add(new SelectOption()
         {
-            Header = "Lucy",
-            Value  = "lucy"
+            Header  = "Lucy",
+            Content = "lucy"
         });
         options.Add(new SelectOption()
         {
-            Header = "Yiminghe",
-            Value  = "yiminghe"
+            Header  = "Yiminghe",
+            Content = "yiminghe"
         });
         options.Add(new SelectOption()
         {
-            Header = "Disabled",
-            Value  = "disabled",
+            Header    = "Disabled",
+            Content   = "disabled",
             IsEnabled = false
         });
         return new SelectOptionsLoadResult()

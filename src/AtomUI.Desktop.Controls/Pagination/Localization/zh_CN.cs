@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.PaginationLang;
 
@@ -8,4 +9,6 @@ internal class zh_CN : LanguageProvider
     public const string JumpToText = "跳至";
     public const string PageText = "页";
     public const string TotalInfoFormat = "共 ${Total} 项";
+    
+    protected override Type GetResourceKindType() => typeof(PaginationLangResourceKind);
 }

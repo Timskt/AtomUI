@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System.Collections;
+using System.Reactive;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls;
 using ReactiveUI;
@@ -8,7 +9,7 @@ namespace AtomUIGallery.ShowCases.ViewModels;
 public class CheckBoxViewModel : ReactiveObject, IRoutableViewModel,
                                  IActivatableViewModel
 {
-    public static TreeNodeKey ID = "CheckBox";
+    public static EntityKey ID = "CheckBox";
 
     public IScreen HostScreen { get; }
     public ViewModelActivator Activator { get; }
@@ -96,9 +97,9 @@ public class CheckBoxViewModel : ReactiveObject, IRoutableViewModel,
         set => this.RaiseAndSetIfChanged(ref _checkBoxOptions, value);
     }
     
-    private IList<CheckBoxOption>? _defaultCheckBoxOptions;
+    private IList? _defaultCheckBoxOptions;
 
-    public IList<CheckBoxOption>? DefaultCheckBoxOptions
+    public IList? DefaultCheckBoxOptions
     {
         get => _defaultCheckBoxOptions;
         set => this.RaiseAndSetIfChanged(ref _defaultCheckBoxOptions, value);

@@ -9,18 +9,20 @@
             <ControlTemplate>
                 <StackPanel Name="{x:Static atom:SimplePaginationThemeConstants.RootLayoutPart}"
                             VerticalAlignment="Center"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal"
+                            IsVisible="{TemplateBinding IsEffectiveVisible}">
                     <atom:PaginationNavItem Name="{x:Static atom:SimplePaginationThemeConstants.PreviousNavItemPart}"
                                             PaginationItemType="Previous"
                                             Icon="{antdicons:AntDesignIconProvider LeftOutlined}"
                                             SizeType="{TemplateBinding SizeType}"
                                             IsEnabled="{TemplateBinding IsEnabled}"
                                             IsMotionEnabled="{TemplateBinding IsMotionEnabled}"/>
-                    <atom:LineEdit Name="{x:Static atom:SimplePaginationThemeConstants.QuickJumperPart}"
-                                   IsVisible="{TemplateBinding IsReadOnly, Mode=Default, Converter={x:Static BoolConverters.Not}}"
-                                   SizeType="{TemplateBinding SizeType}"
-                                   IsEnabled="{TemplateBinding IsEnabled}" 
-                                   IsMotionEnabled="{TemplateBinding IsMotionEnabled}"/>
+                    <atom:QuickJumpEdit Name="{x:Static atom:SimplePaginationThemeConstants.QuickJumperPart}"
+                                        IsVisible="{TemplateBinding IsReadOnly, Mode=Default, Converter={x:Static BoolConverters.Not}}"
+                                        SizeType="{TemplateBinding SizeType}"
+                                        IsEnabled="{TemplateBinding IsEnabled}" 
+                                        IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
+                                        Minimum="1"/>
                     <atom:TextBlock Name="{x:Static atom:SimplePaginationThemeConstants.InfoIndicatorPart}"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
@@ -35,7 +37,7 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}"/>
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}"/>
         
         <Style Selector="^[Align=Start]">
             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -50,25 +52,25 @@
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayoutPart">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}" />
+                        Value="{atom:PaginationTokenResource PaginationLayoutSpacing}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayoutPart">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutSpacing}}" />
+                        Value="{atom:PaginationTokenResource PaginationLayoutSpacing}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ StackPanel#PART_RootLayoutPart">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationLayoutMiniSpacing}}" />
+                        Value="{atom:PaginationTokenResource PaginationLayoutMiniSpacing}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ atom|LineEdit#PART_QuickJumper">
             <Setter Property="MinWidth"
-                    Value="{DynamicResource {x:Static atom:PaginationTokenKey.PaginationQuickJumperInputWidth}}" />
+                    Value="{atom:PaginationTokenResource PaginationQuickJumperInputWidth}" />
         </Style>
 
     </ControlTheme>

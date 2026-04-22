@@ -1,9 +1,6 @@
 ﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,7 +9,7 @@ using Avalonia.Metadata;
 
 namespace AtomUI.Desktop.Controls;
 
-public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotionAwareControl
+public class Breadcrumb : ItemsControl, IMotionAwareControl
 {
     public const string DefaultSeparator = "/";
     
@@ -55,19 +52,10 @@ public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotio
 
     #endregion
 
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => BreadcrumbToken.ID;
-
-    #endregion
-    
-    private Dictionary<BreadcrumbItem, CompositeDisposable> _itemBindingDisposables = new();
-
     public Breadcrumb()
     {
         LogicalChildren.CollectionChanged += HandleItemsCollectionChanged;
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(BreadcrumbToken.ScopeProvider);
     }
 
     private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -80,24 +68,6 @@ public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotio
                 if (item is BreadcrumbItem breadcrumbItem)
                 {
                     breadcrumbItem.IsLast = (i == LogicalChildren.Count - 1);
-                }
-            }
-        }
-
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is BreadcrumbItem breadcrumbItem)
-                    {
-                        if (_itemBindingDisposables.TryGetValue(breadcrumbItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemBindingDisposables.Remove(breadcrumbItem);
-                    }
                 }
             }
         }
@@ -118,8 +88,6 @@ public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotio
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is BreadcrumbItem breadcrumbItem)
         {
-            var disposables = new CompositeDisposable(1);
-
             if (item != null && item is not Visual)
             {
                 if (!breadcrumbItem.IsSet(BreadcrumbItem.ContentProperty))
@@ -158,19 +126,10 @@ public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotio
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, breadcrumbItem, BreadcrumbItem.ContentTemplateProperty));
+                breadcrumbItem[!BreadcrumbItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, breadcrumbItem, BreadcrumbItem.IsMotionEnabledProperty));
-            
-            PrepareBreadcrumbItem(breadcrumbItem, item, index, disposables);
-            
-            if (_itemBindingDisposables.TryGetValue(breadcrumbItem, out var disposable))
-            {
-                disposable.Dispose();
-                _itemBindingDisposables.Remove(breadcrumbItem);
-            }
-            _itemBindingDisposables.Add(breadcrumbItem, disposables);
+            breadcrumbItem[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            PrepareBreadcrumbItem(breadcrumbItem, item, index);
             ConfigureItemSeparator(breadcrumbItem);
         }
         else
@@ -179,7 +138,7 @@ public class Breadcrumb : ItemsControl, IControlSharedTokenResourcesHost, IMotio
         }
     }
     
-    protected virtual void PrepareBreadcrumbItem(BreadcrumbItem breadcrumbItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareBreadcrumbItem(BreadcrumbItem breadcrumbItem, object? item, int index)
     {
     }
 

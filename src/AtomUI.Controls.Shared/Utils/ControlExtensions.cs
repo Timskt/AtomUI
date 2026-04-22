@@ -8,6 +8,14 @@ namespace AtomUI.Controls.Utils;
 
 internal static class ControlUtilsExtensions
 {
+    /// <summary>
+    /// Captures the current visual state of the control as a <see cref="RenderTargetBitmap"/>.
+    /// </summary>
+    /// <param name="control">The control to capture.</param>
+    /// <returns>
+    /// A new <see cref="RenderTargetBitmap"/> containing the rendered control.
+    /// The caller is responsible for disposing the returned bitmap.
+    /// </returns>
     public static RenderTargetBitmap CaptureCurrentBitmap(this Control control)
     {
         var scaling    = TopLevel.GetTopLevel(control)?.RenderScaling ?? 1.0;

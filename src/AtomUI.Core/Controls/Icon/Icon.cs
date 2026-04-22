@@ -176,9 +176,7 @@ public abstract class Icon : PathIcon, ICustomHitTest, IMotionAwareControl
     
     protected virtual IList<DrawingInstruction> DrawingInstructions { get; } = Array.Empty<DrawingInstruction>();
     protected Rect ViewBox;
-
-    // private Animation? _animation;
-    // private CancellationTokenSource? _animationCancellationTokenSource;
+    
     protected readonly IBrush?[] DrawBrushes = new IBrush[5];
     protected readonly Pen?[] DrawPens = new Pen?[5];
     private Style? _animationStyle;
@@ -223,6 +221,14 @@ public abstract class Icon : PathIcon, ICustomHitTest, IMotionAwareControl
         DrawPens[secondaryStrokeIndex] = new Pen(secondaryStrokeBrush, StrokeWidth, lineCap: StrokeLineCap, lineJoin: StrokeLineJoin);
         DrawPens[secondaryFillIndex]   = new Pen(secondaryFillBrush, StrokeWidth, lineCap: StrokeLineCap, lineJoin: StrokeLineJoin);
         DrawPens[fallbackIndex]        = new Pen(fallbackBrush, StrokeWidth, lineCap: StrokeLineCap, lineJoin: StrokeLineJoin);
+        ConfigureTransitions(false);
+        this.DisableTransitions();
+    }
+    
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 
     protected virtual IBrush? ProcessBrush(IBrush? brush)
@@ -259,15 +265,10 @@ public abstract class Icon : PathIcon, ICustomHitTest, IMotionAwareControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        
+
         if (change.Property == AngleAnimationRotateProperty)
         {
             SetCurrentValue(RenderTransformProperty, new RotateTransform(AngleAnimationRotate));
-        }
-        
-        else if (change.Property == FillAnimationDurationProperty)
-        {
-            ConfigureTransitions(true);
         }
 
         if (change.Property == StrokeBrushProperty)
@@ -316,10 +317,11 @@ public abstract class Icon : PathIcon, ICustomHitTest, IMotionAwareControl
                 IsSupportSimpleTransition = false;
             }
         }
-        
+
         if (IsLoaded)
         {
-            if (change.Property == IsMotionEnabledProperty)
+            if (change.Property == IsMotionEnabledProperty ||
+                change.Property == FillAnimationDurationProperty)
             {
                 ConfigureTransitions(true);
             }
@@ -429,21 +431,30 @@ public abstract class Icon : PathIcon, ICustomHitTest, IMotionAwareControl
         }
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-        SetupRotateAnimation(false);
-    }
-
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
-        Transitions = null;
+        if (_animationStyle != null)
+        {
+            Styles.Remove(_animationStyle);
+        }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        SetupRotateAnimation(false);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
         if (_animationStyle != null)
         {
             Styles.Remove(_animationStyle);  
         }
+
+        _animationStyle = null;
     }
 
     public override void Render(DrawingContext context)

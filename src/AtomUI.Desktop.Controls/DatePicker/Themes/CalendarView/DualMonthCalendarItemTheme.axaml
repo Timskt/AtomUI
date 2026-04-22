@@ -150,15 +150,15 @@
 
         <Style Selector="^ /template/ UniformGrid#PART_MonthViewLayout">
             <Setter Property="ColumnSpacing"
-                    Value="{DynamicResource {x:Static atom:DatePickerTokenKey.RangeCalendarSpacing}}" />
+                    Value="{atom:DatePickerTokenResource RangeCalendarSpacing}" />
         </Style>
         
         <Style Selector="^ /template/ Grid#PART_MonthView">
-            <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.MonthViewMinWidth}}" />
+            <Setter Property="MinWidth" Value="{atom:DatePickerTokenResource MonthViewMinWidth}" />
         </Style>
         
         <Style Selector="^ /template/ Grid#PART_SecondaryMonthView">
-            <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.MonthViewMinWidth}}" />
+            <Setter Property="MinWidth" Value="{atom:DatePickerTokenResource MonthViewMinWidth}" />
         </Style>
 
     </ControlTheme>

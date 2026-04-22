@@ -1,8 +1,6 @@
 ﻿using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
@@ -98,50 +96,6 @@ public class SliderThumb : TemplatedControl
     {
         get => GetValue(ThumbCircleSizeProperty);
         set => SetValue(ThumbCircleSizeProperty, value);
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(OutlineBrushProperty),
-                    TransitionUtils.CreateTransition<ThicknessTransition>(OutlineThicknessProperty,
-                        SharedTokenKey.MotionDurationFast),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     internal void AdjustDrag(Vector v)
@@ -251,5 +205,17 @@ public class SliderThumb : TemplatedControl
         var outlinePen       = new Pen(OutlineBrush, OutlineThickness.Left);
         var outlinePenRadius = ThumbCircleSize / 2 + BorderThickness.Left / 2 + OutlineThickness.Left / 2;
         context.DrawEllipse(null, outlinePen, centerPos, outlinePenRadius, outlinePenRadius);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

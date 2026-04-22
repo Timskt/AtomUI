@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class NotificationToken : AbstractControlDesignToken
 {
     public const string ID = "Notification";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public NotificationToken()
         : base(ID)
@@ -119,4 +122,6 @@ internal class NotificationToken : AbstractControlDesignToken
         NotificationIconMargin         = new Thickness(0, 0, SharedToken.UniformlyMarginSM, 0);
         NotificationCloseButtonPadding = SharedToken.PaddingXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(NotificationTokenKind);
 }

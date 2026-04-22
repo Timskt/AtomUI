@@ -1,9 +1,7 @@
 ﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
@@ -17,9 +15,7 @@ using Avalonia.VisualTree;
 namespace AtomUI.Desktop.Controls;
 
 [PseudoClasses(StdPseudoClass.Error, StdPseudoClass.Information, StdPseudoClass.Success, StdPseudoClass.Warning)]
-public class NotificationCard : ContentControl,
-                                IMotionAwareControl,
-                                IControlSharedTokenResourcesHost
+public class NotificationCard : ContentControl, IMotionAwareControl
 {
     internal const double AnimationMaxOffsetY = 150d;
     internal const double AnimationMaxOffsetX = 500d;
@@ -115,6 +111,12 @@ public class NotificationCard : ContentControl,
 
     #region 内部属性定义
 
+    /// <summary>回调：用户点击通知卡片时触发，由 WindowNotificationManager 设置以避免 lambda 闭包。</summary>
+    internal Action? OnClick { get; set; }
+
+    /// <summary>回调：通知卡片关闭时触发，由 WindowNotificationManager 设置以避免 lambda 闭包。</summary>
+    internal Action? OnClose { get; set; }
+
     internal static readonly DirectProperty<NotificationCard, NotificationPosition> PositionProperty =
         AvaloniaProperty.RegisterDirect<NotificationCard, NotificationPosition>(
             nameof(Position),
@@ -142,9 +144,6 @@ public class NotificationCard : ContentControl,
         set => SetAndRaise(OpenCloseMotionDurationProperty, ref _openCloseMotionDuration, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => NotificationToken.ID;
-
     #endregion
 
     private bool _isClosing;
@@ -157,7 +156,7 @@ public class NotificationCard : ContentControl,
     /// </summary>
     public NotificationCard(WindowNotificationManager manager)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(NotificationToken.ScopeProvider);
         _notificationManager = manager;
     }
     
@@ -177,13 +176,30 @@ public class NotificationCard : ContentControl,
         SetupPositionPseudoClasses(Position);
         SetupNotificationTypePseudoClasses();
         SetupDefaultNotificationIcon();
+        if (_closeButton != null)
+        {
+            _closeButton.Click += HandleCloseButtonClose;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_closeButton != null)
+        {
+            _closeButton.Click -= HandleCloseButtonClose;
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
-        _closeButton = e.NameScope.Find<IconButton>(NotificationCardThemeConstants.CloseButtonPart);
+        if (_closeButton is not null)
+        {
+            _closeButton.Click -= HandleCloseButtonClose;
+        }
+        _closeButton = e.NameScope.Find<IconButton>("PART_CloseButton");
         _motionActor = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
 
         if (_closeButton is not null)

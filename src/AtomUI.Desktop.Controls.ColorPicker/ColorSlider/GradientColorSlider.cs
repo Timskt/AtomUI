@@ -7,7 +7,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Thumb = AtomUI.Desktop.Controls.Primitives.Thumb;
+using Thumb = AtomUI.Controls.Primitives.Thumb;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -99,7 +99,8 @@ internal class GradientColorSlider : AbstractColorSlider
             track.IgnoreThumbDrag = true;
             _pressDispose = this.AddDisposableHandler(PointerPressedEvent, TrackPressed, RoutingStrategies.Tunnel);
             _releaseDispose = this.AddDisposableHandler(PointerReleasedEvent, TrackReleased, RoutingStrategies.Tunnel);
-            _activatedThumbDispose = GradientColorPickerTrack.ActivatedThumbProperty.Changed.Subscribe(HandleActivatedThumbChanged);
+            _activatedThumbDispose = track.GetObservable(GradientColorPickerTrack.ActivatedThumbProperty)
+                .Subscribe(_ => HandleActivatedThumbChanged());
             if (ActivatedStopIndex != null)
             {
                 track.SetActiveThumb(ActivatedStopIndex.Value);
@@ -107,19 +108,25 @@ internal class GradientColorSlider : AbstractColorSlider
         }
     }
 
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-        _activatedThumbDispose = GradientColorPickerTrack.ActivatedThumbProperty.Changed.Subscribe(HandleActivatedThumbChanged);
-    }
-
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
         _activatedThumbDispose?.Dispose();
+        _activatedThumbDispose = null;
     }
 
-    private void HandleActivatedThumbChanged(AvaloniaPropertyChangedEventArgs args)
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (Track is GradientColorPickerTrack track)
+        {
+            _activatedThumbDispose?.Dispose();
+            _activatedThumbDispose = track.GetObservable(GradientColorPickerTrack.ActivatedThumbProperty)
+                .Subscribe(_ => HandleActivatedThumbChanged());
+        }
+    }
+
+    private void HandleActivatedThumbChanged()
     {
         if (Track is GradientColorPickerTrack track && track.ActivatedThumb != null)
         {

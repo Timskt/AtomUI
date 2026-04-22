@@ -13,20 +13,30 @@
         </ControlTemplate>
     </Setter>
 
+    <Style Selector="^[IsMotionEnabled=True]">
+        <Setter Property="Transitions">
+            <Transitions>
+                <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                <DoubleTransition Property="Width" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                <DoubleTransition Property="Height" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
     <Style Selector="^:is(atom|ScrollBarThumb)">
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ThumbBg}}" />
+        <Setter Property="Background" Value="{atom:ScrollViewerTokenResource ThumbBg}" />
         <Setter Property="CornerRadius"
-                Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ThumbCornerRadius}}" />
+                Value="{atom:ScrollViewerTokenResource ThumbCornerRadius}" />
 
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ThumbHoverBg}}" />
+            <Setter Property="Background" Value="{atom:ScrollViewerTokenResource ThumbHoverBg}" />
             <Style Selector="^[IsLiteMode=True]">
                 <Setter Property="IsExpanded" Value="True" />
             </Style>
         </Style>
 
         <Style Selector="^:pressed">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ThumbActiveBg}}" />
+            <Setter Property="Background" Value="{atom:ScrollViewerTokenResource ThumbActiveBg}" />
             <Style Selector="^[IsLiteMode=True]">
                 <Setter Property="IsExpanded" Value="True" />
             </Style>
@@ -35,31 +45,31 @@
         <Style Selector="^[Orientation=Vertical]">
             <Style Selector="^[IsLiteMode=True]">
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.LiteModeThumbThickness}}" />
+                        Value="{atom:ScrollViewerTokenResource LiteModeThumbThickness}" />
                 <Style Selector="^[IsExpanded=True]">
                     <Setter Property="Width"
-                            Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.NormalModeThumbThickness}}" />
+                            Value="{atom:ScrollViewerTokenResource NormalModeThumbThickness}" />
                 </Style>
             </Style>
             <Style Selector="^[IsLiteMode=False]">
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.NormalModeThumbThickness}}" />
+                        Value="{atom:ScrollViewerTokenResource NormalModeThumbThickness}" />
             </Style>
         </Style>
         <Style Selector="^[Orientation=Horizontal]">
             <Style Selector="^[IsLiteMode=True]">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.LiteModeThumbThickness}}" />
+                        Value="{atom:ScrollViewerTokenResource LiteModeThumbThickness}" />
 
                 <Style Selector="^[IsExpanded=True]">
                     <Setter Property="Height"
-                            Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.NormalModeThumbThickness}}" />
+                            Value="{atom:ScrollViewerTokenResource NormalModeThumbThickness}" />
                 </Style>
 
             </Style>
             <Style Selector="^[IsLiteMode=False]">
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.NormalModeThumbThickness}}" />
+                        Value="{atom:ScrollViewerTokenResource NormalModeThumbThickness}" />
             </Style>
         </Style>
     </Style>

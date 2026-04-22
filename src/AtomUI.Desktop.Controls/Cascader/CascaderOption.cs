@@ -25,7 +25,7 @@ public static class ICascaderOptionExtensions
 {
     public static bool IsEffectiveLeaf(this ICascaderOption option)
     {
-        return option.IsLeaf || option.Children.Count == 0;
+        return option.IsLeaf || !option.Children.Any();
     }
 }
 
@@ -33,7 +33,7 @@ public record CascaderOption : ICascaderOption, ISelectTagTextProvider
 {
     public ITreeNode<ICascaderOption>? ParentNode { get; private set; }
     
-    public TreeNodeKey? ItemKey { get; init; }
+    public EntityKey? ItemKey { get; init; }
     public object? Header { get; set; }
     public PathIcon? Icon { get; set; }
     public bool IsEnabled { get; set; } = true;
@@ -52,6 +52,8 @@ public record CascaderOption : ICascaderOption, ISelectTagTextProvider
         get => _children;
         init => _children.AddRange(value);
     }
+
+    IEnumerable<ICascaderOption> ITreeNode<ICascaderOption>.Children => Children;
     
     public void UpdateParentNode(ICascaderOption? parentNode)
     {

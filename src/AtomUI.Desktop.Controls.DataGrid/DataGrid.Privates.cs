@@ -11,8 +11,6 @@ using System.Diagnostics;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Data;
 using AtomUI.Desktop.Controls.Utils;
-using AtomUI.Data;
-using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
@@ -239,9 +237,6 @@ public partial class DataGrid
 
     internal ScrollBar? VerticalScrollBar => _vScrollBar;
     internal ScrollBar? HorizontalScrollBar => _hScrollBar;
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DataGridToken.ID;
 
     #endregion
 
@@ -1405,7 +1400,8 @@ public partial class DataGrid
                     newDataGridCollectionView.PageChanging += HandlePageChanging;
                     newDataGridCollectionView.PageChanged  += HandlePageChanged;
                 }
-                IsEmptyDataSource                   =  newCollectionView.IsEmpty;
+
+                IsEmptyDataSource = newCollectionView.IsEmpty;
                 if (newCollectionView.Filter == null)
                 {
                     // TODO 不知道这样循环会不会有内存泄露的风险
@@ -1472,8 +1468,12 @@ public partial class DataGrid
         if (sender is DataGridCollectionView view)
         {
             IsEmptyDataSource = view.IsEmpty;
+            NotifyDataCollectionViewChanged(view, args);
         }
     }
+    
+    protected virtual void NotifyDataCollectionViewChanged(DataGridCollectionView view, NotifyCollectionChangedEventArgs args)
+    {}
 
     internal void UpdatePseudoClasses()
     {
@@ -1582,7 +1582,7 @@ public partial class DataGrid
         {
             newCell.OwningColumn       = column;
             newCell.IsVisible          = column.IsVisible;
-            BindUtils.RelayBind(this, SizeTypeProperty, newCell, DataGridCell.SizeTypeProperty);
+            newCell[!DataGridCell.SizeTypeProperty] = this[!SizeTypeProperty];
         }
 
         row.Cells.Insert(column.Index, newCell);
@@ -4525,7 +4525,7 @@ public partial class DataGrid
 
             if (!string.IsNullOrEmpty(text))
             {
-                CopyToClipboard(text);
+                _ = CopyToClipboardAsync(text);
                 return true;
             }
         }
@@ -4651,15 +4651,23 @@ public partial class DataGrid
         }
     }
 
-    private async void CopyToClipboard(string text)
+    private async Task CopyToClipboardAsync(string text)
     {
-        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-
-        if (clipboard != null)
+        try
         {
-            await clipboard.SetTextAsync(text);
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+
+            if (clipboard != null && this.IsAttachedToVisualTree())
+            {
+                await clipboard.SetTextAsync(text);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in CopyToClipboardAsync: {ex.Message}");
         }
     }
+
 
     /// <summary>
     /// This is an empty content control that's used during the DataGrid's copy procedure

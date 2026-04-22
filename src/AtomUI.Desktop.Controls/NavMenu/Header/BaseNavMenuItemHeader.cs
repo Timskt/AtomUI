@@ -1,7 +1,6 @@
 using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -125,53 +124,22 @@ public class BaseNavMenuItemHeader : TemplatedControl
         {
             UpdatePseudoClasses();
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(NavMenuItemPseudoClass.Icon, Icon is not null);
     }
-    
-    private void ConfigureTransitions(bool force)
+
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                var transitions = new Transitions()
-                {
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                };
-                NotifyConfigureTransitions(transitions);
-                Transitions = transitions;
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
-    
-    protected virtual void NotifyConfigureTransitions(Transitions transitions)
-    {}
-    
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 }

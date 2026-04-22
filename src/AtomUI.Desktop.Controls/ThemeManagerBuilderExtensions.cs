@@ -12,7 +12,7 @@ public static class ThemeManagerBuilderExtensions
 {
     public static IThemeManagerBuilder UseDesktopControls(this IThemeManagerBuilder themeManagerBuilder)
     {
-        themeManagerBuilder.UseSharedControls();
+        themeManagerBuilder.UseCommonControls();
         var controlTokenTypes = ControlTokenTypePool.GetTokenTypes();
         foreach (var controlType in controlTokenTypes)
         {

@@ -1,13 +1,13 @@
 ﻿using AtomUI.Controls;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls;
-using AtomUI.Desktop.Controls.Primitives;
 using ReactiveUI;
 
 namespace AtomUIGallery.ShowCases.ViewModels;
 
 public class TreeViewViewModel : ReactiveObject, IRoutableViewModel
 {
-    public static TreeNodeKey ID = "TreeView";
+    public static EntityKey ID = "TreeView";
     
     public IScreen HostScreen { get; }
     
@@ -77,25 +77,25 @@ public class TreeViewViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _treeViewNodeHoverMode, value);
     }
     
-    private List<ITreeItemNode> _basicTreeNodes = [];
+    private List<ITreeItemNode>? _basicTreeNodes = [];
     
-    public List<ITreeItemNode> BasicTreeNodes
+    public List<ITreeItemNode>? BasicTreeNodes
     {
         get => _basicTreeNodes;
         set => this.RaiseAndSetIfChanged(ref _basicTreeNodes, value);
     }
     
-    private List<ITreeItemNode> _asyncLoadTreeNodes = [];
+    private List<ITreeItemNode>? _asyncLoadTreeNodes = [];
     
-    public List<ITreeItemNode> AsyncLoadTreeNodes
+    public List<ITreeItemNode>? AsyncLoadTreeNodes
     {
         get => _asyncLoadTreeNodes;
         set => this.RaiseAndSetIfChanged(ref _asyncLoadTreeNodes, value);
     }
     
-    private List<ITreeItemNode> _filterTreeNodes = [];
+    private List<ITreeItemNode>? _filterTreeNodes = [];
     
-    public List<ITreeItemNode> FilterTreeNodes
+    public List<ITreeItemNode>? FilterTreeNodes
     {
         get => _filterTreeNodes;
         set => this.RaiseAndSetIfChanged(ref _filterTreeNodes, value);

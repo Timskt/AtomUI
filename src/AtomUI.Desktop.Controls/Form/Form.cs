@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,54 +16,9 @@ using Avalonia.Threading;
 
 namespace AtomUI.Desktop.Controls;
 
-public enum FormLabelAlign
-{
-    Left,
-    Right
-}
-
-public enum FormLayout
-{
-    Horizontal,
-    Vertical,
-    Inline
-}
-
-public enum FormRequiredMark
-{
-    Default,
-    Hidden,
-    Optional,
-    Customize
-}
-
-public enum FormValidateTrigger
-{
-    OnChanged,
-    OnBlur,
-    OnSubmit
-}
-
-public enum FormValidateStrategy
-{
-    StopWhenFirstFailed,
-    Sequential,
-    Parallel
-}
-
-public enum FormValidateStatus
-{
-    Default,
-    Success,
-    Warning,
-    Error,
-    Validating
-}
-
 public class Form : ItemsControl,
                     ISizeTypeAware,
                     IMotionAwareControl,
-                    IControlSharedTokenResourcesHost,
                     IForm,
                     IInputControlStyleVariantAware
 {
@@ -480,10 +432,6 @@ public class Form : ItemsControl,
         set => SetValue(FormLayoutSpacingProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FormToken.ID;
-    
-    private readonly Dictionary<FormItem, CompositeDisposable> _itemsBindingDisposables = new();
     #endregion
 
     private bool _initValueApplied;
@@ -503,34 +451,13 @@ public class Form : ItemsControl,
     
     public Form()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FormToken.ScopeProvider);
         LogicalChildren.CollectionChanged += HandleCollectionChanged;
-        Items.CollectionChanged += (sender, args) =>
-        {
-            InvalidateMeasure();
-        };
+        Items.CollectionChanged           += (_, _) => InvalidateMeasure();
     }
-    
+
     private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is FormItem formItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(formItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(formItem);
-                        }
-                    }
-                }
-            }
-        }
-
         ConfigureShowItemDeleteButton();
     }
     
@@ -552,36 +479,29 @@ public class Form : ItemsControl,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is FormItem formItem)
         {
-            formItem.OwnerForm = this;
-            var disposables = new CompositeDisposable(16);
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, formItem, FormItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, formItem, FormItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ErrorMessageForegroundProperty, formItem, FormItem.ErrorMessageForegroundProperty));
-            disposables.Add(BindUtils.RelayBind(this, WarningMessageForegroundProperty, formItem, FormItem.WarningMessageForegroundProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowColonProperty, formItem, FormItem.IsShowColonProperty));
-            disposables.Add(BindUtils.RelayBind(this, RequiredMarkProperty, formItem, FormItem.RequiredMarkProperty));
-            disposables.Add(BindUtils.RelayBind(this, LabelWrappingProperty, formItem, FormItem.LabelWrappingProperty));
-            disposables.Add(BindUtils.RelayBind(this, StyleVariantProperty, formItem, FormItem.StyleVariantProperty));
-            disposables.Add(BindUtils.RelayBind(this, CustomRequireMarkProperty, formItem, FormItem.CustomRequireMarkProperty));
-            disposables.Add(BindUtils.RelayBind(this, CustomRequireMarkTemplateProperty, formItem, FormItem.CustomRequireMarkTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, CustomOptionalMarkProperty, formItem, FormItem.CustomOptionalMarkProperty));
-            disposables.Add(BindUtils.RelayBind(this, CustomOptionalMarkTemplateProperty, formItem, FormItem.CustomOptionalMarkTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, LabelColInfoProperty, formItem, FormItem.LabelColInfoProperty));
-            disposables.Add(BindUtils.RelayBind(this, WrapperColInfoProperty, formItem, FormItem.WrapperColInfoProperty));
-            disposables.Add(BindUtils.RelayBind(this, FeedbackTemplateProperty, formItem, FormItem.FeedbackTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsShowItemDeleteButtonProperty, formItem, FormItem.IsShowItemDeleteButtonProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsEffectiveShowItemDeleteButtonProperty, formItem, FormItem.IsEffectiveShowItemDeleteButtonProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemDeleteButtonIconProperty, formItem, FormItem.ItemDeleteButtonIconTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, FormLayoutProperty, formItem, FormItem.FormLayoutProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsHideItemLabelProperty, formItem, FormItem.IsHideItemLabelProperty));
-            PrepareFormItem(formItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(formItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(formItem);
-            }
-            _itemsBindingDisposables.Add(formItem, disposables);
+            formItem.OwnerForm                                          = this;
+            formItem[!FormItem.SizeTypeProperty]                        = this[!SizeTypeProperty];
+            formItem[!FormItem.IsMotionEnabledProperty]                 = this[!IsMotionEnabledProperty];
+            formItem[!FormItem.ErrorMessageForegroundProperty]          = this[!ErrorMessageForegroundProperty];
+            formItem[!FormItem.WarningMessageForegroundProperty]        = this[!WarningMessageForegroundProperty];
+            formItem[!FormItem.IsShowColonProperty]                     = this[!IsShowColonProperty];
+            formItem[!FormItem.RequiredMarkProperty]                    = this[!RequiredMarkProperty];
+            formItem[!FormItem.LabelWrappingProperty]                   = this[!LabelWrappingProperty];
+            formItem[!FormItem.StyleVariantProperty]                    = this[!StyleVariantProperty];
+            formItem[!FormItem.CustomRequireMarkProperty]               = this[!CustomRequireMarkProperty];
+            formItem[!FormItem.CustomRequireMarkTemplateProperty]       = this[!CustomRequireMarkTemplateProperty];
+            formItem[!FormItem.CustomOptionalMarkProperty]              = this[!CustomOptionalMarkProperty];
+            formItem[!FormItem.CustomOptionalMarkTemplateProperty]      = this[!CustomOptionalMarkTemplateProperty];
+            formItem[!FormItem.LabelColInfoProperty]                    = this[!LabelColInfoProperty];
+            formItem[!FormItem.WrapperColInfoProperty]                  = this[!WrapperColInfoProperty];
+            formItem[!FormItem.FeedbackTemplateProperty]                = this[!FeedbackTemplateProperty];
+            formItem[!FormItem.IsShowItemDeleteButtonProperty]          = this[!IsShowItemDeleteButtonProperty];
+            formItem[!FormItem.IsEffectiveShowItemDeleteButtonProperty] = this[!IsEffectiveShowItemDeleteButtonProperty];
+            formItem[!FormItem.ItemDeleteButtonIconTemplateProperty] = this[!ItemDeleteButtonIconProperty];
+            formItem[!FormItem.FormLayoutProperty] = this[!FormLayoutProperty];
+            formItem[!FormItem.IsHideItemLabelProperty] = this[!IsHideItemLabelProperty];
+    
+            PrepareFormItem(formItem, item, index);
         }
         else
         {
@@ -589,13 +509,14 @@ public class Form : ItemsControl,
         }
     }
 
-    protected virtual void PrepareFormItem(FormItem formItem, object? item, int index, CompositeDisposable disposables)
+    protected virtual void PrepareFormItem(FormItem formItem, object? item, int index)
     {
     }
     
     public void Validate()
     {
         _validationTokenSource?.Cancel();
+        _validationTokenSource?.Dispose();
         _validationTokenSource = new CancellationTokenSource();
         var cancellationToken = _validationTokenSource.Token;
         Dispatcher.UIThread.InvokeAsync(() => ValidateAsync(cancellationToken));
@@ -658,7 +579,7 @@ public class Form : ItemsControl,
         return FormValidateResult.Success;
     }
 
-    public void SetFormValues(FormValues formValues)
+    public void SetFormValues(IFormValues formValues)
     {
         foreach (var item in Items)
         {
@@ -679,6 +600,7 @@ public class Form : ItemsControl,
     public void Submit()
     {
         _validationTokenSource?.Cancel();
+        _validationTokenSource?.Dispose();
         _validationTokenSource = new CancellationTokenSource();
         var cancellationToken = _validationTokenSource.Token;
         Dispatcher.UIThread.InvokeAsync(async () =>
@@ -888,7 +810,7 @@ public class Form : ItemsControl,
         }
     }
 
-    public void DeleteFormItem(FormItem formItem)
+    public void DeleteFormItem(IFormItem formItem)
     {
         Items.Remove(formItem);
     }

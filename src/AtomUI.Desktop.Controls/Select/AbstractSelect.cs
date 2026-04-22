@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using AtomUI.Controls;
-using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
@@ -18,14 +17,14 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class AbstractSelect : TemplatedControl, 
-                              IMotionAwareControl, 
-                              ISizeTypeAware,
-                              ICompactSpaceAware,
-                              IInputControlStatusAware,
-                              IInputControlStyleVariantAware,
-                              IFormItemAware,
-                              IFormItemFeedbackAware
+public abstract class AbstractSelect : TemplatedControl, 
+                                       IMotionAwareControl, 
+                                       ISizeTypeAware,
+                                       ICompactSpaceAware,
+                                       IInputControlStatusAware,
+                                       IInputControlStyleVariantAware,
+                                       IFormItemAware,
+                                       IFormItemFeedbackAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<bool> IsAllowClearProperty =
@@ -420,21 +419,11 @@ public class AbstractSelect : TemplatedControl,
             o => o.SelectedCount,
             (o, v) => o.SelectedCount = v);
     
-    internal static readonly DirectProperty<AbstractSelect, string?> ActivateFilterValueProperty =
-        AvaloniaProperty.RegisterDirect<AbstractSelect, string?>(nameof(ActivateFilterValue),
-            o => o.ActivateFilterValue,
-            (o, v) => o.ActivateFilterValue = v);
-    
     internal static readonly DirectProperty<AbstractSelect, PlacementMode> PopupPlacementProperty =
         AvaloniaProperty.RegisterDirect<AbstractSelect, PlacementMode>(
             nameof(PopupPlacement),
             o => o.PopupPlacement,
             (o, v) => o.PopupPlacement = v);
-    
-    internal static readonly DirectProperty<AbstractSelect, IValueFilter?> EffectiveFilterProperty =
-        AvaloniaProperty.RegisterDirect<AbstractSelect, IValueFilter?>(nameof(EffectiveFilter),
-            o => o.EffectiveFilter,
-            (o, v) => o.EffectiveFilter = v);
     
     internal static readonly StyledProperty<SpaceItemPosition?> CompactSpaceItemPositionProperty = 
         CompactSpaceAwareControlProperty.CompactSpaceItemPositionProperty.AddOwner<AbstractSelect>();
@@ -512,28 +501,12 @@ public class AbstractSelect : TemplatedControl,
         set => SetAndRaise(SelectedCountProperty, ref _selectedCount, value);
     }
     
-    private string? _activateFilterValue;
-
-    internal string? ActivateFilterValue
-    {
-        get => _activateFilterValue;
-        set => SetAndRaise(ActivateFilterValueProperty, ref _activateFilterValue, value);
-    }
-    
     private PlacementMode _popupPlacement = PlacementMode.BottomEdgeAlignedLeft;
 
     internal PlacementMode PopupPlacement
     {
         get => _popupPlacement;
         set => SetAndRaise(PopupPlacementProperty, ref _popupPlacement, value);
-    }
-    
-    private IValueFilter? _effectiveFilter;
-
-    internal IValueFilter? EffectiveFilter
-    {
-        get => _effectiveFilter;
-        set => SetAndRaise(EffectiveFilterProperty, ref _effectiveFilter, value);
     }
     
     internal SpaceItemPosition? CompactSpaceItemPosition
@@ -567,6 +540,8 @@ public class AbstractSelect : TemplatedControl,
     private protected bool PopupHasOpened;
     private protected bool IgnorePropertyChange;
     private AddOnDecoratedBox? _addOnDecoratedBox;
+
+    private Window? _attachedWindow;
 
     static AbstractSelect()
     {
@@ -672,6 +647,7 @@ public class AbstractSelect : TemplatedControl,
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel is Window window)
         {
+            _attachedWindow    =  window;
             window.Deactivated += HandleWindowDeactivated;
         }
     }
@@ -679,11 +655,13 @@ public class AbstractSelect : TemplatedControl,
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel is Window window)
+        
+        if (_attachedWindow != null)
         {
-            window.Deactivated -= HandleWindowDeactivated;
+            _attachedWindow.Deactivated -= HandleWindowDeactivated;
         }
+
+        _attachedWindow = null;
     }
 
     private void HandleWindowDeactivated(object? sender, EventArgs e)
@@ -700,8 +678,8 @@ public class AbstractSelect : TemplatedControl,
             Popup.Opened -= PopupOpened;
             Popup.Closed -= PopupClosed;
         }
-        
-        Popup                     =  e.NameScope.Find<Popup>(SelectThemeConstants.PopupPart);
+
+        Popup = e.NameScope.Find<Popup>(SelectThemeConstants.PopupPart);
 
         if (Popup != null)
         {
@@ -722,10 +700,7 @@ public class AbstractSelect : TemplatedControl,
     {
         SubscriptionsOnOpen.Clear();
         this.GetObservable(IsVisibleProperty).Subscribe(IsVisibleChanged).DisposeWith(SubscriptionsOnOpen);
-        foreach (var parent in this.GetVisualAncestors().OfType<Control>())
-        {
-            parent.GetObservable(IsVisibleProperty).Subscribe(IsVisibleChanged).DisposeWith(SubscriptionsOnOpen);
-        }
+        this.SubscribeAncestorIsVisible(IsVisibleChanged, SubscriptionsOnOpen);
 
         ConfigurePopupMinWith(Bounds.Width);
         NotifyPopupOpened();
@@ -861,7 +836,7 @@ public class AbstractSelect : TemplatedControl,
         PseudoClasses.Set(SelectPseudoClass.DropdownOpen, IsDropDownOpen);
         PseudoClasses.Set(StdPseudoClass.Error, Status == InputControlStatus.Error);
         PseudoClasses.Set(StdPseudoClass.Warning, Status == InputControlStatus.Warning);
-        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outline);
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outlined);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Filled, StyleVariant == InputControlStyleVariant.Filled);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
     }

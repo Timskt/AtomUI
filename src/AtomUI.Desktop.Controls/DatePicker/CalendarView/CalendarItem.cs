@@ -1187,8 +1187,8 @@ internal class CalendarItem : TemplatedControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-        _pointerPositionDisposable = inputManager.Process.Subscribe(DetectPointerPosition);
+        var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+        _pointerPositionDisposable = inputManager?.Process.Subscribe(DetectPointerPosition);
         SetCalendarDayButtons();
     }
     
@@ -1196,6 +1196,7 @@ internal class CalendarItem : TemplatedControl
     {
         base.OnDetachedFromVisualTree(e);
         _pointerPositionDisposable?.Dispose();
+        _pointerPositionDisposable = null;
     }
 
     protected virtual bool IsPointerInMonthView(Point position)

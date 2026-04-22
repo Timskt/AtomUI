@@ -8,7 +8,7 @@
         </ControlTheme.BasedOn>
         
         <Setter Property="ButtonType" Value="Primary"/>
-        <Setter Property="Content" Value="{DynamicResource {x:Static atom:CommonLangResourceKey.Submit}}"/>
+        <Setter Property="Content" Value="{atom:CommonLangResource Submit}"/>
         
     </ControlTheme>
 </ResourceDictionary>

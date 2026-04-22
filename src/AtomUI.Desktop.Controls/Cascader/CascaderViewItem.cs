@@ -115,7 +115,7 @@ public class CascaderViewItem : TemplatedControl, ISelectable, IListItemVirtuali
         set => SetValue(IsCheckBoxEnabledProperty, value);
     }
 
-    public TreeNodeKey? ItemKey { get; set; }
+    public EntityKey? ItemKey { get; set; }
 
     #endregion
 
@@ -341,7 +341,7 @@ public class CascaderViewItem : TemplatedControl, ISelectable, IListItemVirtuali
     {
         if (HasItemAsyncDataLoader)
         {
-            if (AttachedOption?.Children.Count > 0)
+            if (AttachedOption != null && AttachedOption.Children.Any())
             {
                 IsLeaf = false;
             }
@@ -352,39 +352,21 @@ public class CascaderViewItem : TemplatedControl, ISelectable, IListItemVirtuali
         }
         else
         {
-            IsLeaf = AttachedOption?.Children.Count == 0;
+            IsLeaf = AttachedOption != null && !AttachedOption.Children.Any();
         }
     }
-    
-    private void ConfigureTransitions(bool force)
+
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
-    
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        this.EnableTransitions();
         ConfigureIsLeaf();
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     private int GetLevel()

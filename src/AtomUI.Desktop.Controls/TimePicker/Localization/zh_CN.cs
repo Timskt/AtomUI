@@ -1,4 +1,4 @@
-﻿using AtomUI.Desktop.Controls;
+﻿using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.TimePickerLang;
@@ -9,4 +9,6 @@ internal class zh_CN : LanguageProvider
     public const string AMText = "上午";
     public const string PMText = "下午";
     public const string Now = "现在";
+    
+    protected override Type GetResourceKindType() => typeof(TimePickerLangResourceKind);
 }

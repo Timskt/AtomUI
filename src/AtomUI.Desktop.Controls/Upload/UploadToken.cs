@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class UploadToken : AbstractControlDesignToken
 {
     public const string ID = "Upload";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public UploadToken()
         : this(ID)
     {
@@ -85,4 +88,6 @@ internal class UploadToken : AbstractControlDesignToken
         PictureListItemMargin    = new Thickness(0, SharedToken.UniformlyMarginXS, 0, 0);
         PictureListPreviewerSize = SharedToken.SizeXXL;
     }
+    
+    protected override Type GetTokenKindType() => typeof(UploadTokenKind);
 }

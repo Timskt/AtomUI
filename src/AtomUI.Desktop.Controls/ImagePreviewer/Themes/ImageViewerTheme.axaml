@@ -42,10 +42,20 @@
         </Setter>
 
         <Style Selector="^ /template/ atom|ImagePreviewNavButton">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:SharedTokenKey.Margin}}" />
+            <Setter Property="Margin" Value="{atom:SharedTokenResource Margin}" />
         </Style>
         <Style Selector="^ /template/ Image#PART_ImageRenderer">
             <Setter Property="Cursor" Value="DragMove" />
+        </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="ImageRenderTransform" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="ImageTranslateX" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                    <DoubleTransition Property="ImageTranslateY" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                </Transitions>
+            </Setter>
         </Style>
     </ControlTheme>
 </ResourceDictionary>

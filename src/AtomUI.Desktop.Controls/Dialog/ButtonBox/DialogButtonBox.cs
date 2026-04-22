@@ -1,11 +1,8 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -14,9 +11,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class DialogButtonBox : TemplatedControl, 
-                               IControlSharedTokenResourcesHost,
-                               IMotionAwareControl
+public class DialogButtonBox : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
 
@@ -246,12 +241,6 @@ public class DialogButtonBox : TemplatedControl,
         set => SetValue(IgnoreButtonTextProperty, value);
     }
     #endregion
-    
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DialogToken.ID;
-    #endregion
 
     private DockPanel? _leftGroup;
     private DockPanel? _centerGroup;
@@ -259,7 +248,6 @@ public class DialogButtonBox : TemplatedControl,
     private List<DialogButton>? _standardButtons;
     private Dictionary<DialogButtonRole, List<DialogButton>> _buttonGroup;
     private Dictionary<DialogButtonRole, List<DialogButton>> _standardButtonGroup;
-    private Dictionary<DialogButton, CompositeDisposable> _bindingDisposables;
     
     static DialogButtonBox()
     {
@@ -268,11 +256,10 @@ public class DialogButtonBox : TemplatedControl,
     
     public DialogButtonBox()
     {
-        this.RegisterResources();
-        CustomButtons.CollectionChanged += new NotifyCollectionChangedEventHandler(HandleCustomButtonsChanged);
+        this.RegisterTokenResourceScope(DialogToken.ScopeProvider);
+        CustomButtons.CollectionChanged += new (HandleCustomButtonsChanged);
         _standardButtonGroup            =  new Dictionary<DialogButtonRole, List<DialogButton>>();
         _buttonGroup                    =  new Dictionary<DialogButtonRole, List<DialogButton>>();
-        _bindingDisposables             =  new Dictionary<DialogButton, CompositeDisposable>();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -367,11 +354,6 @@ public class DialogButtonBox : TemplatedControl,
             foreach (var button in _standardButtons)
             {
                 RemoveButtonFromGroup(button.Role, button, true);
-                if (_bindingDisposables.TryGetValue(button, out var disposables))
-                {
-                    disposables.Dispose();
-                    _bindingDisposables.Remove(button);
-                }
             }
         }
         if (StandardButtons == DialogStandardButton.NoButton)
@@ -391,10 +373,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Ok,
                 StandardButtonType = DialogStandardButton.Ok
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, OkButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!OkButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.AcceptRole, button, true);
         }
@@ -409,10 +389,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Open,
                 StandardButtonType = DialogStandardButton.Open
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, OpenButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!OpenButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.AcceptRole, button, true);
         }
@@ -427,10 +405,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Save,
                 StandardButtonType = DialogStandardButton.Save
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, SaveButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!SaveButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.AcceptRole, button, true);
         }
@@ -445,10 +421,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.SaveAll,
                 StandardButtonType = DialogStandardButton.SaveAll
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, SaveAllButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!SaveAllButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.AcceptRole, button, true);
         }
@@ -463,10 +437,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Retry,
                 StandardButtonType = DialogStandardButton.Retry
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, RetryButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!RetryButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.AcceptRole, button, true);
         }
@@ -481,10 +453,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Ignore,
                 StandardButtonType = DialogStandardButton.Ignore
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, IgnoreButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!IgnoreButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.AcceptRole, button, true);
         }
@@ -499,10 +469,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Yes,
                 StandardButtonType = DialogStandardButton.Yes
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, YesButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!YesButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.YesRole, button, true);
         }
@@ -517,10 +485,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.YesToAll,
                 StandardButtonType = DialogStandardButton.YesToAll
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, YesToAllButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!YesToAllButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.YesRole, button, true);
         }
@@ -535,10 +501,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Cancel,
                 StandardButtonType = DialogStandardButton.Cancel
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, CancelButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!CancelButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.RejectRole, button, true);
         }
@@ -553,10 +517,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Close,
                 StandardButtonType = DialogStandardButton.Close
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, CloseButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!CloseButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.RejectRole, button, true);
         }
@@ -571,10 +533,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Abort,
                 StandardButtonType = DialogStandardButton.Abort
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, AbortButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!AbortButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.RejectRole, button, true);
         }
@@ -589,10 +549,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.No,
                 StandardButtonType = DialogStandardButton.No
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, NoButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!NoButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.NoRole, button, true);
         }
@@ -607,10 +565,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.NoToAll,
                 StandardButtonType = DialogStandardButton.NoToAll
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, NoToAllButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!NoToAllButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.NoRole, button, true);
         }
@@ -625,10 +581,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Discard,
                 StandardButtonType = DialogStandardButton.Discard
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, DiscardButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!DiscardButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.DestructiveRole, button, true);
         }
@@ -643,10 +597,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Help,
                 StandardButtonType = DialogStandardButton.Help
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, HelpButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!HelpButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.HelpRole, button, true);
         }
@@ -661,10 +613,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Reset,
                 StandardButtonType = DialogStandardButton.Reset
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, ResetButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!ResetButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.ResetRole, button, true);
         }
@@ -679,10 +629,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Reload,
                 StandardButtonType = DialogStandardButton.Reload
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, ResetButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!ReloadButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.ActionRole, button, true);
         }
@@ -697,10 +645,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.RestoreDefaults,
                 StandardButtonType = DialogStandardButton.RestoreDefaults
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, RestoreDefaultsButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!RestoreDefaultsButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.ResetRole, button, true);
         }
@@ -715,10 +661,8 @@ public class DialogButtonBox : TemplatedControl,
                 IsDefaultEscapeButton = EscapeStandardButton == DialogStandardButton.Apply,
                 StandardButtonType = DialogStandardButton.Apply
             };
-            var disposables = new CompositeDisposable(2);
-            disposables.Add(BindUtils.RelayBind(this, ApplyButtonTextProperty, button, Button.ContentProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, button, Button.IsMotionEnabledProperty));
-            _bindingDisposables.Add(button, disposables);
+            button[!Button.ContentProperty]         = this[!ApplyButtonTextProperty];
+            button[!Button.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
             _standardButtons.Add(button);
             AddButtonToGroup(DialogButtonRole.ApplyRole, button, true);
         }

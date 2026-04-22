@@ -1,9 +1,7 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
@@ -49,48 +47,18 @@ internal class ImagePreviewerCover : ContentControl, IMotionAwareControl
         get => GetValue(MaskOpacityProperty);
         set => SetValue(MaskOpacityProperty, value);
     }
-    
+
     #endregion
-    
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+
+    protected override void OnInitialized()
     {
-        base.OnPropertyChanged(change);
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-    
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        base.OnInitialized();
+        this.DisableTransitions();
     }
 
-    protected override void OnLoaded(RoutedEventArgs args)
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        base.OnLoaded(args);
-        ConfigureTransitions(false);
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<DoubleTransition>(MaskOpacityProperty, SharedTokenKey.MotionDurationSlow)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

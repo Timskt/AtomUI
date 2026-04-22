@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -7,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class CheckBoxToken : AbstractControlDesignToken
 {
     public const string ID = "CheckBox";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public CheckBoxToken()
         : base(ID)
     {
@@ -28,4 +31,6 @@ internal class CheckBoxToken : AbstractControlDesignToken
         IndicatorTristateMarkSize = SharedToken.FontSizeLG / 2;
         TextMargin                = new Thickness(SharedToken.UniformlyMarginXS, 0, SharedToken.UniformlyMarginXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(CheckBoxTokenKind);
 }

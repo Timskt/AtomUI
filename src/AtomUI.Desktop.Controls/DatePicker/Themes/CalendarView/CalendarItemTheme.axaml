@@ -106,35 +106,35 @@
             </Template>
         </Setter>
 
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.ItemPanelMinHeight}}" />
-        <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.ItemPanelMinWidth}}" />
+        <Setter Property="MinHeight" Value="{atom:DatePickerTokenResource ItemPanelMinHeight}" />
+        <Setter Property="MinWidth" Value="{atom:DatePickerTokenResource ItemPanelMinWidth}" />
         <Setter Property="HeaderBorderThickness"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+                Value="{atom:SharedTokenResource BorderThickness}" />
 
         <Style Selector="^ /template/ Border#PART_HeaderFrame">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.HeaderMargin}}" />
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.HeaderPadding}}" />
+            <Setter Property="Margin" Value="{atom:DatePickerTokenResource HeaderMargin}" />
+            <Setter Property="Padding" Value="{atom:DatePickerTokenResource HeaderPadding}" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
+                    Value="{atom:SharedTokenResource ColorBorderSecondary}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeSM}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeSM}" />
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
+                    Value="{atom:SharedTokenResource ColorTextDescription}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton:pointerover">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorText}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton:pressed">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorText}" />
         </Style>
 
         <Style Selector="^ /template/ Grid#PART_MonthView">
-            <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.MonthViewMinWidth}}" />
+            <Setter Property="MinWidth" Value="{atom:DatePickerTokenResource MonthViewMinWidth}" />
         </Style>
 
     </Style>

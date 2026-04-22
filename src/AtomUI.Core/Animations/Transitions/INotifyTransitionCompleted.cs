@@ -12,7 +12,7 @@ public class TransitionCompletedEventArgs : EventArgs
     }
 }
 
-public interface INotifyTransitionCompleted : ITransition
+public interface INotifyTransitionCompleted : ITransition, IDisposable
 {
     public IObservable<bool> CompletedObservable { get; }
     public event EventHandler<TransitionCompletedEventArgs>? TransitionCompleted;

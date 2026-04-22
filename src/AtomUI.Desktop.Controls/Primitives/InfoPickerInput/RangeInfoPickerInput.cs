@@ -1,7 +1,6 @@
-﻿using AtomUI.Controls;
+﻿using AtomUI.Animations;
 using AtomUI.Desktop.Controls.Primitives.Themes;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Primitives;
@@ -109,35 +108,10 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
         _topLevel = TopLevel.GetTopLevel(this);
     }
 
-    private void ConfigureTransitions(bool force)
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<DoubleTransition>(PickerIndicatorOffsetXProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(RangePickerIndicatorOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        base.OnDetachedFromVisualTree(e);
+        _topLevel = null;
     }
 
     protected override bool FlyoutOpenPredicate(RawPointerEventArgs args)
@@ -275,7 +249,7 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
         {
             if (change.Property == IsMotionEnabledProperty)
             {
-                ConfigureTransitions(true);
+                // Transitions now handled by XAML theme
             }
         }
     }
@@ -366,12 +340,24 @@ public abstract class RangeInfoPickerInput : InfoPickerInput
     {
         if (DecoratedBox is not null)
         {
-            SetCurrentValue(IsClearButtonVisibleProperty, DecoratedBox.IsInnerBoxHover && 
-                                                          InfoInputBox?.IsReadOnly == false && 
+            SetCurrentValue(IsClearButtonVisibleProperty, DecoratedBox.IsInnerBoxHover &&
+                                                          InfoInputBox?.IsReadOnly == false &&
                                                           InfoInputBox.Text?.Length > 0 &&
                                                           SecondaryInfoInputBox?.IsReadOnly == false &&
                                                           SecondaryInfoInputBox?.Text?.Length > 0);
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }
 

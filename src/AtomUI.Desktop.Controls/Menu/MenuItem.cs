@@ -1,15 +1,11 @@
-﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
-using AtomUI.Animations;
+﻿using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Metadata;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
@@ -53,9 +49,9 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
 
     #endregion
     
-    IList<IMenuItemData> ITreeNode<IMenuItemData>.Children => Items.OfType<IMenuItemData>().ToList();
+    IEnumerable<IMenuItemData> ITreeNode<IMenuItemData>.Children => Items.OfType<IMenuItemData>();
     public ITreeNode<IMenuItemData>? ParentNode => Parent as ITreeNode<IMenuItemData>;
-    public TreeNodeKey? ItemKey { get; set; }
+    public EntityKey? ItemKey { get; set; }
 
     #region 公共事件定义
 
@@ -124,40 +120,13 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
     private RadioButton? _radioButton;
     private CheckBox? _checkBox;
     private Popup? _popup;
-    private readonly Dictionary<MenuItem, CompositeDisposable> _itemsBindingDisposables = new();
     
     static MenuItem()
     {
         AffectsRender<MenuItem>(BackgroundProperty);
         AffectsMeasure<MenuItem>(IconProperty);
     }
-
-    public MenuItem()
-    {
-        LogicalChildren.CollectionChanged  += HandleItemsCollectionChanged;
-    }
-        
-    private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is MenuItem menuItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(menuItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemsBindingDisposables.Remove(menuItem);
-                    }
-                }
-            }
-        }
-    }
-
+    
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -187,14 +156,6 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
                  change.Property == ItemHeightProperty)
         {
             ConfigureMaxPopupHeight();
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
     }
 
@@ -229,8 +190,6 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is MenuItem menuItem)
         {
-            var disposables = new CompositeDisposable(4);
-                    
             if (item != null && item is not Visual)
             {
                 if (!menuItem.IsSet(HeaderProperty))
@@ -261,21 +220,13 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
             }
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, MenuItem.HeaderTemplateProperty));
+                menuItem[!HeaderTemplateProperty] = this[!ItemTemplateProperty];
             }
-            
-            disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, MenuItem.ItemTemplateProperty));
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, menuItem, MenuItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuItem, MenuItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, menuItem, MenuItem.ShouldUseOverlayLayerProperty));
-            PrepareMenuItem(menuItem, item, index, disposables);
-            
-            if (_itemsBindingDisposables.TryGetValue(menuItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(menuItem);
-            }
-            _itemsBindingDisposables.Add(menuItem, disposables);
+            menuItem[!ItemTemplateProperty]          = this[!ItemTemplateProperty];
+            menuItem[!SizeTypeProperty]              = this[!SizeTypeProperty];
+            menuItem[!IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+            menuItem[!ShouldUseOverlayLayerProperty] = this[!ShouldUseOverlayLayerProperty];
+            PrepareMenuItem(menuItem, item, index);
         }
         else if (container is MenuSeparator menuSeparator)
         {
@@ -287,7 +238,7 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         }
     }
     
-    protected virtual void PrepareMenuItem(MenuItem menuItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareMenuItem(MenuItem menuItem, object? item, int index)
     {
     }
 
@@ -307,7 +258,7 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         
         _radioButton = e.NameScope.Find<RadioButton>(MenuItemThemeConstants.ToggleRadioPart);
         _checkBox    = e.NameScope.Find<CheckBox>(MenuItemThemeConstants.ToggleCheckboxPart);
-        _popup       = e.NameScope.Find<Popup>(MenuItemThemeConstants.PopupPart);
+        _popup       = e.NameScope.Find<Popup>(PopupThemeConstants.PopupPart);
         if (_popup != null)
         {
             _popup.ClickHidePredicate = MenuPopupClosePredicate;
@@ -384,51 +335,21 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
         }
         return popupRoots;
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ContentPresenter.BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ContentPresenter.ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
 
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
-    public async Task CloseItemAsync()
+    public async Task CloseItemAsync(CancellationToken cancellationToken = default)
     {
         for (var i = 0; i < ItemCount; i++)
         {
             var container = ContainerFromIndex(i);
             if (container is MenuItem childMenuItem)
             {
-                await childMenuItem.CloseItemAsync();
+                await childMenuItem.CloseItemAsync(cancellationToken);
             }
         }
 
         if (_popup != null && _popup.IsMotionAwareOpen)
         {
-            await _popup.MotionAwareCloseAsync();
+            await _popup.MotionAwareCloseAsync(cancellationToken);
         }
 
         IsSubMenuOpen = false;
@@ -437,5 +358,17 @@ public class MenuItem : AvaloniaMenuItem, IMenuItemData
     private void ConfigureMaxPopupHeight()
     {
         SetCurrentValue(MaxPopupHeightProperty, ItemHeight * DisplayPageSize + PopupPadding.Top + PopupPadding.Bottom);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

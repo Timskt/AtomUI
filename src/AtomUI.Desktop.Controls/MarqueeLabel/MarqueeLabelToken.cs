@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -6,7 +8,8 @@ namespace AtomUI.Desktop.Controls;
 internal class MarqueeLabelToken : AbstractControlDesignToken
 {
     public const string ID = "MarqueeLabel";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 周期这件的间隔
     /// </summary>
@@ -28,4 +31,6 @@ internal class MarqueeLabelToken : AbstractControlDesignToken
         CycleSpace   = 200;
         DefaultSpeed = 150;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MarqueeLabelTokenKind);
 }

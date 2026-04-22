@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Utilities;
-using Thumb = AtomUI.Desktop.Controls.Primitives.Thumb;
+using Thumb = AtomUI.Controls.Primitives.Thumb;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -45,13 +45,19 @@ internal class ColorSliderThumb : Thumb
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        if (_innerEllipse != null)
+        {
+            _innerEllipse.SizeChanged -= HandleInnerEllipseSizeChanged;
+        }
         _innerEllipse = e.NameScope.Find<Border>(ColorSliderThumbThemeConstants.InnerEllipsePart);
         if (_innerEllipse != null)
         {
-            _innerEllipse.SizeChanged += (sender, args) =>
-            {
-                InnerCornerRadius = new CornerRadius(args.NewSize.Width / 2);
-            };
+            _innerEllipse.SizeChanged += HandleInnerEllipseSizeChanged;
         }
+    }
+
+    private void HandleInnerEllipseSizeChanged(object? sender, SizeChangedEventArgs args)
+    {
+        InnerCornerRadius = new CornerRadius(args.NewSize.Width / 2);
     }
 }

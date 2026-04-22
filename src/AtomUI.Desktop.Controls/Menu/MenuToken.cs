@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.Styling;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.Styling;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,6 +11,7 @@ namespace AtomUI.Desktop.Controls;
 internal class MenuToken : AbstractControlDesignToken
 {
     public const string ID = "Menu";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public MenuToken()
         : base(ID)
@@ -307,4 +310,6 @@ internal class MenuToken : AbstractControlDesignToken
         ContextMenuOffsetX = SharedToken.SpacingXXS;
         ContextMenuOffsetY = SharedToken.SpacingXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MenuTokenKind);
 }

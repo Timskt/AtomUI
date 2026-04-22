@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <atom:TextBlock Name="{x:Static atom:RibbonBadgeAdornerThemeConstants.TextPartPart}"
+                    <atom:TextBlock Name="PART_LabelPart"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Text="{TemplateBinding Text}" />
@@ -16,20 +16,20 @@
         </Setter>
 
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="RibbonColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
-        <Setter Property="BadgeRibbonOffset" Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeRibbonOffset}}" />
+        <Setter Property="RibbonColor" Value="{atom:SharedTokenResource ColorPrimary}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
+        <Setter Property="BadgeRibbonOffset" Value="{atom:BadgeTokenResource BadgeRibbonOffset}" />
         <Setter Property="BadgeRibbonCornerTransform"
-                Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeRibbonCornerTransform}}" />
+                Value="{atom:BadgeTokenResource BadgeRibbonCornerTransform}" />
         <Setter Property="BadgeRibbonCornerDarkenAmount"
-                Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeRibbonCornerDarkenAmount}}" />
+                Value="{atom:BadgeTokenResource BadgeRibbonCornerDarkenAmount}" />
 
-        <Style Selector="^ /template/ atom|TextBlock#PART_TextPart">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
+        <Style Selector="^ /template/ atom|TextBlock#PART_LabelPart">
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
             <Setter Property="LineHeight"
-                    Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeFontHeight}}" />
+                    Value="{atom:BadgeTokenResource BadgeFontHeight}" />
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:BadgeTokenKey.BadgeRibbonTextPadding}}" />
+                    Value="{atom:BadgeTokenResource BadgeRibbonTextPadding}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

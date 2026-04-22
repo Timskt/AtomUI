@@ -1,4 +1,6 @@
-﻿using AtomUI.Desktop.Controls;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
@@ -11,9 +13,34 @@ public partial class CheckBoxShowCase : ReactiveUserControl<CheckBoxViewModel>
     {
         this.WhenActivated(disposables =>
         {
-            if (DataContext is CheckBoxViewModel vm)
+            if (DataContext is CheckBoxViewModel viewModel)
             {
-                ConfigureCheckBoxOptions(vm);
+                ConfigureCheckBoxOptions(viewModel);
+                
+                this.OneWayBind(viewModel, vm => vm.CheckBoxOptions, v => v.BasicCheckBoxGroup.ItemsSource)
+                    .DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.DefaultCheckBoxOptions, v => v.BasicCheckBoxGroup.CheckedItems)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.CheckStatusCommand, v => v.CheckStatusBtn)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.EnableStatusCommand, v => v.EnableStatusBtn)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.CheckBoxCommand, v => v.ControlledCheckbox)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.CheckedAllStatusCommand, v => v.CheckAllCheckbox)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.CheckedItemStatusCommand1, v => v.AppleCheckBox)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.CheckedItemStatusCommand2, v => v.PearCheckBox)
+                    .DisposeWith(disposables);
+                this.BindCommand(viewModel, vm => vm.CheckedItemStatusCommand3, v => v.OrangeCheckBox)
+                    .DisposeWith(disposables);
+                
+                Disposable.Create(() =>
+                {
+                    viewModel.CheckBoxOptions        = null;
+                    viewModel.DefaultCheckBoxOptions = null;
+                }).DisposeWith(disposables);
             }
         });
         InitializeComponent();

@@ -8,7 +8,7 @@ namespace AtomUIGallery.ShowCases.ViewModels;
 
 public class FormViewModel : ReactiveObject, IRoutableViewModel
 {
-    public static TreeNodeKey ID = "Form";
+    public static EntityKey ID = "Form";
     
     public IScreen HostScreen { get; }
     
@@ -30,7 +30,7 @@ public class FormViewModel : ReactiveObject, IRoutableViewModel
         set => this.RaiseAndSetIfChanged(ref _isFormDisabled, value);
     }
     
-    private InputControlStyleVariant _formStyleVariant = InputControlStyleVariant.Outline;
+    private InputControlStyleVariant _formStyleVariant = InputControlStyleVariant.Outlined;
 
     public InputControlStyleVariant FormStyleVariant
     {
@@ -60,6 +60,14 @@ public class FormViewModel : ReactiveObject, IRoutableViewModel
     {
         get => _sliderMarks;
         set => this.RaiseAndSetIfChanged(ref _sliderMarks, value);
+    }
+    
+    private IFormValues? _basicFormInitialValues;
+
+    public IFormValues? BasicFormInitialValues
+    {
+        get => _basicFormInitialValues;
+        set => this.RaiseAndSetIfChanged(ref _basicFormInitialValues, value);
     }
     
     public FormViewModel(IScreen screen)

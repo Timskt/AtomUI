@@ -1,15 +1,13 @@
-﻿using System.Diagnostics;
-using AtomUI.Controls;
+﻿using System.Reactive;
+using System.Reactive.Disposables.Fluent;
 using AtomUI.Desktop.Controls;
-using AtomUI.Theme.Language;
 using AtomUIGallery.Workspace.ViewModels;
-using Avalonia;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
+using ReactiveUI;
 
 namespace AtomUIGallery.Workspace.Views;
 
-internal enum WindowMenuItemKind 
+internal enum WindowMenuItemKind
 {
     FullScreen,
     Pin,
@@ -28,14 +26,20 @@ internal enum WindowMenuItemKind
 public partial class WorkspaceWindow : ReactiveWindow<WorkspaceWindowViewModel>
 {
     public const string LanguageId = nameof(WorkspaceWindow);
+
     public WorkspaceWindow()
     {
-#if DEBUG
-        this.AttachDevTools();
-#endif
-        DataContext = new WorkspaceWindowViewModel();
+        ViewModel = new WorkspaceWindowViewModel();
         InitializeComponent();
         AddHandler(MenuItem.IsCheckStateChangedEvent, HandleMenuItemCheckChanged);
+
+        this.WhenActivated(disposables =>
+        {
+            this.OneWayBind(ViewModel, vm => vm.Router, v => v.RoutedViewHost.Router)
+                .DisposeWith(disposables);
+            
+            ShowCaseNavigation.ViewModel = ViewModel!.CaseNavigation;
+        });
     }
 
     public override void Show()
@@ -47,10 +51,11 @@ public partial class WorkspaceWindow : ReactiveWindow<WorkspaceWindowViewModel>
 
     private void HandleMenuItemCheckChanged(object? sender, RoutedEventArgs e)
     {
+        if (ViewModel is null) return;
+
         if (e.Source is MenuItem menuItem && menuItem.Tag is WindowMenuItemKind kind)
         {
-            var application = Application.Current;
-            Debug.Assert(application != null);
+            // 窗口 UI 属性：纯 View 层行为，直接操作窗口属性
             if (kind == WindowMenuItemKind.FullScreen)
             {
                 IsFullScreenCaptionButtonEnabled = menuItem.IsChecked;
@@ -75,57 +80,54 @@ public partial class WorkspaceWindow : ReactiveWindow<WorkspaceWindowViewModel>
             {
                 CanResize = menuItem.IsChecked;
             }
+            // ✅ 应用级别的操作：通过 ViewModel 命令执行，关注点分离
             else if (kind == WindowMenuItemKind.DarkMode)
             {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    application.SetDarkThemeMode(menuItem.IsChecked);
-                });
+                ViewModel.ToggleDarkModeCommand.Execute(menuItem.IsChecked)
+                         .Subscribe();
             }
             else if (kind == WindowMenuItemKind.Compact)
             {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    application.SetCompactThemeMode(menuItem.IsChecked);
-                });
+                ViewModel.ToggleCompactModeCommand.Execute(menuItem.IsChecked)
+                         .Subscribe();
             }
             else if (kind == WindowMenuItemKind.Motion)
             {
+                // View 层：同步联动 WaveSpirit 复选框状态（纯 UI 行为）
                 if (menuItem.Parent is MenuItem themeMenuItem)
                 {
                     foreach (var item in themeMenuItem.Items)
                     {
-                        if (item is MenuItem themeMenuChildItem && themeMenuChildItem.Tag is WindowMenuItemKind themeMenuChildItemKind)
+                        if (item is MenuItem themeMenuChildItem &&
+                            themeMenuChildItem.Tag is WindowMenuItemKind childKind &&
+                            childKind == WindowMenuItemKind.WaveSpirit)
                         {
-                            if (themeMenuChildItemKind == WindowMenuItemKind.WaveSpirit)
+                            if (!menuItem.IsChecked)
                             {
-                                if (!menuItem.IsChecked)
-                                {
-                                    themeMenuChildItem.IsChecked = false;
-                                }
+                                themeMenuChildItem.IsChecked = false;
                             }
                         }
                     }
                 }
-                application.SetMotionEnabled(menuItem.IsChecked);
+
+                // ViewModel 命令：更新应用运动状态
+                ViewModel.ToggleMotionCommand.Execute(menuItem.IsChecked)
+                         .Subscribe();
             }
             else if (kind == WindowMenuItemKind.WaveSpirit)
             {
-                application.SetWaveSpiritEnabled(menuItem.IsChecked);
+                ViewModel.ToggleWaveSpiritCommand.Execute(menuItem.IsChecked)
+                         .Subscribe();
             }
             else if (kind == WindowMenuItemKind.LanguageZhCN)
             {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    application.SetLanguageVariant(LanguageVariant.zh_CN);
-                });
+                ViewModel.SwitchToZhCNCommand.Execute(Unit.Default)
+                         .Subscribe();
             }
             else if (kind == WindowMenuItemKind.LanguageEnUS)
             {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    application.SetLanguageVariant(LanguageVariant.en_US);
-                });
+                ViewModel.SwitchToEnUSCommand.Execute(Unit.Default)
+                         .Subscribe();
             }
         }
     }

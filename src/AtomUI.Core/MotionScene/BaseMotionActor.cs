@@ -1,7 +1,5 @@
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -85,7 +83,6 @@ public abstract class BaseMotionActor : ContentControl, IMotionActor
     internal bool Animating = false;
 
     private BaseMotionActor? _followTarget;
-    private CompositeDisposable? _followDisposables;
 
     static BaseMotionActor()
     {
@@ -177,7 +174,14 @@ public abstract class BaseMotionActor : ContentControl, IMotionActor
 
         ApplyMotionTransform();
     }
-    
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _transformChangedEventDisposable?.Dispose();
+        _transformChangedEventDisposable = null;
+    }
+
     public virtual void NotifyMotionPreStart()
     {
         RaiseEvent(new RoutedEventArgs(PreStartEvent, this));
@@ -210,19 +214,15 @@ public abstract class BaseMotionActor : ContentControl, IMotionActor
 
     public void Follow(BaseMotionActor target)
     {
-        _followDisposables?.Dispose();
-        _followDisposables = new CompositeDisposable(4);
-        _followDisposables.Add(BindUtils.RelayBind(target, MotionTransformProperty, this, MotionTransformProperty));
-        _followDisposables.Add(BindUtils.RelayBind(target, MotionTransformOperationsProperty, this, MotionTransformOperationsProperty));
-        _followDisposables.Add(BindUtils.RelayBind(target, OpacityProperty, this, OpacityProperty));
-        _followDisposables.Add(BindUtils.RelayBind(target, RenderTransformOriginProperty, this, RenderTransformOriginProperty));
+        this[!MotionTransformProperty]           = target[!MotionTransformProperty];
+        this[!MotionTransformOperationsProperty] = target[!MotionTransformOperationsProperty];
+        this[!OpacityProperty]                   = target[!OpacityProperty];
+        this[!RenderTransformOriginProperty]     = target[!RenderTransformOriginProperty];
         _followTarget = target;
     }
 
     public void UnFollow()
     {
-        _followDisposables?.Dispose();
-        _followDisposables = null;
-        _followTarget      = this;
+        _followTarget = this;
     }
 }

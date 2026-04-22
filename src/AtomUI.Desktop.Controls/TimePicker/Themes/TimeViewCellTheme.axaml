@@ -20,26 +20,35 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ListTokenKey.ItemColor}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:ListTokenKey.ItemBgColor}}" />
-        <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemHeight}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TimePickerTokenKey.ItemPadding}}" />
+        <Setter Property="Foreground" Value="{atom:ListViewTokenResource ItemColor}" />
+        <Setter Property="Background" Value="{atom:ListViewTokenResource ItemBgColor}" />
+        <Setter Property="MinHeight" Value="{atom:TimePickerTokenResource ItemHeight}" />
+        <Setter Property="Padding" Value="{atom:TimePickerTokenResource ItemPadding}" />
         
         <Style Selector="^:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ListTokenKey.ItemHoverColor}}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ListTokenKey.ItemHoverBgColor}}" />
+            <Setter Property="Foreground" Value="{atom:ListViewTokenResource ItemHoverColor}" />
+            <Setter Property="Background" Value="{atom:ListViewTokenResource ItemHoverBgColor}" />
         </Style>
         
         <Style Selector="^:selected">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ListTokenKey.ItemSelectedColor}}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ListTokenKey.ItemSelectedBgColor}}" />
+            <Setter Property="Foreground" Value="{atom:ListViewTokenResource ItemSelectedColor}" />
+            <Setter Property="Background" Value="{atom:ListViewTokenResource ItemSelectedBgColor}" />
         </Style>
         
         <Style Selector="^:disabled">
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+                <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
             </Style>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

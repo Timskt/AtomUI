@@ -29,7 +29,7 @@
             Description="Variants of Input.">
             <StackPanel Orientation="Vertical" Spacing="10">
                 <atom:Separator Title="Normal" />
-                <atom:LineEdit PlaceholderText="Outlined" StyleVariant="Outline" />
+                <atom:LineEdit PlaceholderText="Outlined" StyleVariant="Outlined" />
                 <atom:LineEdit PlaceholderText="Filled" StyleVariant="Filled" />
                 <atom:LineEdit PlaceholderText="Borderless" StyleVariant="Borderless" />
                 <atom:LineEdit PlaceholderText="Underlined" StyleVariant="Underlined" />
@@ -47,12 +47,12 @@
             Description="Variants of Input disabled style.">
             <StackPanel Orientation="Vertical" Spacing="10">
                 <atom:Separator Title="Normal" />
-                <atom:LineEdit PlaceholderText="Outlined" StyleVariant="Outline" IsEnabled="False" />
+                <atom:LineEdit PlaceholderText="Outlined" StyleVariant="Outlined" IsEnabled="False" />
                 <atom:LineEdit PlaceholderText="Filled" StyleVariant="Filled" IsEnabled="False" />
                 <atom:LineEdit PlaceholderText="Borderless" StyleVariant="Borderless" IsEnabled="False" />
                 <atom:LineEdit PlaceholderText="Underlined" StyleVariant="Underlined" IsEnabled="False" />
         
-                <atom:LineEdit PlaceholderText="Outlined" StyleVariant="Outline" Status="Error" IsEnabled="False" />
+                <atom:LineEdit PlaceholderText="Outlined" StyleVariant="Outlined" Status="Error" IsEnabled="False" />
                 <atom:LineEdit PlaceholderText="Filled" StyleVariant="Filled" Status="Error" IsEnabled="False" />
                 <atom:LineEdit PlaceholderText="Borderless" StyleVariant="Borderless" Status="Error" IsEnabled="False" />
                 <atom:LineEdit PlaceholderText="Underlined" StyleVariant="Underlined" Status="Error" IsEnabled="False" />
@@ -123,7 +123,7 @@
                 <atom:LineEdit InnerLeftContent="￥" InnerRightContent="RMB" IsEnabled="False" />
             </StackPanel>
         </gallery:ShowCaseItem>
-
+        
         <gallery:ShowCaseItem
             Title="Status"
             Description="Add status to Input with status, which could be error or warning.">
@@ -175,25 +175,25 @@
                                  Width="400"
                                  HorizontalAlignment="Left"
                                  LeftAddOn="https://"
-                                 StyleVariant="Outline"
+                                 StyleVariant="Outlined"
                                  Status="Error" />
                 <atom:SearchEdit PlaceholderText="input search text" Width="400" HorizontalAlignment="Left"
-                                 LeftAddOn="https://" StyleVariant="Outline" Status="Warning" />
-        
+                                 LeftAddOn="https://" StyleVariant="Outlined" Status="Warning" />
+                
                 <atom:SearchEdit PlaceholderText="input search text" Width="400" HorizontalAlignment="Left"
-                                 LeftAddOn="https://" StyleVariant="Outline" Status="Error"
+                                 LeftAddOn="https://" StyleVariant="Outlined" Status="Error"
                                  SearchButtonStyle="Primary"
                                  SearchButtonText="Search" />
                 <atom:SearchEdit PlaceholderText="input search text" Width="400" HorizontalAlignment="Left"
-                                 LeftAddOn="https://" StyleVariant="Outline" Status="Warning"
+                                 LeftAddOn="https://" StyleVariant="Outlined" Status="Warning"
                                  SearchButtonStyle="Primary"
                                  SearchButtonText="Search" />
-        
+                
                 <atom:SearchEdit PlaceholderText="input search text" Width="400" HorizontalAlignment="Left"
                                  LeftAddOn="https://" StyleVariant="Filled" Status="Error" />
                 <atom:SearchEdit PlaceholderText="input search text" Width="400" HorizontalAlignment="Left"
                                  LeftAddOn="https://" StyleVariant="Filled" Status="Warning" />
-        
+                
                 <atom:SearchEdit PlaceholderText="input search text" Width="400" HorizontalAlignment="Left"
                                  LeftAddOn="https://" StyleVariant="Filled" Status="Error"
                                  SearchButtonStyle="Primary"
@@ -204,7 +204,7 @@
                                  SearchButtonText="Search" />
             </StackPanel>
         </gallery:ShowCaseItem>
-
+        
         <gallery:ShowCaseItem
             Title="Search box"
             Description="Example of creating a search box by grouping a standard input with a search button.">
@@ -246,7 +246,7 @@
                                  StyleVariant="Borderless" />
                 <atom:SearchEdit PlaceholderText="input search text" HorizontalAlignment="Stretch"
                                  LeftAddOn="https://"
-                                 StyleVariant="Borderless" />
+                                 StyleVariant="Borderless" /> 
                 <atom:Separator Title="Underlined" />
                 <atom:SearchEdit PlaceholderText="input search text" HorizontalAlignment="Stretch"
                                  SearchButtonText="Search"
@@ -289,7 +289,7 @@
                         <antdicons:AudioOutlined Width="16" Height="16" Name="AudioOutlined">
                             <antdicons:AudioOutlined.Styles>
                                 <Style Selector="atom|Icon#AudioOutlined">
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}"/>
+                                    <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorPrimary}"/>
                                 </Style>
                             </antdicons:AudioOutlined.Styles>
                         </antdicons:AudioOutlined>

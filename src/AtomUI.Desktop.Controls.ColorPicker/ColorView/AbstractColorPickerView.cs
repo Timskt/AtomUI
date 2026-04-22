@@ -2,7 +2,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,9 +11,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public abstract class AbstractColorPickerView : TemplatedControl,
-                                                IMotionAwareControl,
-                                                IControlSharedTokenResourcesHost
+public abstract class AbstractColorPickerView : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
     
@@ -215,9 +212,6 @@ public abstract class AbstractColorPickerView : TemplatedControl,
         get => _isAlphaEffectiveVisible;
         set => SetAndRaise(IsAlphaEffectiveVisibleProperty, ref _isAlphaEffectiveVisible, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ColorPickerToken.ID;
     #endregion
     
     private ColorBlock? _clearColorButton;
@@ -226,7 +220,7 @@ public abstract class AbstractColorPickerView : TemplatedControl,
 
     public AbstractColorPickerView()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ColorPickerToken.ScopeProvider);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -245,14 +239,11 @@ public abstract class AbstractColorPickerView : TemplatedControl,
             }
         }
         
-        if (this.IsAttachedToVisualTree())
+        if (change.Property == IsPaletteGroupEnabledProperty)
         {
-            if (change.Property == IsPaletteGroupEnabledProperty)
+            if (IsPaletteGroupEnabled && PaletteGroup == null)
             {
-                if (IsPaletteGroupEnabled && PaletteGroup == null)
-                {
-                    ConfigureDefaultPaletteGroup();
-                }
+                ConfigureDefaultPaletteGroup();
             }
         }
     }
@@ -312,6 +303,16 @@ public abstract class AbstractColorPickerView : TemplatedControl,
     {
         base.OnApplyTemplate(e);
         ConfigureAlphaEffectiveVisible();
+        
+        if (_clearColorButton != null)
+        {
+            _clearColorButton.ClearRequest -= HandleColorClearRequest;
+        }
+        if (_paletteGroup != null)
+        {
+            _paletteGroup.ColorSelected -= HandlePaletteColorSelected;
+        }
+
         _clearColorButton = e.NameScope.Find<ColorBlock>(ColorPickerViewThemeConstants.ClearColorPart);
         if (_clearColorButton != null)
         {
@@ -325,11 +326,13 @@ public abstract class AbstractColorPickerView : TemplatedControl,
         _paletteGroup = e.NameScope.Find<ColorPickerPaletteGroup>(ColorPickerViewThemeConstants.PaletteGroupPart);
         if (_paletteGroup != null)
         {
-            _paletteGroup.ColorSelected += (sender, args) =>
-            {
-                NotifyPaletteColorSelected(args.SelectedColor);
-            };
+            _paletteGroup.ColorSelected += HandlePaletteColorSelected;
         }
+    }
+
+    private void HandlePaletteColorSelected(object? sender, ColorPickerPaletteColorSelectedEventArgs args)
+    {
+        NotifyPaletteColorSelected(args.SelectedColor);
     }
     
     private void ConfigureDefaultPaletteGroup()
@@ -372,4 +375,5 @@ public abstract class AbstractColorPickerView : TemplatedControl,
     protected virtual void NotifyPaletteColorSelected(Color color)
     {
     }
+    
 }

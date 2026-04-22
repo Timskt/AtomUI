@@ -90,7 +90,12 @@ public class TimerStatistic : AbstractStatistic
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        _timer?.Stop();
+        if (_timer != null)
+        {
+            _timer.Stop();
+            _timer.Tick -= HandleTickElapsed;
+            _timer = null;
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -111,7 +116,7 @@ public class TimerStatistic : AbstractStatistic
 
     private void GenerateRemainingTimeText()
     {
-        string? formattedText = null;
+        string? formattedText;
         if (Formatter != null)
         {
             formattedText = Formatter(RemainingTime);
@@ -122,17 +127,13 @@ public class TimerStatistic : AbstractStatistic
             {
                 formattedText = RemainingTime.ToString(Format);
             }
-            else if (Format == @"hh\:mm\:ss")
+            else if (RemainingTime.TotalHours >= 1)
             {
                 formattedText = $"{(int)RemainingTime.TotalHours:00}:{RemainingTime.Minutes:00}:{RemainingTime.Seconds:00}";
-            }
-            else if (Format == @"hh\:mm\:ss\.fff")
-            {
-                formattedText = $"{(int)RemainingTime.TotalHours:00}:{RemainingTime.Minutes:00}:{RemainingTime.Seconds:00}.{RemainingTime.Milliseconds:000}";
             }
             else
             {
-                formattedText = $"{(int)RemainingTime.TotalHours:00}:{RemainingTime.Minutes:00}:{RemainingTime.Seconds:00}";
+                formattedText = $"{(int)RemainingTime.TotalMinutes:00}:{RemainingTime.Seconds:00}";
             }
         }
         SetCurrentValue(RemainingTimeTextProperty, formattedText);
@@ -140,6 +141,13 @@ public class TimerStatistic : AbstractStatistic
     
     private void BuildTimer(bool start)
     {
+        // 先清理旧定时器
+        if (_timer != null)
+        {
+            _timer.Stop();
+            _timer.Tick -= HandleTickElapsed;
+        }
+        
         _timer          =  new DispatcherTimer();
         _timer.Interval =  RefreshDuration;
         _timer.Tick     += HandleTickElapsed;

@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.Styling;
 using AtomUI.Theme.TokenSystem;
 using AtomUI.Utils;
@@ -10,7 +12,8 @@ namespace AtomUI.Desktop.Controls;
 internal class OptionButtonToken : AbstractControlDesignToken
 {
     public const string ID = "OptionButton";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 单选框按钮背景色
     /// </summary>
@@ -153,4 +156,6 @@ internal class OptionButtonToken : AbstractControlDesignToken
         PaddingSM = new Thickness(8 - SharedToken.LineWidth,
             Math.Max((controlHeightLG - controlHeightLG * controlHeightLG) / 2 - lineWidth, 0));
     }
+    
+    protected override Type GetTokenKindType() => typeof(OptionButtonTokenKind);
 }

@@ -1,4 +1,7 @@
-﻿using AtomUI.Controls;
+﻿using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Controls;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia.Threading;
@@ -6,31 +9,48 @@ using ReactiveUI;
 
 namespace AtomUIGallery.Workspace.ViewModels;
 
-
-
-public class CaseNavigationViewModel : ReactiveObject
+public class CaseNavigationViewModel : ReactiveObject, IActivatableViewModel
 {
-    private Dictionary<TreeNodeKey, Func<IRoutableViewModel>> _showCaseViewModelFactories;
-    private TreeNodeKey? _currentShowCase;
+    private readonly Dictionary<EntityKey, Func<IRoutableViewModel>> _showCaseViewModelFactories;
+    private EntityKey?     _currentShowCase;
     private DispatcherTimer _dispatcherTimer;
-    
+
     private INavMenuNode? _selectedItem;
-    
+
     public INavMenuNode? SelectedItem
     {
         get => _selectedItem;
         set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
     }
 
-    public IScreen HostScreen { get; }
+    public IScreen          HostScreen { get; }
+    public ViewModelActivator Activator  { get; }
+    
+    public ReactiveCommand<EntityKey, Unit> NavigateToCommand          { get; }
+    public ReactiveCommand<TimeSpan, Unit>  TestNavigatePagesCommand   { get; }
+    public ReactiveCommand<Unit, Unit>      StopTestNavigatePagesCommand { get; }
 
     public CaseNavigationViewModel(IScreen hostScreen)
     {
-        _showCaseViewModelFactories = new Dictionary<TreeNodeKey, Func<IRoutableViewModel>>();
+        _showCaseViewModelFactories = new Dictionary<EntityKey, Func<IRoutableViewModel>>();
         HostScreen                  = hostScreen;
+        Activator                   = new ViewModelActivator();
+
         RegisterShowCaseViewModels();
-        _dispatcherTimer      =  new DispatcherTimer();
+
+        _dispatcherTimer      = new DispatcherTimer();
         _dispatcherTimer.Tick += RandomNavigateToTimerHandler;
+
+        NavigateToCommand          = ReactiveCommand.Create<EntityKey>(DoNavigateTo);
+        TestNavigatePagesCommand   = ReactiveCommand.Create<TimeSpan>(DoTestNavigatePages);
+        StopTestNavigatePagesCommand = ReactiveCommand.Create(DoStopTestNavigatePages);
+        
+        this.WhenActivated((CompositeDisposable disposables) =>
+        {
+            NavigateToCommand.Execute(AboutUsViewModel.ID)
+                             .Subscribe()
+                             .DisposeWith(disposables);
+        });
     }
 
     private void RegisterShowCaseViewModels()
@@ -47,6 +67,7 @@ public class CaseNavigationViewModel : ReactiveObject
     {
         _showCaseViewModelFactories.Add(AboutUsViewModel.ID, () => new AboutUsViewModel(HostScreen));
         _showCaseViewModelFactories.Add(ButtonViewModel.ID, () => new ButtonViewModel(HostScreen));
+        _showCaseViewModelFactories.Add(FloatButtonViewModel.ID, () => new FloatButtonViewModel(HostScreen));
         _showCaseViewModelFactories.Add(IconViewModel.ID, () => new IconViewModel(HostScreen));
         _showCaseViewModelFactories.Add(OsInfoViewModel.ID, () => new OsInfoViewModel(HostScreen));
         _showCaseViewModelFactories.Add(PaletteViewModel.ID, () => new PaletteViewModel(HostScreen));
@@ -54,10 +75,9 @@ public class CaseNavigationViewModel : ReactiveObject
         _showCaseViewModelFactories.Add(SplitButtonViewModel.ID, () => new SplitButtonViewModel(HostScreen));
         _showCaseViewModelFactories.Add(CustomizeThemeViewModel.ID, () => new CustomizeThemeViewModel(HostScreen));
     }
-    
+
     private void RegisterLayoutViewModels()
     {
-        _showCaseViewModelFactories.Add(BoxPanelViewModel.ID, () => new BoxPanelViewModel(HostScreen));
         _showCaseViewModelFactories.Add(FlexPanelViewModel.ID, () => new FlexPanelViewModel(HostScreen));
         _showCaseViewModelFactories.Add(GridViewModel.ID, () => new GridViewModel(HostScreen));
         _showCaseViewModelFactories.Add(SpaceViewModel.ID, () => new SpaceViewModel(HostScreen));
@@ -87,6 +107,7 @@ public class CaseNavigationViewModel : ReactiveObject
         _showCaseViewModelFactories.Add(TimelineViewModel.ID, () => new TimelineViewModel(HostScreen));
         _showCaseViewModelFactories.Add(TooltipViewModel.ID, () => new TooltipViewModel(HostScreen));
         _showCaseViewModelFactories.Add(TreeViewViewModel.ID, () => new TreeViewViewModel(HostScreen));
+        _showCaseViewModelFactories.Add(TourViewModel.ID, () => new TourViewModel(HostScreen));
     }
 
     private void RegisterDataEntryViewModels()
@@ -107,6 +128,7 @@ public class CaseNavigationViewModel : ReactiveObject
         _showCaseViewModelFactories.Add(TimePickerViewModel.ID, () => new TimePickerViewModel(HostScreen));
         _showCaseViewModelFactories.Add(ToggleSwitchViewModel.ID, () => new ToggleSwitchViewModel(HostScreen));
         _showCaseViewModelFactories.Add(TreeSelectViewModel.ID, () => new TreeSelectViewModel(HostScreen));
+        _showCaseViewModelFactories.Add(TransferViewModel.ID, () => new TransferViewModel(HostScreen));
         _showCaseViewModelFactories.Add(UploadViewModel.ID, () => new UploadViewModel(HostScreen));
     }
 
@@ -137,7 +159,8 @@ public class CaseNavigationViewModel : ReactiveObject
         _showCaseViewModelFactories.Add(TabControlViewModel.ID, () => new TabControlViewModel(HostScreen));
     }
 
-    public void NavigateTo(TreeNodeKey showCaseId)
+    // ✅ 改为 private，外部通过 NavigateToCommand 调用
+    private void DoNavigateTo(EntityKey showCaseId)
     {
         if (_currentShowCase is not null && _currentShowCase == showCaseId)
         {
@@ -146,34 +169,32 @@ public class CaseNavigationViewModel : ReactiveObject
 
         _currentShowCase = showCaseId;
 
-        if (!_showCaseViewModelFactories.TryGetValue(showCaseId,  out var viewModelFactory))
+        if (!_showCaseViewModelFactories.TryGetValue(showCaseId, out var viewModelFactory))
         {
             throw new NotSupportedException($"unknown showcase id {showCaseId}");
         }
 
         var viewModel = viewModelFactory();
-        HostScreen.Router.Navigate.Execute(viewModel);
+        HostScreen.Router.NavigateAndReset.Execute(viewModel);
     }
-    
+
     private static int _currentShowCaseIdx = 0;
 
     private void RandomNavigateToTimerHandler(object? sender, EventArgs e)
     {
-        var    caseIds      = _showCaseViewModelFactories.Keys.ToList();
-        // Random random       = new Random();
-        // var    nextKeyIndex = random.Next(caseIds.Count);
-        var id = caseIds[_currentShowCaseIdx++ % caseIds.Count];
-        NavigateTo(id);
+        var caseIds = _showCaseViewModelFactories.Keys.ToList();
+        var id      = caseIds[_currentShowCaseIdx++ % caseIds.Count];
+        DoNavigateTo(id);
     }
 
-    public void TestNavigatePages(TimeSpan interval)
+    private void DoTestNavigatePages(TimeSpan interval)
     {
         _dispatcherTimer.Stop();
         _dispatcherTimer.Interval = interval;
         _dispatcherTimer.Start();
     }
 
-    public void StopTestNavigatePages()
+    private void DoStopTestNavigatePages()
     {
         _dispatcherTimer.Stop();
     }

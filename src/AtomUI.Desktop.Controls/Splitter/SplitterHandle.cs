@@ -1,11 +1,9 @@
-using System;
-using AtomUI;
 using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
-using AtomUIThumb = AtomUI.Desktop.Controls.Primitives.Thumb;
+using AtomUIThumb = AtomUI.Controls.Primitives.Thumb;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -421,13 +419,13 @@ internal class SplitterHandle : AtomUIThumb
 
     private double GetDragTriggerSize()
     {
-        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKey.SplitTriggerSize);
+        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKind.SplitTriggerSize);
         if (value is double size && !double.IsNaN(size) && !double.IsInfinity(size))
         {
             return Math.Max(0, size);
         }
 
-        value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKey.SplitBarSize);
+        value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKind.SplitBarSize);
         if (value is double fallback && !double.IsNaN(fallback) && !double.IsInfinity(fallback))
         {
             return Math.Max(0, fallback);

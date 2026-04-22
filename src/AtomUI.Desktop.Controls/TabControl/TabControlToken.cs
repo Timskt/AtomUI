@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class TabControlToken : AbstractControlDesignToken
 {
     public const string ID = "TabControl";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public TabControlToken()
         : base(ID)
     {
@@ -210,4 +213,6 @@ internal class TabControlToken : AbstractControlDesignToken
         MenuEdgeThickness   = 20;
         TabAndContentGutter = SharedToken.UniformlyMarginSM;
     }
+    
+    protected override Type GetTokenKindType() => typeof(TabControlTokenKind);
 }

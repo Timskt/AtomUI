@@ -61,6 +61,7 @@ internal class CompactSpaceItem : Decorator, ICompactSpaceAware
             if (change.OldValue != null)
             {
                 _disposables?.Dispose();
+                _disposables = null;
             }
 
             if (change.NewValue != null && change.NewValue is ICompactSpaceAware && Child != null)

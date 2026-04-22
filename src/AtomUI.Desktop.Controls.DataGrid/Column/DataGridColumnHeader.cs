@@ -928,14 +928,6 @@ internal partial class DataGridColumnHeader : ContentControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-
         if (change.Property == CanUserSortProperty ||
             change.Property == IsSeparatorsVisibleProperty ||
             change.Property == CanUserFilterProperty)
@@ -949,34 +941,16 @@ internal partial class DataGridColumnHeader : ContentControl
     {
         SetCurrentValue(IndicatorLayoutVisibleProperty, CanUserSort || (IsSeparatorsVisible && CanUserFilter && OwningColumn?.Filters.Count > 0));
     }
-    
-    private void ConfigureTransitions(bool force)
+
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
-    
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 }

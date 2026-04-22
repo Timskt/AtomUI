@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using System.Windows.Input;
 using AtomUI.Controls;
 using AtomUI.Data;
@@ -79,8 +77,8 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         AvaloniaProperty.RegisterDirect<NavMenuItem, bool>(
             nameof(IsTopLevel), o => o.IsTopLevel);
     
-    public static readonly StyledProperty<TreeNodeKey?> ItemKeyProperty =
-        AvaloniaProperty.Register<NavMenuItem, TreeNodeKey?>(nameof(ItemKey));
+    public static readonly StyledProperty<EntityKey?> ItemKeyProperty =
+        AvaloniaProperty.Register<NavMenuItem, EntityKey?>(nameof(ItemKey));
     
     public ICommand? Command
     {
@@ -159,7 +157,7 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         private set => SetAndRaise(IsTopLevelProperty, ref _isTopLevel, value);
     }
     
-    public TreeNodeKey? ItemKey
+    public EntityKey? ItemKey
     {
         get => GetValue(ItemKeyProperty);
         set => SetValue(ItemKeyProperty, value);
@@ -347,8 +345,6 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
     
     internal Popup? Popup => _popup;
     internal NavMenu? OwnerMenu;
-
-    private readonly Dictionary<NavMenuItem, CompositeDisposable> _itemsBindingDisposables = new();
     
     static NavMenuItem()
     {
@@ -361,33 +357,7 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         AutoScrollToSelectedItemProperty.OverrideDefaultValue<NavMenuItem>(false);
     }
     
-    public NavMenuItem()
-    {
-        LogicalChildren.CollectionChanged += HandleItemsCollectionChanged;
-    }
-    
     protected override bool IsEnabledCore => base.IsEnabledCore && _commandCanExecute;
-    
-    private void HandleItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is NavMenuItem menuItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(menuItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                        }
-                        _itemsBindingDisposables.Remove(menuItem);
-                    }
-                }
-            }
-        }
-    }
     
     public void Open()
     {
@@ -814,43 +784,35 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         if (container is NavMenuItem menuItem)
         {
             menuItem.OwnerMenu = OwnerMenu;
-            var disposables = new CompositeDisposable(4);
-
             {
                 if (item is INavMenuNode menuNode)
                 {
                     menuItem.SetCurrentValue(NavMenuItem.HeaderProperty, menuNode);
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Icon), menuItem, NavMenuItem.IconProperty));
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.IsEnabled), menuItem, NavMenuItem.IsEnabledProperty));
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Command), menuItem, NavMenuItem.CommandProperty));
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.CommandParameter), menuItem, NavMenuItem.CommandParameterProperty));
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.Icon), menuItem, NavMenuItem.IconProperty);
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.IsEnabled), menuItem,
+                        NavMenuItem.IsEnabledProperty);
                     menuItem.ItemKey = menuNode.ItemKey;
                 }
             }
             {
                 if (item is INavMenuNode menuNode && menuNode.HeaderTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(menuNode, nameof(INavMenuNode.HeaderTemplate), menuItem, NavMenuItem.HeaderTemplateProperty));
+                    BindUtils.RelayBind(menuNode, nameof(INavMenuNode.HeaderTemplate), menuItem,
+                        NavMenuItem.HeaderTemplateProperty);
                 }
                 else if (ItemTemplate != null)
                 {
-                    disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, menuItem, NavMenuItem.HeaderTemplateProperty));
+                    menuItem[!NavMenuItem.HeaderTemplateProperty] = this[!ItemTemplateProperty];
                 }
             }
             
-            disposables.Add(BindUtils.RelayBind(this, ModeProperty, menuItem, ModeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsDarkStyleProperty, menuItem, IsDarkStyleProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuItem, IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemContainerThemeProperty, menuItem, ItemContainerThemeProperty));
-            disposables.Add(BindUtils.RelayBind(this, ShouldUseOverlayLayerProperty, menuItem, ShouldUseOverlayLayerProperty));
+            menuItem[!NavMenuItem.ModeProperty]                  = this[!ModeProperty];
+            menuItem[!NavMenuItem.IsDarkStyleProperty]           = this[!IsDarkStyleProperty];
+            menuItem[!NavMenuItem.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+            menuItem[!NavMenuItem.ItemContainerThemeProperty]    = this[!ItemContainerThemeProperty];
+            menuItem[!NavMenuItem.ShouldUseOverlayLayerProperty] = this[!ShouldUseOverlayLayerProperty];
             
-            PrepareNavMenuItem(menuItem, item, index, disposables);
-            if (_itemsBindingDisposables.TryGetValue(menuItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(menuItem);
-            }
-            _itemsBindingDisposables.Add(menuItem, disposables);
+            PrepareNavMenuItem(menuItem, item, index);
         }
         else
         {
@@ -858,7 +820,7 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         }
     }
 
-    protected virtual void PrepareNavMenuItem(NavMenuItem menuItem, object? item, int index, CompositeDisposable compositeDisposable)
+    protected virtual void PrepareNavMenuItem(NavMenuItem menuItem, object? item, int index)
     {
     }
 
@@ -922,6 +884,27 @@ internal class NavMenuItem : HeaderedSelectingItemsControl,
         base.OnAttachedToVisualTree(e);
         UpdatePseudoClasses();
         TryUpdateCanExecute();
+        if (_popup != null)
+        {
+            _popup.Opened -= PopupOpened;
+            _popup.Closed -= PopupClosed;
+            _popup.Opened += PopupOpened;
+            _popup.Closed += PopupClosed;
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_popup != null)
+        {
+            if (IsSubMenuOpen)
+            {
+                SetCurrentValue(IsSubMenuOpenProperty, false);
+            }
+            _popup.Opened -= PopupOpened;
+            _popup.Closed -= PopupClosed;
+        }
     }
     
     private static int CalculateDistanceFromLogicalParent<T>(ILogical? logical, int defaultDistance = -1) where T : class

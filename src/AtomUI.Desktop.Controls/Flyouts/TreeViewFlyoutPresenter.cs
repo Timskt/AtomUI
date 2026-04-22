@@ -1,9 +1,5 @@
-using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,10 +8,7 @@ using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
 
-public class TreeViewFlyoutPresenter : FloatableTreeView,
-                                       IShadowMaskInfoProvider,
-                                       IMotionAwareControl,
-                                       IControlSharedTokenResourcesHost
+public class TreeViewFlyoutPresenter : FloatableTreeView, IShadowMaskInfoProvider
 {
     #region 公共属性定义
 
@@ -62,48 +55,20 @@ public class TreeViewFlyoutPresenter : FloatableTreeView,
         
     #region 内部属性定义
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MenuToken.ID;
-    
     private ArrowDecoratedBox? _arrowDecoratedBox;
 
     #endregion
     
-    private readonly Dictionary<MenuItem, CompositeDisposable> _itemsBindingDisposables = new();
-    
     public TreeViewFlyoutPresenter()
         : base(new DefaultTreeViewInteractionHandler(true))
     {
-        this.RegisterResources();
-        Items.CollectionChanged += HandleCollectionChanged;
+        this.RegisterTokenResourceScope(TreeFlyoutToken.ScopeProvider);
     }
 
     public TreeViewFlyoutPresenter(ITreeViewInteractionHandler menuInteractionHandler)
         : base(menuInteractionHandler)
     {
-        this.RegisterResources();
-        Items.CollectionChanged += HandleCollectionChanged;
-    }
-
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is MenuItem menuItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(menuItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(menuItem);
-                        }
-                    }
-                }
-            }
-        }
+        this.RegisterTokenResourceScope(TreeFlyoutToken.ScopeProvider);
     }
     
     protected override void ContainerForItemPreparedOverride(Control container, object? item, int index)
@@ -154,7 +119,7 @@ public class TreeViewFlyoutPresenter : FloatableTreeView,
 
     private void HandleTreeViewItemClicked(object? sender, RoutedEventArgs args)
     {
-        if (sender is TreeItem treeViewItem)
+        if (sender is TreeViewItem treeViewItem)
         {
             var ev = new FlyoutTreeViewItemClickedEventArgs(TreeViewItemClickedEvent, treeViewItem);
             RaiseEvent(ev);
@@ -198,14 +163,7 @@ public class TreeViewFlyoutPresenter : FloatableTreeView,
     {
         if (container is MenuItem menuItem)
         {
-            var disposables = new CompositeDisposable(1);
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, menuItem, MenuItem.IsMotionEnabledProperty));
-            if (_itemsBindingDisposables.TryGetValue(menuItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(menuItem);
-            }
-            _itemsBindingDisposables.Add(menuItem, disposables);
+            menuItem[!MenuItem.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
         }
 
         base.PrepareContainerForItemOverride(container, item, index);
@@ -217,11 +175,11 @@ public class FlyoutTreeViewItemClickedEventArgs : RoutedEventArgs
     /// <summary>
     /// 当前鼠标点击的树节点
     /// </summary>
-    public TreeItem Item { get; }
+    public TreeViewItem ViewItem { get; }
 
-    public FlyoutTreeViewItemClickedEventArgs(RoutedEvent routedEvent, TreeItem treeItem)
+    public FlyoutTreeViewItemClickedEventArgs(RoutedEvent routedEvent, TreeViewItem treeViewItem)
         : base(routedEvent)
     {
-        Item = treeItem;
+        ViewItem = treeViewItem;
     }
 }

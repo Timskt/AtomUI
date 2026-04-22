@@ -17,20 +17,13 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Name="IndicatorLayout">
-                            <Panel>
-                                <ContentPresenter
-                                    Name="CustomIndicator"
-                                    Content="{TemplateBinding CustomIndicator}"
-                                    ContentTemplate="{TemplateBinding CustomIndicatorTemplate}"
-                                    IsVisible="{TemplateBinding IsCustomIndicator}"
-                                    HorizontalAlignment="Center"/>
-                                <atom:SpinIndicator Name="Indicator"
-                                                    SizeType="{TemplateBinding SizeType}"
-                                                    MotionDuration="{TemplateBinding MotionDuration}"
-                                                    MotionEasingCurve="{TemplateBinding MotionEasingCurve}"
-                                                    HorizontalAlignment="Center"
-                                                    IsVisible="{TemplateBinding IsCustomIndicator, Converter={x:Static BoolConverters.Not}}"/>
-                            </Panel>
+                            <atom:SpinIndicator Name="Indicator"
+                                                SizeType="{TemplateBinding SizeType}"
+                                                MotionDuration="{TemplateBinding MotionDuration}"
+                                                MotionEasingCurve="{TemplateBinding MotionEasingCurve}"
+                                                HorizontalAlignment="Center"
+                                                CustomIndicator="{TemplateBinding CustomIndicator}"
+                                                CustomIndicatorTemplate="{TemplateBinding CustomIndicatorTemplate}"/>
                             <atom:TextBlock
                                 Name="Tip"
                                 Text="{TemplateBinding Tip}"
@@ -47,11 +40,19 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="MotionEasingCurve" Value="LinearEasing" />
         <Setter Property="MaskOpacity" Value="1.0" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="MotionDuration"
-                Value="{DynamicResource {x:Static atom:SpinTokenKey.IndicatorDuration}}" />
+                Value="{atom:SpinTokenResource IndicatorDuration}" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="MaskOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
         <Style Selector="^ /template/ atom|TextBlock#Tip">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorPrimary}" />
         </Style>
         
         <Style Selector="^[IsSpinning=True]">
@@ -70,14 +71,14 @@
             
             <Style Selector="^[IsMaskBackgroundEnabled=True]">
                 <Style Selector="^ /template/ Border#Mask">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
+                    <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgMask}" />
                 </Style>
             </Style>
             
         </Style>
         
         <Style Selector="^ /template/ StackPanel#IndicatorLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}"/>
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXXS}"/>
         </Style>
     </ControlTheme>
 </ResourceDictionary>

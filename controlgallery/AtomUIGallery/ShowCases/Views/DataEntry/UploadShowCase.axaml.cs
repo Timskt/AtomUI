@@ -1,3 +1,5 @@
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
@@ -14,6 +16,7 @@ public partial class UploadShowCase : ReactiveUserControl<UploadViewModel>
     
     public UploadShowCase()
     {
+        InitializeComponent();
         this.WhenActivated(disposables =>
         {
             if (DataContext is UploadViewModel vm)
@@ -46,75 +49,161 @@ public partial class UploadShowCase : ReactiveUserControl<UploadViewModel>
                 ];
                 InitPictureWallTaskList(vm);
                 InitPictureListTaskList(vm);
+
+                this.OneWayBind(vm, m => m.DefaultTaskList, v => v.DefaultFileList.DefaultTaskList).DisposeWith(disposables);
+                this.OneWayBind(vm, m => m.PicturesWallDefaultTaskList, v => v.PicturesWallUpload.DefaultTaskList).DisposeWith(disposables);
+                this.OneWayBind(vm, m => m.PicturesWallDefaultTaskList, v => v.PicturesCircleWallUpload.DefaultTaskList).DisposeWith(disposables);
+                this.OneWayBind(vm, m => m.PictureListStyleDefaultTaskList, v => v.PictureListUpload.DefaultTaskList).DisposeWith(disposables);
+                
+                BasicUpload.UploadTransport     =  new UploadMockTransport();
+                BasicUpload.UploadTaskFailed    += HandleUploadFailed;
+                BasicUpload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                AvatarDemoPictureCardUpload.UploadTransport     =  new UploadMockTransport();
+                AvatarDemoPictureCardUpload.UploadTaskFailed    += HandleUploadFailed;
+                AvatarDemoPictureCardUpload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                AvatarDemoPictureCircleUpload.UploadTransport     =  new UploadMockTransport();
+                AvatarDemoPictureCircleUpload.UploadTaskFailed    += HandleUploadFailed;
+                AvatarDemoPictureCircleUpload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                DefaultFileList.UploadTransport     =  new UploadMockTransport();
+                DefaultFileList.UploadTaskFailed    += HandleUploadFailed;
+                DefaultFileList.UploadTaskCompleted += HandleUploadCompleted;
+        
+                AvatarDemoPictureCardUpload.UploadTaskAboutToScheduling   += HandleAboutToScheduling;
+                AvatarDemoPictureCircleUpload.UploadTaskAboutToScheduling += HandleAboutToScheduling;
+                AvatarDemoPictureCardUpload.UploadTaskFailed              += HandleUploadFailed;
+                AvatarDemoPictureCircleUpload.UploadTaskFailed            += HandleUploadFailed;
+                AvatarDemoPictureCircleUpload.UploadTaskCompleted         += HandleUploadCompleted;
+                AvatarDemoPictureCardUpload.UploadTaskCompleted           += HandleUploadCompleted;
+                PicturesWallUpload.UploadTransport                        =  new UploadMockTransport();
+                PicturesWallUpload.UploadTaskFailed                       += HandleUploadFailed;
+                PicturesWallUpload.UploadTaskCompleted                    += HandleUploadCompleted;
+        
+                PicturesCircleWallUpload.UploadTransport     =  new UploadMockTransport();
+                PicturesCircleWallUpload.UploadTaskFailed    += HandleUploadFailed;
+                PicturesCircleWallUpload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                DragAndDropUpload.UploadTransport     =  new UploadMockTransport();
+                DragAndDropUpload.UploadTaskFailed    += HandleUploadFailed;
+                DragAndDropUpload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                PictureListUpload.UploadTransport     =  new UploadMockTransport();
+                PictureListUpload.UploadTaskFailed    += HandleUploadFailed;
+                PictureListUpload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                MaxCount1Upload.UploadTransport     =  new UploadMockTransport();
+                MaxCount1Upload.UploadTaskFailed    += HandleUploadFailed;
+                MaxCount1Upload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                MaxCount3Upload.UploadTransport     =  new UploadMockTransport();
+                MaxCount3Upload.UploadTaskFailed    += HandleUploadFailed;
+                MaxCount3Upload.UploadTaskCompleted += HandleUploadCompleted;
+        
+                DirectoryUpload.UploadTransport           =  new UploadMockTransport();
+                DirectoryUpload.UploadTaskFailed          += HandleUploadFailed;
+                DirectoryUpload.UploadTaskCompleted       += HandleUploadCompleted;
+                PngOnlyUpload.UploadTransport             =  new UploadMockTransport();
+                PngOnlyUpload.UploadTaskAboutToScheduling += HandlePngUploadAboutToScheduling;
+                PngOnlyUpload.UploadTaskFailed            += HandleUploadFailed;
+                PngOnlyUpload.UploadTaskCompleted         += HandleUploadCompleted;
+
+                Disposable.Create(() =>
+                {
+                    BasicUpload.UploadTransport                   = null;
+                    AvatarDemoPictureCardUpload.UploadTransport   = null;
+                    AvatarDemoPictureCircleUpload.UploadTransport = null;
+                    DefaultFileList.UploadTransport               = null;
+                    PicturesWallUpload.UploadTransport            = null;
+                    PicturesCircleWallUpload.UploadTransport      = null;
+                    DragAndDropUpload.UploadTransport             = null;
+                    PictureListUpload.UploadTransport             = null;
+                    MaxCount1Upload.UploadTransport               = null;
+                    MaxCount3Upload.UploadTransport               = null;
+                    DirectoryUpload.UploadTransport               = null;
+                    PngOnlyUpload.UploadTransport                 = null;
+                    
+                    BasicUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    BasicUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    BasicUpload.Reset();
+                
+                    AvatarDemoPictureCardUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    AvatarDemoPictureCardUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    AvatarDemoPictureCardUpload.Reset();
+             
+                    AvatarDemoPictureCircleUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    AvatarDemoPictureCircleUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    AvatarDemoPictureCircleUpload.Reset();
+               
+                    DefaultFileList.UploadTaskFailed    -= HandleUploadFailed;
+                    DefaultFileList.UploadTaskCompleted -= HandleUploadCompleted;
+                    DefaultFileList.Reset();
+        
+                    AvatarDemoPictureCardUpload.UploadTaskAboutToScheduling -= HandleAboutToScheduling;
+                    AvatarDemoPictureCardUpload.UploadTaskFailed            -= HandleUploadFailed;
+                    AvatarDemoPictureCardUpload.UploadTaskCompleted         -= HandleUploadCompleted;
+                    AvatarDemoPictureCardUpload.Reset();
+                    AvatarDemoPictureCircleUpload.UploadTaskAboutToScheduling -= HandleAboutToScheduling;
+                    AvatarDemoPictureCircleUpload.UploadTaskFailed            -= HandleUploadFailed;
+                    AvatarDemoPictureCircleUpload.UploadTaskCompleted         -= HandleUploadCompleted;
+                    AvatarDemoPictureCircleUpload.Reset();
+                    
+                    PicturesWallUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    PicturesWallUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    PicturesWallUpload.Reset();
+               
+                    PicturesCircleWallUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    PicturesCircleWallUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    PicturesCircleWallUpload.Reset();
+     
+                    DragAndDropUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    DragAndDropUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    DragAndDropUpload.Reset();
+        
+                    PictureListUpload.UploadTaskFailed    -= HandleUploadFailed;
+                    PictureListUpload.UploadTaskCompleted -= HandleUploadCompleted;
+                    PictureListUpload.Reset();
+  
+                    MaxCount1Upload.UploadTaskFailed    -= HandleUploadFailed;
+                    MaxCount1Upload.UploadTaskCompleted -= HandleUploadCompleted;
+                    MaxCount1Upload.Reset();
+                
+                    MaxCount3Upload.UploadTaskFailed    -= HandleUploadFailed;
+                    MaxCount3Upload.UploadTaskCompleted -= HandleUploadCompleted;
+                    MaxCount3Upload.Reset();
+                
+                    DirectoryUpload.UploadTaskFailed          -= HandleUploadFailed;
+                    DirectoryUpload.UploadTaskCompleted       -= HandleUploadCompleted;
+                    DirectoryUpload.Reset();
+                    PngOnlyUpload.UploadTaskAboutToScheduling -= HandlePngUploadAboutToScheduling;
+                    PngOnlyUpload.UploadTaskFailed            -= HandleUploadFailed;
+                    PngOnlyUpload.UploadTaskCompleted         -= HandleUploadCompleted;
+                    PngOnlyUpload.Reset();
+
+                    vm.DefaultTaskList                 = null;
+                    vm.PicturesWallDefaultTaskList     = null;
+                    vm.PictureListStyleDefaultTaskList = null;
+                }).DisposeWith(disposables);
             }
         });
-        InitializeComponent();
-        BasicUpload.UploadTransport     =  new UploadMockTransport();
-        BasicUpload.UploadTaskFailed    += HandleUploadFailed;
-        BasicUpload.UploadTaskCompleted += HandleUploadCompleted;
-        
-        AvatarDemoPictureCardUpload.UploadTransport     =  new UploadMockTransport();
-        AvatarDemoPictureCardUpload.UploadTaskFailed    += HandleUploadFailed;
-        AvatarDemoPictureCardUpload.UploadTaskCompleted += HandleUploadCompleted;
-        
-        AvatarDemoPictureCircleUpload.UploadTransport     =  new UploadMockTransport();
-        AvatarDemoPictureCircleUpload.UploadTaskFailed    += HandleUploadFailed;
-        AvatarDemoPictureCircleUpload.UploadTaskCompleted += HandleUploadCompleted;
-        
-        DefaultFileList.UploadTransport               =  new UploadMockTransport();
-        DefaultFileList.UploadTaskFailed              += HandleUploadFailed;
-        DefaultFileList.UploadTaskCompleted           += HandleUploadCompleted;
-        
-        AvatarDemoPictureCardUpload.UploadTaskAboutToScheduling   += HandleAboutToScheduling;
-        AvatarDemoPictureCircleUpload.UploadTaskAboutToScheduling += HandleAboutToScheduling;
-        AvatarDemoPictureCardUpload.UploadTaskFailed              += HandleUploadFailed;
-        AvatarDemoPictureCircleUpload.UploadTaskFailed            += HandleUploadFailed;
-        AvatarDemoPictureCircleUpload.UploadTaskCompleted         += HandleUploadCompleted;
-        AvatarDemoPictureCardUpload.UploadTaskCompleted           += HandleUploadCompleted;
-        PicturesWallUpload.UploadTransport                        =  new UploadMockTransport();
-        PicturesWallUpload.UploadTaskFailed                       += HandleUploadFailed;
-        PicturesWallUpload.UploadTaskCompleted                    += HandleUploadCompleted;
-        
-        PicturesCircleWallUpload.UploadTransport                  =  new UploadMockTransport();
-        PicturesCircleWallUpload.UploadTaskFailed                 += HandleUploadFailed;
-        PicturesCircleWallUpload.UploadTaskCompleted              += HandleUploadCompleted;
-        
-        DragAndDropUpload.UploadTransport                         =  new UploadMockTransport();
-        DragAndDropUpload.UploadTaskFailed                        += HandleUploadFailed;
-        DragAndDropUpload.UploadTaskCompleted                     += HandleUploadCompleted;
-        
-        PictureListUpload.UploadTransport                         =  new UploadMockTransport();
-        PictureListUpload.UploadTaskFailed                        += HandleUploadFailed;
-        PictureListUpload.UploadTaskCompleted                     += HandleUploadCompleted;
-        
-        MaxCount1Upload.UploadTransport                           =  new UploadMockTransport();
-        MaxCount1Upload.UploadTaskFailed                          += HandleUploadFailed;
-        MaxCount1Upload.UploadTaskCompleted                       += HandleUploadCompleted;
-        
-        MaxCount3Upload.UploadTransport                           =  new UploadMockTransport();
-        MaxCount3Upload.UploadTaskFailed                          += HandleUploadFailed;
-        MaxCount3Upload.UploadTaskCompleted                       += HandleUploadCompleted;
-        
-        DirectoryUpload.UploadTransport                           =  new UploadMockTransport();
-        DirectoryUpload.UploadTaskFailed                          += HandleUploadFailed;
-        DirectoryUpload.UploadTaskCompleted                       += HandleUploadCompleted;
-        PngOnlyUpload.UploadTransport                             =  new UploadMockTransport();
-        PngOnlyUpload.UploadTaskAboutToScheduling                 += HandlePngUploadAboutToScheduling;
-        PngOnlyUpload.UploadTaskFailed                            += HandleUploadFailed;
-        PngOnlyUpload.UploadTaskCompleted                         += HandleUploadCompleted;
     }
     
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        if (_messageManager == null)
+        var topLevel = TopLevel.GetTopLevel(this);
+        _messageManager = new WindowMessageManager(topLevel)
         {
-            var topLevel = TopLevel.GetTopLevel(this);
-            _messageManager = new WindowMessageManager(topLevel)
-            {
-                MaxItems = 10
-            };
-        }
+            MaxItems = 10
+        };
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _messageManager?.Dispose();
+        _messageManager = null;
     }
 
     private void HandleAboutToScheduling(object? sender, UploadTaskAboutToSchedulingEventArgs e)

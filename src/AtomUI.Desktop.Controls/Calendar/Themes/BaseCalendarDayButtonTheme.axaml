@@ -29,40 +29,48 @@
         <Setter Property="ClickMode" Value="Release" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLabel}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLabel}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusSM}" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:CalendarTokenKey.CellWidth}}" />
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:CalendarTokenKey.CellHeight}}" />
-        <Setter Property="Margin" Value="{DynamicResource {x:Static atom:CalendarTokenKey.CellMargin}}" />
+        <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
+        <Setter Property="Width" Value="{atom:CalendarTokenResource CellWidth}" />
+        <Setter Property="Height" Value="{atom:CalendarTokenResource CellHeight}" />
+        <Setter Property="Margin" Value="{atom:CalendarTokenResource CellMargin}" />
         
         <Style Selector="^ /template/ ContentPresenter#PART_Content">
-            <Setter Property="LineHeight" Value="{DynamicResource {x:Static atom:CalendarTokenKey.CellLineHeight}}" />
+            <Setter Property="LineHeight" Value="{atom:CalendarTokenResource CellLineHeight}" />
         </Style>
         
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:CalendarTokenKey.CellHoverBg}}" />
+            <Setter Property="Background" Value="{atom:CalendarTokenResource CellHoverBg}" />
         </Style>
         
         <Style Selector="^:inactive">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
         </Style>
         
         <Style Selector="^:today">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorPrimary}" />
         </Style>
         
         <Style Selector="^:selected:not(:inactive)">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWhite}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorPrimary}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorWhite}" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationFast}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

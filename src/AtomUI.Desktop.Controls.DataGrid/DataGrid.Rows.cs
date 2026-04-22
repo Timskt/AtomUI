@@ -6,8 +6,8 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Data;
-using AtomUI.Data;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
@@ -1153,13 +1153,13 @@ public partial class DataGrid
         DataGridRow? dataGridRow = GetGeneratedRow(dataContext);
         if (dataGridRow == null)
         {
-            dataGridRow             = DisplayData.GetUsedRow() ?? new DataGridRow();
-            dataGridRow.Index       = rowIndex;
-            dataGridRow.Slot        = slot;
-            dataGridRow.OwningGrid  = this;
-            dataGridRow.DataContext = dataContext;
-            BindUtils.RelayBind(this, IsMotionEnabledProperty, dataGridRow, DataGridRow.IsMotionEnabledProperty);
-            BindUtils.RelayBind(this, SizeTypeProperty, dataGridRow, DataGridRow.SizeTypeProperty);
+            dataGridRow                                       = DisplayData.GetUsedRow() ?? new DataGridRow();
+            dataGridRow.Index                                 = rowIndex;
+            dataGridRow.Slot                                  = slot;
+            dataGridRow.OwningGrid                            = this;
+            dataGridRow.DataContext                           = dataContext;
+            dataGridRow[!DataGridRow.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            dataGridRow[!DataGridRow.SizeTypeProperty]        = this[!SizeTypeProperty];
 
             CompleteCellsCollection(dataGridRow);
             NotifyLoadingRow(new DataGridRowEventArgs(dataGridRow));
@@ -1171,10 +1171,10 @@ public partial class DataGrid
     internal DataGridRow GetGeneratedGhostRow(object? dataContext)
     {
         var dataGridRow = new DataGridRow();
-        dataGridRow.OwningGrid  = this;
-        dataGridRow.DataContext = dataContext;
-        BindUtils.RelayBind(this, IsMotionEnabledProperty, dataGridRow, DataGridRow.IsMotionEnabledProperty);
-        BindUtils.RelayBind(this, SizeTypeProperty, dataGridRow, DataGridRow.SizeTypeProperty);
+        dataGridRow.OwningGrid                            = this;
+        dataGridRow.DataContext                           = dataContext;
+        dataGridRow[!DataGridRow.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+        dataGridRow[!DataGridRow.SizeTypeProperty]        = this[!SizeTypeProperty];
         CompleteCellsCollection(dataGridRow);
         return dataGridRow;
     }
@@ -1221,17 +1221,14 @@ public partial class DataGrid
             Debug.Assert(DisplayData.GetDisplayedElement(slot) != null);
             return DisplayData.GetDisplayedElement(slot).DesiredSize.Height;
         }
-        else
+        DataGridRowGroupInfo? rowGroupInfo = RowGroupHeadersTable.GetValueAt(slot);
+        if (rowGroupInfo != null)
         {
-            DataGridRowGroupInfo? rowGroupInfo = RowGroupHeadersTable.GetValueAt(slot);
-            if (rowGroupInfo != null)
-            {
-                return _rowGroupHeightsByLevel[rowGroupInfo.Level];
-            }
-
-            // Assume it's a row since we're either not grouping or it wasn't a RowGroupHeader
-            return RowHeightEstimate + (GetRowDetailsVisibility(slot) ? RowDetailsHeightEstimate : 0);
+            return _rowGroupHeightsByLevel[rowGroupInfo.Level];
         }
+
+        // Assume it's a row since we're either not grouping or it wasn't a RowGroupHeader
+        return RowHeightEstimate + (GetRowDetailsVisibility(slot) ? RowDetailsHeightEstimate : 0);
     }
 
     /// <summary>

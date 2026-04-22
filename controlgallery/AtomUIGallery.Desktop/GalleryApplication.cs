@@ -26,7 +26,7 @@ public class GalleryApplication : BaseGalleryApplication
     {
         Name = "AtomUI Desktop Gallery";
     }
-    
+
     public override void OnFrameworkInitializationCompleted()
     {
         switch (ApplicationLifetime)
@@ -35,9 +35,6 @@ public class GalleryApplication : BaseGalleryApplication
                 desktop.MainWindow       = CreateWorkspaceWindow();
                 desktop.MainWindow.Title = Name;
                 break;
-            // case ISingleViewApplicationLifetime singleView:
-            //     singleView.MainView = new MainView();
-            //     break;
         }
 
         base.OnFrameworkInitializationCompleted();

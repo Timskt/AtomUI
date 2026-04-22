@@ -1,11 +1,7 @@
 using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Primitives.Themes;
-using AtomUI.Theme;
-using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
@@ -13,13 +9,14 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Metadata;
-using Avalonia.Styling;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
 internal class AddOnDecoratedBox : ContentControl, 
-                                   IControlSharedTokenResourcesHost,
                                    ISizeTypeAware,
                                    IMotionAwareControl,
                                    IInputControlStatusAware,
@@ -144,6 +141,24 @@ internal class AddOnDecoratedBox : ContentControl,
     #endregion
     
     #region 内部属性定义
+    internal static readonly StyledProperty<IBrush?> AddOnStatusForegroundProperty =
+        AvaloniaProperty.Register<AddOnDecoratedBox, IBrush?>(nameof(AddOnStatusForeground));
+
+    internal static readonly StyledProperty<IBrush?> AddOnStatusIconBrushProperty =
+        AvaloniaProperty.Register<AddOnDecoratedBox, IBrush?>(nameof(AddOnStatusIconBrush));
+
+    internal IBrush? AddOnStatusForeground
+    {
+        get => GetValue(AddOnStatusForegroundProperty);
+        set => SetValue(AddOnStatusForegroundProperty, value);
+    }
+
+    internal IBrush? AddOnStatusIconBrush
+    {
+        get => GetValue(AddOnStatusIconBrushProperty);
+        set => SetValue(AddOnStatusIconBrushProperty, value);
+    }
+
     internal static readonly DirectProperty<AddOnDecoratedBox, Thickness> InnerBoxBorderThicknessProperty =
         AvaloniaProperty.RegisterDirect<AddOnDecoratedBox, Thickness>(nameof(InnerBoxBorderThickness),
             o => o.InnerBoxBorderThickness,
@@ -274,14 +289,17 @@ internal class AddOnDecoratedBox : ContentControl,
         get => GetValue(IsUsedInCompactSpaceProperty);
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => AddOnDecoratedBoxToken.ID;
-
+    
     #endregion
     
     private protected Control? _leftAddOn;
     private protected Control? _rightAddOn;
+    private ContentPresenter? _contentLeftAddOn;
+    private ContentPresenter? _contentRightAddOn;
+    private bool _borderInfoDirty;
+    private bool _cornerRadiusDirty;
+    private bool _borderThicknessDirty;
+    private bool _layoutUpdatePosted;
 
     internal Border? ContentFrame;
     
@@ -300,91 +318,94 @@ internal class AddOnDecoratedBox : ContentControl,
 
     public AddOnDecoratedBox()
     {
-        this.RegisterResources();
-        ConfigureInstanceStyles();
     }
     
     protected virtual void UpdatePseudoClasses()
     {
-        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outline);
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outlined);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Filled, StyleVariant == InputControlStyleVariant.Filled);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BorderBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty)
-                ];
-                NotifyCreateTransitions(Transitions);
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected virtual void NotifyCreateTransitions(Transitions transitions)
-    {
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Underlined, StyleVariant == InputControlStyleVariant.Underlined);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        
+
         if (change.Property == StyleVariantProperty)
         {
             UpdatePseudoClasses();
-            ConfigureInnerBoxBorderThickness();
         }
 
-        if (change.Property == LeftAddOnProperty || 
+        if (change.Property == StyleVariantProperty ||
+            change.Property == BorderThicknessProperty)
+        {
+            _borderThicknessDirty = true;
+        }
+
+        if (change.Property == LeftAddOnProperty ||
             change.Property == RightAddOnProperty ||
             change.Property == CornerRadiusProperty ||
             change.Property == StyleVariantProperty ||
             change.Property == CompactSpaceItemPositionProperty ||
             change.Property == CompactSpaceOrientationProperty)
         {
-            ConfigureInnerBoxCornerRadius();
+            _cornerRadiusDirty = true;
         }
 
-        if (change.Property == BorderThicknessProperty)
-        {
-            ConfigureInnerBoxBorderThickness();
-        }
-        
-        if (change.Property == CornerRadiusProperty || 
+        if (change.Property == CornerRadiusProperty ||
             change.Property == BorderThicknessProperty ||
             change.Property == StyleVariantProperty ||
             change.Property == CompactSpaceItemPositionProperty ||
             change.Property == CompactSpaceOrientationProperty)
         {
-            ConfigureAddOnBorderInfo();
+            _borderInfoDirty = true;
         }
-        if (IsLoaded)
+
+        if (change.Property == StatusProperty ||
+            change.Property == IsEnabledProperty ||
+            change.Property == ContentLeftAddOnProperty ||
+            change.Property == ContentRightAddOnProperty ||
+            change.Property == AddOnStatusForegroundProperty ||
+            change.Property == AddOnStatusIconBrushProperty)
         {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
+            UpdateIconStatusColors();
+        }
+
+        ScheduleLayoutUpdate();
+    }
+
+    private void ScheduleLayoutUpdate()
+    {
+        if (_layoutUpdatePosted)
+        {
+            return;
+        }
+        if (!_borderInfoDirty && !_cornerRadiusDirty && !_borderThicknessDirty)
+        {
+            return;
+        }
+        _layoutUpdatePosted = true;
+        Dispatcher.UIThread.Post(ApplyDirtyLayoutUpdates, DispatcherPriority.Render);
+    }
+
+    private void ApplyDirtyLayoutUpdates()
+    {
+        _layoutUpdatePosted = false;
+        if (_cornerRadiusDirty)
+        {
+            ConfigureInnerBoxCornerRadius();
+            _cornerRadiusDirty = false;
+        }
+        if (_borderInfoDirty)
+        {
+            ConfigureAddOnBorderInfo();
+            _borderInfoDirty = false;
+        }
+        if (_borderThicknessDirty)
+        {
+            ConfigureInnerBoxBorderThickness();
+            _borderThicknessDirty = false;
         }
     }
     
@@ -394,31 +415,34 @@ internal class AddOnDecoratedBox : ContentControl,
         var topRightRadius    = CornerRadius.TopRight;
         var bottomLeftRadius  = CornerRadius.BottomLeft;
         var bottomRightRadius = CornerRadius.BottomRight;
-        
+
+        CornerRadius newLeftRadius;
+        CornerRadius newRightRadius;
+
         if (IsUsedInCompactSpace && CompactSpaceItemPosition.HasValue &&
-            (!CompactSpaceItemPosition.Value.HasFlag(SpaceItemPosition.First) || 
+            (!CompactSpaceItemPosition.Value.HasFlag(SpaceItemPosition.First) ||
              !CompactSpaceItemPosition.Value.HasFlag(SpaceItemPosition.Last)))
         {
             if (CompactSpaceItemPosition.Value.HasFlag(SpaceItemPosition.First))
             {
                 if (CompactSpaceOrientation == Orientation.Horizontal)
                 {
-                    LeftAddOnCornerRadius = new CornerRadius(topLeft:topLeftRadius,
+                    newLeftRadius = new CornerRadius(topLeft:topLeftRadius,
                         topRight:0,
                         bottomLeft: bottomLeftRadius,
                         bottomRight: 0);
-                    RightAddOnCornerRadius = new CornerRadius(topLeft:0,
+                    newRightRadius = new CornerRadius(topLeft:0,
                         topRight: 0,
                         bottomLeft: 0,
                         bottomRight: 0);
                 }
                 else
                 {
-                    LeftAddOnCornerRadius = new CornerRadius(topLeft:topLeftRadius,
+                    newLeftRadius = new CornerRadius(topLeft:topLeftRadius,
                         topRight:0,
                         bottomLeft: 0,
                         bottomRight: 0);
-                    RightAddOnCornerRadius = new CornerRadius(topLeft:0,
+                    newRightRadius = new CornerRadius(topLeft:0,
                         topRight:topRightRadius,
                         bottomLeft: 0,
                         bottomRight: 0);
@@ -426,35 +450,35 @@ internal class AddOnDecoratedBox : ContentControl,
             }
             else if (CompactSpaceItemPosition.Value.HasFlag(SpaceItemPosition.Middle))
             {
-                LeftAddOnCornerRadius = new CornerRadius(topLeft:0,
+                newLeftRadius = new CornerRadius(topLeft:0,
                     topRight:0,
                     bottomLeft: 0,
                     bottomRight: 0);
-                RightAddOnCornerRadius = new CornerRadius(topLeft:0,
+                newRightRadius = new CornerRadius(topLeft:0,
                     topRight:0,
                     bottomLeft: 0,
                     bottomRight: 0);
             }
-            else if (CompactSpaceItemPosition.Value.HasFlag(SpaceItemPosition.Last))
+            else // Last
             {
                 if (CompactSpaceOrientation == Orientation.Horizontal)
                 {
-                    LeftAddOnCornerRadius = new CornerRadius(topLeft:0,
+                    newLeftRadius = new CornerRadius(topLeft:0,
                         topRight:0,
                         bottomLeft: 0,
                         bottomRight: 0);
-                    RightAddOnCornerRadius = new CornerRadius(topLeft:0,
+                    newRightRadius = new CornerRadius(topLeft:0,
                         topRight:topRightRadius,
                         bottomLeft: 0,
                         bottomRight: bottomRightRadius);
                 }
                 else
                 {
-                    LeftAddOnCornerRadius = new CornerRadius(topLeft:0,
+                    newLeftRadius = new CornerRadius(topLeft:0,
                         topRight:0,
                         bottomLeft: bottomLeftRadius,
                         bottomRight: 0);
-                    RightAddOnCornerRadius = new CornerRadius(topLeft:0,
+                    newRightRadius = new CornerRadius(topLeft:0,
                         topRight:0,
                         bottomLeft: 0,
                         bottomRight: bottomRightRadius);
@@ -463,43 +487,115 @@ internal class AddOnDecoratedBox : ContentControl,
         }
         else
         {
-            LeftAddOnCornerRadius = new CornerRadius(topLeft:topLeftRadius,
+            newLeftRadius = new CornerRadius(topLeft:topLeftRadius,
                 topRight:0,
                 bottomLeft: bottomLeftRadius,
                 bottomRight: 0);
-            RightAddOnCornerRadius = new CornerRadius(topLeft:0,
+            newRightRadius = new CornerRadius(topLeft:0,
                 topRight:topRightRadius,
                 bottomLeft: 0,
                 bottomRight: bottomRightRadius);
         }
-        
-        if (StyleVariant == InputControlStyleVariant.Outline ||
+
+        if (LeftAddOnCornerRadius != newLeftRadius)
+        {
+            LeftAddOnCornerRadius = newLeftRadius;
+        }
+        if (RightAddOnCornerRadius != newRightRadius)
+        {
+            RightAddOnCornerRadius = newRightRadius;
+        }
+
+        Thickness newLeftThickness;
+        Thickness newRightThickness;
+
+        if (StyleVariant == InputControlStyleVariant.Outlined ||
             StyleVariant == InputControlStyleVariant.Filled)
         {
             var topThickness    = BorderThickness.Top;
             var rightThickness  = BorderThickness.Right;
             var bottomThickness = BorderThickness.Bottom;
             var leftThickness   = BorderThickness.Left;
-            
-            LeftAddOnBorderThickness =
+
+            newLeftThickness =
                 new Thickness(top: topThickness, right: 0, bottom: bottomThickness, left: leftThickness);
-            RightAddOnBorderThickness =
+            newRightThickness =
                 new Thickness(top: topThickness, right: rightThickness, bottom: bottomThickness, left: 0);
         }
         else if (StyleVariant == InputControlStyleVariant.Underlined)
         {
-            LeftAddOnBorderThickness  = new Thickness(0);
-            RightAddOnBorderThickness = new Thickness(0);
+            newLeftThickness  = new Thickness(0);
+            newRightThickness = new Thickness(0);
         }
+        else
+        {
+            newLeftThickness  = LeftAddOnBorderThickness;
+            newRightThickness = RightAddOnBorderThickness;
+        }
+
+        if (LeftAddOnBorderThickness != newLeftThickness)
+        {
+            LeftAddOnBorderThickness = newLeftThickness;
+        }
+        if (RightAddOnBorderThickness != newRightThickness)
+        {
+            RightAddOnBorderThickness = newRightThickness;
+        }
+
         NotifyAddOnBorderInfoCalculated();
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        
+        UpdatePseudoClasses();
+
+        // 取消旧的 ContentPresenter 订阅
+        if (_contentLeftAddOn != null)
+        {
+            _contentLeftAddOn.PropertyChanged -= HandleContentPresenterChildChanged;
+        }
+
+        if (_contentRightAddOn != null)
+        {
+            _contentRightAddOn.PropertyChanged -= HandleContentPresenterChildChanged;
+        }
+
+        if (_leftAddOn is ContentPresenter oldLeftAddOn)
+        {
+            oldLeftAddOn.PropertyChanged -= HandleContentPresenterChildChanged;
+        }
+
+        if (_rightAddOn is ContentPresenter oldRightAddOn)
+        {
+            oldRightAddOn.PropertyChanged -= HandleContentPresenterChildChanged;
+        }
+
         _leftAddOn   = e.NameScope.Find<Control>(AddOnDecoratedBoxThemeConstants.LeftAddOnPart);
         _rightAddOn  = e.NameScope.Find<Control>(AddOnDecoratedBoxThemeConstants.RightAddOnPart);
+        _contentLeftAddOn  = e.NameScope.Find<ContentPresenter>(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart);
+        _contentRightAddOn = e.NameScope.Find<ContentPresenter>(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart);
+
+        // 订阅新的 ContentPresenter Child 变化
+        if (_contentLeftAddOn != null)
+        {
+            _contentLeftAddOn.PropertyChanged += HandleContentPresenterChildChanged;
+        }
+
+        if (_contentRightAddOn != null)
+        {
+            _contentRightAddOn.PropertyChanged += HandleContentPresenterChildChanged;
+        }
+
+        if (_leftAddOn is ContentPresenter newLeftAddOn)
+        {
+            newLeftAddOn.PropertyChanged += HandleContentPresenterChildChanged;
+        }
+
+        if (_rightAddOn is ContentPresenter newRightAddOn)
+        {
+            newRightAddOn.PropertyChanged += HandleContentPresenterChildChanged;
+        }
         
         if (ContentFrame != null)
         {
@@ -521,6 +617,7 @@ internal class AddOnDecoratedBox : ContentControl,
         ConfigureInnerBoxCornerRadius();
         ConfigureAddOnBorderInfo();
         ConfigureInnerBoxBorderThickness();
+        UpdateIconStatusColors();
     }
 
     private void HandleContentFramePointerEnter(object? sender, PointerEventArgs args)
@@ -543,6 +640,93 @@ internal class AddOnDecoratedBox : ContentControl,
     {
         IsInnerBoxPressed = false;
         IsInnerBoxHover   = true;
+    }
+
+    private void HandleContentPresenterChildChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ContentPresenter.ChildProperty)
+        {
+            if (e.OldValue is Control oldChild)
+            {
+                oldChild.AttachedToVisualTree -= HandleAddOnChildAttachedToVisualTree;
+            }
+
+            if (e.NewValue is Control newChild)
+            {
+                if (newChild.IsAttachedToVisualTree())
+                {
+                    UpdateIconStatusColors();
+                }
+                else
+                {
+                    newChild.AttachedToVisualTree += HandleAddOnChildAttachedToVisualTree;
+                }
+            }
+        }
+    }
+
+    private void HandleAddOnChildAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is Control child)
+        {
+            child.AttachedToVisualTree -= HandleAddOnChildAttachedToVisualTree;
+        }
+        UpdateIconStatusColors();
+    }
+
+    private void UpdateIconStatusColors()
+    {
+        var foreground = AddOnStatusForeground;
+        var iconBrush = AddOnStatusIconBrush;
+
+        // 应用 Foreground 到 addon 区域的 ContentPresenter
+        ApplyAddOnForeground(_contentLeftAddOn, foreground);
+        ApplyAddOnForeground(_contentRightAddOn, foreground);
+        ApplyAddOnForeground(_leftAddOn as ContentPresenter, foreground);
+        ApplyAddOnForeground(_rightAddOn as ContentPresenter, foreground);
+
+        // 应用 Icon 染色
+        ApplyIconBrush(_contentLeftAddOn, iconBrush);
+        ApplyIconBrush(_contentRightAddOn, iconBrush);
+        ApplyIconBrush(_leftAddOn, iconBrush);
+        ApplyIconBrush(_rightAddOn, iconBrush);
+    }
+
+    private static void ApplyAddOnForeground(ContentPresenter? presenter, IBrush? brush)
+    {
+        if (presenter == null) return;
+        if (brush != null)
+        {
+            presenter.SetCurrentValue(ForegroundProperty, brush);
+        }
+        else
+        {
+            presenter.ClearValue(ForegroundProperty);
+        }
+    }
+
+    private static void ApplyIconBrush(Control? container, IBrush? brush)
+    {
+        if (container == null)
+        {
+            return;
+        }
+        foreach (var icon in container.GetVisualDescendants().OfType<Icon>())
+        {
+            if (icon.Classes.Contains("skip-status")) continue;
+            if (brush != null)
+            {
+                icon.SetCurrentValue(Icon.FillBrushProperty, brush);
+                icon.SetCurrentValue(Icon.StrokeBrushProperty, brush);
+                icon.SetCurrentValue(Icon.ForegroundProperty, brush);
+            }
+            else
+            {
+                icon.ClearValue(Icon.FillBrushProperty);
+                icon.ClearValue(Icon.StrokeBrushProperty);
+                icon.ClearValue(Icon.ForegroundProperty);
+            }
+        }
     }
     
     protected virtual void NotifyAddOnBorderInfoCalculated()
@@ -635,73 +819,16 @@ internal class AddOnDecoratedBox : ContentControl,
         }
     }
     
-    private void ConfigureInstanceStyles()
+
+    protected override void OnInitialized()
     {
-        {
-            var warningStyle = new Style(x =>
-                x.PropertyEquals(StatusProperty, InputControlStatus.Warning));
-            
-            var iconStyle = new Style(x => Selectors.Or(
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status"))));
-            
-            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKey.ColorWarning);
-            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKey.ColorWarning);
-            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKey.ColorWarning);
-            warningStyle.Add(iconStyle);
-            Styles.Add(warningStyle);
-        }
-        {
-            var errorStyle = new Style(x =>
-                x.PropertyEquals(StatusProperty, InputControlStatus.Error));
-               
-            var iconStyle = new Style(x => Selectors.Or(
-                x.Nesting().Descendant().OfType<ContentPresenter>().Name(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status"))));
-            
-            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKey.ColorError);
-            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKey.ColorError);
-            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKey.ColorError);
-            errorStyle.Add(iconStyle);
-            Styles.Add(errorStyle);
-        }
-        {
-            var disabledStyle = new Style(x => x.Class(StdPseudoClass.Disabled));
-            var iconStyle = new Style(x => Selectors.Or(
-                x.Nesting().Descendant().OfType<ContentPresenter>().Name(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart).Descendant()
-                 .OfType<Icon>(),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentLeftAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.ContentRightAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.LeftAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.LeftAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.RightAddOnPart).Descendant()
-                 .OfType<Icon>().Not(p => p.Class("skip-status")),
-                x.Nesting().Descendant().Name(AddOnDecoratedBoxThemeConstants.RightAddOnPart).Descendant()
-                 .OfType<PathIcon>().Not(p => p.Class("skip-status"))));
-      
-            iconStyle.Add(Icon.FillBrushProperty, SharedTokenKey.ColorTextDisabled);
-            iconStyle.Add(Icon.StrokeBrushProperty, SharedTokenKey.ColorTextDisabled);
-            iconStyle.Add(Icon.ForegroundProperty, SharedTokenKey.ColorTextDisabled);
-            disabledStyle.Add(iconStyle);
-            Styles.Add(disabledStyle);
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

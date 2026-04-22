@@ -22,7 +22,7 @@
                                                        IsShowCoverMask="False"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
-                                                       Sources="{TemplateBinding Sources}" />
+                                                       ItemsSource="{TemplateBinding Sources}" />
                             <Border Name="Mask" Opacity="{TemplateBinding MaskOpacity}">
                                 <StackPanel Name="ActionsLayout" Orientation="Horizontal" HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
@@ -43,7 +43,7 @@
         </Setter>
 
         <Style Selector="^ /template/ StackPanel#ActionsLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXXS}" />
         </Style>
         
         <Style Selector="^[ListType=PictureCircle]">
@@ -52,8 +52,8 @@
             </Style>
         </Style>
         
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:UploadTokenKey.PictureCardSize}}" />
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:UploadTokenKey.PictureCardSize}}" />
+        <Setter Property="Width" Value="{atom:UploadTokenResource PictureCardSize}" />
+        <Setter Property="Height" Value="{atom:UploadTokenResource PictureCardSize}" />
 
     </ControlTheme>
 </ResourceDictionary>

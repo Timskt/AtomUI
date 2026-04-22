@@ -106,12 +106,26 @@
         </Setter>
 
         <Style Selector="^:is(atom|ButtonSpinnerDecoratedBox)">
-            
+
             <Setter Property="SpinnerBorderThickness"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+                    Value="{atom:SharedTokenResource BorderThickness}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="SpinnerHandleWidth"
-                    Value="{DynamicResource {x:Static atom:ButtonSpinnerTokenKey.HandleWidth}}" />
+                    Value="{atom:ButtonSpinnerTokenResource HandleWidth}" />
+
+            <Style Selector="^[IsMotionEnabled=True]">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <atom:SolidColorBrushTransition Property="BorderBrush" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="HandleOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="HandleOffset" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="ContentLeftShift" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                        <DoubleTransition Property="ContentRightShift" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    </Transitions>
+                </Setter>
+            </Style>
+
             <Style Selector="^[ButtonSpinnerLocation=Left]">
                 <Style Selector="^ /template/ ContentPresenter#PART_SpinnerHandle">
                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -122,22 +136,22 @@
                     <Setter Property="HorizontalAlignment" Value="Right" />
                 </Style>
             </Style>
-            
+
             <Style Selector="^ /template/ atom|ButtonSpinnerContentPanel#ContentLayout">
-                <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+                <Setter Property="HorizontalSpacing" Value="{atom:SharedTokenResource SpacingXXS}" />
             </Style>
-            
+
             <Style Selector="^[SizeType=Large]">
                 <Setter Property="ContentPadding"
-                        Value="{DynamicResource {x:Static atom:AddOnDecoratedBoxTokenKey.PaddingLG}}" />
+                        Value="{atom:AddOnDecoratedBoxTokenResource PaddingLG}" />
             </Style>
             <Style Selector="^[SizeType=Middle]">
                 <Setter Property="ContentPadding"
-                        Value="{DynamicResource {x:Static atom:AddOnDecoratedBoxTokenKey.Padding}}" />
+                        Value="{atom:AddOnDecoratedBoxTokenResource Padding}" />
             </Style>
             <Style Selector="^[SizeType=Small]">
                 <Setter Property="ContentPadding"
-                        Value="{DynamicResource {x:Static atom:AddOnDecoratedBoxTokenKey.PaddingSM}}" />
+                        Value="{atom:AddOnDecoratedBoxTokenResource PaddingSM}" />
             </Style>
             <Style Selector="^[SizeType=Large], ^[SizeType=Middle], ^[SizeType=Small]">
                 <Style Selector="^ /template/ Border#PART_ContentFrame">
@@ -145,7 +159,7 @@
                             Value="{Binding EffectiveContentPadding, RelativeSource={RelativeSource TemplatedParent}}" />
                 </Style>
             </Style>
-           
+
         </Style>
     </ControlTheme>
 </ResourceDictionary>

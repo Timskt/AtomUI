@@ -4,7 +4,6 @@ using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Automation;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls;
@@ -171,28 +170,8 @@ public class TabItem : HeaderedContentControl, ISelectable
         {
             _closeButton.Click += HandleCloseRequest;
         }
-      
-        SetupDefaultCloseIcon();
-    }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(CloseButtonOpacityProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        SetupDefaultCloseIcon();
     }
 
     private void HandleCloseRequest(object? sender, RoutedEventArgs args)
@@ -213,15 +192,7 @@ public class TabItem : HeaderedContentControl, ISelectable
                 SetupShapeThemeBindings(true);
             }
         }
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-        
+
         if (change.Property == CloseIconProperty)
         {
             SetupDefaultCloseIcon();
@@ -256,18 +227,6 @@ public class TabItem : HeaderedContentControl, ISelectable
                 }
             }
         }
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     protected override void OnAccessKey(RoutedEventArgs e)
@@ -315,5 +274,17 @@ public class TabItem : HeaderedContentControl, ISelectable
         {
             SetCurrentValue(LineMaskMarginProperty, new Thickness(0, 1, 0, 1));
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

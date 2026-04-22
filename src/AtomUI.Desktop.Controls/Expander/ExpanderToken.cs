@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ExpanderToken : AbstractControlDesignToken
 {
     public const string ID = "Expander";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public ExpanderToken()
         : base(ID)
     {
@@ -81,4 +84,6 @@ internal class ExpanderToken : AbstractControlDesignToken
         LeftExpandButtonVMargin  = new Thickness(0, 0, 0, SharedToken.UniformlyMarginSM);
         RightExpandButtonVMargin = new Thickness(0, SharedToken.UniformlyMarginSM, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ExpanderTokenKind);
 }

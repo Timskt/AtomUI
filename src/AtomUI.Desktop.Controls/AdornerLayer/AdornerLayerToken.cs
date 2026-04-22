@@ -1,3 +1,4 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
@@ -20,4 +21,6 @@ internal class AdornerLayerToken : AbstractControlDesignToken
         base.CalculateTokenValues(isDarkMode);
         FocusVisualMargin = new Thickness(0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(AdornerLayerTokenKind);
 }

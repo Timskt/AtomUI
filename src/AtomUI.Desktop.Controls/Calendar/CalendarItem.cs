@@ -262,8 +262,6 @@ internal class CalendarItem : TemplatedControl
     protected Grid? _headerLayout;
 
     internal Calendar? Owner { get; set; }
-    private CompositeDisposable? _dayBtnBindingDisposables;
-    private CompositeDisposable? _monthBtnBindingDisposables;
 
     /// <summary>
     /// Gets the Grid that hosts the content when in month mode.
@@ -293,9 +291,6 @@ internal class CalendarItem : TemplatedControl
                     children.Add(cell);
                 }
             }
-            
-            _dayBtnBindingDisposables?.Dispose();
-            _dayBtnBindingDisposables = new CompositeDisposable(Calendar.RowsPerMonth * Calendar.ColumnsPerMonth);
 
             EventHandler<PointerPressedEventArgs>  cellMouseLeftButtonDown = HandleCellMouseLeftButtonDown;
             EventHandler<PointerReleasedEventArgs> cellMouseLeftButtonUp   = HandleCellMouseLeftButtonUp;
@@ -311,9 +306,8 @@ internal class CalendarItem : TemplatedControl
 
                     if (Owner != null)
                     {
-                        cell.Owner = Owner;
-                        _dayBtnBindingDisposables.Add(BindUtils.RelayBind(Owner, Calendar.IsMotionEnabledProperty, cell,
-                            BaseCalendarDayButton.IsMotionEnabledProperty));
+                        cell.Owner                                           = Owner;
+                        cell[!BaseCalendarDayButton.IsMotionEnabledProperty] = Owner[!Calendar.IsMotionEnabledProperty];
                     }
 
                     cell.SetValue(Grid.RowProperty, i);
@@ -337,9 +331,6 @@ internal class CalendarItem : TemplatedControl
             EventHandler<PointerPressedEventArgs>  monthCalendarButtonMouseDown = HandleMonthCalendarButtonMouseDown;
             EventHandler<PointerReleasedEventArgs> monthCalendarButtonMouseUp   = HandleMonthCalendarButtonMouseUp;
             EventHandler<PointerEventArgs>         monthMouseEntered            = HandleMonthMouseEntered;
-            
-            _monthBtnBindingDisposables?.Dispose();
-            _monthBtnBindingDisposables = new CompositeDisposable(Calendar.RowsPerYear * Calendar.ColumnsPerYear);
 
             for (var i = 0; i < Calendar.RowsPerYear; i++)
             {
@@ -349,8 +340,7 @@ internal class CalendarItem : TemplatedControl
 
                     if (Owner != null)
                     {
-                        _monthBtnBindingDisposables.Add(BindUtils.RelayBind(Owner, Calendar.IsMotionEnabledProperty, month,
-                            BaseCalendarButton.IsMotionEnabledProperty));
+                        month[!BaseCalendarButton.IsMotionEnabledProperty] = Owner[!Calendar.IsMotionEnabledProperty];
                         month.Owner = Owner;
                     }
 

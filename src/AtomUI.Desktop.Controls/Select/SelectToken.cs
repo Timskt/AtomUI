@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class SelectToken : AbstractControlDesignToken
 {
     public const string ID = "Select";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 多选标签背景色
@@ -182,4 +185,6 @@ internal class SelectToken : AbstractControlDesignToken
         PaddingSM = new Thickness(multiPaddingRightSM, multiPaddingVerticalSM);
         PaddingLG = new Thickness(multiPaddingRightLG,  multiPaddingVerticalLG);
     }
+    
+    protected override Type GetTokenKindType() => typeof(SelectTokenKind);
 }

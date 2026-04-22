@@ -144,6 +144,9 @@ internal class OverlayDialogHeader : TemplatedControl, IMotionAwareControl
     {
         base.OnAttachedToVisualTree(e);
 
+        _disposables?.Dispose();
+        _disposables = null;
+
         if (VisualRoot is Window window)
         {
             _disposables = new CompositeDisposable(6)
@@ -215,46 +218,18 @@ internal class OverlayDialogHeader : TemplatedControl, IMotionAwareControl
     {
         base.OnDetachedFromVisualTree(e);
         _disposables?.Dispose();
-    }
-    
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
+        _disposables = null;
     }
 
-    private void ConfigureTransitions(bool force)
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 }

@@ -35,36 +35,36 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveColor}}" />
+        <Setter Property="Foreground" Value="{atom:ChromeTokenResource ActiveColor}" />
         
         <Style Selector="^ /template/ atom|IconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveColor}}" />
+            <Setter Property="IconBrush" Value="{atom:ChromeTokenResource ActiveColor}" />
         </Style>
         
         <Setter Property="Background" Value="Transparent" />
         
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActiveHoverBgColor}}" />
+            <Setter Property="Background" Value="{atom:ChromeTokenResource ActiveHoverBgColor}" />
         </Style>
 
         <Style Selector="^:pressed">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.ActivePressedBgColor}}" />
+            <Setter Property="Background" Value="{atom:ChromeTokenResource ActivePressedBgColor}" />
         </Style>
         
         <Style Selector="^[IsCloseButton=True]">
             <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.WindowsCloseButtonHoverBgColor}}" />
+                <Setter Property="Background" Value="{atom:ChromeTokenResource WindowsCloseButtonHoverBgColor}" />
                 
                 <Style Selector="^ /template/ atom|IconPresenter">
-                    <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:ChromeTokenKey.WindowsCloseButtonHoverColor}}" />
+                    <Setter Property="IconBrush" Value="{atom:ChromeTokenResource WindowsCloseButtonHoverColor}" />
                 </Style>
                 
             </Style>
             <Style Selector="^:pressed">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.WindowsCloseButtonPressedBgColor}}" />
+                <Setter Property="Background" Value="{atom:ChromeTokenResource WindowsCloseButtonPressedBgColor}" />
                 
                 <Style Selector="^ /template/ atom|IconPresenter">
-                    <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:ChromeTokenKey.WindowsCloseButtonHoverColor}}" />
+                    <Setter Property="IconBrush" Value="{atom:ChromeTokenResource WindowsCloseButtonHoverColor}" />
                 </Style>
             </Style>
         </Style>
@@ -72,17 +72,17 @@
         <Style Selector="^[IsWindowActive=False]">
             <Style Selector="^ /template/ atom|IconPresenter">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:ChromeTokenKey.InactiveColor}}" />
+                        Value="{atom:ChromeTokenResource InactiveColor}" />
             </Style>
             <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.InactiveHoverBgColor}}" />
+                <Setter Property="Background" Value="{atom:ChromeTokenResource InactiveHoverBgColor}" />
             </Style>
             
             <Style Selector="^[IsCloseButton=True]">
                 <Style Selector="^:pointerover">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static atom:ChromeTokenKey.WindowsCloseButtonHoverBgColor}}" />
+                    <Setter Property="Background" Value="{atom:ChromeTokenResource WindowsCloseButtonHoverBgColor}" />
                     <Style Selector="^ /template/ atom|IconPresenter">
-                        <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:ChromeTokenKey.WindowsCloseButtonHoverColor}}" />
+                        <Setter Property="IconBrush" Value="{atom:ChromeTokenResource WindowsCloseButtonHoverColor}" />
                     </Style>
                 </Style>
             </Style>

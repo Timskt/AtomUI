@@ -1,12 +1,16 @@
+using System.Reactive.Disposables;
 using AtomUI.Controls;
+using AtomUI.Controls.Commons;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Desktop.Controls.Utils;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
@@ -16,7 +20,6 @@ namespace AtomUI.Desktop.Controls;
 using AvaloniaTextBox = Avalonia.Controls.TextBox;
 
 public class TextArea : AvaloniaTextBox,
-                        IControlSharedTokenResourcesHost,
                         IMotionAwareControl,
                         ISizeTypeAware,
                         IFormItemAware,
@@ -193,15 +196,13 @@ public class TextArea : AvaloniaTextBox,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => LineEditToken.ID;
-
+    
     #endregion
 
     private ScrollViewer? _scrollViewer;
     private IconButton? _clearButton;
     private ResizeHandle? _resizeHandle;
+    private CompositeDisposable? _contentRightAddOnBindings;
     private double? _originHeight; // 拖动改变高度的初始值
 
     static TextArea()
@@ -213,14 +214,14 @@ public class TextArea : AvaloniaTextBox,
     
     public TextArea()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(LineEditToken.ScopeProvider);
     }
 
     private void UpdatePseudoClasses()
     {
         PseudoClasses.Set(StdPseudoClass.Error, Status == InputControlStatus.Error);
         PseudoClasses.Set(StdPseudoClass.Warning, Status == InputControlStatus.Warning);
-        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outline);
+        PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Outline, StyleVariant == InputControlStyleVariant.Outlined);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Filled, StyleVariant == InputControlStyleVariant.Filled);
         PseudoClasses.Set(AddOnDecoratedBoxPseudoClass.Borderless, StyleVariant == InputControlStyleVariant.Borderless);
     }
@@ -275,6 +276,37 @@ public class TextArea : AvaloniaTextBox,
         UpdatePseudoClasses();
         ConfigureEffectiveShowClearButton();
         HandleInputChanged(Text);
+        SetupContentRightAddOnBindings(e);
+    }
+
+    private void SetupContentRightAddOnBindings(TemplateAppliedEventArgs e)
+    {
+        _contentRightAddOnBindings?.Dispose();
+        _contentRightAddOnBindings = new CompositeDisposable();
+
+        if (e.NameScope.Find<InputClearIconButton>(TextAreaThemeConstants.ClearButtonPart) is { } clearButton)
+        {
+            _contentRightAddOnBindings.Add(clearButton.Bind(AbstractIconButton.IsMotionEnabledProperty,
+                new Binding(nameof(IsMotionEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(clearButton.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(IsEffectiveShowClearButton)) { Source = this }));
+            _contentRightAddOnBindings.Add(clearButton.Bind(AbstractIconButton.IconProperty,
+                new Binding(nameof(ClearIcon)) { Source = this }));
+        }
+
+        if (e.NameScope.Find<ContentPresenter>("PART_FormFeedBack") is { } formFeedback)
+        {
+            _contentRightAddOnBindings.Add(formFeedback.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(FormFeedback)) { Source = this, Converter = ObjectConverters.IsNotNull }));
+            _contentRightAddOnBindings.Add(formFeedback.Bind(ContentPresenter.ContentProperty,
+                new Binding(nameof(FormFeedback)) { Source = this }));
+        }
+
+        if (e.NameScope.Find<ContentPresenter>("PART_InnerRightContentPresenter") is { } innerRightContent)
+        {
+            _contentRightAddOnBindings.Add(innerRightContent.Bind(ContentPresenter.ContentProperty,
+                new Binding(nameof(InnerRightContent)) { Source = this }));
+        }
     }
 
     private void HandleClearButtonClicked(object? sender, RoutedEventArgs args)

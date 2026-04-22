@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class MessageToken : AbstractControlDesignToken
 {
     public const string ID = "Message";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     /// <summary>
     /// 提示框背景色
@@ -56,4 +59,6 @@ internal class MessageToken : AbstractControlDesignToken
         MessageTopMargin  = new Thickness(SharedToken.UniformlyMargin, SharedToken.UniformlyMargin, SharedToken.UniformlyMargin, 0);
         MessageIconSize   = SharedToken.FontSizeSM * SharedToken.RelativeLineHeightSM;
     }
+    
+    protected override Type GetTokenKindType() => typeof(MessageTokenKind);
 }

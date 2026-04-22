@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class PaginationToken : AbstractControlDesignToken
 {
     public const string ID = "Pagination";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 页码选项背景色
@@ -118,4 +121,6 @@ internal class PaginationToken : AbstractControlDesignToken
         PaginationMiniQuickJumperInputWidth = SharedToken.ControlHeightLG * 1.1;
         PaginationItemPaddingInline         = new Thickness(SharedToken.UniformlyMarginXXS * 1.5);
     }
+    
+    protected override Type GetTokenKindType() => typeof(PaginationTokenKind);
 }

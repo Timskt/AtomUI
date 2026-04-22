@@ -1,196 +1,186 @@
-<ResourceDictionary
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="using:AtomUI.Desktop.Controls.Converters"
-    x:ClassModifier="internal"
-    xmlns:atom="https://atomui.net"
-    xmlns:dataGridLocalization="clr-namespace:AtomUI.Desktop.Controls.DataGridLocalization">
-    <converters:DataGridHeaderCornerRadiusConverter x:Key="DataGridHeaderCornerRadiusConverter" />
-    <converters:DataGridUniformBorderThicknessToScalarConverter x:Key="DataGridUniformBorderThicknessToScalarConverter" />
-    <atom:BorderThicknessFilterConverter x:Key="TitleSeparatorThicknessConverter"
-                                         Left="False"
-                                         Top="False"
-                                         Right="False"
-                                         Bottom="True" />
-    <converters:DataGridPaginationVisibilityConvertor x:Key="TopPaginationVisibilityConvertor" IsTop="True" />
-    <converters:DataGridPaginationVisibilityConvertor x:Key="BottomPaginationVisibilityConvertor" IsTop="False" />
-    <ControlTheme x:Key="{x:Type atom:DataGrid}" TargetType="atom:DataGrid">
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border Name="Frame"
-                        BorderThickness="{TemplateBinding FrameBorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius, Converter={StaticResource DataGridHeaderCornerRadiusConverter}}"
-                        ClipToBounds="True">
-                    <atom:Spin IsSpinning="{TemplateBinding IsOperating}"
-                               IsShowTip="True"
-                               Tip="{TemplateBinding OperatingMsg}"
-                               CustomIndicator="{TemplateBinding CustomOperatingIndicator}"
-                               CustomIndicatorTemplate="{TemplateBinding CustomOperatingIndicatorTemplate}"
-                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                               VerticalAlignment="{TemplateBinding VerticalAlignment}">
-                        <DockPanel LastChildFill="True">
-                            <atom:Pagination DockPanel.Dock="Top"
-                                             Name="{x:Static atom:DataGridThemeConstants.TopPaginationPart}"
-                                             Margin="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMargin}}"
-                                             Align="{TemplateBinding TopPaginationAlign}"
-                                             IsHideOnSinglePage="{TemplateBinding IsHideOnSinglePage}"
-                                             IsEnabled="{TemplateBinding IsEnabled}"
-                                             SizeType="{TemplateBinding SizeType}"
-                                             IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
-                                             IsVisible="{TemplateBinding EffectivePaginationVisibility, Converter={StaticResource TopPaginationVisibilityConvertor}}" />
-                            <Border Name="TitleFrame"
-                                    DockPanel.Dock="Top"
-                                    BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource TitleSeparatorThicknessConverter}}"
-                                    IsVisible="{TemplateBinding Title, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                <ContentPresenter Name="Title"
-                                                  Content="{TemplateBinding Title}"
-                                                  ContentTemplate="{TemplateBinding TitleTemplate}" />
-                            </Border>
-                            <atom:Pagination DockPanel.Dock="Bottom"
-                                             Name="{x:Static atom:DataGridThemeConstants.BottomPaginationPart}"
-                                             Margin="{DynamicResource {x:Static atom:DataGridTokenKey.PaginationMargin}}"
-                                             Align="{TemplateBinding BottomPaginationAlign}"
-                                             IsHideOnSinglePage="{TemplateBinding IsHideOnSinglePage}"
-                                             IsEnabled="{TemplateBinding IsEnabled}"
-                                             SizeType="{TemplateBinding SizeType}"
-                                             IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
-                                             IsVisible="{TemplateBinding EffectivePaginationVisibility, Converter={StaticResource BottomPaginationVisibilityConvertor}}" />
-                            <ContentPresenter Name="Footer"
-                                              Content="{TemplateBinding Footer}"
-                                              ContentTemplate="{TemplateBinding FooterTemplate}"
-                                              IsVisible="{TemplateBinding Footer, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                              DockPanel.Dock="Bottom" />
+<ControlTheme TargetType="atom:DataGrid"
+              xmlns="https://github.com/avaloniaui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:atom="https://atomui.net"
+              x:Class="AtomUI.Desktop.Controls.Themes.DataGridTheme"
+              xmlns:dataGridLocalization="clr-namespace:AtomUI.Desktop.Controls.DataGridLocalization">
+    <Setter Property="Template">
+        <ControlTemplate TargetType="atom:DataGrid">
+            <Border Name="Frame"
+                    Background="{TemplateBinding Background}"
+                    BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                    BorderThickness="{TemplateBinding FrameBorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius, Converter={x:Static atom:DataGridTheme.HeaderCornerRadiusConverter}}"
+                    ClipToBounds="True">
+                <atom:Spin IsSpinning="{TemplateBinding IsOperating}"
+                           IsShowTip="True"
+                           Tip="{TemplateBinding OperatingMsg}"
+                           CustomIndicator="{TemplateBinding CustomOperatingIndicator}"
+                           CustomIndicatorTemplate="{TemplateBinding CustomOperatingIndicatorTemplate}"
+                           HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                           VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                    <DockPanel LastChildFill="True">
+                        <atom:Pagination DockPanel.Dock="Top"
+                                         Name="{x:Static atom:DataGridThemeConstants.TopPaginationPart}"
+                                         Align="{TemplateBinding TopPaginationAlign}"
+                                         IsHideOnSinglePage="{TemplateBinding IsHideOnSinglePage}"
+                                         IsEnabled="{TemplateBinding IsEnabled}"
+                                         SizeType="{TemplateBinding SizeType}"
+                                         IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
+                                         IsVisible="{TemplateBinding EffectivePaginationVisibility, Converter={x:Static atom:DataGridTheme.TopPaginationVisibilityConvertor}}" />
+                        <Border Name="TitleFrame"
+                                DockPanel.Dock="Top"
+                                BorderThickness="{TemplateBinding BorderThickness, Converter={x:Static atom:DataGridTheme.TitleSeparatorThicknessConverter}}"
+                                IsVisible="{TemplateBinding Title, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <ContentPresenter Name="Title"
+                                              Content="{TemplateBinding Title}"
+                                              ContentTemplate="{TemplateBinding TitleTemplate}" />
+                        </Border>
+                        <atom:Pagination DockPanel.Dock="Bottom"
+                                         Name="{x:Static atom:DataGridThemeConstants.BottomPaginationPart}"
+                                         Align="{TemplateBinding BottomPaginationAlign}"
+                                         IsHideOnSinglePage="{TemplateBinding IsHideOnSinglePage}"
+                                         IsEnabled="{TemplateBinding IsEnabled}"
+                                         SizeType="{TemplateBinding SizeType}"
+                                         IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
+                                         IsVisible="{TemplateBinding EffectivePaginationVisibility, Converter={x:Static atom:DataGridTheme.BottomPaginationVisibilityConvertor}}" />
+                        <ContentPresenter Name="Footer"
+                                          Content="{TemplateBinding Footer}"
+                                          ContentTemplate="{TemplateBinding FooterTemplate}"
+                                          IsVisible="{TemplateBinding Footer, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                          DockPanel.Dock="Bottom" />
 
-                            <Grid
-                                RowDefinitions="Auto, *, Auto, Auto"
-                                ColumnDefinitions="Auto, *, Auto"
-                                ClipToBounds="True">
+                        <Grid
+                            RowDefinitions="Auto, *, Auto, Auto"
+                            ColumnDefinitions="Auto, *, Auto"
+                            ClipToBounds="True">
 
-                                <atom:DataGridTopLeftColumnHeader
-                                    Name="{x:Static atom:DataGridThemeConstants.TopLeftCornerPart}"
+                            <atom:DataGridTopLeftColumnHeader
+                                Name="{x:Static atom:DataGridThemeConstants.TopLeftCornerPart}"
+                                Grid.Row="0"
+                                Grid.Column="0" />
+
+                            <Border Name="ColumnHeadersPresenterFrame"
                                     Grid.Row="0"
-                                    Grid.Column="0" />
-
-                                <Border Name="ColumnHeadersPresenterFrame"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Grid.ColumnSpan="2"
-                                        ClipToBounds="True"
-                                        CornerRadius="{TemplateBinding HeaderCornerRadius}">
-                                    <Panel>
-                                        <atom:DataGridColumnHeadersPresenter
-                                            Name="{x:Static atom:DataGridThemeConstants.ColumnHeadersPresenterPart}"
-                                            IsVisible="{TemplateBinding IsGroupHeaderMode, Converter={x:Static BoolConverters.Not}}" />
-                                        <atom:DataGridGroupColumnHeadersPresenter
-                                            Name="{x:Static atom:DataGridThemeConstants.GroupColumnHeadersPresenterPart}"
-                                            IsVisible="{TemplateBinding IsGroupHeaderMode}" />
-                                    </Panel>
-
-                                </Border>
-                                <Rectangle
-                                    Name="ColumnHeadersAndRowsSeparator"
-                                    VerticalAlignment="Bottom"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="3"
-                                    Height="{TemplateBinding BorderThickness, Converter={StaticResource DataGridUniformBorderThicknessToScalarConverter}}" />
-
-                                <atom:DataGridRowsPresenter
-                                    Name="{x:Static atom:DataGridThemeConstants.RowsPresenterPart}"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    Grid.RowSpan="2"
-                                    Grid.ColumnSpan="3"
-                                    ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}"
-                                    IsVisible="{TemplateBinding IsEmptyDataSource, Converter={x:Static BoolConverters.Not}}">
-                                    <atom:DataGridRowsPresenter.GestureRecognizers>
-                                        <ScrollGestureRecognizer
-                                            CanHorizontallyScroll="True"
-                                            CanVerticallyScroll="True"
-                                            IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_RowPresenter}" />
-                                    </atom:DataGridRowsPresenter.GestureRecognizers>
-                                </atom:DataGridRowsPresenter>
-
-                                <ContentPresenter
-                                    Name="EmptyIndicator"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    Grid.RowSpan="2"
-                                    Grid.ColumnSpan="3"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    IsVisible="{TemplateBinding IsEmptyDataSource}"
-                                    Content="{TemplateBinding EmptyIndicator}"
-                                    ContentTemplate="{TemplateBinding EmptyIndicatorTemplate}" />
-
-                                <Rectangle
-                                    Name="{x:Static atom:DataGridThemeConstants.BottomRightCornerPart}"
-                                    Grid.Row="2"
-                                    Grid.Column="2" />
-
-                                <atom:ScrollBar
-                                    Name="{x:Static atom:DataGridThemeConstants.VerticalScrollbarPart}"
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    Orientation="Vertical" />
-
-                                <atom:ScrollBar
-                                    Grid.Row="2"
                                     Grid.Column="1"
-                                    Name="{x:Static atom:DataGridThemeConstants.HorizontalScrollbarPart}"
-                                    Orientation="Horizontal" />
+                                    Grid.ColumnSpan="2"
+                                    ClipToBounds="True"
+                                    CornerRadius="{TemplateBinding HeaderCornerRadius}">
+                                <Panel>
+                                    <atom:DataGridColumnHeadersPresenter
+                                        Name="{x:Static atom:DataGridThemeConstants.ColumnHeadersPresenterPart}"
+                                        IsVisible="{TemplateBinding IsGroupHeaderMode, Converter={x:Static BoolConverters.Not}}" />
+                                    <atom:DataGridGroupColumnHeadersPresenter
+                                        Name="{x:Static atom:DataGridThemeConstants.GroupColumnHeadersPresenterPart}"
+                                        IsVisible="{TemplateBinding IsGroupHeaderMode}" />
+                                </Panel>
 
-                                <Border Name="DisabledVisualElement"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Grid.RowSpan="4"
-                                        Grid.ColumnSpan="3"
-                                        IsHitTestVisible="False"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        CornerRadius="{TemplateBinding HeaderCornerRadius}"
-                                        IsEnabled="{TemplateBinding IsEnabled}" />
+                            </Border>
+                            <Rectangle
+                                Name="ColumnHeadersAndRowsSeparator"
+                                VerticalAlignment="Bottom"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Height="{TemplateBinding BorderThickness, Converter={x:Static atom:DataGridTheme.UniformBorderThicknessToScalarConverter}}" />
 
-                                <atom:DataGridColumnDraggingOverIndicator
-                                    Name="{x:Static atom:DataGridThemeConstants.DraggingOverIndicatorPart}"
-                                    Grid.Row="1"
+                            <atom:DataGridRowsPresenter
+                                Name="{x:Static atom:DataGridThemeConstants.RowsPresenterPart}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="3"
+                                ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}"
+                                IsVisible="{TemplateBinding IsEmptyDataSource, Converter={x:Static BoolConverters.Not}}">
+                                <atom:DataGridRowsPresenter.GestureRecognizers>
+                                    <ScrollGestureRecognizer
+                                        CanHorizontallyScroll="True"
+                                        CanVerticallyScroll="True"
+                                        IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_RowPresenter}" />
+                                </atom:DataGridRowsPresenter.GestureRecognizers>
+                            </atom:DataGridRowsPresenter>
+
+                            <ContentPresenter
+                                Name="EmptyIndicator"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="3"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                IsVisible="{TemplateBinding IsEmptyDataSource}"
+                                Content="{TemplateBinding EmptyIndicator}"
+                                ContentTemplate="{TemplateBinding EmptyIndicatorTemplate}" />
+
+                            <Rectangle
+                                Name="{x:Static atom:DataGridThemeConstants.BottomRightCornerPart}"
+                                Grid.Row="2"
+                                Grid.Column="2" />
+
+                            <atom:ScrollBar
+                                Name="{x:Static atom:DataGridThemeConstants.VerticalScrollbarPart}"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Orientation="Vertical" />
+
+                            <atom:ScrollBar
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Name="{x:Static atom:DataGridThemeConstants.HorizontalScrollbarPart}"
+                                Orientation="Horizontal" />
+
+                            <Border Name="DisabledVisualElement"
+                                    Grid.Row="0"
                                     Grid.Column="0"
-                                    Grid.RowSpan="2"
+                                    Grid.RowSpan="4"
                                     Grid.ColumnSpan="3"
-                                    IsVisible="False" />
-                            </Grid>
+                                    IsHitTestVisible="False"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    CornerRadius="{TemplateBinding HeaderCornerRadius}"
+                                    IsEnabled="{TemplateBinding IsEnabled}" />
 
-                        </DockPanel>
-                    </atom:Spin>
-                </Border>
-            </ControlTemplate>
-        </Setter>
+                            <atom:DataGridColumnDraggingOverIndicator
+                                Name="{x:Static atom:DataGridThemeConstants.DraggingOverIndicatorPart}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="3"
+                                IsVisible="False" />
+                        </Grid>
 
+                    </DockPanel>
+                </atom:Spin>
+            </Border>
+        </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:is(atom|DataGrid)">
         <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="SelectionMode" Value="None" />
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableRadius}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="CornerRadius" Value="{atom:DataGridTokenResource TableRadius}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="OperatingMsg"
-                Value="{DynamicResource {x:Static dataGridLocalization:DataGridLangResourceKey.Operating}}" />
+                Value="{atom:DataGridLangResource Operating}" />
 
         <Style Selector="^ /template/ Border#ColumnHeadersPresenterFrame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
         </Style>
 
         <Style Selector="^ /template/ Rectangle#ColumnHeadersAndRowsSeparator">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="Fill" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Style Selector="^ /template/ Border#Frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="BorderBrush" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Style Selector="^ /template/ Border#TitleFrame">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="BorderBrush" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
 
         <Style Selector="^[IsShowFrameBorder=False] /template/ Border#TitleFrame">
@@ -199,52 +189,62 @@
 
         <Style Selector="^ /template/ ContentPresenter#Footer">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFooterTextColor}}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFooterBg}}" />
+                    Value="{atom:DataGridTokenResource TableFooterTextColor}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableFooterBg}" />
         </Style>
 
         <Style Selector="^ /template/ ContentPresenter#EmptyIndicator">
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXL}}" />
+                    Value="{atom:SharedTokenResource PaddingXL}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ ContentPresenter#Title">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}" />
+                <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Footer">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}" />
-                <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}" />
+                <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}" />
+            </Style>
+            
+            <Style Selector="^ /template/ atom|Pagination">
+                <Setter Property="Margin" Value="{atom:DataGridTokenResource PaginationMargin}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ ContentPresenter#Title">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingMiddle}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeMiddle}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Footer">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingMiddle}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeMiddle}" />
+            </Style>
+            <Style Selector="^ /template/ atom|Pagination">
+                <Setter Property="Margin" Value="{atom:DataGridTokenResource PaginationMargin}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ ContentPresenter#Title">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingSmall}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeSmall}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Footer">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingSmall}" />
                 <Setter Property="FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeSmall}" />
+            </Style>
+            <Style Selector="^ /template/ atom|Pagination">
+                <Setter Property="Margin" Value="{atom:DataGridTokenResource PaginationMarginSM}" />
             </Style>
         </Style>
+    </Style>
 
-    </ControlTheme>
-</ResourceDictionary>
+</ControlTheme>

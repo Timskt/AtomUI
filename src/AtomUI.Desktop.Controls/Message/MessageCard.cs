@@ -1,9 +1,7 @@
 ﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.MotionScene;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
@@ -20,9 +18,7 @@ namespace AtomUI.Desktop.Controls;
     MessageCardPseudoClass.Success, 
     MessageCardPseudoClass.Warning, 
     MessageCardPseudoClass.Loading)]
-public class MessageCard : TemplatedControl,
-                           IMotionAwareControl,
-                           IControlSharedTokenResourcesHost
+public class MessageCard : TemplatedControl, IMotionAwareControl
 {
     internal const double AnimationMaxOffsetY = 100d;
 
@@ -44,7 +40,7 @@ public class MessageCard : TemplatedControl,
     /// Defines the <see cref="NotificationType" /> property
     /// </summary>
     public static readonly StyledProperty<MessageType> MessageTypeProperty =
-        AvaloniaProperty.Register<MessageCard, MessageType>(nameof(NotificationType));
+        AvaloniaProperty.Register<MessageCard, MessageType>(nameof(MessageType));
 
     /// <summary>
     /// Defines the <see cref="MessageClosed" /> event.
@@ -119,6 +115,9 @@ public class MessageCard : TemplatedControl,
 
     #region 内部属性定义
 
+    /// <summary>回调：消息卡片关闭时触发，由 WindowMessageManager 设置以避免 lambda 闭包。</summary>
+    internal Action? OnClose { get; set; }
+
     internal static readonly DirectProperty<MessageCard, TimeSpan> OpenCloseMotionDurationProperty =
         AvaloniaProperty.RegisterDirect<MessageCard, TimeSpan>(nameof(OpenCloseMotionDuration),
             o => o.OpenCloseMotionDuration,
@@ -132,9 +131,6 @@ public class MessageCard : TemplatedControl,
         set => SetAndRaise(OpenCloseMotionDurationProperty, ref _openCloseMotionDuration, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MessageToken.ID;
-
     #endregion
 
     private bool _isClosing;
@@ -142,7 +138,7 @@ public class MessageCard : TemplatedControl,
     
     public MessageCard()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MessageToken.ScopeProvider);
     }
     
     public void Close()
@@ -197,7 +193,7 @@ public class MessageCard : TemplatedControl,
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        _motionActor = e.NameScope.Find<BaseMotionActor>(MessageCardThemeConstants.MotionActorPart);
+        _motionActor = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
         ApplyShowMotion();
         UpdatePseudoClasses();
         SetupDefaultMessageIcon();

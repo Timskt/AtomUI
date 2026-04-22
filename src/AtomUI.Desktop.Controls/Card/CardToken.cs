@@ -1,4 +1,6 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,6 +11,7 @@ namespace AtomUI.Desktop.Controls;
 internal class CardToken : AbstractControlDesignToken
 {
     public const string ID = "Card";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 卡片头部背景色
@@ -243,4 +246,6 @@ internal class CardToken : AbstractControlDesignToken
         CardPaddingBase     = SharedToken.PaddingLG;
         CardActionsIconSize = SharedToken.FontSize;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CardTokenKind);
 }

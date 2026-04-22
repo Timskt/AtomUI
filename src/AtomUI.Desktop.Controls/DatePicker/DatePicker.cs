@@ -1,13 +1,11 @@
 ﻿using System.Globalization;
-using System.Reactive.Disposables;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.CalendarView;
+using AtomUI.Desktop.Controls.Localization;
 using AtomUI.Desktop.Controls.Primitives;
-using AtomUI.Desktop.Controls.TimePickerLang;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Media;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -16,8 +14,7 @@ using Avalonia.Layout;
 
 namespace AtomUI.Desktop.Controls;
 
-public class DatePicker : InfoPickerInput,
-                          IControlSharedTokenResourcesHost
+public class DatePicker : InfoPickerInput
 {
     #region 公共属性定义
 
@@ -88,16 +85,9 @@ public class DatePicker : InfoPickerInput,
 
     #endregion
 
-    #region 内部属性定义
-
-    string IControlSharedTokenResourcesHost.TokenId => DatePickerToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
-    #endregion
-
     public DatePicker()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DatePickerToken.ScopeProvider);
     }
 
     static DatePicker()
@@ -106,7 +96,6 @@ public class DatePicker : InfoPickerInput,
     }
 
     private DatePickerPresenter? _pickerPresenter;
-    private CompositeDisposable? _flyoutBindingDisposables;
 
     /// <summary>
     /// 清除时间选择器的值，不考虑默认值
@@ -159,8 +148,8 @@ public class DatePicker : InfoPickerInput,
         if (ClockIdentifier == ClockIdentifierType.HourClock12)
         {
             var formatInfo = new DateTimeFormatInfo();
-            formatInfo.AMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKey.AMText)!;
-            formatInfo.PMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKey.PMText)!;
+            formatInfo.AMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKind.AMText)!;
+            formatInfo.PMDesignator = LanguageResourceBinder.GetLangResource(TimePickerLangResourceKind.PMText)!;
             return dateTime.Value.ToString(format, formatInfo);
         }
 
@@ -171,15 +160,14 @@ public class DatePicker : InfoPickerInput,
     {
         var flyout = new DatePickerFlyout();
         flyout.IsDetectMouseClickEnabled = false;
-        _flyoutBindingDisposables?.Dispose();
-        _flyoutBindingDisposables = new CompositeDisposable(6);
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, flyout, DatePickerFlyout.IsMotionEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, SelectedDateTimeProperty, flyout, DatePickerFlyout.SelectedDateTimeProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsNeedConfirmProperty, flyout, DatePickerFlyout.IsNeedConfirmProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowNowProperty, flyout, DatePickerFlyout.IsShowNowProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsShowTimeProperty, flyout, DatePickerFlyout.IsShowTimeProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, ClockIdentifierProperty, flyout, DatePickerFlyout.ClockIdentifierProperty));
-        
+
+        flyout[!DatePickerFlyout.IsMotionEnabledProperty]  = this[!IsMotionEnabledProperty];
+        flyout[!DatePickerFlyout.SelectedDateTimeProperty] = this[!SelectedDateTimeProperty];
+        flyout[!DatePickerFlyout.IsNeedConfirmProperty]    = this[!IsNeedConfirmProperty];
+        flyout[!DatePickerFlyout.IsShowNowProperty]        = this[!IsShowNowProperty];
+        flyout[!DatePickerFlyout.IsShowTimeProperty]       = this[!IsShowTimeProperty];
+        flyout[!DatePickerFlyout.ClockIdentifierProperty]  = this[!ClockIdentifierProperty];
+
         return flyout;
     }
 

@@ -11,5 +11,4 @@ internal class MessageCardThemeConstants
     public const string IconContentPart = "PART_IconContent";
     public const string HeaderContainerPart = "PART_HeaderContainer";
     public const string MessagePart = "PART_Message";
-    public const string MotionActorPart = "PART_MotionActor";
 }

@@ -1,25 +1,20 @@
 using System.Collections.Specialized;
-using System.Reactive.Disposables;
+using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Theme.Styling;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using BoxShadowsTransition = AtomUI.Animations.BoxShadowsTransition;
 
 namespace AtomUI.Desktop.Controls;
 
 public enum CardStyleVariant
 {
-    Outline,
+    Outlined,
     Borderless
 }
 
@@ -32,7 +27,6 @@ internal enum CardContentType
 }
 
 public class Card : HeaderedContentControl,
-                    IControlSharedTokenResourcesHost,
                     ISizeTypeAware,
                     IMotionAwareControl
 {
@@ -142,9 +136,6 @@ public class Card : HeaderedContentControl,
     #endregion
     
     #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => CardToken.ID;
     
     internal static readonly DirectProperty<Card, Thickness> HeaderBorderThicknessProperty =
         AvaloniaProperty.RegisterDirect<Card, Thickness>(
@@ -218,7 +209,6 @@ public class Card : HeaderedContentControl,
     #endregion
 
     private CardActionPanel? _cardActionPanel;
-    private CompositeDisposable? _contentBindingDisposables;
     
     static Card()
     {
@@ -228,8 +218,8 @@ public class Card : HeaderedContentControl,
     
     public Card()
     {
-        this.RegisterResources();
-        Actions.CollectionChanged += new NotifyCollectionChangedEventHandler(HandleActionsChanged);
+        this.RegisterTokenResourceScope(CardToken.ScopeProvider);
+        Actions.CollectionChanged += HandleActionsChanged;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -257,18 +247,10 @@ public class Card : HeaderedContentControl,
             ConfigureContentCornerRadius();
             ConfigureHeaderBorderThickness();
         }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
     }
 
     private void ConfigureContentType()
     {
-        _contentBindingDisposables?.Dispose();
         // 暂时只能探测 Content 直接指定的情况
         if (Content is CardMetaContent)
         {
@@ -277,16 +259,14 @@ public class Card : HeaderedContentControl,
         else if (Content is CardTabsContent cardTabsContent)
         {
             SetCurrentValue(ContentTypeProperty, CardContentType.Tabs);
-            _contentBindingDisposables = new CompositeDisposable();
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, cardTabsContent, CardTabsContent.IsMotionEnabledProperty));
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, cardTabsContent, CardTabsContent.SizeTypeProperty));
+            cardTabsContent[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            cardTabsContent[!SizeTypeProperty]        = this[!SizeTypeProperty];
         }
         else if (Content is CardGridContent cardGridContent)
         {
             SetCurrentValue(ContentTypeProperty, CardContentType.Grid);
-            _contentBindingDisposables = new CompositeDisposable();
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, cardGridContent, CardGridContent.IsMotionEnabledProperty));
-            _contentBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, cardGridContent, CardGridContent.SizeTypeProperty));
+            cardGridContent[!IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            cardGridContent[!SizeTypeProperty]        = this[!SizeTypeProperty];
         }
     }
     
@@ -298,7 +278,7 @@ public class Card : HeaderedContentControl,
     
     private void ConfigureContentBorderThickness()
     {
-        if (StyleVariant == CardStyleVariant.Outline)
+        if (StyleVariant == CardStyleVariant.Outlined)
         {
             SetCurrentValue(EffectiveBorderThicknessProperty, BorderThickness);
         }
@@ -352,37 +332,6 @@ public class Card : HeaderedContentControl,
         ConfigureContentCornerRadius();
         ConfigureHeaderBorderThickness();
     }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<BoxShadowsTransition>(BoxShadowProperty,
-                        SharedTokenKey.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
 
     private void UpdatePseudoClasses()
     {
@@ -417,5 +366,17 @@ public class Card : HeaderedContentControl,
             }
         }
         SetCurrentValue(ActionsPanelVisibleProperty, Actions.Count > 0);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

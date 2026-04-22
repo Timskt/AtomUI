@@ -1,6 +1,6 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 
@@ -137,49 +137,6 @@ internal class AbstractUploadListItem : TemplatedControl, IMotionAwareControl
         }
     }
     
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = new Transitions();
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
-    protected virtual void NotifyConfigureTransitions(Transitions transitions)
-    {
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected virtual void RaiseTaskRemoveRequestEvent()
     {
         RaiseEvent(new TaskRemoveRequestEventArgs(TaskId)
@@ -187,5 +144,17 @@ internal class AbstractUploadListItem : TemplatedControl, IMotionAwareControl
             RoutedEvent = TaskRemoveRequestEvent,
             Source = this
         });
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -4,7 +4,6 @@ using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Icons.AntDesign;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
@@ -143,7 +142,7 @@ internal class NodeSwitcherButton : ToggleButton
     #endregion
 
     private readonly BorderRenderHelper _borderRenderHelper;
-    private TreeItem? _owningTreeItem;
+    private TreeViewItem? _owningTreeItem;
 
     static NodeSwitcherButton()
     {
@@ -163,25 +162,6 @@ internal class NodeSwitcherButton : ToggleButton
         SetupDefaultIcons();
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(RotationIconRenderTransformProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -191,14 +171,6 @@ internal class NodeSwitcherButton : ToggleButton
             change.Property == RotationIconProperty)
         {
             SetupDefaultIcons();
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
     }
 
@@ -260,7 +232,7 @@ internal class NodeSwitcherButton : ToggleButton
             return;
         }
         
-        _owningTreeItem ??= this.FindAncestorOfType<TreeItem>();
+        _owningTreeItem ??= this.FindAncestorOfType<TreeViewItem>();
         Debug.Assert(_owningTreeItem != null);
         if (_owningTreeItem.HasTreeItemDataLoader && !_owningTreeItem.AsyncLoaded)
         {
@@ -272,16 +244,16 @@ internal class NodeSwitcherButton : ToggleButton
         }
         base.Toggle();
     }
-    
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 }

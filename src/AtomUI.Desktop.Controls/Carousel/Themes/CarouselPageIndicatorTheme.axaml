@@ -24,9 +24,9 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Height" Value="{DynamicResource {x:Static atom:CarouselTokenKey.IndicatorHeight}}" />
-        <Setter Property="Width" Value="{DynamicResource {x:Static atom:CarouselTokenKey.IndicatorWidth}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="Height" Value="{atom:CarouselTokenResource IndicatorHeight}" />
+        <Setter Property="Width" Value="{atom:CarouselTokenResource IndicatorWidth}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgContainer}" />
         <Setter Property="Cursor" Value="Hand" />
 
         <Setter Property="FrameOpacity" Value="0.2" />
@@ -36,7 +36,7 @@
         </Style>
 
         <Style Selector="^[IsSelected=True]">
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:CarouselTokenKey.IndicatorActiveWidth}}" />
+            <Setter Property="Width" Value="{atom:CarouselTokenResource IndicatorActiveWidth}" />
         </Style>
 
         <Style Selector="^[IsShowTransitionProgress=False]">
@@ -56,6 +56,15 @@
                     </Style>
                 </Style>
             </Style>
+        </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Width" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="FrameOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
         </Style>
     </ControlTheme>
 </ResourceDictionary>

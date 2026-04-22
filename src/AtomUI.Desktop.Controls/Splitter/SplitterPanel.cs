@@ -137,14 +137,15 @@ internal class SplitterPanel : Panel
     
     private void SyncTrackedPanels(IReadOnlyList<Control> panels)
     {
-        foreach (var panel in _trackedPanels.ToList())
+        _trackedPanels.RemoveWhere(panel =>
         {
             if (!panels.Contains(panel))
             {
                 panel.PropertyChanged -= HandlePanelPropertyChanged;
-                _trackedPanels.Remove(panel);
+                return true;
             }
-        }
+            return false;
+        });
 
         foreach (var panel in panels)
         {
@@ -1845,7 +1846,7 @@ internal class SplitterPanel : Panel
 
     private double GetHandleSpacing()
     {
-        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKey.SplitBarSize);
+        var value = TokenResourceUtils.FindTokenResource(this, SplitterTokenKind.SplitBarSize);
         if (value is double size && !double.IsNaN(size) && !double.IsInfinity(size))
         {
             return Math.Max(0, size);

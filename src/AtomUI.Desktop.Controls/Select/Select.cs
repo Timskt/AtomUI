@@ -1,14 +1,16 @@
-using System.Diagnostics;
+using System.Reactive.Disposables;
 using AtomUI.Controls.Utils;
-using AtomUI.Desktop.Controls.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Metadata;
@@ -27,7 +29,7 @@ public enum SelectMode
 }
 
 [PseudoClasses(SelectPseudoClass.DropdownOpen)]
-public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
+public partial class Select : AbstractSelect
 {
     #region 公共属性定义
     public static readonly StyledProperty<IEnumerable<ISelectOption>?> OptionsSourceProperty =
@@ -40,10 +42,10 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         AvaloniaProperty.Register<Select, bool>(nameof(IsDefaultActiveFirstOption));
     
     public static readonly StyledProperty<bool> IsGroupEnabledProperty =
-        List.IsGroupEnabledProperty.AddOwner<Select>();
+        ListView.IsGroupEnabledProperty.AddOwner<Select>();
     
-    public static readonly StyledProperty<ListGroupPropertySelector?> GroupPropertySelectorProperty =
-        List.GroupPropertySelectorProperty.AddOwner<Select>();
+    public static readonly StyledProperty<DefaultFilterValueSelector?> GroupPropertySelectorProperty =
+        ListView.GroupPropertySelectorProperty.AddOwner<Select>();
     
     public static readonly StyledProperty<bool> IsHideSelectedOptionsProperty =
         AvaloniaProperty.Register<Select, bool>(nameof(IsHideSelectedOptions));
@@ -83,13 +85,8 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
     public static readonly StyledProperty<IValueFilter?> FilterProperty =
         AvaloniaProperty.Register<AbstractSelect, IValueFilter?>(nameof(Filter));
     
-    public static readonly StyledProperty<ValueFilterMode> FilterModeProperty =
-        AvaloniaProperty.Register<AbstractSelect, ValueFilterMode>(
-            nameof(FilterMode),
-            defaultValue: ValueFilterMode.Contains);
-    
-    public static readonly StyledProperty<ListFilterPropertySelector?> FilterValueSelectorProperty =
-        AvaloniaProperty.Register<AbstractSelect, ListFilterPropertySelector?>(
+    public static readonly StyledProperty<DefaultFilterValueSelector?> FilterValueSelectorProperty =
+        AvaloniaProperty.Register<AbstractSelect, DefaultFilterValueSelector?>(
             nameof(FilterValueSelector));
     
     public IEnumerable<ISelectOption>? OptionsSource
@@ -117,7 +114,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         set => SetValue(IsGroupEnabledProperty, value);
     }
     
-    public ListGroupPropertySelector? GroupPropertySelector
+    public DefaultFilterValueSelector? GroupPropertySelector
     {
         get => GetValue(GroupPropertySelectorProperty);
         set => SetValue(GroupPropertySelectorProperty, value);
@@ -136,7 +133,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
     }
     
     [Content]
-    public ItemCollection Options { get; set; } = new();
+    public ItemCollection Options { get; } = new();
     
     private IList<ISelectOption>? _selectedOptions;
 
@@ -180,13 +177,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         set => SetValue(FilterProperty, value);
     }
     
-    public ValueFilterMode FilterMode
-    {
-        get => GetValue(FilterModeProperty);
-        set => SetValue(FilterModeProperty, value);
-    }
-
-    public ListFilterPropertySelector? FilterValueSelector
+    public DefaultFilterValueSelector? FilterValueSelector
     {
         get => GetValue(FilterValueSelectorProperty);
         set => SetValue(FilterValueSelectorProperty, value);
@@ -207,7 +198,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
 
     #endregion
 
-    public static readonly ListFilterPropertySelector HeaderFilterPropertySelector = data =>
+    public static readonly DefaultFilterValueSelector HeaderFilterPropertySelector = data =>
     {
         if (data is ISelectOption option)
         {
@@ -216,11 +207,11 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         return null;
     };
     
-    public static readonly ListFilterPropertySelector ValueFilterPropertySelector = data =>
+    public static readonly DefaultFilterValueSelector ValueFilterPropertySelector = data =>
     {
         if (data is ISelectOption option)
         {
-            return option.Value;
+            return option.Content;
         }
         return null;
     };
@@ -243,9 +234,6 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         get => _isEffectiveFilterEnabled;
         set => SetAndRaise(IsEffectiveFilterEnabledProperty, ref _isEffectiveFilterEnabled, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SelectToken.ID;
 
     #endregion
     
@@ -254,7 +242,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
     
     private SelectCandidateList? _candidateList;
     private SelectFilterTextBox? _singleFilterInput;
-    private IListFilterDescription? _filterDescription;
+    private CompositeDisposable? _contentRightAddOnBindings;
     private bool _ignoreSyncSelection;
     private bool _candidateListActivated;
     private ISelectOption? _addNewOption;
@@ -271,13 +259,11 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         SelectResultOptionsBox.KeyDownEvent.AddClassHandler<Select>(
             (x, e) => x.HandleFilterInputKeyDown(e),
             RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
-        FilterModeProperty.Changed.AddClassHandler<Select>((select,e) => select.HandleFilterModePropertyChanged(e));
-        FilterProperty.Changed.AddClassHandler<Select>((select, e) => select.HandleFilterPropertyChanged(e));
     }
 
     public Select()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SelectToken.ScopeProvider);
     }
 
     protected override void OnInitialized()
@@ -286,28 +272,6 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         if (FilterValueSelector == null)
         {
             SetCurrentValue(FilterValueSelectorProperty, HeaderFilterPropertySelector);
-        }
-    }
-    
-    private void HandleFilterModePropertyChanged(AvaloniaPropertyChangedEventArgs e)
-    {
-        var mode = (ValueFilterMode)e.NewValue!;
-        // Sets the filter predicate for the new value
-        EffectiveFilter = ValueFilterFactory.BuildFilter(mode) ?? Filter;
-    }
-    
-    private void HandleFilterPropertyChanged(AvaloniaPropertyChangedEventArgs e)
-    {
-        var value = e.NewValue as AutoCompleteFilterPredicate<object>;
-
-        // If null, revert to the "None" predicate
-        if (value == null)
-        {
-            SetCurrentValue(FilterModeProperty, ValueFilterMode.None);
-        }
-        else
-        {
-            SetCurrentValue(FilterModeProperty, ValueFilterMode.Custom);
         }
     }
 
@@ -349,7 +313,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
             return DefaultValueCompareFn(value, selectOption);
         }
         var strValue = value.ToString();
-        var optValue = selectOption.Value?.ToString();
+        var optValue = selectOption.Content?.ToString();
         return strValue == optValue;
     }
 
@@ -575,6 +539,66 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
         UpdatePseudoClasses();
         ConfigureSingleFilterTextBox();
         ConfigureEffectiveSearchEnabled();
+        SetupContentRightAddOnBindings(e);
+    }
+
+    private void SetupContentRightAddOnBindings(TemplateAppliedEventArgs e)
+    {
+        _contentRightAddOnBindings?.Dispose();
+        _contentRightAddOnBindings = new CompositeDisposable();
+
+        if (e.NameScope.Find<SelectMaxCountIndicator>("PART_SelectMaxCountIndicator") is { } indicator)
+        {
+            _contentRightAddOnBindings.Add(indicator.Bind(SelectMaxCountIndicator.MaxCountProperty,
+                new Binding(nameof(MaxCount)) { Source = this }));
+            _contentRightAddOnBindings.Add(indicator.Bind(SelectMaxCountIndicator.SelectedCountProperty,
+                new Binding(nameof(SelectedCount)) { Source = this }));
+            _contentRightAddOnBindings.Add(indicator.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(IsShowMaxCountIndicator)) { Source = this }));
+        }
+
+        if (e.NameScope.Find<ContentPresenter>("PART_ContentRightAddOnPresenter") is { } contentPresenter)
+        {
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(ContentPresenter.ContentProperty,
+                new Binding(nameof(ContentRightAddOn)) { Source = this }));
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(ContentPresenter.ContentTemplateProperty,
+                new Binding(nameof(ContentLeftAddOnTemplate)) { Source = this }));
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(ContentRightAddOn)) { Source = this, Converter = ObjectConverters.IsNotNull }));
+        }
+
+        if (e.NameScope.Find<SelectHandle>("PART_SelectHandle") is { } handle)
+        {
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.FormFeedbackProperty,
+                new Binding(nameof(FormFeedback)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.LoadingIconProperty,
+                new Binding(nameof(SuffixLoadingIcon)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.OpenIndicatorProperty,
+                new Binding(nameof(SuffixIcon)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsFilterEnabledProperty,
+                new Binding(nameof(IsEffectiveFilterEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(InputElement.IsEnabledProperty,
+                new Binding(nameof(IsEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsMotionEnabledProperty,
+                new Binding(nameof(IsMotionEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsLoadingProperty,
+                new Binding(nameof(IsLoading)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsAllowClearProperty,
+                new Binding(nameof(IsAllowClear)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsSelectionEmptyProperty,
+                new Binding(nameof(IsSelectionEmpty)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsDropDownOpenProperty,
+                new Binding(nameof(IsDropDownOpen)) { Source = this }));
+
+            var addOnBox = e.NameScope.Find<AddOnDecoratedBox>(AddOnDecoratedBox.AddOnDecoratedBoxPart);
+            if (addOnBox != null)
+            {
+                _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsInputHoverProperty,
+                    new Binding(nameof(AddOnDecoratedBox.IsInnerBoxHover)) { Source = addOnBox }));
+                _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsInputPressedProperty,
+                    new Binding(nameof(AddOnDecoratedBox.IsInnerBoxPressed)) { Source = addOnBox }));
+            }
+        }
     }
     
     private void HandleCandidateListComplete(object? sender, RoutedEventArgs e)
@@ -741,7 +765,7 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
             return;
         }
 
-        _candidateList.SetCurrentValue(List.SelectionModeProperty,
+        _candidateList.SetCurrentValue(ListView.SelectionModeProperty,
             Mode == SelectMode.Single ? SelectionMode.Single : SelectionMode.Multiple);
     }
     
@@ -755,11 +779,11 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
     {
         if (Mode == SelectMode.Single)
         {
-            SetCurrentValue(IsPlaceholderTextVisibleProperty, SelectedOption == null && string.IsNullOrEmpty(ActivateFilterValue));
+            SetCurrentValue(IsPlaceholderTextVisibleProperty, SelectedOption == null && string.IsNullOrEmpty(FilterValue?.ToString()));
         }
         else
         {
-            SetCurrentValue(IsPlaceholderTextVisibleProperty, (SelectedOptions == null || SelectedOptions?.Count == 0) && string.IsNullOrEmpty(ActivateFilterValue));
+            SetCurrentValue(IsPlaceholderTextVisibleProperty, (SelectedOptions == null || SelectedOptions?.Count == 0) && string.IsNullOrEmpty(FilterValue?.ToString()));
         }
     }
 
@@ -788,17 +812,18 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
 
     private void HandleSearchInputTextChanged(TextChangedEventArgs e)
     {
-        if (_candidateList != null && _candidateList.FilterDescriptions != null)
+        if (_candidateList != null)
         {
             if (e.Source is TextBox textBox)
             {
-                ActivateFilterValue = textBox.Text?.Trim();
+                FilterValue = textBox.Text?.Trim();
             }
 
+            var filterValue = FilterValue?.ToString();
             if (_addNewOption != null)
             {
                 var isSelected     = SelectedOptions?.Contains(_addNewOption) == true;
-                var isCurrentInput = ActivateFilterValue == _addNewOption.Header?.ToString();
+                var isCurrentInput = filterValue == _addNewOption.Header?.ToString();
                 if (!isSelected && !isCurrentInput)
                 {
                     Options.Remove(_addNewOption);
@@ -807,54 +832,17 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
             }
             ConfigurePlaceholderVisible();
             
-            if (string.IsNullOrEmpty(ActivateFilterValue))
-            {
-                _candidateList.FilterDescriptions.Clear();
-                _filterDescription               = null;
-            }
-            else
-            {
-                if (_filterDescription != null)
-                {
-                    var oldFilter = _filterDescription;
-                    Debug.Assert(oldFilter.FilterConditions.Count == 1);
-                    var oldFilterValue = oldFilter.FilterConditions.First().ToString();
-                    if (oldFilterValue != ActivateFilterValue)
-                    {
-                        _filterDescription = new ListFilterDescription()
-                        {
-                            FilterPropertySelector = _filterDescription.FilterPropertySelector,
-                            Filter                 =  _filterDescription.Filter,
-                            FilterConditions       = [ActivateFilterValue]
-                        };
-                        _candidateList.FilterDescriptions.Remove(oldFilter);
-                        _candidateList.FilterDescriptions.Add(_filterDescription);
-                    }
-                }
-                else
-                {
-                    var filter = ValueFilterFactory.BuildFilter(FilterMode) ?? Filter;
-                    Debug.Assert(filter != null);
-                    _filterDescription = new ListFilterDescription()
-                    {
-                        FilterPropertySelector = FilterValueSelector,
-                        Filter                 = (value, filterValue) => filter.Filter(value, filterValue),
-                        FilterConditions       = [ActivateFilterValue],
-                    };
-                    _candidateList.FilterDescriptions.Add(_filterDescription);
-                }
-            }
             // Only allow "create from search text" in Tags mode.
             // For Single/Multiple, when data is empty (or filter results are empty),
             // the dropdown should show the empty indicator instead of adding a temporary option.
             if (Mode == SelectMode.Tags &&
-                _candidateList.CollectionView?.Count == 0 &&
-                !string.IsNullOrWhiteSpace(ActivateFilterValue))
+                _candidateList.TotalItemCount == 0 &&
+                !string.IsNullOrWhiteSpace(filterValue))
             {
                 _addNewOption = new SelectOption()
                 {
-                    Header         = ActivateFilterValue,
-                    Value          = ActivateFilterValue,
+                    Header         = filterValue,
+                    Content        = filterValue,
                     IsDynamicAdded = true
                 };
                 Options.Add(_addNewOption);
@@ -896,18 +884,18 @@ public partial class Select : AbstractSelect, IControlSharedTokenResourcesHost
 
     private void HandleFilterValueSelectorChanged()
     {
-        if (_filterDescription != null && _candidateList!= null && _candidateList.FilterDescriptions != null)
-        {
-            var oldFilter = _filterDescription;
-            _filterDescription = new ListFilterDescription()
-            {
-                FilterPropertySelector = FilterValueSelector,
-                Filter                 =  oldFilter.Filter,
-                FilterConditions       = oldFilter.FilterConditions
-            };
-            _candidateList.FilterDescriptions.Remove(oldFilter);
-            _candidateList.FilterDescriptions.Add(_filterDescription);
-        }
+        // if (_filterDescription != null && _candidateList!= null && _candidateList.FilterDescriptions != null)
+        // {
+        //     var oldFilter = _filterDescription;
+        //     _filterDescription = new ListFilterDescription()
+        //     {
+        //         FilterPropertySelector = FilterValueSelector,
+        //         Filter                 =  oldFilter.Filter,
+        //         FilterConditions       = oldFilter.FilterConditions
+        //     };
+        //     _candidateList.FilterDescriptions.Remove(oldFilter);
+        //     _candidateList.FilterDescriptions.Add(_filterDescription);
+        // }
     }
     
     private void HandleOptionsSourcePropertyChanged(AvaloniaPropertyChangedEventArgs change)

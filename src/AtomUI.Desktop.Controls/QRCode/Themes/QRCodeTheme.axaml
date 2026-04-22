@@ -51,12 +51,12 @@
                                         VerticalAlignment="Center"
                                         IsVisible="{TemplateBinding ExpiredContent, Converter={x:Static ObjectConverters.IsNull}}">
                                 <atom:TextBlock HorizontalAlignment="Center"
-                                                Text="{DynamicResource {x:Static qrcodelang:QRCodeLangResourceKey.Expired}}" />
-                                <atom:Button Name="{x:Static atom:QRCodeThemeConstants.RefreshPart}"
+                                                Text="{atom:QRCodeLangResource Expired}" />
+                                <atom:Button Name="PART_RefreshButton"
                                              HorizontalAlignment="Center"
                                              Icon="{antdicons:AntDesignIconProvider Kind=ReloadOutlined}"
                                              ButtonType="Link"
-                                             Content="{DynamicResource {x:Static qrcodelang:QRCodeLangResourceKey.Refresh}}" />
+                                             Content="{atom:QRCodeLangResource Refresh}" />
                             </StackPanel>
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
@@ -69,7 +69,7 @@
                             <atom:TextBlock HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             IsVisible="{TemplateBinding ScannedContent, Converter={x:Static ObjectConverters.IsNull}}"
-                                            Text="{DynamicResource {x:Static qrcodelang:QRCodeLangResourceKey.Scanned}}" />
+                                            Text="{atom:QRCodeLangResource Scanned}" />
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                               Content="{TemplateBinding ScannedContent}"
@@ -83,32 +83,32 @@
 
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Color" Value="{DynamicResource {x:Static atom:QRCodeTokenKey.QRCodeTextColor}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:QRCodeTokenKey.QRCodeTextColor}}" />
+        <Setter Property="Color" Value="{atom:QRCodeTokenResource QRCodeTextColor}" />
+        <Setter Property="Foreground" Value="{atom:QRCodeTokenResource QRCodeTextColor}" />
         <Setter Property="Background" Value="Transparent" />
         
-        <Setter Property="IconBgColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+        <Setter Property="IconBgColor" Value="{atom:SharedTokenResource ColorBgContainer}" />
         <Setter Property="BorderThickness"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+                Value="{atom:SharedTokenResource BorderThickness}" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+        <Setter Property="CornerRadius" Value="{atom:SharedTokenResource BorderRadiusLG}" />
 
         <Style Selector="^[IsBordered=True]">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSplit}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorSplit}" />
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingSM}}" />
+                        Value="{atom:SharedTokenResource PaddingSM}" />
             </Style>
         </Style>
 
         <Style Selector="^ /template/ Border#Mask">
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:QRCodeTokenKey.QRCodeMaskBackgroundColor}}" />
+                    Value="{atom:QRCodeTokenResource QRCodeMaskBackgroundColor}" />
         </Style>
 
         <Style Selector="^ /template/ Border#ImageFrame">
             <Setter Property="Padding"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.PaddingXXS}}" />
+                    Value="{atom:SharedTokenResource PaddingXXS}" />
         </Style>
 
         <Style Selector="^[Status=Active]">

@@ -66,7 +66,7 @@ public abstract class AbstractIconPackageGenerator
     
     protected abstract Task GenerateIconPackageClass(IconFileInfo iconFileInfo, Stream output);
     
-    public async Task GenerateAsync()
+    public async Task GenerateAsync(CancellationToken cancellationToken = default)
     {
         PrepareEnvironment();
         ScanIconFiles();
@@ -74,8 +74,10 @@ public abstract class AbstractIconPackageGenerator
         {
             Console.WriteLine($"Found {IconFiles.Count} icon files.");
             await GenerateIconPackageKindAsync();
+            cancellationToken.ThrowIfCancellationRequested();
             Console.WriteLine("Generate Icon PackageKind enum successfully.");
             await GenerateIconPackageClassesAsync();
+            cancellationToken.ThrowIfCancellationRequested();
             Console.WriteLine("Generate Icon classes successfully.");
         }
     }

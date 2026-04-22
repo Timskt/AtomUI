@@ -56,11 +56,11 @@
                 <atom:StepsItem Header="Third" Content="Last-content" />
             </atom:Steps>
             <atom:DashedBorder BorderThickness="1"
-                               BorderBrush="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}"
+                               BorderBrush="{atom:SharedTokenResource ColorBorder}"
                                StrokeDashArray="{Binding #StepsShowCaseName.DashedArray}"
-                               CornerRadius="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}"
-                               Background="{DynamicResource {x:Static atom:SharedTokenKey.ColorFillAlter}}"
-                               TextElement.Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}"
+                               CornerRadius="{atom:SharedTokenResource BorderRadiusLG}"
+                               Background="{atom:SharedTokenResource ColorFillAlter}"
+                               TextElement.Foreground="{atom:SharedTokenResource ColorTextTertiary}"
                                Height="260">
                 <ContentPresenter Content="{Binding #CurrentStepContentSteps.CurrentContent}"
                                   ContentTemplate="{Binding #CurrentStepContentSteps.CurrentContentTemplate}"
@@ -321,7 +321,7 @@
                     </atom:Steps>
                     <StackPanel Orientation="Vertical" Spacing="10">
                         <TextBlock FontWeight="Bold">Ant Design Title 1</TextBlock>
-                        <TextBlock Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}">
+                        <TextBlock Foreground="{atom:SharedTokenResource ColorTextTertiary}">
                             Ant Design, a design language for background applications, is refined by Ant UED Team
                         </TextBlock>
                         <atom:Separator/>
@@ -335,7 +335,7 @@
                     </atom:Steps>
                     <StackPanel Orientation="Vertical" Spacing="10">
                         <TextBlock FontWeight="Bold">Ant Design Title 2</TextBlock>
-                        <TextBlock Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}">
+                        <TextBlock Foreground="{atom:SharedTokenResource ColorTextTertiary}">
                             Ant Design, a design language for background applications, is refined by Ant UED Team
                         </TextBlock>
                         <atom:Separator/>
@@ -349,7 +349,7 @@
                     </atom:Steps>
                     <StackPanel Orientation="Vertical" Spacing="10">
                         <TextBlock FontWeight="Bold">Ant Design Title 3</TextBlock>
-                        <TextBlock Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}">
+                        <TextBlock Foreground="{atom:SharedTokenResource ColorTextTertiary}">
                             Ant Design, a design language for background applications, is refined by Ant UED Team
                         </TextBlock>
                         <atom:Separator/>
@@ -363,7 +363,7 @@
                     </atom:Steps>
                     <StackPanel Orientation="Vertical" Spacing="10">
                         <TextBlock FontWeight="Bold">Ant Design Title 4</TextBlock>
-                        <TextBlock Foreground="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}">
+                        <TextBlock Foreground="{atom:SharedTokenResource ColorTextTertiary}">
                             Ant Design, a design language for background applications, is refined by Ant UED Team
                         </TextBlock>
                     </StackPanel>

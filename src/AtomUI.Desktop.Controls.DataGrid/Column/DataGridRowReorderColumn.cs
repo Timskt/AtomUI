@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
@@ -28,10 +26,10 @@ public sealed class DataGridRowReorderColumn : DataGridColumn
     {
         Debug.Assert(OwningGrid != null);
         var handle = new DataGridRowReorderHandle();
-        handle.OwningGrid       = OwningGrid;
-        handle.Focusable = false;
-        BindUtils.RelayBind(OwningGrid, DataGrid.IsMotionEnabledProperty, handle, DataGridRowReorderHandle.IsMotionEnabledProperty);
-        BindUtils.RelayBind(OwningGrid, DataGrid.IsEnabledProperty, handle, DataGridRowReorderHandle.IsEnabledProperty);
+        handle.OwningGrid                                         = OwningGrid;
+        handle.Focusable                                          = false;
+        handle[!DataGridRowReorderHandle.IsMotionEnabledProperty] = OwningGrid[!DataGrid.IsMotionEnabledProperty];
+        handle[!DataGridRowReorderHandle.IsEnabledProperty]       = OwningGrid[!DataGrid.IsEnabledProperty];
         return handle;
     }
     

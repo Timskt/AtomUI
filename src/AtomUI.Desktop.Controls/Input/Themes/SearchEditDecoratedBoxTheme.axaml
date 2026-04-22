@@ -33,7 +33,9 @@
                         Content="{TemplateBinding SearchButtonText}"
                         SizeType="{TemplateBinding SizeType}"
                         Status="{TemplateBinding Status}"
-                        StyleVariant="{TemplateBinding StyleVariant}"/>
+                        StyleVariant="{TemplateBinding StyleVariant}"
+                        BorderThickness="{Binding RightAddOnBorderThickness, RelativeSource={RelativeSource TemplatedParent}, Priority=LocalValue}"
+                        CornerRadius="{Binding RightAddOnCornerRadius, RelativeSource={RelativeSource TemplatedParent}, Priority=LocalValue}"/>
 
                     <Border Name="{x:Static atom:AddOnDecoratedBoxThemeConstants.ContentFramePart}"
                             BorderThickness="{TemplateBinding InnerBoxBorderThickness}"
@@ -95,7 +97,7 @@
                 <Setter Property="ButtonType" Value="Default" />
             </Style>
 
-            <Style Selector="^[StyleVariant=Outline]">
+            <Style Selector="^[StyleVariant=Outlined]">
                 <Style
                     Selector="^ /template/ atom|SearchButton#PART_RightAddOn:pressed">
                     <Setter Property="ZIndex" Value="{x:Static atom:AddOnDecoratedBoxThemeConstants.ActivatedZIndex}" />
@@ -114,14 +116,14 @@
                 <Setter Property="IsIconVisible" Value="True" />
                 <Setter Property="ButtonType" Value="Primary" />
             </Style>
-            <Style Selector="^[StyleVariant=Outline]">
+            <Style Selector="^[StyleVariant=Outlined]">
                 <Style Selector="^ /template/ atom|SearchButton#PART_RightAddOn">
                     <Setter Property="ZIndex" Value="{x:Static atom:AddOnDecoratedBoxThemeConstants.ActivatedZIndex}" />
                 </Style>
             </Style>
         </Style>
 
-        <Style Selector="^:not(^[StyleVariant=Outline])">
+        <Style Selector="^:not(^[StyleVariant=Outlined])">
             <Style Selector="^ /template/ atom|SearchButton#PART_RightAddOn">
                 <Setter Property="ButtonType" Value="Text" />
             </Style>

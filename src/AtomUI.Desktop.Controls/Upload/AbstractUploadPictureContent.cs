@@ -1,7 +1,6 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
@@ -82,15 +81,7 @@ internal class AbstractUploadPictureContent : TemplatedControl, IMotionAwareCont
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-        
+
         if (change.Property == ListTypeProperty)
         {
             if (ListType == UploadListType.PictureCircle)
@@ -102,35 +93,6 @@ internal class AbstractUploadPictureContent : TemplatedControl, IMotionAwareCont
                 }
                 ConfigureEffectiveCornerRadius(radius);
             }
-        }
-    }
-    
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    protected override void OnLoaded(RoutedEventArgs args)
-    {
-        base.OnLoaded(args);
-        ConfigureTransitions(false);
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<DoubleTransition>(MaskOpacityProperty, SharedTokenKey.MotionDurationSlow)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
         }
     }
     
@@ -146,5 +108,17 @@ internal class AbstractUploadPictureContent : TemplatedControl, IMotionAwareCont
         {
             SetCurrentValue(CornerRadiusProperty, new CornerRadius(cornerRadius));
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

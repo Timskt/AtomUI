@@ -3,7 +3,6 @@ using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Theme.Palette;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
@@ -19,7 +18,6 @@ namespace AtomUI.Desktop.Controls;
 
 [PseudoClasses(StdPseudoClass.Open)]
 public class ToolTip : ContentControl,
-                       IControlSharedTokenResourcesHost,
                        IMotionAwareControl,
                        IArrowAwareShadowMaskInfoProvider,
                        IPopupHostProvider
@@ -149,7 +147,7 @@ public class ToolTip : ContentControl,
         return element.GetValue(ColorProperty);
     }
 
-    public static void SetColor(Control element, Color color)
+    public static void SetColor(Control element, Color? color)
     {
         element.SetValue(ColorProperty, color);
     }
@@ -314,11 +312,10 @@ public class ToolTip : ContentControl,
 
     #region 内部属性定义
 
+    // AttachedProperty 没有 CLR 属性声明，只能使用硬编码字符串注册
+    // 注意: 这里 nameof(ToolTip) 会解析为类名而非属性概念名，结果恰好正确但仍应显式标注
     internal static readonly AttachedProperty<ToolTip?> ToolTipProperty =
         AvaloniaProperty.RegisterAttached<ToolTip, Control, ToolTip?>("ToolTip");
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ToolTipToken.ID;
 
     #endregion
 
@@ -340,7 +337,7 @@ public class ToolTip : ContentControl,
 
     public ToolTip()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ToolTipToken.ScopeProvider);
     }
     
     public CornerRadius GetMaskCornerRadius()
@@ -390,7 +387,7 @@ public class ToolTip : ContentControl,
         return _arrowDecoratedBox.ArrowIndicatorLayoutBounds;
     }
     
-    ArrowDecoratedBox IArrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox()
+    AbstractArrowDecoratedBox IArrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox()
     {
         Debug.Assert(_arrowDecoratedBox != null);
         return _arrowDecoratedBox;
@@ -600,21 +597,28 @@ public class ToolTip : ContentControl,
     
     private void StartShowTimer(int showDelay, Control control)
     {
+        StopTimer();
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay), Tag = (this, control) };
-        _timer.Tick += (o, e) =>
-        {
-            if (_timer != null)
-            {
-                Open(control);
-            }
-        };
+        _timer.Tick += HandleShowTimerTick;
         _timer.Start();
     }
-    
+
+    private void HandleShowTimerTick(object? sender, EventArgs e)
+    {
+        if (_timer?.Tag is ValueTuple<ToolTip, Control> tuple)
+        {
+            Open(tuple.Item2);
+        }
+    }
+
     private void StopTimer()
     {
-        _timer?.Stop();
-        _timer = null;
+        if (_timer != null)
+        {
+            _timer.Tick -= HandleShowTimerTick;
+            _timer.Stop();
+            _timer = null;
+        }
     }
 
     private void HandlePopupHostChanged(IPopupHost? host)

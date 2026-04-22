@@ -1,7 +1,5 @@
 using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.DialogPositioning;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -23,8 +21,8 @@ internal class ImagePreviewerDialog : Window,
                                       IManagedDialogPositionerDialog
 {
     #region 公共属性定义
-    public static readonly StyledProperty<IList<PreviewImageSource>?> SourcesProperty =
-        AvaloniaProperty.Register<ImagePreviewerDialog, IList<PreviewImageSource>?>(nameof(Sources));
+    public static readonly StyledProperty<IList<PreviewImageSource>?> ItemsSourceProperty =
+        AvaloniaProperty.Register<ImagePreviewerDialog, IList<PreviewImageSource>?>(nameof(ItemsSource));
     
     public static readonly StyledProperty<bool> IsImageMovableProperty =
         ImagePreviewer.IsImageMovableProperty.AddOwner<ImagePreviewerDialog>();
@@ -55,10 +53,10 @@ internal class ImagePreviewerDialog : Window,
     public static readonly StyledProperty<Transform?> TransformProperty =
         AvaloniaProperty.Register<ImagePreviewerDialog, Transform?>(nameof(Transform));
     
-    public IList<PreviewImageSource>? Sources
+    public IList<PreviewImageSource>? ItemsSource
     {
-        get => GetValue(SourcesProperty);
-        set => SetValue(SourcesProperty, value);
+        get => GetValue(ItemsSourceProperty);
+        set => SetValue(ItemsSourceProperty, value);
     }
     
     public bool IsImageMovable
@@ -522,14 +520,14 @@ internal class ImagePreviewerDialog : Window,
         {
             HandleCurrentIndexChanged();
         }
-        else if (change.Property == SourcesProperty)
+        else if (change.Property == ItemsSourceProperty)
         {
-            if (Sources?.Count > 0)
+            if (ItemsSource?.Count > 0)
             {
                 SetCurrentValue(CurrentIndexProperty, 0);
             }
-            SetCurrentValue(IsMultiImagesProperty, Sources?.Count > 1);
-            Count = Sources?.Count ?? 0;
+            SetCurrentValue(IsMultiImagesProperty, ItemsSource?.Count > 1);
+            Count = ItemsSource?.Count ?? 0;
         }
 
         if (change.Property == ImageScaleXProperty ||
@@ -542,13 +540,13 @@ internal class ImagePreviewerDialog : Window,
 
     private void HandleCurrentIndexChanged()
     {
-        if (Sources?.Count > 0 && CurrentIndex >= 0 && CurrentIndex < Sources.Count)
+        if (ItemsSource?.Count > 0 && CurrentIndex >= 0 && CurrentIndex < ItemsSource.Count)
         {
-            SetCurrentValue(CurrentImageProperty, Sources[CurrentIndex]);
+            SetCurrentValue(CurrentImageProperty, ItemsSource[CurrentIndex]);
             SetCurrentValue(IsFirstImageProperty, CurrentIndex == 0);
-            SetCurrentValue(IsLastImageProperty, CurrentIndex == Sources.Count - 1);
+            SetCurrentValue(IsLastImageProperty, CurrentIndex == ItemsSource.Count - 1);
         }
-        else if (Sources == null || Sources?.Count == 0)
+        else if (ItemsSource == null || ItemsSource?.Count == 0)
         {
             SetCurrentValue(IsLastImageProperty, false);
             SetCurrentValue(IsFirstImageProperty, false);
@@ -717,7 +715,7 @@ internal class ImagePreviewerDialog : Window,
 
     private void HandleImageSwitchKeyDown(KeyEventArgs e)
     {
-        var imageCount = Sources?.Count ?? Count;
+        var imageCount = ItemsSource?.Count ?? Count;
         if (imageCount <= 1)
         {
             return;
@@ -835,16 +833,18 @@ internal class ImagePreviewerDialog : Window,
         SwitchImage(-1, useTransformPolicy);
     }
     
-    protected override WindowTitleBar? NotifyCreateTitleBar(WindowTitleBar? oldTitleBar, CompositeDisposable disposables)
+    protected override WindowTitleBar? NotifyCreateTitleBar(WindowTitleBar? oldTitleBar)
     {
         var imagePreviewToolbar = new ImagePreviewToolbar();
-        disposables.Add(BindUtils.RelayBind(this, CurrentIndexProperty, imagePreviewToolbar, ImagePreviewToolbar.CurrentIndexProperty));
-        disposables.Add(BindUtils.RelayBind(this, CountProperty, imagePreviewToolbar, ImagePreviewToolbar.CountProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsScaleDownEnabledProperty, imagePreviewToolbar, ImagePreviewToolbar.IsScaleDownEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsScaleUpEnabledProperty, imagePreviewToolbar, ImagePreviewToolbar.IsScaleUpEnabledProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsImageFitToWindowProperty, imagePreviewToolbar, ImagePreviewToolbar.IsImageFitToWindowProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsFirstImageProperty, imagePreviewToolbar, ImagePreviewToolbar.IsFirstImageProperty));
-        disposables.Add(BindUtils.RelayBind(this, IsLastImageProperty, imagePreviewToolbar, ImagePreviewToolbar.IsLastImageProperty));
+
+        imagePreviewToolbar[!ImagePreviewToolbar.CurrentIndexProperty]       = this[!CurrentIndexProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.CountProperty]              = this[!CountProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsScaleDownEnabledProperty] = this[!IsScaleDownEnabledProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsScaleUpEnabledProperty]   = this[!IsScaleUpEnabledProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsImageFitToWindowProperty] = this[!IsImageFitToWindowProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsFirstImageProperty]       = this[!IsFirstImageProperty];
+        imagePreviewToolbar[!ImagePreviewToolbar.IsLastImageProperty]        = this[!IsLastImageProperty];
+        
         return new WindowTitleBar
         {
             Name = WindowThemeConstants.TitleBarPart,
@@ -852,11 +852,11 @@ internal class ImagePreviewerDialog : Window,
         };
     }
     
-    protected override void NotifyConfigureTitleBar(WindowTitleBar titleBar, CompositeDisposable disposables)
+    protected override void NotifyConfigureTitleBar(WindowTitleBar titleBar)
     {
-        disposables.Add(BindUtils.RelayBind(this, TitleFontSizeProperty, titleBar, WindowTitleBar.FontSizeProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleFontWeightProperty, titleBar, WindowTitleBar.FontWeightProperty));
-        disposables.Add(BindUtils.RelayBind(this, TitleBarContextMenuProperty, titleBar, WindowTitleBar.ContextMenuProperty));
+        titleBar[!WindowTitleBar.FontSizeProperty]    = this[!TitleFontSizeProperty];
+        titleBar[!WindowTitleBar.FontWeightProperty]  = this[!TitleFontWeightProperty];
+        titleBar[!WindowTitleBar.ContextMenuProperty] = this[!TitleBarContextMenuProperty];
     }
     
     private enum ImageTransformRetentionMode

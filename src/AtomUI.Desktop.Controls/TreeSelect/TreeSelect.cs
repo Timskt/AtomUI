@@ -1,14 +1,17 @@
 using System.Collections.Specialized;
+using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -20,7 +23,7 @@ namespace AtomUI.Desktop.Controls;
 using ItemCollection = AtomUI.Collections.ItemCollection;
 using ItemsSourceView = AtomUI.Collections.ItemsSourceView;
 
-public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
+public class TreeSelect : AbstractSelect
 {
     #region 公共属性定义
     
@@ -304,13 +307,11 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
         set => SetAndRaise(EffectiveSelectedItemsProperty, ref _effectiveSelectedItems, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => TreeSelectToken.ID;
-
     #endregion
     
     private SelectFilterTextBox? _singleFilterInput;
     private TreeView? _treeView;
+    private CompositeDisposable? _contentRightAddOnBindings;
     private bool _needSkipSyncSelection;
     private bool _needSkipCollectionChangedEvent;
     private readonly ItemCollection _items = new();
@@ -319,9 +320,9 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
     {
         FocusableProperty.OverrideDefaultValue<TreeSelect>(true);
         SelectHandle.ClearRequestedEvent.AddClassHandler<TreeSelect>((target, args) => target.HandleClearRequest());
-        TreeItem.ClickEvent.AddClassHandler<TreeSelect>((treeSelect, args) =>
+        TreeViewItem.ClickEvent.AddClassHandler<TreeSelect>((treeSelect, args) =>
         {
-            if (args.Source is TreeItem item)
+            if (args.Source is TreeViewItem item)
             {
                 treeSelect.HandleTreeViewItemClicked(item);
             }
@@ -337,7 +338,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
     
     public TreeSelect()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(TreeSelectToken.ScopeProvider);
         Items.CollectionChanged += HandleItemsChanged;
     }
     
@@ -442,7 +443,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
     
     private void ConfigurePlaceholderVisible()
     {
-        SetCurrentValue(IsPlaceholderTextVisibleProperty, SelectedItem == null && (SelectedItems == null || SelectedItems?.Count == 0) && string.IsNullOrEmpty(ActivateFilterValue));
+        SetCurrentValue(IsPlaceholderTextVisibleProperty, SelectedItem == null && (SelectedItems == null || SelectedItems?.Count == 0) && string.IsNullOrEmpty(FilterValue?.ToString()));
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -485,6 +486,66 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
         ConfigureSingleFilterTextBox();
         ConfigurePlaceholderVisible();
         UpdatePseudoClasses();
+        SetupContentRightAddOnBindings(e);
+    }
+
+    private void SetupContentRightAddOnBindings(TemplateAppliedEventArgs e)
+    {
+        _contentRightAddOnBindings?.Dispose();
+        _contentRightAddOnBindings = new CompositeDisposable();
+
+        if (e.NameScope.Find<SelectMaxCountIndicator>("PART_SelectMaxCountIndicator") is { } indicator)
+        {
+            _contentRightAddOnBindings.Add(indicator.Bind(SelectMaxCountIndicator.MaxCountProperty,
+                new Binding(nameof(MaxCount)) { Source = this }));
+            _contentRightAddOnBindings.Add(indicator.Bind(SelectMaxCountIndicator.SelectedCountProperty,
+                new Binding(nameof(SelectedCount)) { Source = this }));
+            _contentRightAddOnBindings.Add(indicator.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(IsShowMaxCountIndicator)) { Source = this }));
+        }
+
+        if (e.NameScope.Find<ContentPresenter>("PART_ContentRightAddOnPresenter") is { } contentPresenter)
+        {
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(ContentPresenter.ContentProperty,
+                new Binding(nameof(ContentRightAddOn)) { Source = this }));
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(ContentPresenter.ContentTemplateProperty,
+                new Binding(nameof(ContentLeftAddOnTemplate)) { Source = this }));
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(ContentRightAddOn)) { Source = this, Converter = ObjectConverters.IsNotNull }));
+        }
+
+        if (e.NameScope.Find<SelectHandle>("PART_SelectHandle") is { } handle)
+        {
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.FormFeedbackProperty,
+                new Binding(nameof(FormFeedback)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.LoadingIconProperty,
+                new Binding(nameof(SuffixLoadingIcon)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.OpenIndicatorProperty,
+                new Binding(nameof(SuffixIcon)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsFilterEnabledProperty,
+                new Binding(nameof(IsFilterEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(InputElement.IsEnabledProperty,
+                new Binding(nameof(IsEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsMotionEnabledProperty,
+                new Binding(nameof(IsMotionEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsLoadingProperty,
+                new Binding(nameof(IsLoading)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsAllowClearProperty,
+                new Binding(nameof(IsAllowClear)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsSelectionEmptyProperty,
+                new Binding(nameof(IsSelectionEmpty)) { Source = this }));
+            _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsDropDownOpenProperty,
+                new Binding(nameof(IsDropDownOpen)) { Source = this }));
+
+            var addOnBox = e.NameScope.Find<AddOnDecoratedBox>(AddOnDecoratedBox.AddOnDecoratedBoxPart);
+            if (addOnBox != null)
+            {
+                _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsInputHoverProperty,
+                    new Binding(nameof(AddOnDecoratedBox.IsInnerBoxHover)) { Source = addOnBox }));
+                _contentRightAddOnBindings.Add(handle.Bind(SelectHandle.IsInputPressedProperty,
+                    new Binding(nameof(AddOnDecoratedBox.IsInnerBoxPressed)) { Source = addOnBox }));
+            }
+        }
     }
     
     private void HandlePopupClosed(object? sender, EventArgs e)
@@ -497,7 +558,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
             {
                 _singleFilterInput.Clear();
                 _singleFilterInput.Width = double.NaN;
-                ActivateFilterValue      = null;
+                FilterValue              = null;
             }
         }
     }
@@ -506,10 +567,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
     {
         SubscriptionsOnOpen.Clear();
         this.GetObservable(IsVisibleProperty).Subscribe(HandleIsVisibleChanged).DisposeWith(SubscriptionsOnOpen);
-        foreach (var parent in this.GetVisualAncestors().OfType<Control>())
-        {
-            parent.GetObservable(IsVisibleProperty).Subscribe(HandleIsVisibleChanged).DisposeWith(SubscriptionsOnOpen);
-        }
+        this.SubscribeAncestorIsVisible(HandleIsVisibleChanged, SubscriptionsOnOpen);
         NotifyPopupOpened();
      
         if (!IsMultiple)
@@ -709,7 +767,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
         base.OnPointerReleased(e);
     }
 
-    private void HandleTreeViewItemClicked(TreeItem item)
+    private void HandleTreeViewItemClicked(TreeViewItem viewItem)
     {
         if (!IsMultiple)
         {
@@ -723,7 +781,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
         {
             if (e.Source is TextBox textBox)
             {
-                ActivateFilterValue = textBox.Text?.Trim();
+                FilterValue = textBox.Text?.Trim();
             }
             ConfigurePlaceholderVisible();
         }
@@ -942,7 +1000,7 @@ public class TreeSelect : AbstractSelect, IControlSharedTokenResourcesHost
                 {
                     foreach (var node in SelectedItems)
                     {
-                        if (node.Children.Count == 0)
+                        if (!node.Children.Any())
                         {
                             effectiveSelectedItems.Add(node);
                         }

@@ -1,5 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
-using Avalonia;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -8,6 +9,7 @@ namespace AtomUI.Desktop.Controls;
 internal class QRCodeToken : AbstractControlDesignToken
 {
     public const string ID = "QRCode";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// QRCode 文字颜色
@@ -33,4 +35,6 @@ internal class QRCodeToken : AbstractControlDesignToken
         QRCodeTextColor           = SharedToken.ColorText;
         QRCodeMaskBackgroundColor = Color.FromArgb(244, colorBgContainer.R, colorBgContainer.G, colorBgContainer.B);
     }
+    
+    protected override Type GetTokenKindType() => typeof(QRCodeTokenKind);
 }

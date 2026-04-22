@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ProgressBarToken : AbstractControlDesignToken
 {
     public const string ID = "ProgressBar";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 进度条默认颜色
     /// </summary>
@@ -69,4 +72,6 @@ internal class ProgressBarToken : AbstractControlDesignToken
         LineExtraInfoMargin       = SharedToken.ControlPaddingHorizontalSM;
         LineProgressPadding       = SharedToken.UniformlyPaddingXXS / 2;
     }
+    
+    protected override Type GetTokenKindType() => typeof(ProgressBarTokenKind);
 }

@@ -1,6 +1,6 @@
+using AtomUI.Data;
 using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Styling;
 
 namespace AtomUI.Controls;
 
@@ -10,10 +10,8 @@ public static class WaveSpiritAwareControlExtensions
     {
         if (waveSpiritAwareControl is StyledElement styledElement)
         {
-            var bindingStyle = new Style();
-            bindingStyle.Add(MotionAwareControlProperty.IsMotionEnabledProperty, SharedTokenKey.EnableMotion);
-            bindingStyle.Add(WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty, SharedTokenKey.EnableWaveSpirit);
-            styledElement.Styles.Add(bindingStyle);
+            TokenResourceBinder.CreateTokenBinding(styledElement, MotionAwareControlProperty.IsMotionEnabledProperty, SharedTokenKind.EnableMotion);
+            TokenResourceBinder.CreateTokenBinding(styledElement, WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty, SharedTokenKind.EnableWaveSpirit);
         }
     }
 }

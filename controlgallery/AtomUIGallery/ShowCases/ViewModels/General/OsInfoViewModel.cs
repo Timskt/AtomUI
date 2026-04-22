@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+
 using System.Runtime.InteropServices;
 using AtomUI;
 using AtomUI.Controls;
@@ -8,12 +8,18 @@ namespace AtomUIGallery.ShowCases.ViewModels;
 
 public class OsInfoViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
 {
-    public static TreeNodeKey ID = "OsInfo";
+    public static EntityKey ID = "OsInfo";
 
     public IScreen HostScreen { get; }
     public ViewModelActivator Activator { get; }
     
-    public ObservableCollection<SystemInfoRecord> SystemInfoRecords { get; }
+    private IList<SystemInfoRecord>? _systemInfoRecords;
+    
+    public IList<SystemInfoRecord>? SystemInfoRecords
+    {
+        get => _systemInfoRecords;
+        set => this.RaiseAndSetIfChanged(ref _systemInfoRecords, value);
+    }
     
     private string? _logoPath;
 
@@ -29,8 +35,6 @@ public class OsInfoViewModel : ReactiveObject, IRoutableViewModel, IActivatableV
     {
         Activator         = new ViewModelActivator();
         HostScreen        = screen;
-        SystemInfoRecords = new ObservableCollection<SystemInfoRecord>();
-        
     }
 }
 

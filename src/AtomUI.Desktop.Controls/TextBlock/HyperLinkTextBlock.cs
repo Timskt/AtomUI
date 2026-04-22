@@ -43,8 +43,7 @@ public class HyperLinkTextBlock : TemplatedControl, IMotionAwareControl
     public static readonly AttachedProperty<TextTrimming> TextTrimmingProperty =
         TextBlock.TextTrimmingProperty.AddOwner<HyperLinkTextBlock>();
     
-    public static readonly StyledProperty<bool> IsMotionEnabledProperty
-        = MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<HyperLinkTextBlock>();
+    public static readonly StyledProperty<bool> IsMotionEnabledProperty = MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<HyperLinkTextBlock>();
     
     /// <summary>
     /// Defines the <see cref="Command"/> property.
@@ -167,32 +166,12 @@ public class HyperLinkTextBlock : TemplatedControl, IMotionAwareControl
         UpdatePseudoClasses();
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == IsPressedProperty)
         {
             UpdatePseudoClasses();
-        }
-
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
     }
 
@@ -345,21 +324,16 @@ public class HyperLinkTextBlock : TemplatedControl, IMotionAwareControl
             UpdateIsEffectivelyEnabled();
         }
     }
-    
-    private void ConfigureTransitions(bool force)
+
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions is null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

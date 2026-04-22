@@ -6,7 +6,6 @@ using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -17,9 +16,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-public class Descriptions : TemplatedControl,
-                            IControlSharedTokenResourcesHost,
-                            ISizeTypeAware
+public class Descriptions : TemplatedControl, ISizeTypeAware
 {
     #region 公共属性定义
 
@@ -134,15 +131,12 @@ public class Descriptions : TemplatedControl,
         set => SetAndRaise(IsHeaderLayoutVisibleProperty, ref _isHeaderLayoutVisible, value);
     }
 
-    string IControlSharedTokenResourcesHost.TokenId => DescriptionsToken.ID;
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-
     #endregion
 
     private Grid? _gridLayout;
     private MediaBreakPoint? _breakPoint;
     private int _effectiveColumns;
-    private readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
+    private Window? _attachedWindow;
 
     static Descriptions()
     {
@@ -151,16 +145,10 @@ public class Descriptions : TemplatedControl,
 
     public Descriptions()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DescriptionsToken.ScopeProvider);
         Items.CollectionChanged += HandleCollectionChanged;
     }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        
-    }
-
+    
     protected virtual void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (_gridLayout != null && this.IsAttachedToVisualTree())
@@ -197,6 +185,7 @@ public class Descriptions : TemplatedControl,
         base.OnAttachedToVisualTree(e);
         if (TopLevel.GetTopLevel(this) is Window window)
         {
+            _attachedWindow               =  window;
             window.MediaBreakPointChanged += HandleMediaBreakChanged;
         }
     }
@@ -204,10 +193,12 @@ public class Descriptions : TemplatedControl,
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        if (TopLevel.GetTopLevel(this) is Window window)
+        if (_attachedWindow != null)
         {
-            window.MediaBreakPointChanged -= HandleMediaBreakChanged;
+            _attachedWindow.MediaBreakPointChanged -= HandleMediaBreakChanged;
         }
+
+        _attachedWindow = null;
     }
 
     private void HandleMediaBreakChanged(object? sender, MediaBreakPointChangedEventArgs args)
@@ -304,32 +295,10 @@ public class Descriptions : TemplatedControl,
                 {
                     if (IsBordered)
                     {
-                        var itemLabel = new DescriptionBorderedItemLabel();
-                        {
-                            var disposables = new CompositeDisposable(2);
-                            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, itemLabel, SizeTypeProperty));
-                            if (_itemsBindingDisposables.TryGetValue(itemLabel, out var oldDisposables))
-                            {
-                                oldDisposables.Dispose();
-                                _itemsBindingDisposables.Remove(itemLabel);
-                            }
-
-                            _itemsBindingDisposables.Add(itemLabel, disposables);
-                        }
-
+                        var itemLabel   = new DescriptionBorderedItemLabel();
                         var itemContent = new DescriptionBorderedItemContent();
-                        {
-                            var disposables = new CompositeDisposable(2);
-                            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, itemContent, SizeTypeProperty));
-                            if (_itemsBindingDisposables.TryGetValue(itemContent, out var oldDisposables))
-                            {
-                                oldDisposables.Dispose();
-                                _itemsBindingDisposables.Remove(itemContent);
-                            }
-
-                            _itemsBindingDisposables.Add(itemContent, disposables);
-                        }
-
+                        itemLabel[!SizeTypeProperty] = this[!SizeTypeProperty];
+                        itemContent[!SizeTypeProperty] = this[!SizeTypeProperty];
                         itemLabel.Content   = item.Label;
                         itemContent.Content = item.Content;
                         _gridLayout.Children.Add(itemLabel);
@@ -345,34 +314,17 @@ public class Descriptions : TemplatedControl,
                         descriptionDefaultItem.Header  = item.Label;
                         descriptionDefaultItem.Content = item.Content;
                         _gridLayout.Children.Add(descriptionDefaultItem);
-                        if (_itemsBindingDisposables.TryGetValue(descriptionDefaultItem, out var oldDisposables))
-                        {
-                            oldDisposables.Dispose();
-                            _itemsBindingDisposables.Remove(descriptionDefaultItem);
-                        }
-
-                        _itemsBindingDisposables.Add(descriptionDefaultItem, disposables);
                     }
                 }
                 else
                 {
-                    var disposables           = new CompositeDisposable(2);
                     var descriptionDefaultItem = new DescriptionDefaultItem();
-                    descriptionDefaultItem.Layout = Orientation.Vertical;
-                    disposables.Add(BindUtils.RelayBind(this, IsShowColonProperty, descriptionDefaultItem,
-                        DescriptionDefaultItem.IsColonVisibleProperty));
-                    disposables.Add(BindUtils.RelayBind(this, IsBorderedProperty, descriptionDefaultItem,
-                        DescriptionDefaultItem.IsBorderedProperty));
-                    descriptionDefaultItem.Header  = item.Label;
-                    descriptionDefaultItem.Content = item.Content;
+                    descriptionDefaultItem.Layout                                          = Orientation.Vertical;
+                    descriptionDefaultItem[!DescriptionDefaultItem.IsColonVisibleProperty] = this[!IsShowColonProperty];
+                    descriptionDefaultItem[!DescriptionDefaultItem.IsBorderedProperty]     = this[!IsBorderedProperty];
+                    descriptionDefaultItem.Header                                          = item.Label;
+                    descriptionDefaultItem.Content                                         = item.Content;
                     _gridLayout.Children.Add(descriptionDefaultItem);
-                    if (_itemsBindingDisposables.TryGetValue(descriptionDefaultItem, out var oldDisposables))
-                    {
-                        oldDisposables.Dispose();
-                        _itemsBindingDisposables.Remove(descriptionDefaultItem);
-                    }
-
-                    _itemsBindingDisposables.Add(descriptionDefaultItem, disposables);
                 }
             }
         }
@@ -394,21 +346,11 @@ public class Descriptions : TemplatedControl,
                             if (_gridLayout.Children[index] is DescriptionBorderedItemLabel itemLabel)
                             {
                                 _gridLayout.Children.Remove(itemLabel);
-                                if (_itemsBindingDisposables.TryGetValue(itemLabel, out var disposable))
-                                {
-                                    disposable.Dispose();
-                                    _itemsBindingDisposables.Remove(itemLabel);
-                                }
                             }
 
                             if (_gridLayout.Children[index + 1] is DescriptionBorderedItemContent itemContent)
                             {
                                 _gridLayout.Children.Remove(itemContent);
-                                if (_itemsBindingDisposables.TryGetValue(itemContent, out var disposable))
-                                {
-                                    disposable.Dispose();
-                                    _itemsBindingDisposables.Remove(itemContent);
-                                }
                             }
                         }
                         else
@@ -416,11 +358,6 @@ public class Descriptions : TemplatedControl,
                             if (_gridLayout.Children[index] is DescriptionDefaultItem defaultItem)
                             {
                                 _gridLayout.Children.Remove(defaultItem);
-                                if (_itemsBindingDisposables.TryGetValue(defaultItem, out var disposable))
-                                {
-                                    disposable.Dispose();
-                                    _itemsBindingDisposables.Remove(defaultItem);
-                                }
                             }
                         }
                     }
@@ -429,11 +366,6 @@ public class Descriptions : TemplatedControl,
                         if (_gridLayout.Children[index] is DescriptionDefaultItem defaultItem)
                         {
                             _gridLayout.Children.Remove(defaultItem);
-                            if (_itemsBindingDisposables.TryGetValue(defaultItem, out var disposable))
-                            {
-                                disposable.Dispose();
-                                _itemsBindingDisposables.Remove(defaultItem);
-                            }
                         }
                     }
                 }

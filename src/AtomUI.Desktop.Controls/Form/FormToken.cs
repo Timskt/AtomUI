@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class FormToken : AbstractControlDesignToken
 {
     public const string ID = "Form";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public FormToken()
         : base(ID)
     {
@@ -74,4 +77,6 @@ internal class FormToken : AbstractControlDesignToken
         InlineItemSpacing      = SharedToken.Spacing;
         VerticalLabelMargin    = default;
     }
+    
+    protected override Type GetTokenKindType() => typeof(FormTokenKind);
 }

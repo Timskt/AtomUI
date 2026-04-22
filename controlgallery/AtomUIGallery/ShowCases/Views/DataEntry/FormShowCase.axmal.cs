@@ -1,11 +1,12 @@
 using System.Diagnostics;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using AtomUI;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ShowCaseControls;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -21,44 +22,57 @@ public partial class FormShowCase : ReactiveUserControl<FormViewModel>
     {
         this.WhenActivated(disposables =>
         {
-            if (DataContext is FormViewModel vm)
+            if (DataContext is FormViewModel viewModel)
             {
-                ConfigureSliderMarks(vm);
+                ConfigureSliderMarks(viewModel);
+                ConfigureBasicForm(viewModel);
+                ConfigureLayoutForm(disposables);
+                this.OneWayBind(viewModel, vm => vm.SliderMarks,
+                    v => v.FormSliderItem.Marks).DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.BasicFormInitialValues,
+                    v => v.BasicForm.InitialValues).DisposeWith(disposables);
+
+                Disposable.Create(() =>
+                {
+                    viewModel.BasicFormInitialValues = null;
+                    viewModel.SliderMarks            = null;
+                }).DisposeWith(disposables);
             }
         });
         InitializeComponent();
-        ConfigureBasicForm();
-        ConfigureLayoutForm();
     }
 
-    private void ConfigureBasicForm()
+    private void ConfigureBasicForm(FormViewModel viewModel)
     {
         var values = new FormValues();
         values.Add("remember", true);
-        BasicForm.InitialValues = values;
+        viewModel.BasicFormInitialValues = values;
     }
     
-    private void ConfigureLayoutForm()
+    private void ConfigureLayoutForm(CompositeDisposable disposables)
     {
-        LayoutCaseForm.PropertyChanged += (sender, args) =>
+        LayoutCaseForm.PropertyChanged += HandleLayoutCaseFormPropertyChanged;
+        disposables.Add(Disposable.Create(() => LayoutCaseForm.PropertyChanged -= HandleLayoutCaseFormPropertyChanged));
+    }
+
+    private void HandleLayoutCaseFormPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+    {
+        if (args.Property == Form.FormLayoutProperty)
         {
-            if (args.Property == Form.FormLayoutProperty)
+            if (args.NewValue is FormLayout layout)
             {
-                if (args.NewValue is FormLayout layout)
+                if (layout == FormLayout.Inline)
                 {
-                    if (layout == FormLayout.Inline)
-                    {
-                        LayoutCaseForm.MinWidth            = 0;
-                        LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    }
-                    else
-                    {
-                        LayoutCaseForm.MinWidth            = 600;
-                        LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Left;
-                    }
+                    LayoutCaseForm.MinWidth            = 0;
+                    LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Stretch;
+                }
+                else
+                {
+                    LayoutCaseForm.MinWidth            = 600;
+                    LayoutCaseForm.HorizontalAlignment = HorizontalAlignment.Left;
                 }
             }
-        };
+        }
     }
     
     public void HandleFormLayoutOptionCheckedChanged(object? sender, OptionCheckedChangedEventArgs args)
@@ -130,6 +144,7 @@ public partial class FormShowCase : ReactiveUserControl<FormViewModel>
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
+        _messageManager?.Dispose();
         _messageManager = null;
     }
 
@@ -224,7 +239,7 @@ public class NoteFormItem : FormItem
             {
                 if (formItem.GetItemValue() is ISelectOption selectOption)
                 {
-                    SetItemValue($"Hi, {selectOption.Value}!");
+                    SetItemValue($"Hi, {selectOption.Content}!");
                 }
             }
         }
@@ -240,7 +255,7 @@ public class CustomizeGenderFormItem : FormItem
             if (formItem.Content is Select select && select.Mode == SelectMode.Single)
             {
                 var option = formItem.GetItemValue() as ISelectOption;
-                if (option?.Value?.ToString() == "other")
+                if (option?.Content?.ToString() == "other")
                 {
                     IsVisible = true;
                 }

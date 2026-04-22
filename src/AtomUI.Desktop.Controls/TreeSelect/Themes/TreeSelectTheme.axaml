@@ -31,28 +31,10 @@
                         IsUsedInCompactSpace="{TemplateBinding IsUsedInCompactSpace}">
                         <atom:AddOnDecoratedBox.ContentRightAddOn>
                             <StackPanel Orientation="Horizontal"
-                                        Spacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}">
-                                <atom:SelectMaxCountIndicator
-                                    MaxCount="{Binding MaxCount, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    SelectedCount="{Binding SelectedCount, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsVisible="{Binding IsShowMaxCountIndicator, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}" />
-                                <ContentPresenter
-                                    Content="{Binding ContentRightAddOn, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    ContentTemplate="{Binding ContentLeftAddOnTemplate, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsVisible="{Binding ContentRightAddOn, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                <atom:SelectHandle
-                                    FormFeedback="{Binding FormFeedback, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    LoadingIcon="{Binding SuffixLoadingIcon, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    OpenIndicator="{Binding SuffixIcon, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsFilterEnabled="{Binding IsFilterEnabled, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsMotionEnabled="{Binding IsMotionEnabled, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsLoading="{Binding IsLoading, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsClearable="{Binding IsAllowClear, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsSelectionEmpty="{Binding IsSelectionEmpty, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsDropDownOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource AncestorType=atom:TreeSelect}}"
-                                    IsInputHover="{Binding IsInnerBoxHover, RelativeSource={RelativeSource AncestorType=atom:AddOnDecoratedBox}}"
-                                    IsInputPressed="{Binding IsInnerBoxPressed, RelativeSource={RelativeSource AncestorType=atom:AddOnDecoratedBox}}" />
+                                        Spacing="{atom:SharedTokenResource SpacingXS}">
+                                <atom:SelectMaxCountIndicator Name="PART_SelectMaxCountIndicator" />
+                                <ContentPresenter Name="PART_ContentRightAddOnPresenter" />
+                                <atom:SelectHandle Name="PART_SelectHandle" />
                             </StackPanel>
                         </atom:AddOnDecoratedBox.ContentRightAddOn>
                         <Panel>
@@ -109,7 +91,7 @@
                                                      NodeHoverMode="Block"
                                                      ToggleType="{TemplateBinding TreeViewToggleType}"
                                                      IsDefaultExpandAll="{TemplateBinding IsDefaultExpandAll}"
-                                                     FilterValue="{TemplateBinding ActivateFilterValue}"
+                                                     FilterValue="{TemplateBinding FilterValue}"
                                                      Filter="{TemplateBinding Filter}"
                                                      FilterHighlightStrategy="{TemplateBinding FilterHighlightStrategy}"
                                                      ItemTemplate="{TemplateBinding ItemTemplate}"
@@ -130,36 +112,36 @@
             </ControlTemplate>
         </Setter>
         <Setter Property="FilterHighlightForeground"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+                Value="{atom:SharedTokenResource ColorPrimary}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="PopupContentPadding"
-                Value="{DynamicResource {x:Static atom:SelectTokenKey.PopupContentPadding}}" />
-        <Setter Property="ItemHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlHeight}}" />
+                Value="{atom:SelectTokenResource PopupContentPadding}" />
+        <Setter Property="ItemHeight" Value="{atom:SharedTokenResource ControlHeight}" />
         <Setter Property="PlaceholderForeground"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+                Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
 
         <Style Selector="^[SizeType=Large]">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSizeLG}}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSizeLG}" />
         </Style>
         <Style Selector="^[SizeType=Middle]">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
         </Style>
         <Style Selector="^[SizeType=Small]">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
         </Style>
 
         <Style Selector="^ /template/ atom|Popup#PART_Popup">
             <Setter Property="MarginToAnchor"
-                    Value="{DynamicResource {x:Static atom:PopupHostTokenKey.MarginToAnchor}}" />
-            <Setter Property="MaskShadows" Value="{DynamicResource {x:Static atom:PopupHostTokenKey.BoxShadows}}" />
+                    Value="{atom:PopupHostTokenResource MarginToAnchor}" />
+            <Setter Property="MaskShadows" Value="{atom:PopupHostTokenResource BoxShadows}" />
         </Style>
         <Style Selector="^ /template/ Border#PopupFrame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
             <Setter Property="CornerRadius"
-                    Value="{DynamicResource {x:Static atom:PopupHostTokenKey.BorderRadius}}" />
+                    Value="{atom:PopupHostTokenResource BorderRadius}" />
         </Style>
 
         <Style Selector="^[IsMultiple=False]">
@@ -171,12 +153,12 @@
                 <Style Selector="^ /template/ ContentPresenter#SingleSelectResultPresenter">
                     <Setter Property="IsVisible" Value="True" />
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+                            Value="{atom:SharedTokenResource ColorText}" />
                 </Style>
                 <Style Selector="^[IsDropDownOpen=True]">
                     <Style Selector="^ /template/ ContentPresenter#SingleSelectResultPresenter">
                         <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+                                Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
                     </Style>
                 </Style>
             </Style>
@@ -184,12 +166,12 @@
                 <Style Selector="^ /template/ atom|SelectFilterTextBox#PART_SingleFilterInput">
                     <Setter Property="IsVisible" Value="True" />
                     <Setter Property="PlaceholderForeground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+                            Value="{atom:SharedTokenResource ColorText}" />
                 </Style>
                 <Style Selector="^[IsDropDownOpen=True]">
                     <Style Selector="^ /template/ atom|SelectFilterTextBox#PART_SingleFilterInput">
                         <Setter Property="PlaceholderForeground"
-                                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextPlaceholder}}" />
+                                Value="{atom:SharedTokenResource ColorTextPlaceholder}" />
                     </Style>
                 </Style>
             </Style>
@@ -215,14 +197,14 @@
 
         <Style Selector="^ /template/ Border#PopupFrame">
             <Setter Property="MinWidth"
-                    Value="{DynamicResource {x:Static atom:TreeSelectTokenKey.MinPopupWidth}}" />
+                    Value="{atom:TreeSelectTokenResource MinPopupWidth}" />
         </Style>
 
         <Style Selector="^:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
             <Style Selector="^ /template/ ContentPresenter#SingleSelectResultPresenter">
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+                        Value="{atom:SharedTokenResource ColorTextDisabled}" />
             </Style>
         </Style>
     </ControlTheme>

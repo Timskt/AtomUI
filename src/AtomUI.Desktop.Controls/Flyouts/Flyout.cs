@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reactive.Disposables;
+using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Theme.Styling;
 using Avalonia;
@@ -113,8 +114,6 @@ public class Flyout : PopupFlyoutBase
     #endregion
 
     private Classes? _classes;
-    private CompositeDisposable? _presenterBindingDisposables;
-    private CompositeDisposable? _popupBindingDisposables;
     
     public Classes FlyoutPresenterClasses => _classes ??= new Classes();
 
@@ -157,13 +156,12 @@ public class Flyout : PopupFlyoutBase
 
     protected override Control CreatePresenter()
     {
-        _presenterBindingDisposables?.Dispose();
-        _presenterBindingDisposables = new CompositeDisposable(4);
         var presenter = new FlyoutPresenter();
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, ContentProperty, presenter, FlyoutPresenter.ContentProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, presenter, FlyoutPresenter.IsMotionEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsShowArrowEffectiveProperty, presenter, FlyoutPresenter.IsShowArrowProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, ArrowPositionProperty, presenter, FlyoutPresenter.ArrowPositionProperty));
+        presenter[!FlyoutPresenter.ContentProperty]         = this[!ContentProperty];
+        presenter[!FlyoutPresenter.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+        presenter[!FlyoutPresenter.IsShowArrowProperty]     = this[!IsShowArrowEffectiveProperty];
+        presenter[!FlyoutPresenter.ArrowPositionProperty]   = this[!ArrowPositionProperty];
+        
         ConfigureShowArrowEffective();
         ConfigureArrowPosition();
         return presenter;
@@ -172,14 +170,13 @@ public class Flyout : PopupFlyoutBase
     protected internal override void NotifyPopupCreated(Popup popup)
     {
         base.NotifyPopupCreated(popup);
-        _popupBindingDisposables?.Dispose();
-        _popupBindingDisposables = new CompositeDisposable(5);
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, PlacementProperty, popup, Popup.PlacementProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, PlacementAnchorProperty, popup, Popup.PlacementAnchorProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, PlacementGravityProperty, popup, Popup.PlacementGravityProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, MaskShadowsProperty, popup, Popup.MaskShadowsProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, popup, Popup.IsMotionEnabledProperty));
-        _popupBindingDisposables.Add(BindUtils.RelayBind(popup, Popup.IsFlippedProperty, this, IsPopupFlippedProperty));
+
+        popup[!Popup.PlacementProperty]        = this[!PlacementProperty];
+        popup[!Popup.PlacementAnchorProperty]  = this[!PlacementAnchorProperty];
+        popup[!Popup.PlacementGravityProperty] = this[!PlacementGravityProperty];
+        popup[!Popup.MaskShadowsProperty]      = this[!MaskShadowsProperty];
+        popup[!Popup.IsMotionEnabledProperty]  = this[!IsMotionEnabledProperty];
+        this[!IsPopupFlippedProperty]          = popup[!Popup.IsFlippedProperty];
     }
 
     protected override void OnOpening(CancelEventArgs args)
@@ -201,9 +198,9 @@ public class Flyout : PopupFlyoutBase
         base.OnOpening(args);
 
         CompositeDisposable.Add(TokenResourceBinder.CreateGlobalTokenBinding(this, MotionDurationProperty,
-            SharedTokenKey.MotionDurationMid));
+            SharedTokenKind.MotionDurationMid));
         CompositeDisposable.Add(TokenResourceBinder.CreateGlobalTokenBinding(this, MaskShadowsProperty,
-            SharedTokenKey.BoxShadowsSecondary));
+            SharedTokenKind.BoxShadowsSecondary));
     }
 
     protected override void OnClosed()

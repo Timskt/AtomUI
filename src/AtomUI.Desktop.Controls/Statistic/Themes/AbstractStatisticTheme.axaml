@@ -42,18 +42,18 @@
 
     <Style Selector="^:is(atom|AbstractStatistic)">
         <Style Selector="^ /template/ ContentPresenter#HeaderPresenter">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDescription}}" />
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:StatisticTokenKey.TitleFontSize}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDescription}" />
+            <Setter Property="FontSize" Value="{atom:StatisticTokenResource TitleFontSize}" />
         </Style>
 
-        <Setter Property="ContentForeground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextHeading}}" />
-        <Setter Property="ContentFontSize" Value="{DynamicResource {x:Static atom:StatisticTokenKey.ContentFontSize}}" />
+        <Setter Property="ContentForeground" Value="{atom:SharedTokenResource ColorTextHeading}" />
+        <Setter Property="ContentFontSize" Value="{atom:StatisticTokenResource ContentFontSize}" />
 
         <Style Selector="^ /template/ atom|Icon">
             <Setter Property="FillBrush" Value="{TemplateBinding ContentForeground}" />
             <Setter Property="StrokeBrush" Value="{TemplateBinding ContentForeground}" />
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:StatisticTokenKey.ContentFontSize}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:StatisticTokenKey.ContentFontSize}}" />
+            <Setter Property="Width" Value="{atom:StatisticTokenResource ContentFontSize}" />
+            <Setter Property="Height" Value="{atom:StatisticTokenResource ContentFontSize}" />
         </Style>
     </Style>
 </ControlTheme>

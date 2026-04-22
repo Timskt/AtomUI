@@ -1,11 +1,10 @@
 using AtomUI.Animations;
-using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -82,10 +81,16 @@ public class HorizontalNavMenuItemHeader : BaseNavMenuItemHeader
             _activeIndicator.RenderTransformOrigin = RelativePoint.Center;
         }
     }
-    
-    protected override void NotifyConfigureTransitions(Transitions transitions)
+
+    protected override void OnInitialized()
     {
-        base.NotifyConfigureTransitions(transitions);
-        transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(ActiveBarColorProperty));
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

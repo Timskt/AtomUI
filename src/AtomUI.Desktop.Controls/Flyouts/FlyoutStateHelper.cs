@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Diagnostics;
+using System.Reactive.Disposables;
 using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using Avalonia;
@@ -73,6 +74,7 @@ internal class FlyoutStateHelper : AvaloniaObject
     private DispatcherTimer? _mouseLeaveDelayTimer;
     private IDisposable? _flyoutCloseDetectDisposable;
     private CompositeDisposable? _subscriptions;
+    private PopupRoot? _popupRoot;
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -104,22 +106,25 @@ internal class FlyoutStateHelper : AvaloniaObject
             var host = popupHostProvider.PopupHost;
             if (host is PopupRoot popupRoot)
             {
+                _popupRoot = popupRoot;
                 // 这里 PopupRoot 关闭的时候会被关闭，所以这里的事件处理器是不是不需要删除
                 if (TriggerType == FlyoutTriggerType.Hover)
                 {
-                    popupRoot.PointerMoved += (o, args) =>
-                    {
-                        StopMouseLeaveTimer();
-                        if (_flyoutCloseDetectDisposable is null)
-                        {
-                            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-                            _flyoutCloseDetectDisposable = inputManager.Process.Subscribe(DetectWhenToClosePopup);
-                        }
-                    };
+                    popupRoot.PointerMoved += HandlePopupRootPointerMoved;
                 }
             }
         }
         FlyoutOpened?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void HandlePopupRootPointerMoved(object? sender, PointerEventArgs e)
+    {
+        StopMouseLeaveTimer();
+        if (_flyoutCloseDetectDisposable is null)
+        {
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+            _flyoutCloseDetectDisposable = inputManager?.Process.Subscribe(DetectWhenToClosePopup);
+        }
     }
 
     private void HandleFlyoutClosed(object? sender, EventArgs e)
@@ -129,60 +134,81 @@ internal class FlyoutStateHelper : AvaloniaObject
         _flyoutCloseDetectDisposable?.Dispose();
         _flyoutCloseDetectDisposable = null;
         StopMouseEnterTimer();
+        if (_popupRoot != null)
+        {
+            _popupRoot.PointerMoved -= HandlePopupRootPointerMoved;
+            _popupRoot              =  null;
+        }
     }
 
     private void StartMouseEnterTimer()
     {
+        StopMouseEnterTimer();  // 确保先清理旧定时器
+        
         _mouseEnterDelayTimer = new DispatcherTimer
             { Interval = TimeSpan.FromMilliseconds(MouseEnterDelay), Tag = this };
-        _mouseEnterDelayTimer.Tick += (sender, args) =>
-        {
-            if (_mouseEnterDelayTimer != null)
-            {
-                StopMouseEnterTimer();
-                if (Flyout is null || AnchorTarget is null)
-                {
-                    return;
-                }
-
-                FlyoutAboutToShow?.Invoke(this, EventArgs.Empty);
-                Flyout.ShowAt(AnchorTarget);
-            }
-        };
+        _mouseEnterDelayTimer.Tick += HandleMouseEnterTimerTick;
         _mouseEnterDelayTimer.Start();
+    }
+
+    private void HandleMouseEnterTimerTick(object? sender, EventArgs e)
+    {
+        if (_mouseEnterDelayTimer != null)
+        {
+            StopMouseEnterTimer();
+            if (Flyout is null || AnchorTarget is null)
+            {
+                return;
+            }
+
+            FlyoutAboutToShow?.Invoke(this, EventArgs.Empty);
+            Flyout.ShowAt(AnchorTarget);
+        }
     }
 
     private void StopMouseEnterTimer()
     {
-        _mouseEnterDelayTimer?.Stop();
-        _mouseEnterDelayTimer = null;
+        if (_mouseEnterDelayTimer != null)
+        {
+            _mouseEnterDelayTimer.Stop();
+            _mouseEnterDelayTimer.Tick -= HandleMouseEnterTimerTick;
+            _mouseEnterDelayTimer = null;
+        }
     }
 
     private void StopMouseLeaveTimer()
     {
-        _mouseLeaveDelayTimer?.Stop();
-        _mouseLeaveDelayTimer = null;
+        if (_mouseLeaveDelayTimer != null)
+        {
+            _mouseLeaveDelayTimer.Stop();
+            _mouseLeaveDelayTimer.Tick -= HandleMouseLeaveTimerTick;
+            _mouseLeaveDelayTimer = null;
+        }
     }
 
     private void StartMouseLeaveTimer()
     {
+        StopMouseLeaveTimer();  // 确保先清理旧定时器
+        
         _mouseLeaveDelayTimer = new DispatcherTimer
             { Interval = TimeSpan.FromMilliseconds(MouseLeaveDelay), Tag = this };
-        _mouseLeaveDelayTimer.Tick += (sender, args) =>
-        {
-            if (_mouseLeaveDelayTimer != null)
-            {
-                StopMouseLeaveTimer();
-                if (Flyout is null)
-                {
-                    return;
-                }
-        
-                FlyoutAboutToClose?.Invoke(this, EventArgs.Empty);
-                Flyout.Hide();
-            }
-        };
+        _mouseLeaveDelayTimer.Tick += HandleMouseLeaveTimerTick;
         _mouseLeaveDelayTimer.Start();
+    }
+
+    private void HandleMouseLeaveTimerTick(object? sender, EventArgs e)
+    {
+        if (_mouseLeaveDelayTimer != null)
+        {
+            StopMouseLeaveTimer();
+            if (Flyout is null)
+            {
+                return;
+            }
+    
+            FlyoutAboutToClose?.Invoke(this, EventArgs.Empty);
+            Flyout.Hide();
+        }
     }
 
     public void NotifyAttachedToVisualTree()
@@ -195,53 +221,59 @@ internal class FlyoutStateHelper : AvaloniaObject
         StopMouseLeaveTimer();
         StopMouseEnterTimer();
         _subscriptions?.Dispose();
+        _subscriptions = null;
+        
+        _flyoutCloseDetectDisposable?.Dispose();
+        _flyoutCloseDetectDisposable = null;
+        if (_popupRoot != null)
+        {
+            _popupRoot.PointerMoved -= HandlePopupRootPointerMoved;
+            _popupRoot              =  null;
+        }
     }
 
     private void SetupTriggerHandler()
     {
+        _subscriptions?.Dispose();
+        _subscriptions?.Clear();
+        _subscriptions = new CompositeDisposable();
         if (AnchorTarget is null)
         {
             return;
         }
-        _subscriptions?.Dispose();
-        _subscriptions = new CompositeDisposable();
         if (TriggerType == FlyoutTriggerType.Hover)
         {
-            _subscriptions.Add(InputElement.IsPointerOverProperty.Changed.Subscribe(args =>
+            _subscriptions.Add(AnchorTarget.GetObservable(InputElement.IsPointerOverProperty).Subscribe(isPointerOver =>
             {
-                if (args.Sender == AnchorTarget && 
-                    AnchorTarget.IsEnabled &&
-                    AnchorTarget.IsVisible)
+                if (AnchorTarget.IsEnabled && AnchorTarget.IsVisible)
                 {
-                    HandleAnchorTargetHover(args);
+                    HandleAnchorTargetHover(isPointerOver);
                 }
             }));
         }
-        else if (TriggerType == FlyoutTriggerType.Click ||
-                 TriggerType == FlyoutTriggerType.Focus)
+        else if (TriggerType == FlyoutTriggerType.Click || TriggerType == FlyoutTriggerType.Focus)
         {
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
+            Debug.Assert(inputManager != null);
             _subscriptions.Add(inputManager.Process.Subscribe(HandleAnchorTargetClick));
             if (TriggerType == FlyoutTriggerType.Focus)
             {
-                _subscriptions.Add(InputElement.IsFocusedProperty.Changed.Subscribe(args =>
+                _subscriptions.Add(AnchorTarget.GetObservable(InputElement.IsFocusedProperty).Subscribe(isFocused =>
                 {
-                    if (args.Sender == AnchorTarget &&
-                        AnchorTarget.IsEnabled &&
-                        AnchorTarget.IsVisible)
+                    if (AnchorTarget.IsEnabled && AnchorTarget.IsVisible)
                     {
-                        HandleAnchorTargetFocus(args);
+                        HandleAnchorTargetFocus(isFocused);
                     }
                 }));
             }
         }
     }
 
-    private void HandleAnchorTargetHover(AvaloniaPropertyChangedEventArgs<bool> e)
+    private void HandleAnchorTargetHover(bool isPointerOver)
     {
         if (Flyout is not null)
         {
-            if (e.GetNewValue<bool>())
+            if (isPointerOver)
             {
                 ShowFlyout();
             }
@@ -401,14 +433,14 @@ internal class FlyoutStateHelper : AvaloniaObject
         }
     }
 
-    private void HandleAnchorTargetFocus(AvaloniaPropertyChangedEventArgs<bool> e)
+    private void HandleAnchorTargetFocus(bool isFocused)
     {
         if (Flyout is null)
         {
             return;
         }
 
-        if (e.GetNewValue<bool>())
+        if (isFocused)
         {
             ShowFlyout(true);
         }
@@ -492,4 +524,5 @@ internal class FlyoutStateHelper : AvaloniaObject
 
         return false;
     }
+    
 }

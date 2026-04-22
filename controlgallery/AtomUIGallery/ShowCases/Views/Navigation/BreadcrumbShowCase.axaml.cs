@@ -1,3 +1,5 @@
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia;
@@ -38,6 +40,14 @@ public partial class BreadcrumbShowCase : ReactiveUserControl<BreadcrumbViewMode
                         Content         = "An Application"
                     }
                 ];
+                
+                this.OneWayBind(viewModel, vm => vm.BreadcrumbItems, v => v.TplBreadcrumb.ItemsSource)
+                    .DisposeWith(disposables);
+                
+                Disposable.Create(() =>
+                {
+                    viewModel.BreadcrumbItems = null;
+                }).DisposeWith(disposables);
             }
         });
     }
@@ -50,6 +60,13 @@ public partial class BreadcrumbShowCase : ReactiveUserControl<BreadcrumbViewMode
         {
             MaxItems = 10
         };
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _messageManager?.Dispose();
+        _messageManager = null;
     }
 
     private void HandleNavigateRequest(object? sender, BreadcrumbNavigateEventArgs eventArgs)

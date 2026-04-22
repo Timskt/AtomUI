@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using AtomUI.Controls;
 using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
@@ -137,9 +138,9 @@ internal class OverlayPopupContent : ContentControl
     
     private void ConfigureShadowInfo()
     {
-        if (Content is IArrowAwareShadowMaskInfoProvider arrowAwareShadowMaskInfoProvider)
+        if (Content is IArrowAwareShadowMaskInfoProvider maskInfoProvider)
         {
-            var arrowDecoratedBox = arrowAwareShadowMaskInfoProvider.GetArrowDecoratedBox();
+            var arrowDecoratedBox = maskInfoProvider.GetArrowDecoratedBox();
             _bindingDisposables?.Dispose();
             _bindingDisposables = new CompositeDisposable();
             _bindingDisposables?.Add(BindUtils.RelayBind(arrowDecoratedBox, ArrowDecoratedBox.CornerRadiusProperty, this, MaskShadowsContentCornerRadiusProperty));
@@ -162,8 +163,8 @@ internal class OverlayPopupContent : ContentControl
     {
         var size         = base.ArrangeOverride(finalSize);
         var targetBounds = _maskRenderer?.Bounds ?? default;
-        var offsetX      = 0;
-        var offsetY      = 0;
+        var offsetX      = 0d;
+        var offsetY      = 0d;
         var width        = finalSize.Width;
         var height       = finalSize.Height;
         var arrowBounds  = ArrowIndicatorLayoutBounds;
@@ -172,20 +173,24 @@ internal class OverlayPopupContent : ContentControl
             var effectiveDirection = ArrowDirection;
             if (effectiveDirection == Direction.Top)
             {
-                targetBounds = new Rect(offsetX, offsetY + arrowBounds.Height, width, height - arrowBounds.Height);
+                offsetY =  arrowBounds.Height;
+                height  -= arrowBounds.Height;
+
             }
             else if (effectiveDirection == Direction.Bottom)
             {
-                targetBounds = targetBounds.WithHeight(height - arrowBounds.Height);
+                height -= arrowBounds.Height;
             }
             else if (effectiveDirection == Direction.Left)
             {
-                targetBounds = targetBounds.WithX(arrowBounds.Width).WithWidth(width - arrowBounds.Width);
+                offsetX =  arrowBounds.Width;
+                width   -= arrowBounds.Width;
             }
             else if (effectiveDirection == Direction.Right)
             {
-                targetBounds = targetBounds.WithWidth(width - arrowBounds.Width);
+                width -= arrowBounds.Width;
             }
+            targetBounds = new Rect(offsetX, offsetY , width, height);
         }
         _maskRenderer?.Arrange(targetBounds);
         

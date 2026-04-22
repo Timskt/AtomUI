@@ -1,12 +1,9 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Reflection;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -28,7 +25,6 @@ internal enum SpaceItemPosition
 }
 
 public class CompactSpace : TemplatedControl,
-                            IControlSharedTokenResourcesHost,
                             ISizeTypeAware,
                             IChildIndexProvider,
                             INavigableContainer
@@ -89,15 +85,10 @@ public class CompactSpace : TemplatedControl,
 
     #region 内部属性定义
     private EventHandler<ChildIndexChangedEventArgs>? _childIndexChanged;
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SpaceToken.ID;
-
     #endregion
 
     private Grid? _contentLayout;
     private readonly Dictionary<object, NotifyCollectionChangedEventHandler> _childClassesChangedHandlers = new();
-    private readonly Dictionary<object, CompositeDisposable> _itemsBindingDisposables = new();
 
     static CompactSpace()
     {
@@ -107,7 +98,7 @@ public class CompactSpace : TemplatedControl,
     
     public CompactSpace()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SpaceToken.ScopeProvider);
         Children.CollectionChanged += HandleChildrenChanged;
     }
     
@@ -131,9 +122,8 @@ public class CompactSpace : TemplatedControl,
         {
             case NotifyCollectionChangedAction.Add:
             {
-                var newItems          = e.NewItems!.OfType<Control>().ToList();
                 var compactSpaceItems = new List<CompactSpaceItem>();
-                foreach (var newItem in newItems)
+                foreach (var newItem in e.NewItems!.OfType<Control>())
                 {
                     EnsureCompactSpaceItem(newItem);
                     var compactSpaceItem = new CompactSpaceItem()
@@ -153,7 +143,7 @@ public class CompactSpace : TemplatedControl,
 
             case NotifyCollectionChangedAction.Remove:
             {
-                var oldItems             = e.OldItems!.OfType<Control>().ToList();
+                var oldItems             = new HashSet<Control>(e.OldItems!.OfType<Control>());
                 var oldCompactSpaceItems = new List<CompactSpaceItem>();
                 foreach (var oldItem in _contentLayout.Children)
                 {
@@ -206,13 +196,8 @@ public class CompactSpace : TemplatedControl,
 
             target.PropertyChanged += CompactSpaceItemChildPropertyChanged;
             SetItemSize(compactSpaceItem, GetItemSize(target));
-        
-            NotifyCollectionChangedEventHandler childClassesChangedHandler = delegate (object? sender, NotifyCollectionChangedEventArgs e)
-            {
-                HandleChildFocusWithinChanged(compactSpaceItem, target.Classes.Contains(StdPseudoClass.FocusWithIn));
-            };
-            _childClassesChangedHandlers.Add(target, childClassesChangedHandler);
-            target.Classes.CollectionChanged += childClassesChangedHandler;
+
+            RegisterChildClassesChangedHandler(compactSpaceItem, target);
             if (targetCompactSpaceAware != null && targetCompactSpaceAware.IsAlwaysActiveZIndex())
             {
                 compactSpaceItem.ZIndex = ACTIVE_ZINDEX;
@@ -220,9 +205,7 @@ public class CompactSpace : TemplatedControl,
 
             if (target is ISizeTypeAware)
             {
-                var disposables = new CompositeDisposable(2);
-                disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, target, SizeTypeProperty));
-                _itemsBindingDisposables.Add(target, disposables);
+                target[!SizeTypeProperty] = this[!SizeTypeProperty];
             }
             target.SetTemplatedParent(TemplatedParent);
         }
@@ -246,12 +229,6 @@ public class CompactSpace : TemplatedControl,
             {
                 target.Classes.CollectionChanged -= childClassesChangedHandler;
                 _childClassesChangedHandlers.Remove(target);
-            }
-
-            if (_itemsBindingDisposables.TryGetValue(target, out var disposables))
-            {
-                disposables.Dispose();
-                _itemsBindingDisposables.Remove(target);
             }
             target.SetTemplatedParent(null);
         }
@@ -352,6 +329,7 @@ public class CompactSpace : TemplatedControl,
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        ClearChildClassesChangedHandlers();
         _contentLayout = e.NameScope.Get<Grid>(CompactSpaceThemeConstants.ContentLayoutPart);
         var compactSpaceItems = new List<CompactSpaceItem>();
         foreach (var child in Children)
@@ -397,6 +375,61 @@ public class CompactSpace : TemplatedControl,
             }
         }
         return base.MeasureCore(availableSize);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        ClearChildClassesChangedHandlers();
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        ReRegisterChildClassesChangedHandlers();
+    }
+
+    private void ClearChildClassesChangedHandlers()
+    {
+        foreach (var (target, handler) in _childClassesChangedHandlers)
+        {
+            if (target is Control control)
+            {
+                control.Classes.CollectionChanged -= handler;
+            }
+        }
+        _childClassesChangedHandlers.Clear();
+    }
+
+    private void ReRegisterChildClassesChangedHandlers()
+    {
+        if (_contentLayout == null)
+        {
+            return;
+        }
+
+        foreach (var child in _contentLayout.Children)
+        {
+            if (child is CompactSpaceItem compactSpaceItem && compactSpaceItem.Child is { } target)
+            {
+                RegisterChildClassesChangedHandler(compactSpaceItem, target);
+            }
+        }
+    }
+
+    private void RegisterChildClassesChangedHandler(CompactSpaceItem compactSpaceItem, Control target)
+    {
+        if (_childClassesChangedHandlers.ContainsKey(target))
+        {
+            return;
+        }
+
+        NotifyCollectionChangedEventHandler handler = (_, _) =>
+        {
+            HandleChildFocusWithinChanged(compactSpaceItem, target.Classes.Contains(StdPseudoClass.FocusWithIn));
+        };
+        _childClassesChangedHandlers.Add(target, handler);
+        target.Classes.CollectionChanged += handler;
     }
 
     private void ConfigureSizeDefinitions()

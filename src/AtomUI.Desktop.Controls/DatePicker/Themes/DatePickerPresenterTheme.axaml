@@ -20,19 +20,19 @@
                             ButtonType="Link"
                             HorizontalAlignment="Left"
                             SizeType="Small"
-                            Content="{DynamicResource {x:Static datePickerLang:DatePickerLangResourceKey.Now}}" />
+                            Content="{DynamicResource {x:Static atom:DatePickerLangResourceKind.Now}}" />
                         <atom:Button
                             Name="{x:Static atom:DatePickerPresenterThemeConstants.TodayButtonPart}"
                             ButtonType="Link"
                             HorizontalAlignment="Left"
                             SizeType="Small"
-                            Content="{DynamicResource {x:Static datePickerLang:DatePickerLangResourceKey.Today}}" />
+                            Content="{atom:DatePickerLangResource Today}" />
                         <atom:Button
                             Name="{x:Static atom:DatePickerPresenterThemeConstants.ConfirmButtonPart}"
                             ButtonType="Primary"
                             HorizontalAlignment="Right"
                             SizeType="Small"
-                            Content="{DynamicResource {x:Static atom:CommonLangResourceKey.Ok}}" />
+                            Content="{atom:CommonLangResource Ok}" />
                     </Panel>
                 </Border>
                 <StackPanel Orientation="Horizontal">
@@ -51,17 +51,17 @@
     </Setter>
 
     <Style Selector="^:is(atom|DatePickerPresenter)">
-        <Setter Property="BorderThickness" Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+        <Setter Property="BorderThickness" Value="{atom:SharedTokenResource BorderThickness}" />
         <Style Selector="^ /template/ Border#ButtonsFrame">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorderSecondary}" />
         </Style>
 
         <Style Selector="^ /template/ Panel#ButtonsLayout">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.ButtonsPanelMargin}}" />
+            <Setter Property="Margin" Value="{atom:DatePickerTokenResource ButtonsPanelMargin}" />
         </Style>
 
         <Style Selector="^ /template/ atom|TimeView#PART_TimeView">
-            <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DatePickerTokenKey.PanelContentPadding}}" />
+            <Setter Property="Padding" Value="{atom:DatePickerTokenResource PanelContentPadding}" />
         </Style>
     </Style>
 

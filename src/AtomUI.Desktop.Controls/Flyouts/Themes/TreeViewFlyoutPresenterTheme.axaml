@@ -6,7 +6,7 @@
               x:ClassModifier="internal">
     <Setter Property="Template">
         <ControlTemplate>
-            <atom:ArrowDecoratedBox Name="{x:Static atom:ArrowDecoratedBox.ArrowDecoratorPart}"
+            <atom:ArrowDecoratedBox Name="{x:Static atom:AbstractArrowDecoratedBox.ArrowDecoratorPart}"
                                     IsShowArrow="{TemplateBinding IsShowArrow}"
                                     ArrowPosition="{TemplateBinding ArrowPosition}"
                                     BackgroundSizing="{TemplateBinding BackgroundSizing}"
@@ -20,16 +20,16 @@
     </Setter>
     
     <Style Selector="^:is(atom|TreeViewFlyoutPresenter)">
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:PopupHostTokenKey.BorderRadius}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TreeFlyoutTokenKey.PopupContentPadding}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="CornerRadius" Value="{atom:PopupHostTokenResource BorderRadius}" />
+        <Setter Property="Padding" Value="{atom:TreeFlyoutTokenResource PopupContentPadding}" />
         
         <Style Selector="^ /template/ atom|ArrowDecoratedBox#PART_ArrowDecorator">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:TreeFlyoutTokenKey.PopupBgColor}}" />
-            <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:TreeFlyoutTokenKey.PopupMinWidth}}" />
-            <Setter Property="MaxWidth" Value="{DynamicResource {x:Static atom:TreeFlyoutTokenKey.PopupMaxWidth}}" />
-            <Setter Property="MinHeight" Value="{DynamicResource {x:Static atom:TreeFlyoutTokenKey.PopupMinHeight}}" />
-            <Setter Property="MaxHeight" Value="{DynamicResource {x:Static atom:TreeFlyoutTokenKey.PopupMaxHeight}}" />
+            <Setter Property="Background" Value="{atom:TreeFlyoutTokenResource PopupBgColor}" />
+            <Setter Property="MinWidth" Value="{atom:TreeFlyoutTokenResource PopupMinWidth}" />
+            <Setter Property="MaxWidth" Value="{atom:TreeFlyoutTokenResource PopupMaxWidth}" />
+            <Setter Property="MinHeight" Value="{atom:TreeFlyoutTokenResource PopupMinHeight}" />
+            <Setter Property="MaxHeight" Value="{atom:TreeFlyoutTokenResource PopupMaxHeight}" />
         </Style>
     </Style>
 

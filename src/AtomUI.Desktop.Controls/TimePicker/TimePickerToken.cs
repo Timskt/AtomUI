@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
 namespace AtomUI.Desktop.Controls;
@@ -7,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class TimePickerToken : AbstractControlDesignToken
 {
     public const string ID = "TimePicker";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public TimePickerToken()
         : base(ID)
     {
@@ -65,4 +68,6 @@ internal class TimePickerToken : AbstractControlDesignToken
         RangePickerIndicatorThickness = SharedToken.LineWidthFocus;
         HeaderMargin                  = new Thickness(0, 0, 0, 3);
     }
+    
+    protected override Type GetTokenKindType() => typeof(TimePickerTokenKind);
 }

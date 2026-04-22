@@ -1,3 +1,4 @@
+using AtomUI.Data;
 using AtomUI.Media.TextFormatting;
 using AtomUI.Theme.Styling;
 using AtomUI.Utils;
@@ -7,8 +8,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
-using Avalonia.Styling;
 using Avalonia.Utilities;
+using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -106,51 +107,61 @@ public class SelectableTextBlock : TextBlock
     }
 
     #endregion
-    
+
     private bool _canCopy;
     private int _wordSelectionStart = -1;
 
     public SelectableTextBlock()
     {
-        var styles = new Style();
-        styles.Add(SelectionBrushProperty, SharedTokenKey.SelectionBackground);
-        styles.Add(SelectionForegroundBrushProperty, SharedTokenKey.SelectionForeground);
-        styles.Add(CursorProperty, new Cursor(StandardCursorType.Ibeam));
-        Styles.Add(styles);
+        TokenResourceBinder.CreateTokenBinding(this, SelectionBrushProperty, SharedTokenKind.SelectionBackground);
+        TokenResourceBinder.CreateTokenBinding(this, SelectionForegroundBrushProperty, SharedTokenKind.SelectionForeground);
+        Cursor = new Cursor(StandardCursorType.Ibeam);
     }
 
     /// <summary>
     /// Copies the current selection to the Clipboard.
     /// </summary>
-    public async void Copy()
+    public async Task CopyAsync()
     {
-        if (!_canCopy)
+        try
         {
-            return;
-        }
-
-        var text = GetSelection();
-
-        if (string.IsNullOrEmpty(text))
-        {
-            return;
-        }
-
-        var eventArgs = new RoutedEventArgs(CopyingToClipboardEvent);
-
-        RaiseEvent(eventArgs);
-
-        if (!eventArgs.Handled)
-        {
-            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-
-            if (clipboard != null)
+            if (!_canCopy)
             {
-                await clipboard.SetTextAsync(text);
+                return;
+            }
+
+            var text = GetSelection();
+
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            var eventArgs = new RoutedEventArgs(CopyingToClipboardEvent);
+
+            RaiseEvent(eventArgs);
+
+            if (!eventArgs.Handled)
+            {
+                if (!this.IsAttachedToVisualTree())
+                {
+                    return;
+                }
+
+                var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+
+                if (clipboard != null)
+                {
+                    await clipboard.SetTextAsync(text);
+                }
             }
         }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in CopyAsync: {ex.Message}");
+        }
     }
-
+    
     /// <summary>
     /// Select all text in the TextBox
     /// </summary>
@@ -279,7 +290,7 @@ public class SelectableTextBlock : TextBlock
 
         if (Match(keymap.Copy))
         {
-            Copy();
+            _ = CopyAsync();
             handled = true;
         }
         else if (Match(keymap.SelectAll))

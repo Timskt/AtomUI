@@ -39,13 +39,13 @@
         </Setter>
         
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="EdgeShadowStartColor" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorFillSecondary}}"/>
-        <Setter Property="MenuEdgeThickness" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+        <Setter Property="EdgeShadowStartColor" Value="{atom:SharedTokenResource ColorFillSecondary}"/>
+        <Setter Property="MenuEdgeThickness" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
         
         <Style Selector="^ /template/ atom|IconButton#PART_ScrollMenuIndicator">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"/>
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}"/>
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextSecondary}}"/>
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSize}"/>
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSize}"/>
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorTextSecondary}"/>
         </Style>
         
         <Style Selector="^[TabStripPlacement=Top]">
@@ -55,17 +55,17 @@
             
             <Style Selector="^ /template/ atom|IconButton#PART_ScrollMenuIndicator">
                 <Setter Property="DockPanel.Dock" Value="Right"/>
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuIndicatorPaddingHorizontal}}"/>
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource MenuIndicatorPaddingHorizontal}"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollStartEdgeIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Width" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollEndEdgeIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Width" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
             </Style>
@@ -78,17 +78,17 @@
             
             <Style Selector="^ /template/ atom|IconButton#PART_ScrollMenuIndicator">
                 <Setter Property="DockPanel.Dock" Value="Bottom"/>
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuIndicatorPaddingVertical}}"/>
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource MenuIndicatorPaddingVertical}"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollStartEdgeIndicator">
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Height" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollEndEdgeIndicator">
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Height" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="VerticalAlignment" Value="Bottom"/>
             </Style>
@@ -101,17 +101,17 @@
             
             <Style Selector="^ /template/ atom|IconButton#PART_ScrollMenuIndicator">
                 <Setter Property="DockPanel.Dock" Value="Right"/>
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuIndicatorPaddingHorizontal}}"/>
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource MenuIndicatorPaddingHorizontal}"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollStartEdgeIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Width" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollEndEdgeIndicator">
-                <Setter Property="Width" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Width" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
             </Style>
@@ -124,17 +124,17 @@
             
             <Style Selector="^ /template/ atom|IconButton#PART_ScrollMenuIndicator">
                 <Setter Property="DockPanel.Dock" Value="Bottom"/>
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuIndicatorPaddingVertical}}"/>
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource MenuIndicatorPaddingVertical}"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollStartEdgeIndicator">
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Height" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
             </Style>
             
             <Style Selector="^ /template/ Border#PART_ScrollEndEdgeIndicator">
-                <Setter Property="Height" Value="{DynamicResource {x:Static atom:TabControlTokenKey.MenuEdgeThickness}}"/>
+                <Setter Property="Height" Value="{atom:TabControlTokenResource MenuEdgeThickness}"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="VerticalAlignment" Value="Bottom"/>
             </Style>

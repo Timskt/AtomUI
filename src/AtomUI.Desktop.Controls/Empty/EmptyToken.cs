@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 
 namespace AtomUI.Desktop.Controls;
@@ -7,7 +9,8 @@ namespace AtomUI.Desktop.Controls;
 internal class EmptyToken : AbstractControlDesignToken
 {
     public const string ID = "Empty";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 空图片的高度
     /// </summary>
@@ -34,4 +37,6 @@ internal class EmptyToken : AbstractControlDesignToken
         DescriptionMargin   = new Thickness(0, SharedToken.UniformlyMarginSM, 0, 0);
         DescriptionMarginSM = new Thickness(0, SharedToken.UniformlyMarginXS, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(EmptyTokenKind);
 }

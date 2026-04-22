@@ -1,9 +1,10 @@
 using AtomUI.Theme.Language;
+using AtomUIGallery.Localization;
 using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang;
 
-[LanguageProvider(LanguageCode.en_US, CaseNavigation.LanguageId, Constants.LanguageCatalog)]
+[LanguageProvider(LanguageCode.en_US, CaseNavigation.LanguageId)]
 internal class en_US : LanguageProvider
 {
     public const string General = "General";
@@ -12,12 +13,12 @@ internal class en_US : LanguageProvider
     public const string General_Icons = "Icons";
     public const string General_OsInfo = "OsInfo";
     public const string General_Button = "Button";
+    public const string General_FloatButton = "FloatButton";
     public const string General_SplitButton = "SplitButton";
     public const string General_Separator = "Separator";
     public const string General_CustomizeTheme = "CustomizeTheme";
     
     public const string Layout = "Layout";
-    public const string Layout_BoxPanel = "BoxPanel";
     public const string Layout_BoxPanel_DeprecatedTag = "Deprecated";
     public const string Layout_FlexPanel = "FlexPanel";
     public const string Layout_Grid = "Grid";
@@ -51,6 +52,7 @@ internal class en_US : LanguageProvider
     public const string DataEntry_ToggleSwitch = "ToggleSwitch";
     public const string DataEntry_Select = "Select";
     public const string DataEntry_Slider = "Slider";
+    public const string DataEntry_Transfer = "Transfer";
     public const string DataEntry_TreeSelect = "TreeSelect";
     public const string DataEntry_Upload = "Upload";
     
@@ -72,11 +74,11 @@ internal class en_US : LanguageProvider
     public const string DataDisplay_QRCode = "QRCode";
     public const string DataDisplay_Segmented = "Segmented";
     public const string DataDisplay_Statistic = "Statistic";
+    public const string DataDisplay_Tag = "Tag";
     public const string DataDisplay_Timeline = "Timeline";
     public const string DataDisplay_TreeView = "TreeView";
     public const string DataDisplay_Tooltip = "Tooltip";
-    public const string DataDisplay_Tag = "Tag";
-    public const string DataDisplay_BoxPanel = "BoxPanel";
+    public const string DataDisplay_Tour = "Tour";
     
     public const string Feedback = "Feedback";
     public const string Feedback_Alert = "Alert";
@@ -90,4 +92,6 @@ internal class en_US : LanguageProvider
     public const string Feedback_Skeleton = "Skeleton";
     public const string Feedback_Spin = "Spin";
     public const string Feedback_Watermark = "Watermark";
+    
+    protected override Type GetResourceKindType() => typeof(CaseNavigationLangResourceKind);
 }

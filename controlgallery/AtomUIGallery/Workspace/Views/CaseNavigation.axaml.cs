@@ -1,59 +1,47 @@
-﻿using AtomUI.Desktop.Controls;
-using AtomUIGallery.ShowCases.ViewModels;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Desktop.Controls;
 using AtomUIGallery.Workspace.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using ReactiveUI;
+using ReactiveUI.Avalonia;
 using Window = Avalonia.Controls.Window;
 
 namespace AtomUIGallery.Workspace.Views;
 
-public partial class CaseNavigation : UserControl
+// ✅ 继承 ReactiveUserControl<T>，而非普通 UserControl
+//    ViewModel 由父 ViewModel（WorkspaceWindowViewModel）创建并通过 ViewModel 属性注入，
+//    不再在 View 内部遍历逻辑树自行创建。
+public partial class CaseNavigation : ReactiveUserControl<CaseNavigationViewModel>
 {
     public const string LanguageId = nameof(CaseNavigation);
-    
+
     public CaseNavigation()
     {
         InitializeComponent();
-        ShowCaseNavMenu.NavMenuItemClick += HandleNavMenuItemClick;
-    }
 
-    private void HandleNavMenuItemClick(object? sender, NavMenuItemClickEventArgs args)
-    {
-        if (DataContext is CaseNavigationViewModel caseNavigationViewModel)
+        this.WhenActivated(disposables =>
         {
-            var showCaseId = args.NavMenuItem.ItemKey;
-            if (showCaseId is null)
+            void NavMenuItemClickHandler(object? sender, NavMenuItemClickEventArgs args)
             {
-                // TODO 是不是可以跳转到默认的 ShowCase 页面
-                return;
+                var key = args.NavMenuItem.ItemKey;
+                if (key.HasValue && ViewModel is not null)
+                {
+                    ViewModel.NavigateToCommand.Execute(key.Value)
+                             .Subscribe()
+                             .DisposeWith(disposables);
+                }
             }
 
-            caseNavigationViewModel.NavigateTo(showCaseId.Value.ToString());
-        }
+            ShowCaseNavMenu.NavMenuItemClick += NavMenuItemClickHandler;
+            Disposable.Create(() => ShowCaseNavMenu.NavMenuItemClick -= NavMenuItemClickHandler)
+                      .DisposeWith(disposables);
+        });
     }
-
-    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToLogicalTree(e);
-        var current = Parent;
-        while (current is not null)
-        {
-            if (current.DataContext is IScreen screen)
-            {
-                DataContext = new CaseNavigationViewModel(screen);
-            }
-            current = current.Parent;
-        }
-        if (DataContext is CaseNavigationViewModel caseNavigationViewModel)
-        {
-            caseNavigationViewModel.NavigateTo(AboutUsViewModel.ID);
-        }
-    }
-
+    
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
@@ -64,18 +52,31 @@ public partial class CaseNavigation : UserControl
         }
     }
     
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is Window window)
+        {
+            window.RemoveHandler(InputElement.KeyDownEvent, OnGlobalKeyDown);
+        }
+
+        base.OnDetachedFromVisualTree(e);
+    }
+
     private void OnGlobalKeyDown(object? sender, KeyEventArgs e)
     {
-        if (DataContext is CaseNavigationViewModel caseNavigationViewModel)
+        if (ViewModel is not null)
         {
             if (e.Key == Key.F5)
             {
-                caseNavigationViewModel.TestNavigatePages(TimeSpan.FromMilliseconds(300));
+                ViewModel.TestNavigatePagesCommand.Execute(TimeSpan.FromMilliseconds(300))
+                         .Subscribe();
                 e.Handled = true;
             }
             else if (e.Key == Key.F6)
             {
-                caseNavigationViewModel.StopTestNavigatePages();
+                ViewModel.StopTestNavigatePagesCommand.Execute()
+                         .Subscribe();
             }
         }
     }

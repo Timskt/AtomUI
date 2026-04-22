@@ -1,6 +1,6 @@
-using AtomUI.Controls;
+using AtomUI.Animations;
 using Avalonia;
-using Avalonia.Animation;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 
 namespace AtomUI.Desktop.Controls;
@@ -45,9 +45,15 @@ public class InlineNavMenuItemHeader : BaseNavMenuItemHeader
     }
     #endregion
 
-    protected override void NotifyConfigureTransitions(Transitions transitions)
+    protected override void OnInitialized()
     {
-        base.NotifyConfigureTransitions(transitions);
-        transitions.Add(TransitionUtils.CreateTransition<TransformOperationsTransition>(MenuIndicatorRenderTransformProperty));
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

@@ -11,6 +11,7 @@ namespace AtomUIGallery.ShowCases.Views;
 public partial class MessageShowCase : ReactiveUserControl<MessageViewModel>
 {
     private WindowMessageManager? _messageManager;
+    
     public MessageShowCase()
     {
         this.WhenActivated(disposables => { });
@@ -25,6 +26,13 @@ public partial class MessageShowCase : ReactiveUserControl<MessageViewModel>
         {
             MaxItems = 10
         };
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _messageManager?.Dispose();
+        _messageManager = null;
     }
 
     private void ShowSimpleMessage(object? sender, RoutedEventArgs e)

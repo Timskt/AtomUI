@@ -1,13 +1,9 @@
 <ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:themes="using:AtomUI.Desktop.Controls.Themes"
     xmlns:atom="https://atomui.net"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:SearchEdit}" TargetType="atom:SearchEdit">
-        <ControlTheme.BasedOn>
-            <themes:LineEditTheme TargetType="{x:Type atom:SearchEdit}" />
-        </ControlTheme.BasedOn>
         <Setter Property="Template">
             <ControlTemplate>
                 <atom:SearchEditDecoratedBox
@@ -31,25 +27,16 @@
                     Focusable="True">
                     <atom:SearchEditDecoratedBox.ContentRightAddOn>
                         <StackPanel Orientation="Horizontal"
-                                    Spacing="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyPaddingXXS}}">
-                            <atom:InputClearIconButton
-                                Name="{x:Static atom:TextBoxThemeConstants.ClearButtonPart}"
-                                Icon="{Binding ClearIcon, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}"
-                                IsMotionEnabled="{Binding IsMotionEnabled, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}"
-                                IsVisible="{Binding IsEffectiveShowClearButton, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}" />
+                                    Spacing="{atom:SharedTokenResource UniformlyPaddingXXS}">
+                            <atom:InputClearIconButton Name="{x:Static atom:TextBoxThemeConstants.ClearButtonPart}" />
                             <!-- 新增显示密码按钮 -->
-                            <atom:RevealButton
-                                Name="{x:Static atom:TextBoxThemeConstants.RevealButtonPart}"
-                                IsChecked="{Binding RevealPassword, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}, Mode=TwoWay}"
-                                IsVisible="{Binding IsEnableRevealButton, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}" />
+                            <atom:RevealButton Name="{x:Static atom:TextBoxThemeConstants.RevealButtonPart}" />
                             <ContentPresenter
+                                Name="InnerRightContentPresenter"
                                 VerticalAlignment="Stretch"
                                 VerticalContentAlignment="Center"
                                 HorizontalAlignment="Right"
-                                Focusable="False"
-                                Content="{Binding InnerRightContent, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}"
-                                ContentTemplate="{Binding InnerRightContentTemplate, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}"
-                                IsVisible="{Binding InnerRightContent, Converter={x:Static ObjectConverters.IsNotNull}, RelativeSource={RelativeSource AncestorType=atom:SearchEdit}}" />
+                                Focusable="False" />
                         </StackPanel>
                     </atom:SearchEditDecoratedBox.ContentRightAddOn>
 
@@ -95,5 +82,48 @@
         </Setter>
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+        <Setter Property="atom:ScrollViewer.IsLiteMode" Value="True" />
+        <Setter Property="atom:ScrollViewer.AllowAutoHide" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
+        <Setter Property="SelectionBrush" Value="{atom:SharedTokenResource SelectionBackground}" />
+        <Setter Property="CaretBrush" Value="{atom:SharedTokenResource ColorText}" />
+        <Setter Property="SelectionForegroundBrush"
+                Value="{atom:SharedTokenResource SelectionForeground}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+
+        <Style Selector="^[StyleVariant=Borderless]">
+            <Style Selector="^:error">
+                <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
+                    <Setter Property="Foreground"
+                            Value="{atom:SharedTokenResource ColorErrorText}" />
+                </Style>
+            </Style>
+            <Style Selector="^:warning">
+                <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
+                    <Setter Property="Foreground"
+                            Value="{atom:SharedTokenResource ColorWarningText}" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="^[StyleVariant=Filled]">
+            <Style Selector="^:error">
+                <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
+                    <Setter Property="Foreground"
+                            Value="{atom:SharedTokenResource ColorErrorText}" />
+                </Style>
+            </Style>
+            <Style Selector="^:warning">
+                <Style Selector="^ /template/ ScrollViewer#PART_ScrollViewer">
+                    <Setter Property="Foreground"
+                            Value="{atom:SharedTokenResource ColorWarningText}" />
+                </Style>
+            </Style>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>

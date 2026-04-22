@@ -68,7 +68,7 @@
             </Style>
         </Style>
         
-        <Setter Property="Margin" Value="{DynamicResource {x:Static atom:UploadTokenKey.PictureListItemMargin}}" />
+        <Setter Property="Margin" Value="{atom:UploadTokenResource PictureListItemMargin}" />
         
     </ControlTheme>
 </ResourceDictionary>

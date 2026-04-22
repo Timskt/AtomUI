@@ -1,8 +1,7 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -310,6 +309,7 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
     
     private ImagePreviewRenderer? _image;
     private bool _isSelfChangedPosition;
+    private bool _isArrangeQueued;
     private Point? _lastestPoint;
     private double _originalTranslateX;
     private double _originalTranslateY;
@@ -365,15 +365,6 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
     {
         base.OnPropertyChanged(change);
         
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty ||
-                change.Property == SuppressTransformAnimationProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-        
         if (change.Property == ImageScaleXProperty ||
             change.Property == ImageScaleYProperty ||
             change.Property == ImageRotateProperty)
@@ -417,6 +408,7 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
 
     protected override Size ArrangeOverride(Size finalSize)
     {
+        _isArrangeQueued = false;
         var size = base.ArrangeOverride(finalSize);
         if (_image != null)
         {
@@ -445,43 +437,6 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
         builder.AppendScale(ImageScaleX, ImageScaleY);
         builder.AppendRotate(ImageRotate);
         ImageRenderTransform = builder.Build();
-    }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (SuppressTransformAnimation)
-        {
-            Transitions = null;
-            return;
-        }
-
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(ImageRenderTransformProperty),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateXProperty, SharedTokenKey.MotionDurationFast),
-                    TransitionUtils.CreateTransition<DoubleTransition>(ImageTranslateYProperty, SharedTokenKey.MotionDurationFast)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
     
     protected override void OnPointerMoved(PointerEventArgs e)
@@ -568,7 +523,11 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
             if (MathUtilities.LessThanOrClose(scaledImageWidth, Bounds.Width) && MathUtilities.LessThanOrClose(scaledImageHeight, Bounds.Height))
             {
                 _isSelfChangedPosition = false;
-                InvalidateArrange();
+                if (!_isArrangeQueued)
+                {
+                    _isArrangeQueued = true;
+                    InvalidateArrange();
+                }
             }
             else
             {
@@ -705,7 +664,11 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
             if (MathUtilities.LessThanOrClose(scaledImageWidth, Bounds.Width) && MathUtilities.LessThanOrClose(scaledImageHeight, Bounds.Height))
             {
                 _isSelfChangedPosition = false;
-                InvalidateArrange();
+                if (!_isArrangeQueued)
+                {
+                    _isArrangeQueued = true;
+                    InvalidateArrange();
+                }
             }
             else
             {
@@ -798,5 +761,17 @@ internal class ImageViewer : TemplatedControl, IMotionAwareControl
             ImageTranslateX = offsetX;
             ImageTranslateY = 0;
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

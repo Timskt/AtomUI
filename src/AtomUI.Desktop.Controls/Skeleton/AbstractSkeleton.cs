@@ -153,6 +153,7 @@ public abstract class AbstractSkeleton : TemplatedControl
     protected void StartActiveAnimation()
     {
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
         if (_animation != null)
         {
@@ -164,6 +165,8 @@ public abstract class AbstractSkeleton : TemplatedControl
     protected void StopActiveAnimation()
     {
         _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
+        _cancellationTokenSource = null;
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -180,6 +183,7 @@ public abstract class AbstractSkeleton : TemplatedControl
         if (force || _animation is null)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
             _animation = new Animation
             {
                 Easing         = MotionEasingCurve ?? new CubicEaseOut(),

@@ -11,7 +11,6 @@ using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Input;
 using AtomUI.Reflection;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -30,7 +29,6 @@ namespace AtomUI.Desktop.Controls;
 
 public partial class Dialog : TemplatedControl, 
                               IDialogHostProvider, 
-                              IControlSharedTokenResourcesHost,
                               IMotionAwareControl,
                               IDialog
 {
@@ -72,8 +70,8 @@ public partial class Dialog : TemplatedControl,
     public static readonly StyledProperty<Control?> PlacementTargetProperty =
         AvaloniaProperty.Register<Dialog, Control?>(nameof(PlacementTarget));
     
-    public static readonly StyledProperty<CustomDialogPlacementCallback?> CustomPopupPlacementCallbackProperty =
-        AvaloniaProperty.Register<Dialog, CustomDialogPlacementCallback?>(nameof(CustomDialogPlacementCallback));
+    public static readonly StyledProperty<CustomDialogPlacementCallback?> PlacementCallbackProperty =
+        AvaloniaProperty.Register<Dialog, CustomDialogPlacementCallback?>(nameof(PlacementCallback));
     
     public static readonly StyledProperty<bool> OverlayDismissEventPassThroughProperty =
         AvaloniaProperty.Register<Dialog, bool>(nameof(OverlayDismissEventPassThrough), false);
@@ -214,10 +212,10 @@ public partial class Dialog : TemplatedControl,
         set => SetValue(PlacementTargetProperty, value);
     }
     
-    public CustomDialogPlacementCallback? CustomDialogPlacementCallback
+    public CustomDialogPlacementCallback? PlacementCallback
     {
-        get => GetValue(CustomPopupPlacementCallbackProperty);
-        set => SetValue(CustomPopupPlacementCallbackProperty, value);
+        get => GetValue(PlacementCallbackProperty);
+        set => SetValue(PlacementCallbackProperty, value);
     }
     
     public bool OverlayDismissEventPassThrough
@@ -386,9 +384,6 @@ public partial class Dialog : TemplatedControl,
         set => SetAndRaise(EffectiveMinimizableProperty, ref _effectiveMinimizable, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => DialogToken.ID;
-    
     #endregion
     
     private bool _ignoreIsOpenChanged;
@@ -408,7 +403,7 @@ public partial class Dialog : TemplatedControl,
 
     public Dialog()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(DialogToken.ScopeProvider);
         CustomButtons.CollectionChanged += HandleCustomButtonsChanged;
     }
 
@@ -418,7 +413,7 @@ public partial class Dialog : TemplatedControl,
         {
             if (e.NewValue.Value)
             {
-                Dispatcher.UIThread.InvokeAsync(OpenAsync);
+                Dispatcher.UIThread.InvokeAsync(() => OpenAsync());
             }
             else
             {
@@ -438,6 +433,7 @@ public partial class Dialog : TemplatedControl,
             return null;
         }
         _frameCancellationTokenSource?.Cancel();
+        _frameCancellationTokenSource?.Dispose();
         _frameCancellationTokenSource = new CancellationTokenSource();
         var token = _frameCancellationTokenSource.Token;
         var frame = new DispatcherFrame();
@@ -454,12 +450,14 @@ public partial class Dialog : TemplatedControl,
     /// 1. IsModal 为 true，Task 会等待到窗口关闭才会完成，所以在 await 之后可以获取 Result
     /// 2. IsMoal 为 false，Task 会在窗口打开之后就会完成，所以 await 之后是不能获取 Result
     /// </summary>
-    public async Task OpenAsync()
+    public async Task OpenAsync(CancellationToken cancellationToken = default)
     {
         if (_openState != null || _opening)
         {
             return;
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         _opening = true;
         var placementTarget = PlacementTarget ?? this.FindLogicalAncestorOfType<Control>();
@@ -482,7 +480,7 @@ public partial class Dialog : TemplatedControl,
             var dialogLayer = DialogLayer.GetDialogLayer(placementTarget);
             if (dialogLayer != null)
             {
-                var overlayDialogHost              = CreateOverlayDialogHost(dialogLayer, this);
+                var overlayDialogHost = CreateOverlayDialogHost(dialogLayer, this);
                 OverlayInputPassThroughElement = overlayDialogHost;
                 RelayOverlayDialogBindings(relayBindingDisposables, overlayDialogHost);
                 overlayDialogHost.CustomButtons.AddRange(CustomButtons);
@@ -536,7 +534,7 @@ public partial class Dialog : TemplatedControl,
                 (x, handler) => x.Closed += handler,
                 (x, handler) => x.Closed -= handler).DisposeWith(handlerCleanup);
         } 
-        var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
+        var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
         inputManager?.Process.Subscribe(ListenForNonClientClick).DisposeWith(handlerCleanup);
 
         TaskCompletionSource? modalTsc = null;
@@ -636,7 +634,10 @@ public partial class Dialog : TemplatedControl,
         _dialogHostChangedHandler?.Invoke(Host);
         if (modalTsc != null)
         {
-            await modalTsc.Task;
+            using (cancellationToken.Register(() => modalTsc.TrySetCanceled(cancellationToken)))
+            {
+                await modalTsc.Task;
+            }
         }
     }
 
@@ -1007,7 +1008,7 @@ public partial class Dialog : TemplatedControl,
             OffsetX,
             OffsetY,
             new Rect(default, placementTarget.Bounds.Size),
-            CustomDialogPlacementCallback));
+            PlacementCallback));
     }
     
     private void UpdateHostSizing(IDialogHost dialogHost, TopLevel topLevel, Control placementTarget)

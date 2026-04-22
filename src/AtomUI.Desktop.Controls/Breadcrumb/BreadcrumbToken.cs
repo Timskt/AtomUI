@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class BreadcrumbToken : AbstractControlDesignToken
 {
     public const string ID = "Breadcrumb";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     /// <summary>
     /// 图标大小
     /// </summary>
@@ -73,4 +76,6 @@ internal class BreadcrumbToken : AbstractControlDesignToken
         BreadcrumbItemContentPadding = new Thickness(SharedToken.UniformlyPaddingXXS, SharedToken.UniformlyPaddingXXS,
             SharedToken.UniformlyPaddingXXS, SharedToken.UniformlyPaddingXXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(BreadcrumbTokenKind);
 }

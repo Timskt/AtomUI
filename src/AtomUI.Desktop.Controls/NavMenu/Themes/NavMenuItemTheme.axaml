@@ -133,35 +133,35 @@
 
         <Style Selector="^[Mode=Horizontal],^[Mode=Vertical]">
             <Setter Property="PopupMinWidth"
-                    Value="{DynamicResource {x:Static atom:NavMenuTokenKey.MenuPopupMinWidth}}" />
+                    Value="{atom:NavMenuTokenResource MenuPopupMinWidth}" />
 
             <Style Selector="^ /template/ atom|Popup#PART_Popup">
                 <Setter Property="MarginToAnchor"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.TopLevelItemPopupMarginToAnchor}}" />
+                        Value="{atom:NavMenuTokenResource TopLevelItemPopupMarginToAnchor}" />
                 <Setter Property="MaskShadows"
-                        Value="{DynamicResource {x:Static atom:PopupHostTokenKey.BoxShadows}}" />
+                        Value="{atom:PopupHostTokenResource BoxShadows}" />
             </Style>
 
             <Style Selector="^ /template/ Border#PART_PopupFrame">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+                        Value="{atom:SharedTokenResource ColorBgElevated}" />
                 <Setter Property="CornerRadius"
-                        Value="{DynamicResource {x:Static atom:PopupHostTokenKey.BorderRadius}}" />
+                        Value="{atom:PopupHostTokenResource BorderRadius}" />
                 <Setter Property="MinWidth"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.MenuPopupMinWidth}}" />
+                        Value="{atom:NavMenuTokenResource MenuPopupMinWidth}" />
                 <Setter Property="MaxWidth"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.MenuPopupMaxWidth}}" />
+                        Value="{atom:NavMenuTokenResource MenuPopupMaxWidth}" />
                 <Setter Property="MaxHeight"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.MenuPopupMaxHeight}}" />
+                        Value="{atom:NavMenuTokenResource MenuPopupMaxHeight}" />
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.MenuPopupContentPadding}}" />
+                        Value="{atom:NavMenuTokenResource MenuPopupContentPadding}" />
             </Style>
         </Style>
 
         <Style Selector="^[IsDarkStyle=True]">
             <Style Selector="^ /template/ Border#PART_PopupFrame">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.DarkMenuPopupBg}}" />
+                        Value="{atom:NavMenuTokenResource DarkMenuPopupBg}" />
             </Style>
         </Style>
 
@@ -172,7 +172,7 @@
         </Style>
 
         <Style Selector="^[Mode=Horizontal]:toplevel">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
+            <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
             <Style Selector="^ /template/ atom|Popup#PART_Popup">
                 <Setter Property="Placement" Value="Bottom" />
             </Style>
@@ -180,17 +180,17 @@
 
         <Style Selector="^[Mode=Inline]">
             <Setter Property="OpenCloseMotionDuration"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}" />
+                    Value="{atom:SharedTokenResource MotionDurationSlow}" />
 
             <Setter Property="Focusable" Value="False" />
             <Style Selector="^ /template/ ItemsPresenter#ChildItemsPresenter StackPanel">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.VerticalItemsPanelSpacing}}" />
+                        Value="{atom:NavMenuTokenResource VerticalItemsPanelSpacing}" />
             </Style>
 
             <Style Selector="^ /template/ atom|LayoutAwareMotionActor#PART_ChildItemsLayoutTransform">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:NavMenuTokenKey.VerticalChildItemsMargin}}" />
+                        Value="{atom:NavMenuTokenResource VerticalChildItemsMargin}" />
             </Style>
         </Style>
 

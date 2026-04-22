@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Reactive.Disposables;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -19,23 +17,22 @@ internal class ColorPickerFlyout : AbstractColorPickerFlyout
     }
     
     internal ColorPickerView? Presenter { get; set; }
-    private CompositeDisposable? _presenterBindingDisposables;
     
     protected override Control CreatePresenter()
     {
         var flyoutPresenter = base.CreatePresenter() as FlyoutPresenter;
         Debug.Assert(flyoutPresenter != null);
-        _presenterBindingDisposables?.Dispose();
         Presenter                    = new ColorPickerView();
-        _presenterBindingDisposables = new  CompositeDisposable(8);
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, Presenter, ColorPickerView.IsMotionEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, ValueProperty, Presenter, ColorPickerView.ValueProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, FormatProperty, Presenter, ColorPickerView.FormatProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsClearEnabledProperty, Presenter, ColorPickerView.IsClearEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsAlphaEnabledProperty, Presenter, ColorPickerView.IsAlphaEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsFormatEnabledProperty, Presenter, ColorPickerView.IsFormatEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, IsPaletteGroupEnabledProperty, Presenter, ColorPickerView.IsPaletteGroupEnabledProperty));
-        _presenterBindingDisposables.Add(BindUtils.RelayBind(this, PaletteGroupProperty, Presenter, ColorPickerView.PaletteGroupProperty));
+        
+        Presenter[!ColorPickerView.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+        Presenter[!ColorPickerView.ValueProperty]                 = this[!ValueProperty];
+        Presenter[!ColorPickerView.FormatProperty]                = this[!FormatProperty];
+        Presenter[!ColorPickerView.IsClearEnabledProperty]        = this[!IsClearEnabledProperty];
+        Presenter[!ColorPickerView.IsAlphaEnabledProperty]        = this[!IsAlphaEnabledProperty];
+        Presenter[!ColorPickerView.IsFormatEnabledProperty]       = this[!IsFormatEnabledProperty];
+        Presenter[!ColorPickerView.IsPaletteGroupEnabledProperty] = this[!IsPaletteGroupEnabledProperty];
+        Presenter[!ColorPickerView.PaletteGroupProperty]          = this[!PaletteGroupProperty];
+        
         flyoutPresenter.Content = Presenter;
         return flyoutPresenter;
     }

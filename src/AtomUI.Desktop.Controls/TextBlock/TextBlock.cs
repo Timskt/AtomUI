@@ -1,7 +1,7 @@
+using AtomUI.Controls;
 using AtomUI.Theme.Styling;
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.Styling;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -13,13 +13,7 @@ public class TextBlock : AvaloniaTextBlock, IFormItemAware
     {
         FontStyleProperty.OverrideDefaultValue<TextBlock>(FontStyle.Normal);
         TextProperty.Changed.AddClassHandler<TextBlock>((block, args) => block.NotifyFormValueChanged(args.NewValue as string));
-    }
-
-    public TextBlock()
-    {
-        var styles = new Style();
-        styles.Add(ClipToBoundsProperty, false);
-        Styles.Add(styles);
+        ClipToBoundsProperty.OverrideDefaultValue<TextBlock>(false);
     }
     
     #region 实现 FormItem 接口

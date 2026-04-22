@@ -36,44 +36,44 @@
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TabControlTokenKey.HorizontalItemMargin}}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardBg}}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
+        <Setter Property="Margin" Value="{atom:TabControlTokenResource HorizontalItemMargin}" />
+        <Setter Property="Background" Value="{atom:TabControlTokenResource CardBg}" />
+        <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorderSecondary}" />
 
         <Style Selector="^:selected">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgContainer}" />
         </Style>
 
         <Style Selector="^[TabStripPlacement=Top], ^[TabStripPlacement=Bottom]">
             
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TabControlTokenKey.HorizontalItemMargin}}" />
+            <Setter Property="Margin" Value="{atom:TabControlTokenResource HorizontalItemMargin}" />
             <Style Selector="^[SizeType=Large]">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardPaddingLG}}" />
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource CardPaddingLG}" />
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardPadding}}" />
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource CardPadding}" />
             </Style>
 
             <Style Selector="^[SizeType=Small]">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardPaddingSM}}" />
+                <Setter Property="Padding" Value="{atom:TabControlTokenResource CardPaddingSM}" />
             </Style>
         </Style>
 
         <Style Selector="^[TabStripPlacement=Left], ^[TabStripPlacement=Right]">
             <Style Selector="^[SizeType=Large]">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.VerticalItemPadding}}" />
+                        Value="{atom:TabControlTokenResource VerticalItemPadding}" />
             </Style>
 
             <Style Selector="^[SizeType=Middle]">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.VerticalItemPadding}}" />
+                        Value="{atom:TabControlTokenResource VerticalItemPadding}" />
             </Style>
 
             <Style Selector="^[SizeType=Small]">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.VerticalItemPadding}}" />
+                        Value="{atom:TabControlTokenResource VerticalItemPadding}" />
             </Style>
         </Style>
 
@@ -86,7 +86,7 @@
             <Style Selector="^ /template/ Rectangle#LineMask">
                 <Setter Property="VerticalAlignment" Value="Bottom" />
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                        Value="{atom:SharedTokenResource LineWidth}" />
             </Style>
         </Style>
 
@@ -97,7 +97,7 @@
             <Style Selector="^ /template/ Rectangle#LineMask">
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                        Value="{atom:SharedTokenResource LineWidth}" />
             </Style>
         </Style>
 
@@ -109,7 +109,7 @@
             <Style Selector="^ /template/ Rectangle#LineMask">
                 <Setter Property="VerticalAlignment" Value="Top" />
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                        Value="{atom:SharedTokenResource LineWidth}" />
             </Style>
         </Style>
 
@@ -120,13 +120,23 @@
             <Style Selector="^ /template/ Rectangle#LineMask">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.LineWidth}}" />
+                        Value="{atom:SharedTokenResource LineWidth}" />
             </Style>
         </Style>
 
         <Style Selector="^:disabled">
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainerDisabled}}" />
+                    Value="{atom:SharedTokenResource ColorBgContainerDisabled}" />
+        </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="CloseButtonOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
         </Style>
 
     </ControlTheme>

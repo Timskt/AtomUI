@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using AtomUI.Animations;
 using AtomUI.Theme.Styling;
-using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
@@ -11,13 +10,13 @@ namespace AtomUI.Controls;
 public sealed class TransitionUtils : BaseTransitionUtils
 {
     public static ITransition CreateTransition<T>(AvaloniaProperty targetProperty,
-                                                  TokenResourceKey? durationResourceKey = null,
+                                                  SharedTokenKind? durationResourceKey = null,
                                                   Easing? easing = null,
                                                   TimeSpan? delay = null)
         where T : TransitionBase, new()
     {
         easing              ??= new LinearEasing();
-        durationResourceKey ??= SharedTokenKey.MotionDurationMid;
+        durationResourceKey ??= SharedTokenKind.MotionDurationMid;
         var transition = new T
         {
             Property = targetProperty,

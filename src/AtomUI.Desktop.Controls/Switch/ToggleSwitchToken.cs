@@ -1,4 +1,6 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,7 +11,8 @@ namespace AtomUI.Desktop.Controls;
 internal class ToggleSwitchToken : AbstractControlDesignToken
 {
     public const string ID = "ToggleSwitch";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public ToggleSwitchToken()
         : base(ID)
     {
@@ -166,4 +169,6 @@ internal class ToggleSwitchToken : AbstractControlDesignToken
         LoadingAnimationDuration   = TimeSpan.FromMilliseconds(1200); // 毫秒
         OffStateLoadIndicatorColor = ColorUtils.FromRgbF(0.4,0.0, 0.0, 0.0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ToggleSwitchTokenKind);
 }

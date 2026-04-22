@@ -1,4 +1,6 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,7 +11,8 @@ namespace AtomUI.Desktop.Controls;
 internal class DrawerToken : AbstractControlDesignToken
 {
     public const string ID = "Drawer";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public DrawerToken()
         : base(ID)
     {
@@ -198,4 +201,6 @@ internal class DrawerToken : AbstractControlDesignToken
         ContentPadding    = SharedToken.PaddingLG;
         PushOffsetPercent = 0.4;
     }
+    
+    protected override Type GetTokenKindType() => typeof(DrawerTokenKind);
 }

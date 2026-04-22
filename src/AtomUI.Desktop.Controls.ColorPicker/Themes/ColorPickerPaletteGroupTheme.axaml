@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <atom:ColorPickerCollapse ItemsSource="{TemplateBinding PaletteGroup}"
-                                          ItemContentPadding="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerPresetColorGroupPadding}}"
+                                          ItemContentPadding="{atom:ColorPickerTokenResource ColorPickerPresetColorGroupPadding}"
                                           ItemHeaderPadding="0"
                                           SizeType="Small"
                                           IsGhostStyle="True"
@@ -18,8 +18,8 @@
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel
-                                            ItemSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}"
-                                            LineSpacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXXS}}" />
+                                            ItemSpacing="{atom:SharedTokenResource SpacingXXS}"
+                                            LineSpacing="{atom:SharedTokenResource SpacingXXS}" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
@@ -38,7 +38,7 @@
         </Setter>
 
         <Setter Property="Width"
-                Value="{DynamicResource {x:Static atom:ColorPickerTokenKey.ColorPickerPresetPanelWidth}}" />
+                Value="{atom:ColorPickerTokenResource ColorPickerPresetPanelWidth}" />
 
     </ControlTheme>
 </ResourceDictionary>

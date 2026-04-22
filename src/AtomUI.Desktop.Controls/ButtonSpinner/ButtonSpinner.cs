@@ -1,11 +1,8 @@
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Input;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -28,7 +25,6 @@ public enum ButtonSpinnerLocation
 [PseudoClasses(ButtonSpinnerPseudoClass.Left, ButtonSpinnerPseudoClass.Right)]
 public class ButtonSpinner : Spinner,
                              IMotionAwareControl,
-                             IControlSharedTokenResourcesHost,
                              ICompactSpaceAware,
                              IInputControlStatusAware,
                              IInputControlStyleVariantAware
@@ -221,14 +217,10 @@ public class ButtonSpinner : Spinner,
         get => GetValue(IsUsedInCompactSpaceProperty);
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonSpinnerToken.ID;
 
     #endregion
     
     internal ButtonSpinnerDecoratedBox? DecoratedBox;
-    private CompositeDisposable? _addOnBindingDisposables;
     private ButtonSpinnerHandle? _spinnerHandle;
 
     static ButtonSpinner()
@@ -238,7 +230,7 @@ public class ButtonSpinner : Spinner,
     
     public ButtonSpinner()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonSpinnerToken.ScopeProvider);
     }
     
     private IconButton? _decreaseButton;
@@ -332,15 +324,13 @@ public class ButtonSpinner : Spinner,
 
     private void ConfigureAddOns()
     {
-        _addOnBindingDisposables?.Dispose();
-        _addOnBindingDisposables = new CompositeDisposable();
         if (LeftAddOn is PathIcon leftAddOnIcon)
         {
             var iconPresenter = new SizeTypeAwareIconPresenter
             {
                 Icon = leftAddOnIcon
             };
-            _addOnBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, iconPresenter, SizeTypeProperty));
+            iconPresenter[SizeTypeProperty] = this[SizeTypeProperty];
             LeftAddOn = iconPresenter;
         }
         if (InnerLeftContent is PathIcon innerLeftContent)
@@ -349,8 +339,8 @@ public class ButtonSpinner : Spinner,
             {
                 Icon = innerLeftContent
             };
-            _addOnBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, iconPresenter, SizeTypeProperty));
-            InnerLeftContent = iconPresenter;
+            iconPresenter[SizeTypeProperty] = this[SizeTypeProperty];
+            InnerLeftContent                = iconPresenter;
         }
         if (RightAddOn is PathIcon rightAddOnIcon)
         {
@@ -358,8 +348,8 @@ public class ButtonSpinner : Spinner,
             {
                 Icon = rightAddOnIcon
             };
-            _addOnBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, iconPresenter, SizeTypeProperty));
-            RightAddOn = iconPresenter;
+            iconPresenter[SizeTypeProperty] = this[SizeTypeProperty];
+            RightAddOn                      = iconPresenter;
         }
         if (InnerRightContent is PathIcon innerRightContent)
         {
@@ -367,8 +357,8 @@ public class ButtonSpinner : Spinner,
             {
                 Icon = innerRightContent
             };
-            _addOnBindingDisposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, iconPresenter, SizeTypeProperty));
-            InnerRightContent = iconPresenter;
+            iconPresenter[SizeTypeProperty] = this[SizeTypeProperty];
+            InnerRightContent               = iconPresenter;
         }
     }
     
@@ -521,7 +511,7 @@ public class ButtonSpinner : Spinner,
             return 0.0;
         }
     
-        if (DecoratedBox == null || DecoratedBox.StyleVariant != InputControlStyleVariant.Outline)
+        if (DecoratedBox == null || DecoratedBox.StyleVariant != InputControlStyleVariant.Outlined)
         {
             return 0.0;
         }

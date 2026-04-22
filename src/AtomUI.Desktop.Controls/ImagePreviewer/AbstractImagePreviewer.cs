@@ -17,13 +17,11 @@ using Avalonia.Interactivity;
 
 namespace AtomUI.Desktop.Controls;
 
-public class AbstractImagePreviewer : TemplatedControl, 
-                                      IControlSharedTokenResourcesHost,
-                                      IMotionAwareControl
+public abstract class AbstractImagePreviewer : TemplatedControl, IMotionAwareControl
 {
     #region 公共属性定义
-    public static readonly StyledProperty<IList<string>?> SourcesProperty =
-        AvaloniaProperty.Register<AbstractImagePreviewer, IList<string>?>(nameof(Sources));
+    public static readonly StyledProperty<IList<string>?> ItemsSourceProperty =
+        AvaloniaProperty.Register<AbstractImagePreviewer, IList<string>?>(nameof(ItemsSource));
     
     public static readonly StyledProperty<string?> FallbackImageSrcProperty =
         AvaloniaProperty.Register<AbstractImagePreviewer, string?>(nameof(FallbackImageSrc));
@@ -43,10 +41,10 @@ public class AbstractImagePreviewer : TemplatedControl,
     public static readonly StyledProperty<int> CurrentIndexProperty =
         AvaloniaProperty.Register<AbstractImagePreviewer, int>(nameof(CurrentIndex), 0);
     
-    public IList<string>? Sources
+    public IList<string>? ItemsSource
     {
-        get => GetValue(SourcesProperty);
-        set => SetValue(SourcesProperty, value);
+        get => GetValue(ItemsSourceProperty);
+        set => SetValue(ItemsSourceProperty, value);
     }
     
     public string? FallbackImageSrc
@@ -116,7 +114,7 @@ public class AbstractImagePreviewer : TemplatedControl,
     public static readonly StyledProperty<Dimension?> DialogVerticalOffsetProperty =
         AvaloniaProperty.Register<AbstractImagePreviewer, Dimension?>(nameof(DialogVerticalOffset));
     
-    public static readonly StyledProperty<CustomDialogPlacementCallback?> CustomPopupPlacementCallbackProperty =
+    public static readonly StyledProperty<CustomDialogPlacementCallback?> CustomDialogPlacementCallbackProperty =
         AvaloniaProperty.Register<AbstractImagePreviewer, CustomDialogPlacementCallback?>(nameof(CustomDialogPlacementCallback));
     
     public static readonly StyledProperty<bool> IsDialogTopmostProperty =
@@ -178,8 +176,8 @@ public class AbstractImagePreviewer : TemplatedControl,
     
     public CustomDialogPlacementCallback? CustomDialogPlacementCallback
     {
-        get => GetValue(CustomPopupPlacementCallbackProperty);
-        set => SetValue(CustomPopupPlacementCallbackProperty, value);
+        get => GetValue(CustomDialogPlacementCallbackProperty);
+        set => SetValue(CustomDialogPlacementCallbackProperty, value);
     }
     
     public bool IsDialogTopmost
@@ -242,9 +240,6 @@ public class AbstractImagePreviewer : TemplatedControl,
         set => SetAndRaise(EffectiveSourcesProperty, ref _effectiveSources, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ImagePreviewerToken.ID;
-    
     #endregion
     
     private bool _ignoreIsOpenChanged;
@@ -262,13 +257,13 @@ public class AbstractImagePreviewer : TemplatedControl,
     
     public AbstractImagePreviewer()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ImagePreviewerToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == SourcesProperty)
+        if (change.Property == ItemsSourceProperty)
         {
             HandleSourceChanged();
         }
@@ -286,10 +281,10 @@ public class AbstractImagePreviewer : TemplatedControl,
 
     private void HandleSourceChanged()
     {
-        if (Sources != null && Sources.Count > 0)
+        if (ItemsSource != null && ItemsSource.Count > 0)
         {
             var effectiveSources = new List<PreviewImageSource>();
-            foreach (var source in Sources)
+            foreach (var source in ItemsSource)
             {
                 try
                 {
@@ -300,7 +295,15 @@ public class AbstractImagePreviewer : TemplatedControl,
                     // TODO 这个错误直接抛出还是忽略
                 }
             }
+            var oldSources = EffectiveSources;
             SetCurrentValue(EffectiveSourcesProperty, effectiveSources);
+            if (oldSources != null)
+            {
+                foreach (var source in oldSources)
+                {
+                    source.Dispose();
+                }
+            }
         }
     }
 
@@ -507,7 +510,7 @@ public class AbstractImagePreviewer : TemplatedControl,
         disposables.Add(BindUtils.RelayBind(this, ImageScaleStepProperty, dialogHost, ImagePreviewerDialog.ScaleStepProperty));
         disposables.Add(BindUtils.RelayBind(this, ImageMinScaleProperty, dialogHost, ImagePreviewerDialog.MinScaleProperty));
         disposables.Add(BindUtils.RelayBind(this, ImageMaxScaleProperty, dialogHost, ImagePreviewerDialog.MaxScaleProperty));
-        disposables.Add(BindUtils.RelayBind(this, EffectiveSourcesProperty, dialogHost, ImagePreviewerDialog.SourcesProperty));
+        disposables.Add(BindUtils.RelayBind(this, EffectiveSourcesProperty, dialogHost, ImagePreviewerDialog.ItemsSourceProperty));
         disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, dialogHost, ImagePreviewerDialog.IsMotionEnabledProperty));
         disposables.Add(BindUtils.RelayBind(this, IsDialogModalProperty, dialogHost, ImagePreviewerDialog.IsModalProperty));
         disposables.Add(BindUtils.RelayBind(this, CurrentIndexProperty, dialogHost, ImagePreviewerDialog.CurrentIndexProperty));

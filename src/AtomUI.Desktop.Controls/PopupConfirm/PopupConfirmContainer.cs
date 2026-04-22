@@ -1,8 +1,6 @@
-﻿using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Themes;
+﻿using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -14,8 +12,7 @@ using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-internal class PopupConfirmContainer : TemplatedControl,
-                                       IControlSharedTokenResourcesHost
+internal class PopupConfirmContainer : TemplatedControl
 {
     #region 内部属性定义
 
@@ -100,9 +97,6 @@ internal class PopupConfirmContainer : TemplatedControl,
         get => GetValue(ConfirmStatusProperty);
         set => SetValue(ConfirmStatusProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => PopupConfirmToken.ID;
 
     #endregion
     
@@ -112,7 +106,7 @@ internal class PopupConfirmContainer : TemplatedControl,
 
     public PopupConfirmContainer(PopupConfirm popupConfirm)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(PopupConfirmToken.ScopeProvider);
         PopupConfirmRef = new WeakReference<PopupConfirm>(popupConfirm);
     }
 

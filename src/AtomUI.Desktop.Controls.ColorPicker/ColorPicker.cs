@@ -1,6 +1,4 @@
-using System.Reactive.Disposables;
 using AtomUI.Desktop.Controls.Themes;
-using AtomUI.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -83,10 +81,8 @@ public class ColorPicker : AbstractColorPicker
     #endregion
     
     private ColorPickerView? _presenter;
-    private CompositeDisposable? _flyoutBindingDisposables;
     private Color? _latestSyncValue;
     private ColorBlock? _colorIndicator;
-    private IDisposable? _emptyTextBindingDisposable;
     
     static ColorPicker()
     {
@@ -142,8 +138,7 @@ public class ColorPicker : AbstractColorPicker
             else
             {
                 SetCurrentValue(ColorTextProperty, EmptyColorText);
-                _emptyTextBindingDisposable?.Dispose();
-                _emptyTextBindingDisposable = BindUtils.RelayBind(this, EmptyColorTextProperty, this, ColorTextProperty);
+                this[!ColorTextProperty] = this[!EmptyColorTextProperty];
             }
         }
     }
@@ -175,15 +170,13 @@ public class ColorPicker : AbstractColorPicker
     {
         var flyout = new ColorPickerFlyout();
         flyout.IsDetectMouseClickEnabled = false;
-        _flyoutBindingDisposables?.Dispose();
-        _flyoutBindingDisposables = new CompositeDisposable(7);
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, flyout, ColorPickerFlyout.IsMotionEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsClearEnabledProperty, flyout, ColorPickerFlyout.IsClearEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, FormatProperty, flyout, ColorPickerFlyout.FormatProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsAlphaEnabledProperty, flyout, ColorPickerFlyout.IsAlphaEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsFormatEnabledProperty, flyout, ColorPickerFlyout.IsFormatEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, IsPaletteGroupEnabledProperty, flyout, ColorPickerFlyout.IsPaletteGroupEnabledProperty));
-        _flyoutBindingDisposables.Add(BindUtils.RelayBind(this, PaletteGroupProperty, flyout, ColorPickerFlyout.PaletteGroupProperty));
+        flyout[!ColorPickerFlyout.IsMotionEnabledProperty]       = this[!IsMotionEnabledProperty];
+        flyout[!ColorPickerFlyout.IsClearEnabledProperty]        = this[!IsClearEnabledProperty];
+        flyout[!ColorPickerFlyout.FormatProperty]                = this[!FormatProperty];
+        flyout[!ColorPickerFlyout.IsAlphaEnabledProperty]        = this[!IsAlphaEnabledProperty];
+        flyout[!ColorPickerFlyout.IsFormatEnabledProperty]       = this[!IsFormatEnabledProperty];
+        flyout[!ColorPickerFlyout.IsPaletteGroupEnabledProperty] = this[!IsPaletteGroupEnabledProperty];
+        flyout[!ColorPickerFlyout.PaletteGroupProperty]          = this[!PaletteGroupProperty];
         
         return flyout;
     }
@@ -252,8 +245,7 @@ public class ColorPicker : AbstractColorPicker
         if (_colorIndicator != null)
         {
             _colorIndicator.SetCurrentValue(ColorBlock.IsEmptyColorModeProperty, true);
-            _emptyTextBindingDisposable?.Dispose();
-            _emptyTextBindingDisposable = BindUtils.RelayBind(this, EmptyColorTextProperty, this, ColorTextProperty);
+            this[!ColorTextProperty] = this[!EmptyColorTextProperty];
         }
     }
     

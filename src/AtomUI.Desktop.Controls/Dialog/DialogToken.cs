@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class DialogToken : AbstractControlDesignToken
 {
     public const string ID = "Dialog";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 顶部背景色
@@ -117,4 +120,6 @@ internal class DialogToken : AbstractControlDesignToken
         FooterBg           = Colors.Transparent;
         ButtonGroupSpacing = SharedToken.SpacingXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(DialogTokenKind);
 }

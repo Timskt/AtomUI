@@ -50,29 +50,29 @@
         </Setter>
 
         <Setter Property="CardSize"
-                Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardSize}}" />
+                Value="{atom:TabControlTokenResource CardSize}" />
         <Setter Property="CardBorderThickness"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderThickness}}" />
+                Value="{atom:SharedTokenResource BorderThickness}" />
         
         <Style Selector="^ /template/ atom|IconButton#PART_AddTabButton">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemColor}}" />
+                    Value="{atom:TabControlTokenResource ItemColor}" />
             <Setter Property="IconWidth"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                    Value="{atom:SharedTokenResource IconSize}" />
             <Setter Property="IconHeight"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                    Value="{atom:SharedTokenResource IconSize}" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorderSecondary}}" />
+                    Value="{atom:SharedTokenResource ColorBorderSecondary}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton#PART_AddTabButton:pointerover">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemHoverColor}}" />
+                    Value="{atom:TabControlTokenResource ItemHoverColor}" />
         </Style>
 
         <Style Selector="^[TabStripPlacement=Top]">
             <Style Selector="^ /template/ DockPanel#HeaderLayout">
-                <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}"/>
+                <Setter Property="HorizontalSpacing" Value="{atom:SharedTokenResource SpacingXS}"/>
             </Style>
             
             <Style Selector="^ /template/ ContentPresenter#HeaderStartExtraContent">
@@ -94,20 +94,20 @@
 
             <Style Selector="^ /template/ ItemsPresenter#PART_ItemsPresenter StackPanel">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardGutter}}" />
+                        Value="{atom:TabControlTokenResource CardGutter}" />
                 <Setter Property="Orientation" Value="Horizontal" />
             </Style>
 
             <Style Selector="^ /template/ atom|IconButton#PART_AddTabButton">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.AddTabButtonMarginHorizontal}}" />
+                        Value="{atom:TabControlTokenResource AddTabButtonMarginHorizontal}" />
             </Style>
 
         </Style>
 
         <Style Selector="^[TabStripPlacement=Right]">
             <Style Selector="^ /template/ DockPanel#HeaderLayout">
-                <Setter Property="VerticalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}"/>
+                <Setter Property="VerticalSpacing" Value="{atom:SharedTokenResource SpacingXS}"/>
             </Style>
             
             <Style Selector="^ /template/ ContentPresenter#HeaderStartExtraContent">
@@ -129,20 +129,20 @@
 
             <Style Selector="^ /template/ ItemsPresenter#PART_ItemsPresenter StackPanel">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardGutter}}" />
+                        Value="{atom:TabControlTokenResource CardGutter}" />
                 <Setter Property="Orientation" Value="Vertical" />
             </Style>
 
             <Style Selector="^ /template/ atom|IconButton#PART_AddTabButton">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.AddTabButtonMarginVertical}}" />
+                        Value="{atom:TabControlTokenResource AddTabButtonMarginVertical}" />
             </Style>
 
         </Style>
 
         <Style Selector="^[TabStripPlacement=Bottom]">
             <Style Selector="^ /template/ DockPanel#HeaderLayout">
-                <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}"/>
+                <Setter Property="HorizontalSpacing" Value="{atom:SharedTokenResource SpacingXS}"/>
             </Style>
             
             <Style Selector="^ /template/ ContentPresenter#HeaderStartExtraContent">
@@ -164,20 +164,20 @@
 
             <Style Selector="^ /template/ ItemsPresenter#PART_ItemsPresenter StackPanel">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardGutter}}" />
+                        Value="{atom:TabControlTokenResource CardGutter}" />
                 <Setter Property="Orientation" Value="Horizontal" />
             </Style>
 
             <Style Selector="^ /template/ atom|IconButton#PART_AddTabButton">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.AddTabButtonMarginHorizontal}}" />
+                        Value="{atom:TabControlTokenResource AddTabButtonMarginHorizontal}" />
             </Style>
 
         </Style>
 
         <Style Selector="^[TabStripPlacement=Left]">
             <Style Selector="^ /template/ DockPanel#HeaderLayout">
-                <Setter Property="VerticalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}"/>
+                <Setter Property="VerticalSpacing" Value="{atom:SharedTokenResource SpacingXS}"/>
             </Style>
             
             <Style Selector="^ /template/ ContentPresenter#HeaderStartExtraContent">
@@ -199,30 +199,28 @@
 
             <Style Selector="^ /template/ ItemsPresenter#PART_ItemsPresenter StackPanel">
                 <Setter Property="Spacing"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.CardGutter}}" />
+                        Value="{atom:TabControlTokenResource CardGutter}" />
                 <Setter Property="Orientation" Value="Vertical" />
             </Style>
 
             <Style Selector="^ /template/ atom|IconButton#PART_AddTabButton">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.AddTabButtonMarginVertical}}" />
+                        Value="{atom:TabControlTokenResource AddTabButtonMarginVertical}" />
             </Style>
 
         </Style>
         
         <Style Selector="^[SizeType=Large]">
             <Setter Property="CardBorderRadius"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusLG}}" />
+                    Value="{atom:SharedTokenResource BorderRadiusLG}" />
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Setter Property="CardBorderRadius"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadius}}" />
+                    Value="{atom:SharedTokenResource BorderRadius}" />
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Setter Property="CardBorderRadius"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.BorderRadiusSM}}" />
+                    Value="{atom:SharedTokenResource BorderRadiusSM}" />
         </Style>
-        
-        
     </ControlTheme>
 </ResourceDictionary>

@@ -8,22 +8,30 @@
         <PackageVersion Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Win32" Version="$(AvaloniaVersion)"/>
-        <PackageVersion Include="ReactiveUI.Avalonia" Version="11.3.8"/>
-        <PackageVersion Include="Svg.Controls.Avalonia" Version="11.3.6.2"/>
-        <PackageVersion Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1"/>
+        <PackageVersion Include="ReactiveUI.Avalonia" Version="11.4.12"/>
+        <PackageVersion Include="Svg.Controls.Avalonia" Version="11.3.9.5"/>
         <PackageVersion Include="SkiaSharp.QrCode" Version="0.7.0"/>
         <PackageVersion Include="System.Reactive" Version="6.1.0"/>
+        <PackageVersion Include="SkiaSharp" Version="2.88.9"/>
         <!-- 测试相关依赖 -->
-        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0-release-24177-07"/>
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0"/>
         <PackageVersion Include="NSubstitute" Version="5.1.0"/>
-        <PackageVersion Include="Shouldly" Version="4.2.1"/>
-        <PackageVersion Include="xunit" Version="2.8.0"/>
-        <PackageVersion Include="xunit.extensibility.execution" Version="2.8.0"/>
-        <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0"/>
-        <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.1.0"/>
+        <PackageVersion Include="Shouldly" Version="4.3.0"/>
+        <PackageVersion Include="xunit.v3" Version="3.2.2"/>
+        <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.2"/>
+        <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
         <!-- 源码生成 -->
-        <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0-3.final"/>
-        <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.24219.2"/>
+        <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0"/>
+        <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0"/>
+        <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0"/>
+        <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing" Version="1.1.3"/>
+
+        <!-- 安全漏洞修复: CVE-2026-39959 (GHSA-xrw6-gwf8-vvr9) — Tmds.DBus.Protocol 0.21.2 高危漏洞覆盖 -->
+        <PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.3"/>
+        
+        <!-- 其他依赖 -->
+        <PackageVersion Include="ThomasLevesque.WeakEvent" Version="4.1.0"/>
+        
     </ItemGroup>
     <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
         <PackageVersion Include="AtomUI.Core" Version="$(AtomUIVersion)"/>

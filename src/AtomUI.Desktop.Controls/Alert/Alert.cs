@@ -1,7 +1,6 @@
 ﻿using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -28,7 +27,7 @@ public static class AlertPseudoClass
 }
 
 [PseudoClasses(AlertPseudoClass.HasDescription, AlertPseudoClass.HasExtraAction)]
-public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
+public class Alert : TemplatedControl
 {
     #region 公共属性定义
 
@@ -38,8 +37,8 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
     public static readonly StyledProperty<bool> IsShowIconProperty =
         AvaloniaProperty.Register<Alert, bool>(nameof(IsShowIcon));
 
-    public static readonly StyledProperty<bool> IsMessageMarqueEnabledProperty =
-        AvaloniaProperty.Register<Alert, bool>(nameof(IsMessageMarqueEnabled));
+    public static readonly StyledProperty<bool> IsMessageMarqueeEnabledProperty =
+        AvaloniaProperty.Register<Alert, bool>(nameof(IsMessageMarqueeEnabled));
 
     public static readonly StyledProperty<bool> IsClosableProperty =
         AvaloniaProperty.Register<Alert, bool>(nameof(IsClosable));
@@ -54,7 +53,7 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
         AvaloniaProperty.Register<Alert, string?>(nameof(Description));
 
     public static readonly StyledProperty<Control?> ExtraActionProperty =
-        AvaloniaProperty.Register<Alert, Control?>(nameof(Description));
+        AvaloniaProperty.Register<Alert, Control?>(nameof(ExtraAction));
 
     public AlertType Type
     {
@@ -68,10 +67,10 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
         set => SetValue(IsShowIconProperty, value);
     }
 
-    public bool IsMessageMarqueEnabled
+    public bool IsMessageMarqueeEnabled
     {
-        get => GetValue(IsMessageMarqueEnabledProperty);
-        set => SetValue(IsMessageMarqueEnabledProperty, value);
+        get => GetValue(IsMessageMarqueeEnabledProperty);
+        set => SetValue(IsMessageMarqueeEnabledProperty, value);
     }
 
     public bool IsClosable
@@ -112,13 +111,6 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
     public event EventHandler? CloseRequest;
 
     #endregion
-
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => AlertToken.ID;
-
-    #endregion
     
     private IconButton? _closeButton;
 
@@ -128,16 +120,16 @@ public class Alert : TemplatedControl, IControlSharedTokenResourcesHost
             IsShowIconProperty,
             MessageProperty,
             DescriptionProperty,
-            IsMessageMarqueEnabledProperty,
+            IsMessageMarqueeEnabledProperty,
             PaddingProperty,
             ExtraActionProperty,
-            IsMessageMarqueEnabledProperty);
+            IsMessageMarqueeEnabledProperty);
         AffectsRender<Alert>(TypeProperty);
     }
 
     public Alert()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(AlertToken.ScopeProvider);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

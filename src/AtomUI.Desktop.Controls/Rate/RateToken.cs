@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.Palette;
 using AtomUI.Theme.TokenSystem;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class RateToken : AbstractControlDesignToken
 {
     public const string ID = "Rate";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 星星颜色
@@ -60,4 +63,6 @@ internal class RateToken : AbstractControlDesignToken
         StarHoverScale = 1.2;
         StarBg         = SharedToken.ColorFillContent;
     }
+    
+    protected override Type GetTokenKindType() => typeof(RateTokenKind);
 }

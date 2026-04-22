@@ -57,59 +57,67 @@
 
         <Setter Property="Focusable" Value="False" />
         <Style Selector="^ /template/ Rectangle#PART_BottomGridLine">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBorderColor}}" />
+            <Setter Property="Fill" Value="{atom:DataGridTokenResource TableBorderColor}" />
         </Style>
         
         <Style Selector="^[IsDragging=True]">
             <Setter Property="ZIndex" Value="1000" />
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableRowHoverBg}}" />
+                    Value="{atom:DataGridTokenResource TableRowHoverBg}" />
         </Style>
         
         <Style Selector="^[IsDragging=False]">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBg}}" />
-            
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableBg}" />
+
+            <Style Selector="^[IsMotionEnabled=True]">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    </Transitions>
+                </Setter>
+            </Style>
+
             <Style Selector="^[IsSelected=True]">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableSelectedRowBg}}" />
+                        Value="{atom:DataGridTokenResource TableSelectedRowBg}" />
                 <Style Selector="^:row-hover">
                     <Setter Property="Background"
-                            Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableSelectedRowHoverBg}}" />
+                            Value="{atom:DataGridTokenResource TableSelectedRowHoverBg}" />
                 </Style>
             </Style>
             <Style Selector="^[IsSelected=False]">
-                <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableBg}}" />
+                <Setter Property="Background" Value="{atom:DataGridTokenResource TableBg}" />
                 <Style Selector="^:row-hover">
                     <Setter Property="Background"
-                            Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableRowHoverBg}}" />
+                            Value="{atom:DataGridTokenResource TableRowHoverBg}" />
                 </Style>
             </Style>
         </Style>
         
         <Style Selector="^ /template/ Border#DetailsPresenterFrame">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableExpandedRowBg}}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableExpandedRowBg}" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Border#DetailsPresenterFrame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}" />
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}" />
+                        Value="{atom:DataGridTokenResource TableFontSize}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#DetailsPresenterFrame">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingMiddle}" />
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeMiddle}" />
             </Style>
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#DetailsPresenterFrame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingSmall}" />
                 <Setter Property="TextElement.FontSize"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}" />
+                        Value="{atom:DataGridTokenResource TableFontSizeSmall}" />
             </Style>
         </Style>
     </ControlTheme>

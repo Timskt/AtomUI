@@ -25,19 +25,19 @@
                                 ButtonType="Link"
                                 HorizontalAlignment="Left"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static datePickerLang:DatePickerLangResourceKey.Now}}" />
+                                Content="{atom:DatePickerLangResource Now}" />
                             <atom:Button
                                 Name="{x:Static atom:DatePickerPresenterThemeConstants.TodayButtonPart}"
                                 ButtonType="Link"
                                 HorizontalAlignment="Left"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static datePickerLang:DatePickerLangResourceKey.Today}}" />
+                                Content="{atom:DatePickerLangResource Today}" />
                             <atom:Button
                                 Name="{x:Static atom:DatePickerPresenterThemeConstants.ConfirmButtonPart}"
                                 ButtonType="Primary"
                                 HorizontalAlignment="Right"
                                 SizeType="Small"
-                                Content="{DynamicResource {x:Static atom:CommonLangResourceKey.Ok}}" />
+                                Content="{atom:CommonLangResource Ok}" />
                         </Panel>
                     </Border>
                     <StackPanel Orientation="Horizontal">

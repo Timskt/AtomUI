@@ -5,7 +5,6 @@ using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Icons.AntDesign;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
@@ -24,9 +23,7 @@ public enum FormItemLayout
     Vertical
 }
 
-public class FormItem : TemplatedControl,
-                        IControlSharedTokenResourcesHost,
-                        IFormItem
+public class FormItem : TemplatedControl, IFormItem
 {
     #region 公共属性定义
     
@@ -595,8 +592,6 @@ public class FormItem : TemplatedControl,
         set => SetAndRaise(IsHideItemLabelProperty, ref _isHideItemLabel, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => FormToken.ID;
     #endregion
 
     #region 内部事件定义
@@ -632,6 +627,7 @@ public class FormItem : TemplatedControl,
     private IDisposable? _feedbackDisposable;
     private CancellationTokenSource? _validationTokenSource;
     internal Form? OwnerForm;
+    private Window? _attachedWindow;
     
     static FormItem()
     {
@@ -641,7 +637,7 @@ public class FormItem : TemplatedControl,
     
     public FormItem()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(FormToken.ScopeProvider);
         LayoutUpdated += HandleLayoutUpdated;
     }
 
@@ -726,6 +722,7 @@ public class FormItem : TemplatedControl,
     private void ValidateValueDefer()
     {
         _validationTokenSource?.Cancel();
+        _validationTokenSource?.Dispose();
         _validationTokenSource = new CancellationTokenSource();
         var cancellationToken = _validationTokenSource.Token;
         if (ValidateDebounce != TimeSpan.Zero)
@@ -1115,6 +1112,7 @@ public class FormItem : TemplatedControl,
         base.OnAttachedToVisualTree(e);
         if (TopLevel.GetTopLevel(this) is Window window)
         {
+            _attachedWindow               =  window;
             window.MediaBreakPointChanged += HandleMediaBreakChanged;
         }
     }
@@ -1122,10 +1120,12 @@ public class FormItem : TemplatedControl,
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        if (TopLevel.GetTopLevel(this) is Window window)
+        if (_attachedWindow != null)
         {
-            window.MediaBreakPointChanged -= HandleMediaBreakChanged;
+            _attachedWindow.MediaBreakPointChanged -= HandleMediaBreakChanged;
         }
+
+        _attachedWindow = null;
     }
     
     private void HandleMediaBreakChanged(object? sender, MediaBreakPointChangedEventArgs args)

@@ -2,7 +2,7 @@ namespace AtomUI.Controls;
 
 public enum InputControlStyleVariant
 {
-    Outline,
+    Outlined,
     Filled,
     Borderless,
     Underlined

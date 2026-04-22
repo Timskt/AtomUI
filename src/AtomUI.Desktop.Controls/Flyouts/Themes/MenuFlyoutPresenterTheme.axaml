@@ -6,7 +6,7 @@
               x:ClassModifier="internal">
     <Setter Property="Template">
         <ControlTemplate TargetType="atom:MenuFlyoutPresenter">
-            <atom:ArrowDecoratedBox Name="{x:Static atom:ArrowDecoratedBox.ArrowDecoratorPart}"
+            <atom:ArrowDecoratedBox Name="{x:Static atom:AbstractArrowDecoratedBox.ArrowDecoratorPart}"
                                     IsShowArrow="{TemplateBinding IsShowArrow}"
                                     ArrowPosition="{TemplateBinding ArrowPosition}"
                                     Padding="{TemplateBinding Padding}"
@@ -27,16 +27,16 @@
     <Style Selector="^:is(atom|MenuFlyoutPresenter)">
         <Setter Property="atom:ScrollViewer.IsLiteMode" Value="True" />
         <Setter Property="atom:ScrollViewer.AllowAutoHide" Value="True" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:PopupHostTokenKey.BorderRadius}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
-        <Setter Property="Padding" Value="{DynamicResource {x:Static atom:MenuTokenKey.MenuPopupContentPadding}}" />
-        <Setter Property="ItemHeight" Value="{DynamicResource {x:Static atom:MenuTokenKey.ItemHeight}}" /> 
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
+        <Setter Property="CornerRadius" Value="{atom:PopupHostTokenResource BorderRadius}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
+        <Setter Property="Padding" Value="{atom:MenuTokenResource MenuPopupContentPadding}" />
+        <Setter Property="ItemHeight" Value="{atom:MenuTokenResource ItemHeight}" /> 
 
         <Style Selector="^ /template/ atom|ArrowDecoratedBox#PART_ArrowDecorator">
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
-            <Setter Property="MinWidth" Value="{DynamicResource {x:Static atom:MenuTokenKey.MenuPopupMinWidth}}" />
-            <Setter Property="MaxWidth" Value="{DynamicResource {x:Static atom:MenuTokenKey.MenuPopupMaxWidth}}" />
+            <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
+            <Setter Property="MinWidth" Value="{atom:MenuTokenResource MenuPopupMinWidth}" />
+            <Setter Property="MaxWidth" Value="{atom:MenuTokenResource MenuPopupMaxWidth}" />
         </Style>
     </Style>
 

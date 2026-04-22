@@ -20,7 +20,7 @@
                                           ClipToBounds="True" />
                         <Border CornerRadius="{TemplateBinding CornerRadius}"
                                 ClipToBounds="True">
-                            <atom:VisualLayerManager Padding="{TemplateBinding OffScreenMargin, Mode=OneWay}">
+                            <atom:DialogLayerManager Padding="{TemplateBinding OffScreenMargin, Mode=OneWay}">
                                 <Panel>
                                     <atom:GlobalDialogManager />
                                     <DockPanel Name="{x:Static atom:WindowThemeConstants.ContentLayoutPart}"
@@ -46,7 +46,6 @@
                                                               ContentTemplate="{TemplateBinding ContentFrameLayerTemplate}" />
                                             <Border Name="ContentFrame"
                                                     ClipToBounds="True"
-                                                    Cursor="Arrow"
                                                     Container.Name="{x:Static atom:IMediaBreakAwareControl.GlobalQueryContainerName}"
                                                     Container.Sizing="WidthAndHeight"
                                                     Padding="{TemplateBinding Padding}">
@@ -55,6 +54,7 @@
                                                         Name="{x:Static atom:WindowThemeConstants.ContentPresenterPart}"
                                                         ContentTemplate="{TemplateBinding ContentTemplate}"
                                                         Content="{TemplateBinding Content}"
+                                                        Cursor="Arrow"
                                                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                                                     <atom:WindowMediaQueryIndicator
@@ -64,7 +64,7 @@
                                         </Panel>
                                     </DockPanel>
                                 </Panel>
-                            </atom:VisualLayerManager>
+                            </atom:DialogLayerManager>
                         </Border>
                     </Panel>
                 </Border>
@@ -78,14 +78,14 @@
         <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="TransparencyLevelHint" Value="Transparent" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultBackground}}" />
+        <Setter Property="Background" Value="{atom:WindowTokenResource DefaultBackground}" />
         <Setter Property="TransparencyBackgroundFallback"
-                Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultBackground}}" />
+                Value="{atom:WindowTokenResource DefaultBackground}" />
         <Setter Property="TopLevel.SystemBarColor"
-                Value="{DynamicResource {x:Static atom:WindowTokenKey.SystemBarColor}}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:WindowTokenKey.DefaultForeground}}" />
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontSize}}" />
-        <Setter Property="FontFamily" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontFamily}}" />
+                Value="{atom:WindowTokenResource SystemBarColor}" />
+        <Setter Property="Foreground" Value="{atom:WindowTokenResource DefaultForeground}" />
+        <Setter Property="FontSize" Value="{atom:SharedTokenResource FontSize}" />
+        <Setter Property="FontFamily" Value="{atom:SharedTokenResource FontFamily}" />
         <Setter Property="ExtendClientAreaTitleBarHeightHint" Value="-1" />
 
         <Style Selector="^[OsType=Windows]">
@@ -93,7 +93,7 @@
         </Style>
 
         <Setter Property="ExtendClientAreaToDecorationsHint" Value="True" />
-        <Setter Property="CornerRadius" Value="{DynamicResource {x:Static atom:WindowTokenKey.CornerRadius}}" />
+        <Setter Property="CornerRadius" Value="{atom:WindowTokenResource CornerRadius}" />
 
         <Setter Property="ExtendClientAreaChromeHints" Value="SystemChrome" />
 
@@ -102,7 +102,7 @@
         </Style>
 
         <Style Selector="^[OsType=macOS]">
-            <Setter Property="MacOSCaptionGroupOffset" Value="10, 2" />
+            <Setter Property="MacOSCaptionGroupOffset" Value="15, 0" />
             <Setter Property="MacOSCaptionGroupSpacing" Value="5" />
         </Style>
 
@@ -117,7 +117,7 @@
                     </On>
                 </OnPlatform>
             </Setter>
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBorder}}" />
+            <Setter Property="BorderBrush" Value="{atom:SharedTokenResource ColorBorder}" />
         </Style>
 
         <Style Selector="^[WindowState=FullScreen], ^[WindowState=Maximized]">

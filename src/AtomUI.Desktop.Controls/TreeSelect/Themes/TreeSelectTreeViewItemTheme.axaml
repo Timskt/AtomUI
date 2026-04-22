@@ -3,14 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
     x:ClassModifier="internal">
-    <ControlTheme x:Key="{x:Type atom:TreeSelectTreeItem}" TargetType="atom:TreeSelectTreeItem">
+    <ControlTheme x:Key="{x:Type atom:TreeViewSelectTreeViewItem}" TargetType="atom:TreeViewSelectTreeViewItem">
         <ControlTheme.BasedOn>
-            <atom:TreeViewItemTheme TargetType="atom:TreeSelectTreeItem" />
+            <atom:TreeViewItemTheme TargetType="atom:TreeViewSelectTreeViewItem" />
         </ControlTheme.BasedOn>
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Orientation="Vertical">
-                    <atom:TreeViewItemHeader Name="{x:Static atom:TreeViewItemThemeConstants.HeaderPart}"
+                    <atom:TreeViewItemHeader Name="Header"
                                              Icon="{TemplateBinding Icon}"
                                              IsShowIcon="{TemplateBinding IsShowIcon}"
                                              IsShowLeafIcon="{TemplateBinding IsShowLeafIcon}"
@@ -55,12 +55,12 @@
             </ControlTemplate>
         </Setter>
         
-        <Style Selector="^ /template/ atom|TreeViewItemHeader#PART_Header">
+        <Style Selector="^ /template/ atom|TreeViewItemHeader#Header">
             <Setter Property="IsEnabled" Value="{TemplateBinding IsEnabled}"/>
         </Style>
         
         <Style Selector="^[IsMaxSelectReached=True][IsChecked=False][IsSelected=False]">
-            <Style Selector="^ /template/ atom|TreeViewItemHeader#PART_Header">
+            <Style Selector="^ /template/ atom|TreeViewItemHeader#Header">
                 <Setter Property="IsEnabled" Value="False"/>
             </Style>
         </Style>

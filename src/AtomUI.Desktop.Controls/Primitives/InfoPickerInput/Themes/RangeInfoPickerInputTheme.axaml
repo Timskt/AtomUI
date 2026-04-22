@@ -32,17 +32,10 @@
                     IsUsedInCompactSpace="{TemplateBinding IsUsedInCompactSpace}">
                     <atom:AddOnDecoratedBox.ContentRightAddOn>
                         <StackPanel Orientation="Horizontal"
-                                    Spacing="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}">
+                                    Spacing="{atom:SharedTokenResource SpacingXS}">
                             <atom:PickerClearUpButton
-                                IsInClearMode="{Binding IsClearButtonVisible, RelativeSource={RelativeSource AncestorType=atom:InfoPickerInput}}"
-                                Name="{x:Static atom:InfoPickerInputThemeConstants.ClearUpButtonPart}"
-                                Icon="{Binding InfoIcon, RelativeSource={RelativeSource AncestorType=atom:RangeInfoPickerInput}}"
-                                FormFeedback="{Binding FormFeedback, RelativeSource={RelativeSource AncestorType=atom:RangeInfoPickerInput}}"
-                                IsVisible="{Binding InfoIcon, RelativeSource={RelativeSource AncestorType=atom:RangeInfoPickerInput}, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                            <ContentPresenter
-                                Content="{Binding ContentRightAddOn, RelativeSource={RelativeSource AncestorType=atom:RangeInfoPickerInput}}"
-                                ContentTemplate="{Binding ContentRightAddOnTemplate, RelativeSource={RelativeSource AncestorType=atom:RangeInfoPickerInput}}"
-                                IsVisible="{Binding ContentRightAddOn, RelativeSource={RelativeSource AncestorType=atom:RangeInfoPickerInput}, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                Name="{x:Static atom:InfoPickerInputThemeConstants.ClearUpButtonPart}" />
+                            <ContentPresenter Name="PART_ContentRightAddOnPresenter" />
                         </StackPanel>
                     </atom:AddOnDecoratedBox.ContentRightAddOn>
                     <Grid ColumnDefinitions="*, Auto, *">
@@ -102,58 +95,67 @@
         <Setter Property="KeyboardNavigation.TabNavigation" Value="Once" />
         <Style Selector="^ /template/ atom|TextBox">
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+                    Value="{atom:SharedTokenResource ColorText}" />
         </Style>
 
         <Style Selector="^:flyout-open">
             <Style Selector="^ /template/ atom|TextBox">
                 <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorText}}" />
+                        Value="{atom:SharedTokenResource ColorText}" />
             </Style>
             <Style Selector="^[RangeActivatedPart=Start]">
                 <Style Selector="^ /template/ atom|TextBox#PART_InfoInputBox">
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}" />
+                            Value="{atom:SharedTokenResource ColorTextTertiary}" />
                 </Style>
             </Style>
             <Style Selector="^[RangeActivatedPart=End]">
                 <Style Selector="^ /template/ atom|TextBox#PART_SecondaryInfoInputBox">
                     <Setter Property="Foreground"
-                            Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}" />
+                            Value="{atom:SharedTokenResource ColorTextTertiary}" />
                 </Style>
             </Style>
         </Style>
 
         <Style Selector="^ /template/ atom|Icon#PART_RangePickerArrow">
             <Setter Property="Margin"
-                    Value="{DynamicResource {x:Static atom:InfoPickerInputTokenKey.RangePickerArrowMargin}}" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
-            <Setter Property="Width" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                    Value="{atom:InfoPickerInputTokenResource RangePickerArrowMargin}" />
+            <Setter Property="Height" Value="{atom:SharedTokenResource IconSize}" />
+            <Setter Property="Width" Value="{atom:SharedTokenResource IconSize}" />
             <Setter Property="Foreground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextQuaternary}}" />
+                    Value="{atom:SharedTokenResource ColorTextQuaternary}" />
         </Style>
 
         <Style Selector="^ /template/ Rectangle#PART_RangePickerIndicator">
             <Setter Property="Height"
-                    Value="{DynamicResource {x:Static atom:InfoPickerInputTokenKey.RangePickerIndicatorThickness}}" />
+                    Value="{atom:InfoPickerInputTokenResource RangePickerIndicatorThickness}" />
         </Style>
 
         <Style Selector="^[Status=Default]">
             <Style Selector="^ /template/ Rectangle#PART_RangePickerIndicator">
-                <Setter Property="Fill" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimary}}" />
+                <Setter Property="Fill" Value="{atom:SharedTokenResource ColorPrimary}" />
             </Style>
         </Style>
 
         <Style Selector="^[Status=Error]">
             <Style Selector="^ /template/ Rectangle#PART_RangePickerIndicator">
-                <Setter Property="Fill" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+                <Setter Property="Fill" Value="{atom:SharedTokenResource ColorError}" />
             </Style>
         </Style>
 
         <Style Selector="^[Status=Warning]">
             <Style Selector="^ /template/ Rectangle#PART_RangePickerIndicator">
-                <Setter Property="Fill" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorWarning}}" />
+                <Setter Property="Fill" Value="{atom:SharedTokenResource ColorWarning}" />
             </Style>
+        </Style>
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="PickerIndicatorOffsetX" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="RangePickerIndicatorOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
         </Style>
 
     </Style>

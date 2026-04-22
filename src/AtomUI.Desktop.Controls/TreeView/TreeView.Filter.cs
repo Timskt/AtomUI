@@ -6,8 +6,8 @@ namespace AtomUI.Desktop.Controls;
 
 public partial class TreeView
 {
-    internal static readonly DirectProperty<TreeItem, bool> IsFilterModeProperty =
-        AvaloniaProperty.RegisterDirect<TreeItem, bool>(nameof(IsFilterMode),
+    internal static readonly DirectProperty<TreeViewItem, bool> IsFilterModeProperty =
+        AvaloniaProperty.RegisterDirect<TreeViewItem, bool>(nameof(IsFilterMode),
             o => o.IsFilterMode,
             (o, v) => o.IsFilterMode = v);
     
@@ -19,7 +19,9 @@ public partial class TreeView
         set => SetAndRaise(IsFilterModeProperty, ref _isFilterMode, value);
     }
 
-    internal ISet<TreeItem> SelectedItemsClosure = new HashSet<TreeItem>();
+    internal ISet<TreeViewItem> SelectedItemsClosure = new HashSet<TreeViewItem>();
+
+    private HashSet<TreeViewItem>? _descendantsMatchCache;
 
     private static void ConfigureFilter()
     {
@@ -31,10 +33,10 @@ public partial class TreeView
         if (IsFilterMode)
         {
             SelectedItemsClosure.Clear();
-            var startupItems = new List<TreeItem>();
+            var startupItems = new List<TreeViewItem>();
             if (SelectionMode.HasFlag(SelectionMode.Single))
             {
-                if (SelectedItem != null && TreeContainerFromItem(SelectedItem) is TreeItem item)
+                if (SelectedItem != null && TreeContainerFromItem(SelectedItem) is TreeViewItem item)
                 {
                     startupItems.Add(item);
                 }
@@ -43,7 +45,7 @@ public partial class TreeView
             {
                 foreach (var entry in SelectedItems)
                 {
-                    if (entry != null && TreeContainerFromItem(entry) is TreeItem item)
+                    if (entry != null && TreeContainerFromItem(entry) is TreeViewItem item)
                     {
                         startupItems.Add(item);
                     }
@@ -58,11 +60,11 @@ public partial class TreeView
         }
     }
 
-    private ISet<TreeItem> CalculateSelectItemClosure(TreeItem treeItem)
+    private ISet<TreeViewItem> CalculateSelectItemClosure(TreeViewItem treeViewItem)
     {
-        var closure = new HashSet<TreeItem>(); 
-        StyledElement? current = treeItem;
-        while (current != null && current is TreeItem currentTreeViewItem)
+        var closure = new HashSet<TreeViewItem>(); 
+        StyledElement? current = treeViewItem;
+        while (current != null && current is TreeViewItem currentTreeViewItem)
         {
             closure.Add(currentTreeViewItem);
             current = current.Parent;
@@ -87,44 +89,39 @@ public partial class TreeView
             var originIsFilterMode = IsFilterMode;
             IsFilterMode      = true;
             FilterResultCount = 0;
-            HashSet<TreeItem>? originExpandedItems = null;
+            HashSet<TreeViewItem>? originExpandedItems = null;
             if (!FilterHighlightStrategy.HasFlag(TreeFilterHighlightStrategy.ExpandPath))
             {
-                originExpandedItems = new HashSet<TreeItem>();
+                originExpandedItems = new HashSet<TreeViewItem>();
                 for (int i = 0; i < ItemCount; i++)
                 {
-                    if (ContainerFromIndex(i) is TreeItem item)
+                    if (ContainerFromIndex(i) is TreeViewItem item)
                     {
-                        originExpandedItems.UnionWith(CollectExpandedItems(item));
+                        CollectExpandedItems(item, originExpandedItems);
                     }
                 }
             }
- 
-            ExpandAll(false); // TODO 这样合适吗？
+
+            ExpandAll(false);
             using var state = BeginTurnOffMotion();
             if (!FilterHighlightStrategy.HasFlag(TreeFilterHighlightStrategy.ExpandPath) && originExpandedItems != null)
             {
                 RestoreItemExpandedStates(originExpandedItems);
             }
 
-            if (!originIsFilterMode)
-            {
-                for (int i = 0; i < ItemCount; i++)
-                {
-                    if (ContainerFromIndex(i) is TreeItem item)
-                    {
-                        BackupStateForFilterMode(item);
-                    }
-                }
-            }
-         
+            var needBackup = !originIsFilterMode;
+            _descendantsMatchCache = new HashSet<TreeViewItem>();
+
             for (var i = 0; i < ItemCount; i++)
             {
-                if (ContainerFromIndex(i) is TreeItem treeViewItem)
+                if (ContainerFromIndex(i) is TreeViewItem treeViewItem)
                 {
-                    FilterItem(treeViewItem);
+                    FilterItem(treeViewItem, needBackup);
                 }
             }
+
+            _descendantsMatchCache = null;
+            ConfigureEmptyIndicator();
         }
         else
         {
@@ -132,107 +129,92 @@ public partial class TreeView
         }
     }
 
-    private void FilterItem(TreeItem treeItem)
+    private void FilterItem(TreeViewItem treeViewItem, bool needBackup)
     {
         if (Filter == null)
         {
             return;
         }
-        for (var i = 0; i < treeItem.ItemCount; i++)
+
+        var anyDescendantMatched = false;
+        for (var i = 0; i < treeViewItem.ItemCount; i++)
         {
-            if (treeItem.ContainerFromIndex(i) is TreeItem treeViewItem)
+            if (treeViewItem.ContainerFromIndex(i) is TreeViewItem childTreeViewItem)
             {
-                FilterItem(treeViewItem);
+                FilterItem(childTreeViewItem, needBackup);
+                if (_descendantsMatchCache!.Contains(childTreeViewItem))
+                {
+                    anyDescendantMatched = true;
+                }
             }
         }
-        treeItem.IsFilterMode = true;
-        var filterResult = Filter.Filter(this, treeItem, FilterValue);
-        treeItem.IsFilterMatch = filterResult;
+
+        if (needBackup)
+        {
+            treeViewItem.CreateFilterContextBackup();
+        }
+
+        treeViewItem.IsFilterMode = true;
+        var filterResult = Filter.Filter(this, treeViewItem, FilterValue);
+        treeViewItem.IsFilterMatch = filterResult;
         if (filterResult)
         {
             ++FilterResultCount;
             if (FilterHighlightStrategy.HasFlag(TreeFilterHighlightStrategy.HighlightedMatch) ||
                 FilterHighlightStrategy.HasFlag(TreeFilterHighlightStrategy.HighlightedWhole))
             {
-                treeItem.FilterHighlightWords = FilterValue?.ToString();
+                treeViewItem.FilterHighlightWords = FilterValue?.ToString();
             }
         }
-        ConfigureEmptyIndicator();
-        
+
+        if (filterResult || anyDescendantMatched)
+        {
+            _descendantsMatchCache!.Add(treeViewItem);
+        }
+
         if (FilterHighlightStrategy.HasFlag(TreeFilterHighlightStrategy.HideUnMatched))
         {
-            if (treeItem.IsFilterMatch)
+            if (treeViewItem.IsFilterMatch)
             {
-                var current = treeItem.Parent;
+                var current = treeViewItem.Parent;
                 while (current != null)
                 {
-                    if (current is TreeItem item)
+                    if (current is TreeViewItem item)
                     {
-                        item.SetCurrentValue(TreeItem.IsVisibleProperty, true);
+                        item.SetCurrentValue(TreeViewItem.IsVisibleProperty, true);
                     }
                     current = current.Parent;
                 }
-                treeItem.SetCurrentValue(TreeItem.IsVisibleProperty, true);
+                treeViewItem.SetCurrentValue(TreeViewItem.IsVisibleProperty, true);
             }
-            else if (!HasChildOrDescendantsMatchFilter(treeItem))
+            else if (!anyDescendantMatched)
             {
-                treeItem.SetCurrentValue(TreeItem.IsVisibleProperty, false);
+                treeViewItem.SetCurrentValue(TreeViewItem.IsVisibleProperty, false);
             }
         }
 
         if (FilterHighlightStrategy.HasFlag(TreeFilterHighlightStrategy.ExpandPath))
         {
-            SetupExpandForFilter(treeItem);
+            SetupExpandForFilter(treeViewItem, anyDescendantMatched);
         }
     }
 
-    private void SetupExpandForFilter(TreeItem treeItem)
+    private void SetupExpandForFilter(TreeViewItem treeViewItem, bool hasDescendantMatch)
     {
-        var hasChildOrDescendantsMatchFilter = HasChildOrDescendantsMatchFilter(treeItem);
-        if (hasChildOrDescendantsMatchFilter || treeItem.IsFilterMatch)
+        if (hasDescendantMatch || treeViewItem.IsFilterMatch)
         {
-            var current = treeItem.Parent;
-            while (current != null && current is TreeItem)
+            var current = treeViewItem.Parent;
+            while (current is TreeViewItem item)
             {
-                if (current is TreeItem item)
-                {
-                    item.SetCurrentValue(TreeItem.IsExpandedProperty, true);
-                }
-                current =  current.Parent;
+                item.SetCurrentValue(TreeViewItem.IsExpandedProperty, true);
+                current = item.Parent;
             }
         }
 
-        if (!hasChildOrDescendantsMatchFilter)
+        if (!hasDescendantMatch && !treeViewItem.IsFilterMatch)
         {
-            treeItem.SetCurrentValue(TreeItem.IsExpandedProperty, false);
+            treeViewItem.SetCurrentValue(TreeViewItem.IsExpandedProperty, false);
         }
-    }
-
-    private bool HasChildOrDescendantsMatchFilter(TreeItem treeItem)
-    {
-        for (int i = 0; i < treeItem.ItemCount; i++)
-        {
-            if (treeItem.ContainerFromIndex(i) is TreeItem childItem)
-            {
-                if (HasChildOrDescendantsMatchFilter(childItem))
-                {
-                    return true;
-                }
-            }
-        }
-        return treeItem.IsFilterMatch;
-    }
-    
-    private void BackupStateForFilterMode(TreeItem treeItem)
-    {
-        for (int i = 0; i < treeItem.ItemCount; i++)
-        {
-            if (treeItem.ContainerFromIndex(i) is TreeItem childItem)
-            {
-                BackupStateForFilterMode(childItem);
-            }
-        }
-        treeItem.CreateFilterContextBackup();
     }
 
     private void ClearFilter()
@@ -244,7 +226,7 @@ public partial class TreeView
 
         for (var i = 0; i < ItemCount; i++)
         {
-            if (ContainerFromIndex(i) is TreeItem treeViewItem)
+            if (ContainerFromIndex(i) is TreeViewItem treeViewItem)
             {
                 ClearItemFilterMode(treeViewItem);
             }
@@ -255,37 +237,35 @@ public partial class TreeView
         SelectedItemsClosure.Clear();
     }
     
-    private void ClearItemFilterMode(TreeItem treeItem)
+    private void ClearItemFilterMode(TreeViewItem treeViewItem)
     {
-        for (var i = 0; i < treeItem.ItemCount; i++)
+        for (var i = 0; i < treeViewItem.ItemCount; i++)
         {
-            if (treeItem.ContainerFromIndex(i) is TreeItem childTreeItem)
+            if (treeViewItem.ContainerFromIndex(i) is TreeViewItem childTreeItem)
             {
                 ClearItemFilterMode(childTreeItem);
             }
         }
-        treeItem.ClearFilterMode();
+        treeViewItem.ClearFilterMode();
     }
 
-    private ISet<TreeItem> CollectExpandedItems(TreeItem treeItem)
+    private void CollectExpandedItems(TreeViewItem treeViewItem, HashSet<TreeViewItem> expandedItems)
     {
-        var expandedItems = new HashSet<TreeItem>();
-        for (var i = 0; i < treeItem.ItemCount; i++)
+        for (var i = 0; i < treeViewItem.ItemCount; i++)
         {
-            if (treeItem.ContainerFromIndex(i) is TreeItem childTreeItem)
+            if (treeViewItem.ContainerFromIndex(i) is TreeViewItem childTreeItem)
             {
-                expandedItems.UnionWith(CollectExpandedItems(childTreeItem));
+                CollectExpandedItems(childTreeItem, expandedItems);
             }
         }
 
-        if (treeItem.IsExpanded)
+        if (treeViewItem.IsExpanded)
         {
-            expandedItems.Add(treeItem);
+            expandedItems.Add(treeViewItem);
         }
-        return expandedItems;
     }
 
-    private void RestoreItemExpandedStates(ISet<TreeItem> originExpandedItems)
+    private void RestoreItemExpandedStates(ISet<TreeViewItem> originExpandedItems)
     {
         
         var originMotionEnabled = IsMotionEnabled;
@@ -296,7 +276,7 @@ public partial class TreeView
 
             for (int i = 0; i < ItemCount; i++)
             {
-                if (ContainerFromIndex(i) is TreeItem item)
+                if (ContainerFromIndex(i) is TreeViewItem item)
                 {
                     RestoreItemExpandedState(item, originExpandedItems);
                 }
@@ -307,27 +287,25 @@ public partial class TreeView
             IsExpandAllProcess = false;
             SetCurrentValue(IsMotionEnabledProperty, originMotionEnabled);
         }
-        
-        
     }
 
-    private void RestoreItemExpandedState(TreeItem treeItem, in ISet<TreeItem> expandedItems)
+    private void RestoreItemExpandedState(TreeViewItem treeViewItem, in ISet<TreeViewItem> expandedItems)
     {
-        for (var i = 0; i < treeItem.ItemCount; i++)
+        for (var i = 0; i < treeViewItem.ItemCount; i++)
         {
-            if (treeItem.ContainerFromIndex(i) is TreeItem childTreeItem)
+            if (treeViewItem.ContainerFromIndex(i) is TreeViewItem childTreeItem)
             {
                 RestoreItemExpandedState(childTreeItem, expandedItems);
             }
         }
 
-        if (expandedItems.Contains(treeItem))
+        if (expandedItems.Contains(treeViewItem))
         {
-            treeItem.SetCurrentValue(TreeItem.IsExpandedProperty, true);
+            treeViewItem.SetCurrentValue(TreeViewItem.IsExpandedProperty, true);
         }
         else
         {
-            treeItem.SetCurrentValue(TreeItem.IsExpandedProperty, false);
+            treeViewItem.SetCurrentValue(TreeViewItem.IsExpandedProperty, false);
         }
     }
 

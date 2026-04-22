@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -6,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class FlyoutHostToken : AbstractControlDesignToken
 {
     public const string ID = "FlyoutHost";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 默认 Popup 和 PlacementTarget 的间距
@@ -22,4 +25,6 @@ internal class FlyoutHostToken : AbstractControlDesignToken
         base.CalculateTokenValues(isDarkMode);
         MarginToAnchor = SharedToken.UniformlyMarginXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(FlyoutHostTokenKind);
 }

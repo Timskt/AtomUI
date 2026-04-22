@@ -12,13 +12,13 @@ public interface IThemeManager
     static ThemeVariant DefaultThemeVariant = new ThemeVariant(IThemeManager.DEFAULT_THEME_ID, null);
     
     static readonly StyledProperty<ThemeVariant> ThemeVariantProperty =
-        AvaloniaProperty.Register<StyledElement, ThemeVariant>("ThemeVariant", DefaultThemeVariant);
+        AvaloniaProperty.Register<StyledElement, ThemeVariant>(nameof(ThemeVariant), DefaultThemeVariant);
     
     static readonly StyledProperty<bool> IsDarkThemeModeProperty =
-        AvaloniaProperty.Register<StyledElement, bool>("IsDarkThemeMode");
+        AvaloniaProperty.Register<StyledElement, bool>(nameof(IsDarkThemeMode));
     
     static readonly StyledProperty<bool> IsCompactThemeModeProperty =
-        AvaloniaProperty.Register<StyledElement, bool>("IsCompactThemeMode");
+        AvaloniaProperty.Register<StyledElement, bool>(nameof(IsCompactThemeMode));
     
     IReadOnlyCollection<ITheme> AvailableThemes { get; }
     ITheme? ActivatedTheme { get; }

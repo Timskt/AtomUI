@@ -1,4 +1,6 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,6 +11,7 @@ namespace AtomUI.Desktop.Controls;
 internal class ScrollViewerToken : AbstractControlDesignToken
 {
     public const string ID = "ScrollViewer";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 极简模式下，滚动条滑块的粗细
@@ -79,4 +82,6 @@ internal class ScrollViewerToken : AbstractControlDesignToken
         ScrollBarContentHPadding = new Thickness(SharedToken.UniformlyPaddingXXS, 0d);
         ScrollBarContentVPadding = new Thickness(0d, SharedToken.UniformlyPaddingXXS);
     }
+    
+    protected override Type GetTokenKindType() => typeof(ScrollViewerTokenKind);
 }

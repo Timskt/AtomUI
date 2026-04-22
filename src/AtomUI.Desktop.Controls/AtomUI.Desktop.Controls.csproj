@@ -13,8 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Svg.Controls.Avalonia" />
-        <PackageReference Include="SkiaSharp.QrCode" />
         <PackageReference Include="ReactiveUI.Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
     </ItemGroup>
@@ -25,16 +23,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../AtomUI.Controls.Shared/AtomUI.Controls.Shared.csproj" />
+        <ProjectReference Include="../AtomUI.Controls/AtomUI.Controls.csproj" />
         <ProjectReference Include="../AtomUI.Generator/AtomUI.Generator.csproj" 
                           OutputItemType="Analyzer" 
                           ReferenceOutputAssembly="false"
                           PrivateAssets="all" />
     </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Dialog\Themes\DialogHostXTheme.axaml" />
-      <AdditionalFiles Include="Form\Themes\SubmitButtonTheme.axaml" />
-      <AdditionalFiles Include="NavMenu\Themes\NavMenuThemes.axaml" />
-    </ItemGroup>
+    
 </Project>

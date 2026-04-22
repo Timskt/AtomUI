@@ -52,6 +52,7 @@ jobs:
                dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Core/AtomUI.Core.csproj
                dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Fonts.AlibabaSans/AtomUI.Fonts.AlibabaSans.csproj
                dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Controls.Shared/AtomUI.Controls.Shared.csproj
+               dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Controls/AtomUI.Controls.csproj
                dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Desktop.Controls/AtomUI.Desktop.Controls.csproj
                dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Generator/AtomUI.Generator.csproj
                dotnet build --configuration ${{ inputs.BuildConfiguration }} ./src/AtomUI.Icons.Shared/AtomUI.Icons.Shared.csproj
@@ -63,6 +64,7 @@ jobs:
                   "./src/AtomUI.Native/AtomUI.Native.csproj",
                   "./src/AtomUI.Core/AtomUI.Core.csproj",
                   "./src/AtomUI.Fonts.AlibabaSans/AtomUI.Fonts.AlibabaSans.csproj",
+                  "./src/AtomUI.Controls/AtomUI.Controls.csproj",
                   "./src/AtomUI.Controls.Shared/AtomUI.Controls.Shared.csproj",
                   "./src/AtomUI.Desktop.Controls/AtomUI.Desktop.Controls.csproj",
                   "./src/AtomUI.Generator/AtomUI.Generator.csproj",

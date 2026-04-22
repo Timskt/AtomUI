@@ -1,4 +1,7 @@
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using AtomUI;
+using AtomUI.Controls;
 using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
@@ -19,6 +22,43 @@ public partial class SelectShowCase : ReactiveUserControl<SelectViewModel>
                 InitializeRandomOptions(viewModel);
                 InitializeMaxTagCountOptions(viewModel);
                 viewModel.SelectOptionsAsyncLoader = new SelectOptionsAsyncLoader();
+
+                this.OneWayBind(viewModel, vm => vm.SelectOptionsAsyncLoader, v => v.AsyncLoadSelect.OptionsLoader)
+                    .DisposeWith(disposables);
+                
+                this.OneWayBind(viewModel, vm => vm.BasicSelectedOptions, v => v.DefaultSelectedSelect.OptionsSource)
+                    .DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.DefaultSelectedOptions, v => v.DefaultSelectedSelect.SelectedOptions)
+                    .DisposeWith(disposables);
+                
+                this.OneWayBind(viewModel, vm => vm.RandomOptions, v => v.MultiSelect1.OptionsSource)
+                    .DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.RandomOptions, v => v.MultiSelect2.OptionsSource)
+                    .DisposeWith(disposables);
+                
+                this.OneWayBind(viewModel, vm => vm.RandomOptions, v => v.TagsModeSelect.OptionsSource)
+                    .DisposeWith(disposables);
+                
+                this.OneWayBind(viewModel, vm => vm.RandomOptions, v => v.SizeSelect1.OptionsSource)
+                    .DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.RandomOptions, v => v.SizeSelect2.OptionsSource)
+                    .DisposeWith(disposables);
+                
+                this.OneWayBind(viewModel, vm => vm.MaxTagCountOptions, v => v.MaxTagSelect1.OptionsSource)
+                    .DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.MaxTagCountOptions, v => v.MaxTagSelect2.OptionsSource)
+                    .DisposeWith(disposables);
+                this.OneWayBind(viewModel, vm => vm.MaxTagCountOptions, v => v.MaxTagSelect3.OptionsSource)
+                    .DisposeWith(disposables);
+                
+                Disposable.Create(() =>
+                {
+                    viewModel.SelectOptionsAsyncLoader = null;
+                    viewModel.BasicSelectedOptions     = null;
+                    viewModel.RandomOptions            = null;
+                    viewModel.MaxTagCountOptions       = null;
+                    viewModel.DefaultSelectedOptions   = null;
+                }).DisposeWith(disposables);
             }
         });
         InitializeComponent();
@@ -30,23 +70,23 @@ public partial class SelectShowCase : ReactiveUserControl<SelectViewModel>
         viewModel.BasicSelectedOptions = [
             new SelectOption()
             {
-                Header = "Jack",
-                Value  = "jack",
+                Header  = "Jack",
+                Content = "jack",
             },
             new SelectOption()
             {
-                Header = "Lucy",
-                Value  = "lucy",
+                Header  = "Lucy",
+                Content = "lucy",
             },
             new SelectOption()
             {
-                Header = "Yiminghe",
-                Value  = "yiminghe",
+                Header  = "Yiminghe",
+                Content = "yiminghe",
             },
             new SelectOption()
             {
                 Header    = "Disabled",
-                Value     = "disabled",
+                Content   = "disabled",
                 IsEnabled = false
             }
         ];
@@ -61,8 +101,8 @@ public partial class SelectShowCase : ReactiveUserControl<SelectViewModel>
             var base36Str = ConvertToBase36(i);
             options.Add(new SelectOption 
             {
-                Header = base36Str + i,
-                Value = base36Str + i
+                Header  = base36Str + i,
+                Content = base36Str + i
             });
         }
         viewModel.RandomOptions = options;
@@ -76,8 +116,8 @@ public partial class SelectShowCase : ReactiveUserControl<SelectViewModel>
             var base36Str = ConvertToBase36(i);
             options.Add(new SelectOption 
             {
-                Header = $"Long label: {base36Str + i}",
-                Value  = base36Str + i
+                Header  = $"Long label: {base36Str + i}",
+                Content = base36Str + i
             });
         }
         viewModel.MaxTagCountOptions = options;

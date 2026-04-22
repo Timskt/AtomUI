@@ -1,24 +1,19 @@
 ﻿using System.Collections;
 using AtomUI.Controls;
-using AtomUI.Data;
-using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
-[TemplatePart(WindowNotificationManagerThemeConstants.ItemsPart, typeof(Panel))]
-public class WindowMessageManager : TemplatedControl,
-                                    IMessageManager,
-                                    IMotionAwareControl,
-                                    IControlSharedTokenResourcesHost
+[TemplatePart("PART_Items", typeof(Panel))]
+public class WindowMessageManager : TemplatedControl, IMessageManager, IMotionAwareControl, IDisposable
 {
     #region 公共属性定义
 
@@ -29,8 +24,8 @@ public class WindowMessageManager : TemplatedControl,
         AvaloniaProperty.Register<WindowMessageManager, NotificationPosition>(
             nameof(Position), NotificationPosition.TopRight);
 
-    public static readonly StyledProperty<bool> IsMotionEnabledProperty
-        = MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<WindowMessageManager>();
+    public static readonly StyledProperty<bool> IsMotionEnabledProperty =
+        MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<WindowMessageManager>();
 
     /// <summary>
     /// Defines which corner of the screen notifications can be displayed in.
@@ -46,7 +41,7 @@ public class WindowMessageManager : TemplatedControl,
     /// Defines the <see cref="MaxItems" /> property.
     /// </summary>
     public static readonly StyledProperty<int> MaxItemsProperty =
-        AvaloniaProperty.Register<WindowNotificationManager, int>(nameof(MaxItems), 5);
+        AvaloniaProperty.Register<WindowMessageManager, int>(nameof(MaxItems), 5);
 
     /// <summary>
     /// Defines the maximum number of notifications visible at once.
@@ -65,15 +60,10 @@ public class WindowMessageManager : TemplatedControl,
 
     #endregion
 
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => MessageToken.ID;
-
-    #endregion
-
     private IList? _items;
-    private IDisposable? _bindingDisposable;
+    private TopLevel? _topLevel;
+    private bool _isDisposed;
+    private AdornerLayer? _adornerLayer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowNotificationManager" /> class.
@@ -81,10 +71,11 @@ public class WindowMessageManager : TemplatedControl,
     /// <param name="host">The TopLevel that will host the control.</param>
     public WindowMessageManager(TopLevel? host)
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(MessageToken.ScopeProvider);
 
         if (host is not null)
         {
+            _topLevel = host;
             InstallFromTopLevel(host);
         }
     }
@@ -110,8 +101,11 @@ public class WindowMessageManager : TemplatedControl,
     /// <param name="classes">style classes to apply</param>
     public void Show(IMessage message, string[]? classes = null)
     {
-        var expiration = message.Expiration;
-        var onClose    = message.OnClose;
+        if (_isDisposed || _items is null)
+        {
+            return;
+        }
+
         Dispatcher.UIThread.VerifyAccess();
 
         var messageControl = new MessageCard
@@ -120,11 +114,10 @@ public class WindowMessageManager : TemplatedControl,
             Message     = message.Content,
             MessageType = message.Type
         };
-        _bindingDisposable?.Dispose();
-        _bindingDisposable = BindUtils.RelayBind(this, IsMotionEnabledProperty, messageControl, MessageCard.IsMotionEnabledProperty);
-
+        messageControl[!MessageCard.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+        
         // Add style classes if any
-        if (classes != null)
+        if (classes?.Length > 0)
         {
             foreach (var cls in classes)
             {
@@ -132,50 +125,102 @@ public class WindowMessageManager : TemplatedControl,
             }
         }
 
-        messageControl.MessageClosed += (sender, args) =>
-        {
-            onClose?.Invoke();
-            _bindingDisposable?.Dispose();
-            _items?.Remove(sender);
-        };
+        messageControl.OnClose = message.OnClose;
+        messageControl.MessageClosed += OnMessageClosed;
 
         Dispatcher.UIThread.Post(() =>
         {
-            _items?.Add(messageControl);
-
-            if (_items?.OfType<MessageCard>().Count(i => !i.IsClosing) > MaxItems)
-            {
-                _items.OfType<MessageCard>().First(i => !i.IsClosing).Close();
-            }
+            _items.Add(messageControl);
+            RemoveExcessMessages();
         });
 
-        if (expiration == TimeSpan.Zero)
+        // Auto-close after expiration time
+        if (message.Expiration != TimeSpan.Zero)
         {
-            return;
+            DispatcherTimer.RunOnce(messageControl.Close, message.Expiration);
         }
+    }
 
-        DispatcherTimer.RunOnce(() => messageControl.Close(), expiration);
+    private void OnMessageClosed(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MessageCard card)
+        {
+            card.OnClose?.Invoke();
+            _items?.Remove(card);
+        }
+    }
+
+    /// <summary>
+    /// Removes excess messages when the count exceeds MaxItems.
+    /// </summary>
+    private void RemoveExcessMessages()
+    {
+        var visibleMessages = _items!.OfType<MessageCard>().Where(m => !m.IsClosing).ToList();
+        var excessCount = visibleMessages.Count - MaxItems;
+
+        if (excessCount > 0)
+        {
+            for (int i = 0; i < excessCount; i++)
+            {
+                visibleMessages[i].Close();
+            }
+        }
     }
     
     private void InstallFromTopLevel(TopLevel topLevel)
     {
         topLevel.TemplateApplied += TopLevelOnTemplateApplied;
-        var adorner = topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer;
-        if (adorner is not null)
+        _adornerLayer = topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer;
+        if (_adornerLayer is not null)
         {
-            adorner.Children.Add(this);
-            AdornerLayer.SetAdornedElement(this, adorner);
+            _adornerLayer.Children.Add(this);
+            AdornerLayer.SetAdornedElement(this, _adornerLayer);
         }
     }
 
-    private void TopLevelOnTemplateApplied(object? sender, TemplateAppliedEventArgs e)
+    public void Dispose()
     {
-        if (Parent is AdornerLayer adornerLayer)
+        if (_topLevel is null || _isDisposed)
         {
-            adornerLayer.Children.Remove(this);
-            AdornerLayer.SetAdornedElement(this, null);
+            return;
         }
 
+        try
+        {
+            // 卸载事件订阅
+            _topLevel.TemplateApplied -= TopLevelOnTemplateApplied;
+            _items?.Clear();
+            // 从 AdornerLayer 中移除
+            if (_adornerLayer is not null)
+            {
+                _adornerLayer.Children.Remove(this);
+                AdornerLayer.SetAdornedElement(this, null);
+                _adornerLayer = null;
+            }
+            _topLevel   = null;
+            _items      = null;
+            _isDisposed = true;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error uninstalling from TopLevel: {ex.Message}");
+        }
+    }
+
+    private void RemoveFromAdornerLayer()
+    {
+        if (_adornerLayer is not null)
+        {
+            _adornerLayer.Children.Remove(this);
+            AdornerLayer.SetAdornedElement(this, null);
+            _adornerLayer = null;
+        }
+    }
+
+    private void TopLevelOnTemplateApplied(object? sender, TemplateAppliedEventArgs _)
+    {
+        RemoveFromAdornerLayer();
+        
         // Reinstall notification manager on template reapplied.
         var topLevel = (TopLevel)sender!;
         topLevel.TemplateApplied -= TopLevelOnTemplateApplied;

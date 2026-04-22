@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -8,6 +10,7 @@ namespace AtomUI.Desktop.Controls;
 internal class CascaderToken : AbstractControlDesignToken
 {
     public const string ID = "Cascader";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     
     /// <summary>
     /// 节点标题高度
@@ -100,4 +103,6 @@ internal class CascaderToken : AbstractControlDesignToken
         FilterHighlightColor     = SharedToken.ColorError;
         ItemHeaderSpacing        = SharedToken.SpacingXXS;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CascaderTokenKind);
 }

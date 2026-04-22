@@ -31,11 +31,19 @@
             </ControlTemplate>
         </Setter>
         
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgElevated}}" />
+        <Setter Property="Background" Value="{atom:SharedTokenResource ColorBgElevated}" />
         <Setter Property="MotionDuration"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}" />
+                Value="{atom:SharedTokenResource MotionDurationSlow}" />
         <Setter Property="MaskBgColor"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgMask}}" />
-        
+                Value="{atom:SharedTokenResource ColorBgMask}" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </ControlTheme>
 </ResourceDictionary>

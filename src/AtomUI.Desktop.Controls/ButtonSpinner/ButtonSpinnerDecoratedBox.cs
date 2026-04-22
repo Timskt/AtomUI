@@ -1,12 +1,10 @@
 using AtomUI.Animations;
-using AtomUI.Controls;
-using AtomUI.Theme.Styling;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
@@ -202,6 +200,7 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
     {
         base.OnDetachedFromVisualTree(e);
         _mouseMoveDisposable?.Dispose();
+        _mouseMoveDisposable = null;
     }
 
     private void ConfigureMoveProcessor()
@@ -209,8 +208,8 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
         if (IsEffectivelyEnabled && IsShowHandle && IsHandleFloatable)
         {
             _mouseMoveDisposable?.Dispose();
-            var inputManager = AvaloniaLocator.Current.GetService<IInputManager>()!;
-            _mouseMoveDisposable = inputManager.Process.Subscribe(HandleMouseMove);
+            var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;;
+            _mouseMoveDisposable = inputManager?.Process.Subscribe(HandleMouseMove);
         }
     }
 
@@ -287,12 +286,10 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
             if (!IsEffectivelyEnabled)
             {
                 _mouseMoveDisposable?.Dispose();
-                Transitions = null;
             }
             else
             {
                 ConfigureMoveProcessor();
-                ConfigureTransitionsForEnabledState();
             }
             UpdateHandleVisualState();
         }
@@ -311,15 +308,6 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
         {
             UpdateHandleVisualState();
         }
-    }
-    
-    protected override void NotifyCreateTransitions(Transitions transitions)
-    {
-        base.NotifyCreateTransitions(transitions);
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOpacityProperty));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(HandleOffsetProperty, SharedTokenKey.MotionDurationMid));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentLeftShiftProperty, SharedTokenKey.MotionDurationMid));
-        transitions.Add(TransitionUtils.CreateTransition<DoubleTransition>(ContentRightShiftProperty, SharedTokenKey.MotionDurationMid));
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -379,19 +367,15 @@ internal class ButtonSpinnerDecoratedBox : AddOnDecoratedBox
         }
     }
 
-    private void ConfigureTransitionsForEnabledState()
+    protected override void OnInitialized()
     {
-        if (IsMotionEnabled)
-        {
-            if (Transitions == null)
-            {
-                Transitions =
-                [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BorderBrushProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(Border.BackgroundProperty)
-                ];
-                NotifyCreateTransitions(Transitions);
-            }
-        }
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

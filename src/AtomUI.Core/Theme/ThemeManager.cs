@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Theme.Language;
 using AtomUI.Theme.Styling;
 using Avalonia;
@@ -84,7 +82,7 @@ internal class ThemeManager : Styles, IThemeManager
     
     public ITheme? ActivatedTheme => _activatedTheme;
     public IReadOnlyList<string> CustomThemeDirs => _customThemeDirs;
-    public static ThemeManager? Current { get; internal set; } = AvaloniaLocator.Current.GetService<ThemeManager>();
+    public static ThemeManager? Current { get; internal set; } = AvaloniaLocator.Current.GetService(typeof(ThemeManager)) as ThemeManager;
     public string DefaultThemeId { get; set; }
     public FontFamily? FontFamily { get; internal set; }
     internal List<Type> ControlTokenTypes { get; set; }
@@ -111,7 +109,6 @@ internal class ThemeManager : Styles, IThemeManager
     
     private readonly Dictionary<LanguageVariant, ResourceDictionary> _languages;
     private List<ILanguageProvider>? _languageProviders;
-    private CompositeDisposable? _applicationDisposables;
     
     internal ThemeManager()
     {
@@ -467,9 +464,7 @@ internal class ThemeManager : Styles, IThemeManager
 
     public void AttachApplication(Application application)
     {
-        _applicationDisposables?.Dispose();
-        _applicationDisposables = new CompositeDisposable();
-        _applicationDisposables.Add(BindUtils.RelayBind(application, Application.ActualThemeVariantProperty, this, ThemeVariantProperty));
+        this[!ThemeVariantProperty] = application[!Application.ActualThemeVariantProperty];
         // TODO 需要审查
         ConfigureThemeVariant(application.ActualThemeVariant);
         application.Styles.Add(this);
@@ -491,7 +486,7 @@ internal class ThemeManager : Styles, IThemeManager
             }
             else
             {
-                if (TryGetResource(SharedTokenKey.EnableMotion, variant, out var enableMotionResource))
+                if (TryGetResource(SharedTokenKind.EnableMotion, variant, out var enableMotionResource))
                 {
                     if (enableMotionResource is bool enableMotion)
                     {
@@ -499,7 +494,7 @@ internal class ThemeManager : Styles, IThemeManager
                     }
                 }
                 
-                if (TryGetResource(SharedTokenKey.EnableWaveSpirit, variant, out var enableWaveSpiritResource))
+                if (TryGetResource(SharedTokenKind.EnableWaveSpirit, variant, out var enableWaveSpiritResource))
                 {
                     if (enableWaveSpiritResource is bool enableWaveSpirit)
                     {
@@ -537,7 +532,7 @@ internal class ThemeManager : Styles, IThemeManager
         var themeResource = Resources.ThemeDictionaries[ThemeVariant];
         if (themeResource is ResourceDictionary globalResourceDictionary)
         {
-            globalResourceDictionary[SharedTokenKey.EnableMotion] = IsMotionEnabled;
+            globalResourceDictionary[SharedTokenKind.EnableMotion] = IsMotionEnabled;
         }
     }
     
@@ -546,7 +541,7 @@ internal class ThemeManager : Styles, IThemeManager
         var themeResource = Resources.ThemeDictionaries[ThemeVariant];
         if (themeResource is ResourceDictionary globalResourceDictionary)
         {
-            globalResourceDictionary[SharedTokenKey.EnableWaveSpirit] = IsWaveSpiritEnabled;
+            globalResourceDictionary[SharedTokenKind.EnableWaveSpirit] = IsWaveSpiritEnabled;
         }
     }
 }

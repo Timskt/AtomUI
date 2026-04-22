@@ -1,4 +1,6 @@
-﻿using AtomUI.Theme.TokenSystem;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
+using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
 
@@ -8,7 +10,8 @@ namespace AtomUI.Desktop.Controls;
 internal class CollapseToken : AbstractControlDesignToken
 {
     public const string ID = "Collapse";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public CollapseToken()
         : base(ID)
     {
@@ -69,4 +72,6 @@ internal class CollapseToken : AbstractControlDesignToken
         RightExpandButtonMargin   = new Thickness(SharedToken.UniformlyMarginXS, 0, 0, 0);
         RightExpandButtonMarginLG   = new Thickness(SharedToken.UniformlyMarginSM, 0, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(CollapseTokenKind);
 }

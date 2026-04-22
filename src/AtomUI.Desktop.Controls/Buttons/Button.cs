@@ -1,12 +1,10 @@
 using System.Diagnostics;
 using AtomUI.Animations;
 using AtomUI.Controls;
-using AtomUI.Desktop.Controls.Primitives;
+using AtomUI.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
@@ -47,7 +45,6 @@ public enum ButtonShape
 public class Button : AvaloniaButton,
                       ISizeTypeAware,
                       IWaveSpiritAwareControl,
-                      IControlSharedTokenResourcesHost,
                       ICompactSpaceAware,
                       IFormItemAware
 {
@@ -224,12 +221,8 @@ public class Button : AvaloniaButton,
         set => SetValue(IsUsedInCompactSpaceProperty, value);
     }
     
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ButtonToken.ID;
-    
     #endregion
     
-    protected bool ThemeConfigured;
     private WaveSpiritDecorator? _waveSpiritDecorator;
 
     static Button()
@@ -246,7 +239,19 @@ public class Button : AvaloniaButton,
 
     public Button()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(ButtonToken.ScopeProvider);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -326,15 +331,6 @@ public class Button : AvaloniaButton,
             ConfigureEffectiveBorderThickness();
         }
 
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty ||
-                change.Property == IsWaveSpiritEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-
         if (change.Property == CornerRadiusProperty ||
             change.Property == CompactSpaceItemPositionProperty ||
             change.Property == CompactSpaceOrientationProperty)
@@ -362,43 +358,6 @@ public class Button : AvaloniaButton,
         WaveSpiritType = waveType;
     }
 
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                var transitions = new Transitions();
-                transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty));
-                if (ButtonType == ButtonType.Primary)
-                {
-                    if (IsGhost)
-                    {
-                        transitions.Add(
-                            TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty));
-                        transitions.Add(
-                            TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty));
-                    }
-                }
-                else if (ButtonType == ButtonType.Default || ButtonType == ButtonType.Dashed)
-                {
-                    transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(BorderBrushProperty));
-                    transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty));
-                }
-                else if (ButtonType == ButtonType.Link)
-                {
-                    transitions.Add(TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty));
-                }
-        
-                Transitions = transitions;
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -406,18 +365,6 @@ public class Button : AvaloniaButton,
         UpdatePseudoClasses();
         ConfigureWaveSpiritType();
         ConfigureEffectiveBorderThickness();
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
     }
 
     private void ConfigureEffectiveBorderThickness()
@@ -428,17 +375,6 @@ public class Button : AvaloniaButton,
         {
             EffectiveBorderThickness = BorderThickness;
         }
-        // else if (ButtonType == ButtonType.Primary)
-        // {
-        //     if (IsGhost || !IsEnabled)
-        //     {
-        //         EffectiveBorderThickness = BorderThickness;
-        //     }
-        //     else
-        //     {
-        //         EffectiveBorderThickness = new Thickness(0);
-        //     }
-        // }
         else
         {
             EffectiveBorderThickness = new Thickness(0);

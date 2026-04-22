@@ -2,8 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
-    x:ClassModifier="internal"
-    xmlns:dataGridLocalization="using:AtomUI.Desktop.Controls.DataGridLocalization">
+    x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:DataGridOperationButtons}"
                   TargetType="atom:DataGridOperationButtons">
         <Setter Property="Template">
@@ -13,13 +12,13 @@
                                 Orientation="Horizontal"
                                 IsVisible="{TemplateBinding IsEditing, Converter={x:Static BoolConverters.Not}}">
                         <atom:HyperLinkTextBlock
-                            Text="{DynamicResource {x:Static atom:CommonLangResourceKey.Edit}}"
+                            Text="{atom:CommonLangResource Edit}"
                             Name="{x:Static atom:DataGridOperationButtonsThemeConstants.EditActionPart}" />
                         <atom:PopupConfirm
                             Name="{x:Static atom:DataGridOperationButtonsThemeConstants.DeleteActionPart}"
-                            Title="{DynamicResource {x:Static dataGridLocalization:DataGridLangResourceKey.DeleteConfirmText}}">
+                            Title="{atom:DataGridLangResource DeleteConfirmText}">
                             <atom:HyperLinkTextBlock
-                                Text="{DynamicResource {x:Static atom:CommonLangResourceKey.Delete}}"
+                                Text="{atom:CommonLangResource Delete}"
                                 IsEnabled="{TemplateBinding IsEditing, Converter={x:Static BoolConverters.Not}}"/>
                         </atom:PopupConfirm>
                     </StackPanel>
@@ -28,14 +27,14 @@
                                 IsVisible="{TemplateBinding IsEditing}">
 
                         <atom:HyperLinkTextBlock
-                            Text="{DynamicResource {x:Static atom:CommonLangResourceKey.Save}}"
+                            Text="{atom:CommonLangResource Save}"
                             Name="{x:Static atom:DataGridOperationButtonsThemeConstants.SaveActionPart}" />
 
                         <atom:PopupConfirm
                             Name="{x:Static atom:DataGridOperationButtonsThemeConstants.CancelActionPart}"
-                            Title="{DynamicResource {x:Static dataGridLocalization:DataGridLangResourceKey.CancelConfirmText}}">
+                            Title="{atom:DataGridLangResource CancelConfirmText}">
                             <atom:HyperLinkTextBlock
-                                Text="{DynamicResource {x:Static atom:CommonLangResourceKey.Cancel}}"
+                                Text="{atom:CommonLangResource Cancel}"
                                 IsEnabled="{TemplateBinding IsEditing}"/>
                         </atom:PopupConfirm>
                     </StackPanel>
@@ -44,7 +43,7 @@
         </Setter>
 
         <Style Selector="^ /template/ StackPanel">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.SpacingXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource SpacingXS}" />
         </Style>
 
     </ControlTheme>

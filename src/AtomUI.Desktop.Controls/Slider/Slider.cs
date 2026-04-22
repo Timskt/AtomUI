@@ -88,12 +88,11 @@ public record SliderMark(string Label, double Value)
 [PseudoClasses(StdPseudoClass.Vertical, StdPseudoClass.Horizontal, StdPseudoClass.Pressed)]
 public class Slider : RangeBase,
                       IMotionAwareControl,
-                      IControlSharedTokenResourcesHost,
                       IFormItemAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<Orientation> OrientationProperty =
-        ScrollBar.OrientationProperty.AddOwner<Slider>();
+        StackPanel.OrientationProperty.AddOwner<Slider>();
     
     public static readonly StyledProperty<bool> IsDirectionReversedProperty =
         SliderTrack.IsDirectionReversedProperty.AddOwner<Slider>();
@@ -122,7 +121,7 @@ public class Slider : RangeBase,
     public static readonly StyledProperty<bool> IsMotionEnabledProperty =
         MotionAwareControlProperty.IsMotionEnabledProperty.AddOwner<Slider>();
 
-    public static readonly StyledProperty<bool> IsWaveAnimationEnabledProperty =
+    public static readonly StyledProperty<bool> IsWaveSpiritEnabledProperty =
         WaveSpiritAwareControlProperty.IsWaveSpiritEnabledProperty.AddOwner<Slider>();
     
     public Orientation Orientation
@@ -188,18 +187,11 @@ public class Slider : RangeBase,
         set => SetValue(IsMotionEnabledProperty, value);
     }
 
-    public bool IsWaveAnimationEnabled
+    public bool IsWaveSpiritEnabled
     {
-        get => GetValue(IsWaveAnimationEnabledProperty);
-        set => SetValue(IsWaveAnimationEnabledProperty, value);
+        get => GetValue(IsWaveSpiritEnabledProperty);
+        set => SetValue(IsWaveSpiritEnabledProperty, value);
     }
-
-    #endregion
-
-    #region 内部属性定义
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SliderToken.ID;
 
     #endregion
     
@@ -234,7 +226,7 @@ public class Slider : RangeBase,
     }
     public Slider()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SliderToken.ScopeProvider);
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

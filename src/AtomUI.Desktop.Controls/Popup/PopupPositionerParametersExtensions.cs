@@ -71,8 +71,7 @@ internal static class PopupPositionerParametersExtensions
                 PlacementMode.LeftEdgeAlignedBottom => (PopupAnchor.BottomLeft, PopupGravity.TopLeft),
                 PlacementMode.RightEdgeAlignedTop => (PopupAnchor.TopRight, PopupGravity.BottomRight),
                 PlacementMode.RightEdgeAlignedBottom => (PopupAnchor.BottomRight, PopupGravity.TopRight),
-                _ => throw new ArgumentOutOfRangeException(nameof(placement), placement,
-                    "Invalid value for Popup.PlacementMode")
+                _ => (PopupAnchor.None, PopupGravity.None)
             };
             positionerParameters.Anchor = parameters.Item1;
             positionerParameters.Gravity = parameters.Item2;

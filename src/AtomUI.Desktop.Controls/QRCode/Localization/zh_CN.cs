@@ -1,4 +1,5 @@
-﻿using AtomUI.Theme.Language;
+﻿using AtomUI.Desktop.Controls.Localization;
+using AtomUI.Theme.Language;
 
 namespace AtomUI.Desktop.Controls.QRCodeLang;
 
@@ -8,4 +9,6 @@ internal class zh_CN : LanguageProvider
     public const string Refresh = "点击刷新";
     public const string Expired = "二维码过期";
     public const string Scanned = "已扫描";
+    
+    protected override Type GetResourceKindType() => typeof(QRCodeLangResourceKind);
 }

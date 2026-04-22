@@ -1,7 +1,7 @@
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -152,28 +152,11 @@ internal class DrawerInfoContainer : HeaderedContentControl
         get => GetValue(IsMotionEnabledProperty);
         set => SetValue(IsMotionEnabledProperty, value);
     }
-    
+
     #endregion
-    
+
     internal event EventHandler? CloseRequested;
     private IconButton? _closeButton;
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(RenderTransformProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -181,7 +164,7 @@ internal class DrawerInfoContainer : HeaderedContentControl
         if (change.Property == FooterProperty || change.Property == FooterTemplateProperty)
         {
             HasFooter = Footer != null || FooterTemplate != null;
-        } 
+        }
         else if (change.Property == ExtraProperty || change.Property == ExtraTemplateProperty)
         {
             HasExtra = Extra != null || ExtraTemplate != null;
@@ -191,7 +174,7 @@ internal class DrawerInfoContainer : HeaderedContentControl
         {
             if (change.Property == IsMotionEnabledProperty)
             {
-                ConfigureTransitions(true);
+                // Transitions now handled by XAML theme
             }
         }
     }
@@ -234,15 +217,15 @@ internal class DrawerInfoContainer : HeaderedContentControl
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
+        this.EnableTransitions();
     }
 }

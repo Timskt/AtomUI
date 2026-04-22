@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
+using AtomUI.Theme.Styling;
 using Avalonia.Controls;
 using Avalonia.Logging;
 using Avalonia.Media;
@@ -73,43 +75,31 @@ public abstract class AbstractDesignToken : IDesignToken
     public virtual void BuildResourceDictionary(IResourceDictionary dictionary)
     {
         var type = GetType();
-        // internal 这里也考虑进去，还是具体的 Token 自己处理？
         var tokenProperties = type.GetProperties(BindingFlags.Public |
                                                  BindingFlags.NonPublic |
                                                  BindingFlags.Instance |
-                                                 BindingFlags.FlattenHierarchy);
-        var tokenResourceNamespace = GetTokenResourceCatalog();
-        foreach (var property in tokenProperties)
+                                                 BindingFlags.FlattenHierarchy)
+                                  .ToDictionary(x => x.Name);;
+            
+        foreach (var value in Enum.GetValues<SharedTokenKind>())
         {
-            var tokenName  = property.Name;
-            var tokenValue = property.GetValue(this);
-            if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
-                tokenValue is not null)
+            var tokenName = Enum.GetName(value);
+            Debug.Assert(tokenName != null);
+            if (tokenProperties.TryGetValue(tokenName, out var property))
             {
-                tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                var tokenValue = property.GetValue(this);
+                if ((property.PropertyType == typeof(Color) || property.PropertyType == typeof(Color?)) && 
+                    tokenValue is not null)
+                {
+                    tokenValue = new ImmutableSolidColorBrush((Color)tokenValue);
+                }
+                dictionary[value] = tokenValue;
             }
-
-            dictionary[new TokenResourceKey(tokenName, tokenResourceNamespace)] = tokenValue;
+            else
+            {
+                throw new Exception($"Token: {tokenName} does not exist in {type.FullName}");
+            }
         }
-    }
-
-    protected string? GetTokenResourceCatalog()
-    {
-        var tokenType                   = GetType();
-        var globalDesignTokenAttributes = tokenType.GetCustomAttributes<GlobalDesignTokenAttribute>();
-        if (globalDesignTokenAttributes.Any())
-        {
-            return null;
-        }
-
-        var controlDesignTokenAttribute = tokenType.GetCustomAttribute<ControlDesignTokenAttribute>();
-        if (controlDesignTokenAttribute is not null)
-        {
-            return controlDesignTokenAttribute.ResourceCatalog;
-        }
-
-        throw new TokenResourceRegisterException(
-            $"The current Token: {tokenType.FullName} lacks the token type annotation");
     }
 
     public virtual object? GetTokenValue(string name)

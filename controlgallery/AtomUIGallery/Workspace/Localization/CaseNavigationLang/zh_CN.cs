@@ -1,9 +1,10 @@
 using AtomUI.Theme.Language;
+using AtomUIGallery.Localization;
 using AtomUIGallery.Workspace.Views;
 
 namespace AtomUIGallery.Workspace.Localization.CaseNavigationLang;
 
-[LanguageProvider(LanguageCode.zh_CN, CaseNavigation.LanguageId, Constants.LanguageCatalog)]
+[LanguageProvider(LanguageCode.zh_CN, CaseNavigation.LanguageId)]
 internal class zh_CN : LanguageProvider
 {
     public const string General = "通用";
@@ -12,12 +13,12 @@ internal class zh_CN : LanguageProvider
     public const string General_Icons = "Icons 图标";
     public const string General_OsInfo = "系统信息";
     public const string General_Button = "Button 按钮";
+    public const string General_FloatButton = "FloatButton 悬浮按钮";
     public const string General_SplitButton = "SplitButton 分割按钮";
     public const string General_Separator = "Separator 分割线";
     public const string General_CustomizeTheme = "CustomizeTheme 主题";
     
     public const string Layout = "布局";
-    public const string Layout_BoxPanel = "BoxPanel 盒子布局";
     public const string Layout_BoxPanel_DeprecatedTag = "废弃";
     public const string Layout_FlexPanel = "FlexPanel 弹性布局";
     public const string Layout_Grid = "Grid 栅格布局";
@@ -51,6 +52,7 @@ internal class zh_CN : LanguageProvider
     public const string DataEntry_ToggleSwitch = "ToggleSwitch 开关";
     public const string DataEntry_Select = "Select 选择器";
     public const string DataEntry_Slider = "Slider 滑动输入条";
+    public const string DataEntry_Transfer = "Transfer 穿梭框";
     public const string DataEntry_TreeSelect = "TreeSelect 树选择";
     public const string DataEntry_Upload = "Upload 上传";
     
@@ -72,11 +74,11 @@ internal class zh_CN : LanguageProvider
     public const string DataDisplay_QRCode = "QRCode 二维码";
     public const string DataDisplay_Segmented = "Segmented 分段控制器";
     public const string DataDisplay_Statistic = "Statistic 统计数值";
+    public const string DataDisplay_Tag = "Tag 标签";
     public const string DataDisplay_Timeline = "Timeline 时间轴";
     public const string DataDisplay_TreeView = "TreeView 树形控件";
     public const string DataDisplay_Tooltip = "Tooltip 文字提示";
-    public const string DataDisplay_Tag = "Tag 标签";
-    public const string DataDisplay_BoxPanel = "BoxPanel 盒布局";
+    public const string DataDisplay_Tour = "Tour 漫游式引导";
     
     public const string Feedback = "反馈";
     public const string Feedback_Alert = "Alert 警告提示";
@@ -90,4 +92,6 @@ internal class zh_CN : LanguageProvider
     public const string Feedback_Skeleton = "Skeleton 骨架屏";
     public const string Feedback_Spin = "Spin 加载提示";
     public const string Feedback_Watermark = "Watermark 水印";
+    
+    protected override Type GetResourceKindType() => typeof(CaseNavigationLangResourceKind);
 }

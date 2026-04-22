@@ -1,4 +1,6 @@
+using AtomUI.Desktop.Controls.DesignTokens;
 using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,7 +11,7 @@ namespace AtomUI.Desktop.Controls;
 internal class TagToken : AbstractControlDesignToken
 {
     public const string ID = "Tag";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
     /// <summary>
     /// 默认背景色
     /// </summary>
@@ -47,4 +49,6 @@ internal class TagToken : AbstractControlDesignToken
         DefaultColor         = SharedToken.ColorText;
         TagTextPaddingInline = new Thickness(SharedToken.UniformlyPaddingXXS, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(TagTokenKind);
 }

@@ -1,4 +1,6 @@
-﻿using AtomUI.Media;
+﻿using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Media;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 using Avalonia;
 using Avalonia.Media;
@@ -9,7 +11,8 @@ namespace AtomUI.Desktop.Controls;
 internal class DatePickerToken : AbstractControlDesignToken
 {
     public const string ID = "DatePicker";
-
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
+    
     public DatePickerToken()
         : base(ID)
     {
@@ -136,4 +139,6 @@ internal class DatePickerToken : AbstractControlDesignToken
         RangeCalendarSpacing   = 20;
         ButtonsPanelMargin     = new Thickness(0, SharedToken.UniformlyMarginXS, 0, 0);
     }
+    
+    protected override Type GetTokenKindType() => typeof(DatePickerTokenKind);
 }

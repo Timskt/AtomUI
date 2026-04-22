@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using System.Collections.Frozen;
+using Avalonia.Media;
 using Avalonia.Styling;
 
 namespace AtomUI.Theme.Palette;
@@ -11,15 +12,17 @@ public class PaletteInfo
 
 public static class PresetPalettes
 {
-    private static readonly Dictionary<PresetPrimaryColor, PaletteInfo> sm_presetPalettes;
-    private static readonly Dictionary<PresetPrimaryColor, PaletteInfo> sm_presetDarkPalettes;
+    private static readonly FrozenDictionary<PresetPrimaryColor, PaletteInfo> sm_presetPalettes;
+    private static readonly FrozenDictionary<PresetPrimaryColor, PaletteInfo> sm_presetDarkPalettes;
 
     static PresetPalettes()
     {
-        sm_presetPalettes     = new Dictionary<PresetPrimaryColor, PaletteInfo>();
-        sm_presetDarkPalettes = new Dictionary<PresetPrimaryColor, PaletteInfo>();
-        InitPalettes(false);
-        InitPalettes(true);
+        var light = new Dictionary<PresetPrimaryColor, PaletteInfo>();
+        var dark  = new Dictionary<PresetPrimaryColor, PaletteInfo>();
+        InitPalettes(light, false);
+        InitPalettes(dark, true);
+        sm_presetPalettes     = light.ToFrozenDictionary();
+        sm_presetDarkPalettes = dark.ToFrozenDictionary();
     }
 
     public static PaletteInfo GetPresetPalette(PresetPrimaryColor primaryColor, bool isDark = false)
@@ -42,7 +45,7 @@ public static class PresetPalettes
         return sm_presetPalettes;
     }
 
-    private static void InitPalettes(bool isDark)
+    private static void InitPalettes(Dictionary<PresetPrimaryColor, PaletteInfo> target, bool isDark)
     {
         var allColors = PresetPrimaryColor.AllColorTypes();
         foreach (var presetColor in allColors)
@@ -50,7 +53,7 @@ public static class PresetPalettes
             if (isDark)
             {
                 var colorSequence = PaletteGenerator.GeneratePalette(presetColor.Color());
-                sm_presetPalettes[presetColor] = new PaletteInfo
+                target[presetColor] = new PaletteInfo
                 {
                     Primary       = colorSequence[5],
                     ColorSequence = colorSequence
@@ -64,7 +67,7 @@ public static class PresetPalettes
                         ThemeVariant    = ThemeVariant.Dark,
                         BackgroundColor = Color.Parse("#141414")
                     });
-                sm_presetDarkPalettes[presetColor] = new PaletteInfo
+                target[presetColor] = new PaletteInfo
                 {
                     Primary       = colorSequence[5],
                     ColorSequence = colorSequence

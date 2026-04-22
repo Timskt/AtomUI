@@ -1,3 +1,5 @@
+using AtomUI.Desktop.Controls.DesignTokens;
+using AtomUI.Theme;
 using AtomUI.Theme.TokenSystem;
 
 namespace AtomUI.Desktop.Controls;
@@ -6,6 +8,7 @@ namespace AtomUI.Desktop.Controls;
 internal class CarouselToken : AbstractControlDesignToken
 {
     public const string ID = "Carousel";
+    public static readonly ControlTokenResourceScopeProvider ScopeProvider = new(ID);
 
     public CarouselToken()
         : base(ID)
@@ -65,4 +68,6 @@ internal class CarouselToken : AbstractControlDesignToken
         IndicatorGap         = SharedToken.UniformlyMarginXS;
         PaginationOffset     = 12;
     }
+    
+    protected override Type GetTokenKindType() => typeof(CarouselTokenKind);
 }

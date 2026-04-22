@@ -7,20 +7,20 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <atom:WaveSpiritDecorator Name="{x:Static atom:ToggleSwitchThemeConstants.WaveSpiritPart}"/>
-                    <Canvas Name="{x:Static atom:ToggleSwitchThemeConstants.MainContainerPart}"
+                    <atom:WaveSpiritDecorator Name="PART_WaveSpirit"/>
+                    <Canvas Name="PART_MainContainer"
                             ClipToBounds="True">
-                        <atom:SwitchKnob Name="{x:Static atom:ToggleSwitchThemeConstants.SwitchKnobPart}"
-                                         IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
-                                         IsCheckedState="{TemplateBinding IsChecked}" />
-                        <ContentPresenter Name="{x:Static atom:ToggleSwitchThemeConstants.OnContentPresenterPart}"
+                        <ContentPresenter Name="PART_OnContentPresenter"
                                           Content="{TemplateBinding OnContent}"
                                           ContentTemplate="{TemplateBinding OnContentTemplate}"
                                           IsVisible="{TemplateBinding OnContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                        <ContentPresenter Name="{x:Static atom:ToggleSwitchThemeConstants.OffContentPresenterPart}"
+                        <ContentPresenter Name="PART_OffContentPresenter"
                                           Content="{TemplateBinding OffContent}"
                                           ContentTemplate="{TemplateBinding OffContentTemplate}"
                                           IsVisible="{TemplateBinding OffContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        <atom:SwitchKnob Name="PART_SwitchKnob"
+                                         IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
+                                         IsCheckedState="{TemplateBinding IsChecked}" />
                     </Canvas>
                 </Panel>
             </ControlTemplate>
@@ -30,20 +30,32 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextLightSolid}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextLightSolid}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="IsWaveSpiritEnabled"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableWaveSpirit}}" />
+                Value="{atom:SharedTokenResource EnableWaveSpirit}" />
         
         <Style Selector="^ /template/ atom|WaveSpiritDecorator#PART_WaveSpirit">
             <Setter Property="WaveType" Value="PillWave"/>
         </Style>
 
-        <Setter Property="TrackPadding" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.TrackPadding}}" />
+        <Setter Property="TrackPadding" Value="{atom:ToggleSwitchTokenResource TrackPadding}" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:RectTransition Property="KnobMovingRect" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <PointTransition Property="OnContentOffset" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <PointTransition Property="OffContentOffset" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <atom:SolidColorBrushTransition Property="GrooveBackground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                    <DoubleTransition Property="SwitchOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}"/>
+                </Transitions>
+            </Setter>
+        </Style>
 
         <Style Selector="^[IsLoading=True], ^:disabled">
             <Setter Property="SwitchOpacity"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.SwitchDisabledOpacity}}" />
+                    Value="{atom:ToggleSwitchTokenResource SwitchDisabledOpacity}" />
             <Style Selector="^ /template/ atom|SwitchKnob#PART_SwitchKnob">
                 <Setter Property="Opacity" Value="0.9" />
             </Style>
@@ -51,61 +63,61 @@
 
         <Style Selector="^[IsChecked=True]">
             <Setter Property="GrooveBackground"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.SwitchColor}}" />
+                    Value="{atom:ToggleSwitchTokenResource SwitchColor}" />
         </Style>
 
         <Style Selector="^[IsChecked=True]:pointerover">
             <Setter Property="GrooveBackground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorPrimaryHover}}" />
+                    Value="{atom:SharedTokenResource ColorPrimaryHover}" />
         </Style>
 
         <Style Selector="^[IsChecked=False]">
             <Setter Property="GrooveBackground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextQuaternary}}" />
+                    Value="{atom:SharedTokenResource ColorTextQuaternary}" />
         </Style>
 
         <Style Selector="^[IsChecked=False]:pointerover">
             <Setter Property="GrooveBackground"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextTertiary}}" />
+                    Value="{atom:SharedTokenResource ColorTextTertiary}" />
         </Style>
 
         <Style Selector="^[SizeType=Small]">
             <Setter Property="FontSize"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.ExtraInfoFontSizeSM}}" />
-            <Setter Property="KnobSize" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.HandleSizeSM}}" />
+                    Value="{atom:ToggleSwitchTokenResource ExtraInfoFontSizeSM}" />
+            <Setter Property="KnobSize" Value="{atom:ToggleSwitchTokenResource HandleSizeSM}" />
             <Setter Property="InnerMaxMargin"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.InnerMaxMarginSM}}" />
+                    Value="{atom:ToggleSwitchTokenResource InnerMaxMarginSM}" />
             <Setter Property="InnerMinMargin"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.InnerMinMarginSM}}" />
-            <Setter Property="TrackHeight" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.TrackHeightSM}}" />
+                    Value="{atom:ToggleSwitchTokenResource InnerMinMarginSM}" />
+            <Setter Property="TrackHeight" Value="{atom:ToggleSwitchTokenResource TrackHeightSM}" />
             <Setter Property="TrackMinWidth"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.TrackMinWidthSM}}" />
-            <Setter Property="IconSize" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.IconSizeSM}}" />
+                    Value="{atom:ToggleSwitchTokenResource TrackMinWidthSM}" />
+            <Setter Property="IconSize" Value="{atom:ToggleSwitchTokenResource IconSizeSM}" />
         </Style>
         <Style Selector="^[SizeType=Middle], ^[SizeType=Large]">
             <Setter Property="FontSize"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.ExtraInfoFontSize}}" />
-            <Setter Property="KnobSize" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.HandleSize}}" />
+                    Value="{atom:ToggleSwitchTokenResource ExtraInfoFontSize}" />
+            <Setter Property="KnobSize" Value="{atom:ToggleSwitchTokenResource HandleSize}" />
             <Setter Property="InnerMaxMargin"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.InnerMaxMargin}}" />
+                    Value="{atom:ToggleSwitchTokenResource InnerMaxMargin}" />
             <Setter Property="InnerMinMargin"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.InnerMinMargin}}" />
-            <Setter Property="TrackHeight" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.TrackHeight}}" />
+                    Value="{atom:ToggleSwitchTokenResource InnerMinMargin}" />
+            <Setter Property="TrackHeight" Value="{atom:ToggleSwitchTokenResource TrackHeight}" />
             <Setter Property="TrackMinWidth"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.TrackMinWidth}}" />
-            <Setter Property="IconSize" Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.IconSize}}" />
+                    Value="{atom:ToggleSwitchTokenResource TrackMinWidth}" />
+            <Setter Property="IconSize" Value="{atom:ToggleSwitchTokenResource IconSize}" />
         </Style>
 
         <Style Selector="^ /template/ atom|SwitchKnob#PART_SwitchKnob">
             <Setter Property="KnobBackgroundColor"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.HandleBg}}" />
+                    Value="{atom:ToggleSwitchTokenResource HandleBg}" />
             <Setter Property="KnobBoxShadow"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.HandleShadow}}" />
+                    Value="{atom:ToggleSwitchTokenResource HandleShadow}" />
             <Setter Property="LoadIndicatorBrush"
-                    Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.OffStateLoadIndicatorColor}}" />
+                    Value="{atom:ToggleSwitchTokenResource OffStateLoadIndicatorColor}" />
             <Style Selector="^[IsCheckedState=True]">
                 <Setter Property="LoadIndicatorBrush"
-                        Value="{DynamicResource {x:Static atom:ToggleSwitchTokenKey.SwitchColor}}" />
+                        Value="{atom:ToggleSwitchTokenResource SwitchColor}" />
             </Style>
         </Style>
 

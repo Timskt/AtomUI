@@ -1,23 +1,26 @@
-﻿using AtomUI.Desktop.Controls;
-using AtomUI.Desktop.Controls.Data;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using AtomUI.Controls;
+using AtomUI.Controls.Data;
+using AtomUI.Desktop.Controls;
 using AtomUIGallery.ShowCases.ViewModels;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
+using IListItemData = AtomUI.Controls.Data.IListItemData;
+using ListItemData = AtomUI.Controls.Data.ListItemData;
 
 namespace AtomUIGallery.ShowCases.Views;
 
 public partial class ListShowCase : ReactiveUserControl<ListViewModel>
 {
-    
     public ListShowCase()
     {
         this.WhenActivated(disposables =>
         {
             if (DataContext is ListViewModel viewModel)
             {
-         
                 viewModel.ListItemsWidthDisabled = [
                     new ListItemData()
                     {
@@ -44,13 +47,25 @@ public partial class ListShowCase : ReactiveUserControl<ListViewModel>
                 InitializeOrderedGroupItems(viewModel);
                 InitializeEmptyDemoItems(viewModel);
                 InitializeBasicListBoxItems(viewModel);
+                InitializePaginationListBoxItems(viewModel);
                 viewModel.SelectionMode = SelectionMode.Single;
+
+                Disposable.Create(() =>
+                {
+                    viewModel.ListItems              = null;
+                    viewModel.SelectionListItems     = null;
+                    viewModel.GroupListItems         = null;
+                    viewModel.ListItemsWidthDisabled = null;
+                    viewModel.EmptyDemoItems         = null;
+                    viewModel.FilteredGroupListItems = null;
+                    viewModel.OrderedGroupListItems  = null;
+                    viewModel.PaginationListItems    = null;
+                }).DisposeWith(disposables);
             }
         });
         InitializeComponent();
         SelectionModeOptionGroup.OptionCheckedChanged += HandleSelectionModeOptionCheckedChanged;
-        FilteredList.CollectionViewChanged            += HandleFilterCollectionViewChanged;
-        OrderedList.CollectionViewChanged             += HandleOrderedCollectionViewChanged;
+        OrderedList.SortDescriptions = [ListSortDescription.FromPath("Content")];
     }
 
     private void HandleSelectionModeOptionCheckedChanged(object? sender, OptionCheckedChangedEventArgs e)
@@ -227,25 +242,25 @@ public partial class ListShowCase : ReactiveUserControl<ListViewModel>
     private void InitializeBasicListBoxItems(ListViewModel viewModel)
     {
         viewModel.BasicListBoxItems = [
-            new ListBoxItemData()
+            new ListItemData()
             {
-                Value = "Racing car sprays burning fuel into crowd."
+                Content = "Racing car sprays burning fuel into crowd."
             },
-            new ListBoxItemData()
+            new ListItemData()
             {
-                Value = "Japanese princess to wed commoner."
+                Content = "Japanese princess to wed commoner."
             },
-            new ListBoxItemData()
+            new ListItemData()
             {
-                Value = "Australian walks 100km after outback crash."
+                Content = "Australian walks 100km after outback crash."
             },
-            new ListBoxItemData()
+            new ListItemData()
             {
-                Value = "Man charged over missing wedding girl."
+                Content = "Man charged over missing wedding girl."
             },
-            new ListBoxItemData()
+            new ListItemData()
             {
-                Value = "Los Angeles battles huge wildfires."
+                Content = "Los Angeles battles huge wildfires."
             },
         ];
     }
@@ -287,39 +302,26 @@ public partial class ListShowCase : ReactiveUserControl<ListViewModel>
         viewModel.EmptyDemoItems = items;
     }
     
-    private void HandleFilterCollectionViewChanged(object? sender, ListCollectionViewChangedEventArgs e)
-    {
-        if (FilteredList.CollectionView != null)
-        {
-            FilteredList.CollectionView.FilterDescriptions.Add(new ListFilterDescription()
-            {
-                FilterPropertySelector = data =>
-                {
-                    if (data is IListItemData listItemData)
-                    {
-                        return listItemData.Content;
-                    }
-
-                    return null;
-                },
-                FilterConditions       = ["a"]
-            });
-        }
-    }
-    
-    private void HandleOrderedCollectionViewChanged(object? sender, ListCollectionViewChangedEventArgs e)
-    {
-        if (OrderedList.CollectionView != null)
-        {
-            OrderedList.CollectionView.SortDescriptions.Add(ListSortDescription.FromPath("Content"));
-        }
-    }
-    
     private void HandleFilterListBoxClicked(object? sender, RoutedEventArgs e)
     {
         if (sender is SearchEdit searchEdit)
         {
             SearchListBox.ItemFilterValue = searchEdit.Text?.Trim();
         }
+    }
+
+    private void InitializePaginationListBoxItems(ListViewModel viewModel)
+    {
+        var list = new List<IListItemData>();
+        for (var i = 0; i < 2000; i++)
+        {
+            list.Add(new ListItemData()
+            {
+                ItemKey = $"{i}",
+                Content = $"Content {i}"
+            });
+        }
+
+        viewModel.PaginationListItems = list;
     }
 }

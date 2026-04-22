@@ -70,8 +70,8 @@
     </Setter>
 
     <Style Selector="^:is(atom|DataGridColumnHeader)">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderTextColor}}" />
-        <Setter Property="FontWeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontWeightStrong}}" />
+        <Setter Property="Foreground" Value="{atom:DataGridTokenResource TableHeaderTextColor}" />
+        <Setter Property="FontWeight" Value="{atom:SharedTokenResource FontWeightStrong}" />
         <Setter Property="atom:ToolTip.Placement" Value="Top" />
         <Setter Property="atom:ToolTip.ShowDelay" Value="1000" />
         <Setter Property="atom:ToolTip.ServiceEnabled" Value="False" />
@@ -79,48 +79,57 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="ClipToBounds" Value="False" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
+        <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
         <Style Selector="^[ShowSorterTooltip=True]">
             <Setter Property="atom:ToolTip.ServiceEnabled" Value="True" />
         </Style>
 
         <Style Selector="^[SizeType=Large]">
             <Style Selector="^ /template/ Border#ContentFrame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePadding}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePadding}" />
             </Style>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSize}}" />
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSize}" />
         </Style>
         <Style Selector="^[SizeType=Middle]">
             <Style Selector="^ /template/ Border#ContentFrame">
                 <Setter Property="Padding"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingMiddle}}" />
+                        Value="{atom:DataGridTokenResource TablePaddingMiddle}" />
             </Style>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeMiddle}}" />
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSizeMiddle}" />
         </Style>
         <Style Selector="^[SizeType=Small]">
             <Style Selector="^ /template/ Border#ContentFrame">
-                <Setter Property="Padding" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TablePaddingSmall}}" />
+                <Setter Property="Padding" Value="{atom:DataGridTokenResource TablePaddingSmall}" />
             </Style>
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableFontSizeSmall}}" />
+            <Setter Property="FontSize" Value="{atom:DataGridTokenResource TableFontSizeSmall}" />
         </Style>
 
         <Style Selector="^ /template/ Rectangle#VerticalSeparator">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static atom:DataGridTokenKey.HeaderSplitColor}}" />
+            <Setter Property="Fill" Value="{atom:DataGridTokenResource HeaderSplitColor}" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Height" Value="{DynamicResource {x:Static atom:SharedTokenKey.FontHeight}}" />
+            <Setter Property="Height" Value="{atom:SharedTokenResource FontHeight}" />
         </Style>
-        
+
         <Style Selector="^[IsSeparatorFullHeight=True] /template/ Rectangle#VerticalSeparator">
             <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="Height" Value="NaN" />
         </Style>
 
         <Style Selector="^ /template/ StackPanel#IndicatorsLayout">
-            <Setter Property="Spacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyMarginXXS}}" />
+            <Setter Property="Spacing" Value="{atom:SharedTokenResource UniformlyMarginXXS}" />
         </Style>
-        
+
         <Style Selector="^ /template/ DockPanel#ContentLayout">
-            <Setter Property="HorizontalSpacing" Value="{DynamicResource {x:Static atom:SharedTokenKey.UniformlyMarginXS}}" />
+            <Setter Property="HorizontalSpacing" Value="{atom:SharedTokenResource UniformlyMarginXS}" />
         </Style>
         <Style Selector="^:sort-ascending">
             <Style Selector="^ /template/ atom|DataGridSortIndicator#PART_SortIndicator">
@@ -141,16 +150,16 @@
         <Style Selector="^[CanUserSort=True]">
             <Style Selector="^:sort-ascending, ^:sort-descending">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.HeaderSortActiveBg}}" />
+                        Value="{atom:DataGridTokenResource HeaderSortActiveBg}" />
             </Style>
 
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Cursor" Value="Hand" />
             </Style>
-        
+
             <Style Selector="^:pointerover">
                 <Setter Property="Background"
-                        Value="{DynamicResource {x:Static atom:DataGridTokenKey.HeaderSortHoverBg}}" />
+                        Value="{atom:DataGridTokenResource HeaderSortHoverBg}" />
             </Style>
         </Style>
 
@@ -160,17 +169,17 @@
 
         <Style Selector="^[HeaderDragMode=Reorder]">
             <Setter Property="Background"
-                    Value="{DynamicResource {x:Static atom:DataGridTokenKey.ColumnReorderActiveBg}}" />
+                    Value="{atom:DataGridTokenResource ColumnReorderActiveBg}" />
         </Style>
 
         <Style Selector="^[IsShowFrozenShadow=True]">
 
-            <Setter Property="Background" Value="{DynamicResource {x:Static atom:DataGridTokenKey.TableHeaderBg}}" />
+            <Setter Property="Background" Value="{atom:DataGridTokenResource TableHeaderBg}" />
 
             <Style Selector="^[FrozenShadowPosition=Left]">
                 <Style Selector="^ /template/ Border#Frame">
                     <Setter Property="BoxShadow"
-                            Value="{DynamicResource {x:Static atom:DataGridTokenKey.LeftFrozenShadows}}" />
+                            Value="{atom:DataGridTokenResource LeftFrozenShadows}" />
                 </Style>
                 <Setter Property="ZIndex" Value="1" />
             </Style>
@@ -178,10 +187,23 @@
             <Style Selector="^[FrozenShadowPosition=Right]">
                 <Style Selector="^ /template/ Border#Frame">
                     <Setter Property="BoxShadow"
-                            Value="{DynamicResource {x:Static atom:DataGridTokenKey.RightFrozenShadows}}" />
+                            Value="{atom:DataGridTokenResource RightFrozenShadows}" />
                 </Style>
                 <Setter Property="ZIndex" Value="1" />
             </Style>
         </Style>
+
+        <Style Selector="^[SortTooltipType=Cancel]">
+            <Setter Property="atom:ToolTip.Tip" Value="{atom:DataGridLangResource CancelTooltip}" />
+        </Style>
+
+        <Style Selector="^[SortTooltipType=Ascending]">
+            <Setter Property="atom:ToolTip.Tip" Value="{atom:DataGridLangResource AscendTooltip}" />
+        </Style>
+
+        <Style Selector="^[SortTooltipType=Descending]">
+            <Setter Property="atom:ToolTip.Tip" Value="{atom:DataGridLangResource DescendTooltip}" />
+        </Style>
+
     </Style>
 </ControlTheme>

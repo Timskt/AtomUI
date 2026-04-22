@@ -1,10 +1,10 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reactive.Disposables;
+using AtomUI.Animations;
 using AtomUI.Controls;
 using AtomUI.Data;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -18,7 +18,6 @@ using Avalonia.VisualTree;
 using AtomUI.Desktop.Controls.DialogPositioning;
 using AtomUI.Desktop.Controls.Primitives;
 using AtomUI.Desktop.Controls.Themes;
-using Avalonia.Animation.Easings;
 using Avalonia.Media.Transformation;
 
 namespace AtomUI.Desktop.Controls;
@@ -265,7 +264,7 @@ internal class OverlayDialogHost : ContentControl,
         _dialog                    = dialog;
         _dialogLayer               = dialogLayer;
         _positioner                = new ManagedDialogPositioner(this);
-        _keyboardNavigationHandler = AvaloniaLocator.Current.GetService<IKeyboardNavigationHandler>();
+        _keyboardNavigationHandler = AvaloniaLocator.Current.GetService(typeof(IKeyboardNavigationHandler)) as IKeyboardNavigationHandler;
         _keyboardNavigationHandler?.SetOwner(this);
         CustomButtons.CollectionChanged +=  new NotifyCollectionChangedEventHandler(HandleCustomButtonsChanged);
         _dialogMask                     ??= new OverlayDialogMask(_dialogLayer, _dialog);
@@ -502,13 +501,6 @@ internal class OverlayDialogHost : ContentControl,
                  change.Property == IsLoadingProperty)
         {
             ConfigureEffectiveFooterVisible();
-        }
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
         }
     }
 
@@ -875,40 +867,21 @@ internal class OverlayDialogHost : ContentControl,
         ConfigureEffectiveFooterVisible();
     }
     
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                var easing = new CircularEaseOut();
-                Transitions = [
-                    TransitionUtils.CreateTransition<DoubleTransition>(OpacityProperty, AnimationDuration, easing),
-                    TransitionUtils.CreateTransition<TransformOperationsTransition>(RenderTransformProperty, AnimationDuration, easing),
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
     internal void NotifyChangeZIndex(int zindex)
     {
         _dialogMask.SetCurrentValue(OverlayDialogMask.ZIndexProperty, zindex - 1);
         SetCurrentValue(ZIndexProperty, zindex);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 }

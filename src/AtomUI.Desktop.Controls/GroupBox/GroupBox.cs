@@ -1,7 +1,6 @@
 ﻿using AtomUI.Controls.Utils;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -17,7 +16,7 @@ public enum GroupBoxTitlePosition
     Center
 }
 
-public class GroupBox : ContentControl, IControlSharedTokenResourcesHost
+public class GroupBox : ContentControl
 {
     #region 公共属性定义
 
@@ -85,13 +84,6 @@ public class GroupBox : ContentControl, IControlSharedTokenResourcesHost
     }
 
     #endregion
-
-    #region 内部属性定义
-
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => GroupBoxToken.ID;
-    
-    #endregion
     
     private readonly BorderRenderHelper _borderRenderHelper;
     private Control? _headerContentContainer;
@@ -106,7 +98,7 @@ public class GroupBox : ContentControl, IControlSharedTokenResourcesHost
 
     public GroupBox()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(GroupBoxToken.ScopeProvider);
         _borderRenderHelper = new BorderRenderHelper();
     }
 

@@ -1,18 +1,18 @@
-﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using AtomUI.Controls;
-using AtomUI.Data;
 using AtomUI.Desktop.Controls.Themes;
 using AtomUI.Theme;
 using AtomUI.Utils;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Diagnostics;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
-using Avalonia.VisualTree;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -20,7 +20,6 @@ using AvaloniaComboBox = Avalonia.Controls.ComboBox;
 
 public class ComboBox : AvaloniaComboBox,
                         IMotionAwareControl,
-                        IControlSharedTokenResourcesHost,
                         ISizeTypeAware,
                         IInputControlStatusAware,
                         IInputControlStyleVariantAware,
@@ -33,7 +32,7 @@ public class ComboBox : AvaloniaComboBox,
         AddOnDecoratedBox.LeftAddOnProperty.AddOwner<ComboBox>();
     
     public static readonly StyledProperty<IDataTemplate?> LeftAddOnTemplateProperty =
-       AddOnDecoratedBox.LeftAddOnTemplateProperty.AddOwner<ComboBox>();
+        AddOnDecoratedBox.LeftAddOnTemplateProperty.AddOwner<ComboBox>();
 
     public static readonly StyledProperty<object?> RightAddOnProperty =
         AddOnDecoratedBox.RightAddOnProperty.AddOwner<ComboBox>();
@@ -208,41 +207,19 @@ public class ComboBox : AvaloniaComboBox,
         get => GetValue(FormFeedbackProperty);
         set => SetValue(FormFeedbackProperty, value);
     }
-    
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => ComboBoxToken.ID;
 
     #endregion
     
     private Popup? _popup;
-    private readonly Dictionary<ComboBoxItem, CompositeDisposable> _itemsBindingDisposables = new();
+    private Window? _attachedWindow;
+    private AddOnDecoratedBox? _addOnDecoratedBox;
+    private ComboBoxHandle? _comboBoxHandle;
+    private CompositeDisposable? _contentRightAddOnBindings;
 
     public ComboBox()
     {
-        this.RegisterResources();
-        LogicalChildren.CollectionChanged += HandleCollectionChanged;
+        this.RegisterTokenResourceScope(ComboBoxToken.ScopeProvider);
         SelectionBoxItemProperty.Changed.AddClassHandler<ComboBox>((box, args) => box.NotifyFormValueChanged(args.NewValue));
-    }
-    
-    private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems != null)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems.Count > 0)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is ComboBoxItem comboBoxItem)
-                    {
-                        if (_itemsBindingDisposables.TryGetValue(comboBoxItem, out var disposable))
-                        {
-                            disposable.Dispose();
-                            _itemsBindingDisposables.Remove(comboBoxItem);
-                        }
-                    }
-                }
-            }
-        }
     }
     
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -252,31 +229,64 @@ public class ComboBox : AvaloniaComboBox,
 
         if (_popup != null)
         {
-            _popup.ClickHidePredicate  =  PopupClosePredicate;
-        }
-        
-        _popup = e.NameScope.Find<Popup>(ComboBoxThemeConstants.PopupPart);
-        
-        if (_popup != null)
-        {
-            _popup.ClickHidePredicate  =  PopupClosePredicate;
+            _popup.ClickHidePredicate = PopupClosePredicate;
         }
 
-        var addOnDecoratedBox = e.NameScope.Find<AddOnDecoratedBox>(AddOnDecoratedBox.AddOnDecoratedBoxPart);
-        if (addOnDecoratedBox != null)
+        _popup = e.NameScope.Find<Popup>(ComboBoxThemeConstants.PopupPart);
+
+        if (_popup != null)
         {
-            if (addOnDecoratedBox.ContentRightAddOn is Control rightAddOn)
-            {
-                var handle = rightAddOn.FindDescendantOfType<ComboBoxHandle>();
-                if (handle != null)
-                {
-                    handle.HandleClick += HandleOpenPopupClicked;
-                }
-            }
+            _popup.ClickHidePredicate = PopupClosePredicate;
         }
-        
+
+        if (_comboBoxHandle != null)
+        {
+            _comboBoxHandle.HandleClick -= HandleOpenPopupClicked;
+        }
+
+        _addOnDecoratedBox = e.NameScope.Find<AddOnDecoratedBox>(AddOnDecoratedBox.AddOnDecoratedBoxPart);
+        _comboBoxHandle = e.NameScope.Find<ComboBoxHandle>("PART_ComboBoxHandle");
+
+        if (_comboBoxHandle != null)
+        {
+            _comboBoxHandle.HandleClick += HandleOpenPopupClicked;
+        }
+
         UpdatePseudoClasses();
         ConfigureMaxDropdownHeight();
+        SetupContentRightAddOnBindings(e);
+    }
+
+    private void SetupContentRightAddOnBindings(TemplateAppliedEventArgs e)
+    {
+        _contentRightAddOnBindings?.Dispose();
+        _contentRightAddOnBindings = new CompositeDisposable();
+
+        if (e.NameScope.Find<ContentPresenter>("PART_ContentRightAddOnPresenter") is { } contentPresenter)
+        {
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(ContentPresenter.ContentProperty,
+                new Binding(nameof(ContentRightAddOn)) { Source = this }));
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(ContentPresenter.ContentTemplateProperty,
+                new Binding(nameof(ContentLeftAddOnTemplate)) { Source = this }));
+            _contentRightAddOnBindings.Add(contentPresenter.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(ContentRightAddOn)) { Source = this, Converter = ObjectConverters.IsNotNull }));
+        }
+
+        if (e.NameScope.Find<ContentPresenter>("PART_FormFeedBack") is { } formFeedback)
+        {
+            _contentRightAddOnBindings.Add(formFeedback.Bind(Visual.IsVisibleProperty,
+                new Binding(nameof(FormFeedback)) { Source = this, Converter = ObjectConverters.IsNotNull }));
+            _contentRightAddOnBindings.Add(formFeedback.Bind(ContentPresenter.ContentProperty,
+                new Binding(nameof(FormFeedback)) { Source = this }));
+        }
+
+        if (_comboBoxHandle != null)
+        {
+            _contentRightAddOnBindings.Add(_comboBoxHandle.Bind(InputElement.IsEnabledProperty,
+                new Binding(nameof(IsEnabled)) { Source = this }));
+            _contentRightAddOnBindings.Add(_comboBoxHandle.Bind(ComboBoxHandle.IsMotionEnabledProperty,
+                new Binding(nameof(IsMotionEnabled)) { Source = this }));
+        }
     }
     
     protected bool PopupClosePredicate(IPopupHostProvider hostProvider, RawPointerEventArgs args)
@@ -317,6 +327,7 @@ public class ComboBox : AvaloniaComboBox,
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel is Window window)
         {
+            _attachedWindow    =  window;
             window.Deactivated += HandleWindowDeactivated;
         }
     }
@@ -324,11 +335,12 @@ public class ComboBox : AvaloniaComboBox,
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel is Window window)
+        if (_attachedWindow != null)
         {
-            window.Deactivated -= HandleWindowDeactivated;
+            _attachedWindow.Deactivated -= HandleWindowDeactivated;
         }
+
+        _attachedWindow = null;
     }
     
     private void HandleWindowDeactivated(object? sender, EventArgs e)
@@ -358,8 +370,6 @@ public class ComboBox : AvaloniaComboBox,
         base.PrepareContainerForItemOverride(container, item, index);
         if (container is ComboBoxItem comboBoxItem)
         {
-            var disposables = new CompositeDisposable(4);
-            
             if (item != null && item is not Visual)
             {
                 if (!comboBoxItem.IsSet(ComboBoxItem.ContentProperty))
@@ -370,20 +380,13 @@ public class ComboBox : AvaloniaComboBox,
             
             if (ItemTemplate != null)
             {
-                disposables.Add(BindUtils.RelayBind(this, ItemTemplateProperty, comboBoxItem, ComboBoxItem.ContentTemplateProperty));
+                comboBoxItem[!ComboBoxItem.ContentTemplateProperty] = this[!ItemTemplateProperty];
             }
             
-            disposables.Add(BindUtils.RelayBind(this, SizeTypeProperty, comboBoxItem, ComboBoxItem.SizeTypeProperty));
-            disposables.Add(BindUtils.RelayBind(this, OptionFontSizeProperty, comboBoxItem, ComboBoxItem.FontSizeProperty));
-            disposables.Add(BindUtils.RelayBind(this, IsMotionEnabledProperty, comboBoxItem, ComboBoxItem.IsMotionEnabledProperty));
-            disposables.Add(BindUtils.RelayBind(this, ItemHeightProperty, comboBoxItem, ComboBoxItem.HeightProperty));
-            
-            if (_itemsBindingDisposables.TryGetValue(comboBoxItem, out var oldDisposables))
-            {
-                oldDisposables.Dispose();
-                _itemsBindingDisposables.Remove(comboBoxItem);
-            }
-            _itemsBindingDisposables.Add(comboBoxItem, disposables);
+            comboBoxItem[!ComboBoxItem.SizeTypeProperty]        = this[!SizeTypeProperty];
+            comboBoxItem[!ComboBoxItem.FontSizeProperty]        = this[!OptionFontSizeProperty];
+            comboBoxItem[!ComboBoxItem.IsMotionEnabledProperty] = this[!IsMotionEnabledProperty];
+            comboBoxItem[!ComboBoxItem.HeightProperty]          = this[!ItemHeightProperty];
         }
     }
 

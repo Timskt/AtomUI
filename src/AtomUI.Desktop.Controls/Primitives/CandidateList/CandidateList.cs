@@ -1,11 +1,13 @@
 using AtomUI.Controls;
+using AtomUI.Controls.Data;
+using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 
 namespace AtomUI.Desktop.Controls.Primitives;
 
@@ -88,6 +90,8 @@ public class CandidateList : ListBox, ICandidateList
     
     private static readonly FuncTemplate<Panel?> DefaultPanel = new(() => new CandidateVirtualizingStackPanel());
 
+    private ScrollViewer? _scrollViewer;
+
     static CandidateList()
     {
         SelectedItemProperty.Changed.AddClassHandler<CandidateList>((list, args) => list.HandleSelectItemChanged(args));
@@ -130,7 +134,7 @@ public class CandidateList : ListBox, ICandidateList
             {
                 var item      = Items[i];
                 var container = ContainerFromIndex(i);
-                if (item is IListBoxItemData selectOption)
+                if (item is IListItemData selectOption)
                 {
                     container?.SetCurrentValue(IsEnabledProperty, selectOption.IsEnabled);
                 }
@@ -214,11 +218,16 @@ public class CandidateList : ListBox, ICandidateList
     
     private void ResetScrollViewer()
     {
-        var sv = this.GetLogicalDescendants().OfType<ScrollViewer>().FirstOrDefault();
-        if (sv != null)
+        if (_scrollViewer != null)
         {
-            sv.Offset = new Vector(0, 0);
+            _scrollViewer.Offset = new Vector(0, 0);
         }
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _scrollViewer = e.NameScope.Find<ScrollViewer>(ListViewThemeConstants.ScrollViewerPart);
     }
     
     public void HandleKeyDown(KeyEventArgs e)
@@ -443,7 +452,7 @@ public class CandidateList : ListBox, ICandidateList
 
     #region 虚拟化上下文管理
 
-    protected override void NotifyRestoreDefaultContext(ListBoxItem item, IListBoxItemData itemData)
+    protected override void NotifyRestoreDefaultContext(ListBoxItem item, IListItemData itemData)
     {
         base.NotifyRestoreDefaultContext(item, itemData);
         if (item is CandidateListItem candidateListItem && item is IListItemVirtualizingContextAware virtualListItem)

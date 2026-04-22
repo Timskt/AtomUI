@@ -31,23 +31,25 @@
                         <atom:CarouselPagination Name="{x:Static atom:CarouselThemeConstants.PaginationPart}"
                                                  IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
                                                  IsShowTransitionProgress="{TemplateBinding IsEffectiveShowTransitionProgress}"
-                                                 AutoPlaySpeed="{TemplateBinding AutoPlaySpeed}" />
+                                                 AutoPlaySpeed="{TemplateBinding AutoPlaySpeed}" 
+                                                 SelectedIndex="{TemplateBinding SelectedIndex, Mode=TwoWay}"
+                                                 ItemsSource="{TemplateBinding IndicatorItems}"/>
                     </LayoutTransformControl>
                 </Panel>
             </ControlTemplate>
         </Setter>
 
-        <Setter Property="PaginationOffset" Value="{DynamicResource {x:Static atom:CarouselTokenKey.PaginationOffset}}" />
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="PaginationOffset" Value="{atom:CarouselTokenResource PaginationOffset}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Setter Property="PageTransitionDuration"
-                Value="{DynamicResource {x:Static atom:SharedTokenKey.MotionDurationSlow}}" />
+                Value="{atom:SharedTokenResource MotionDurationSlow}" />
         <Setter Property="PageInEasing" Value="CubicEaseOut" />
         <Setter Property="PageOutEasing" Value="CubicEaseOut" />
 
         <Style Selector="^ /template/ atom|CarouselNavButton">
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:CarouselTokenKey.ArrowSize}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:CarouselTokenKey.ArrowSize}}" />
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorBgContainer}}" />
+            <Setter Property="IconWidth" Value="{atom:CarouselTokenResource ArrowSize}" />
+            <Setter Property="IconHeight" Value="{atom:CarouselTokenResource ArrowSize}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorBgContainer}" />
             <Setter Property="Opacity" Value="0.2" />
         </Style>
 

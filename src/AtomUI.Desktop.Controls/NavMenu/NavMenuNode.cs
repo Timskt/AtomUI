@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using System.Windows.Input;
 using AtomUI.Controls;
 using Avalonia;
 using Avalonia.Collections;
@@ -12,8 +11,6 @@ namespace AtomUI.Desktop.Controls;
 public interface INavMenuNode : ITreeNode<INavMenuNode>
 {
     IDataTemplate? HeaderTemplate { get; }
-    ICommand? Command { get; }
-    object? CommandParameter { get; }
     void UpdateParentNode(INavMenuNode? parentNode) => throw new NotImplementedException();
 }
 
@@ -31,20 +28,8 @@ public class NavMenuNode : AvaloniaObject, INavMenuNode
             o => o.HeaderTemplate,
             (o, v) => o.HeaderTemplate = v);
     
-    public static readonly DirectProperty<NavMenuNode, ICommand?> CommandProperty =
-        AvaloniaProperty.RegisterDirect<NavMenuNode, ICommand?>(
-            nameof(Command),
-            o => o.Command,
-            (o, v) => o.Command = v);
-    
-    public static readonly DirectProperty<NavMenuNode, object?> CommandParameterProperty =
-        AvaloniaProperty.RegisterDirect<NavMenuNode, object?>(
-            nameof(CommandParameter),
-            o => o.CommandParameter,
-            (o, v) => o.CommandParameter = v);
-    
-    public static readonly DirectProperty<NavMenuNode, TreeNodeKey?> ItemKeyProperty =
-        AvaloniaProperty.RegisterDirect<NavMenuNode, TreeNodeKey?>(
+    public static readonly DirectProperty<NavMenuNode, EntityKey?> ItemKeyProperty =
+        AvaloniaProperty.RegisterDirect<NavMenuNode, EntityKey?>(
             nameof(ItemKey),
             o => o.ItemKey,
             (o, v) => o.ItemKey = v);
@@ -76,26 +61,10 @@ public class NavMenuNode : AvaloniaObject, INavMenuNode
         get => _headerTemplate;
         set => SetAndRaise(HeaderTemplateProperty, ref _headerTemplate, value);
     }
-            
-    private ICommand? _command;
-
-    public ICommand? Command
-    {
-        get => _command;
-        set => SetAndRaise(CommandProperty, ref _command, value);
-    }
     
-    private object? _commandParameter;
+    private EntityKey? _itemKey;
 
-    public object? CommandParameter
-    {
-        get => _commandParameter;
-        set => SetAndRaise(CommandParameterProperty, ref _commandParameter, value);
-    }
-    
-    private TreeNodeKey? _itemKey;
-
-    public TreeNodeKey? ItemKey
+    public EntityKey? ItemKey
     {
         get => _itemKey;
         set => SetAndRaise(ItemKeyProperty, ref _itemKey, value);
@@ -127,6 +96,8 @@ public class NavMenuNode : AvaloniaObject, INavMenuNode
         get => _children;
         init => _children.AddRange(value);
     }
+
+    IEnumerable<INavMenuNode> ITreeNode<INavMenuNode>.Children => Children;
     
     public NavMenuNode()
     {

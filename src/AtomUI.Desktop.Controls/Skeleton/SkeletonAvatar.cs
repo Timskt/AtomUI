@@ -1,18 +1,16 @@
 using AtomUI.Controls;
 using AtomUI.Theme;
-using AtomUI.Utils;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 
 namespace AtomUI.Desktop.Controls;
 
-public class SkeletonAvatar : AbstractSkeleton, IControlSharedTokenResourcesHost, ICustomizableSizeTypeAware
+public class SkeletonAvatar : AbstractSkeleton, ICustomizableSizeTypeAware
 {
     #region 公共属性定义
     public static readonly StyledProperty<AvatarShape> ShapeProperty =
-        AvaloniaProperty.Register<SkeletonAvatar, AvatarShape>(nameof(AvatarShape), AvatarShape.Circle);
+        AvaloniaProperty.Register<SkeletonAvatar, AvatarShape>(nameof(Shape), AvatarShape.Circle);
     
     public static readonly StyledProperty<CustomizableSizeType> SizeTypeProperty =
         CustomizableSizeTypeControlProperty.SizeTypeProperty.AddOwner<SkeletonAvatar>();
@@ -56,14 +54,11 @@ public class SkeletonAvatar : AbstractSkeleton, IControlSharedTokenResourcesHost
         set => SetAndRaise(IsCustomSizeProperty, ref _isCustomSize, value);
     }
 
-    Control IControlSharedTokenResourcesHost.HostControl => this;
-    string IControlSharedTokenResourcesHost.TokenId => SkeletonToken.ID;
-
     #endregion
     
     public SkeletonAvatar()
     {
-        this.RegisterResources();
+        this.RegisterTokenResourceScope(SkeletonToken.ScopeProvider);
     }
     
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

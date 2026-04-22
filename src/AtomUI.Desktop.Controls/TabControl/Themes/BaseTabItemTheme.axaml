@@ -28,63 +28,63 @@
     
     <Style Selector="^:is(atom|TabItem)">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemColor}}" />
+        <Setter Property="Foreground" Value="{atom:TabControlTokenResource ItemColor}" />
         <Setter Property="Background" Value="Transparent" />
 
         <Style Selector="^ /template/ atom|IconButton#PART_ItemCloseButton">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TabControlTokenKey.CloseIconMargin}}" />
-            <Setter Property="IconWidth" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
-            <Setter Property="IconHeight" Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+            <Setter Property="Margin" Value="{atom:TabControlTokenResource CloseIconMargin}" />
+            <Setter Property="IconWidth" Value="{atom:SharedTokenResource IconSizeSM}" />
+            <Setter Property="IconHeight" Value="{atom:SharedTokenResource IconSizeSM}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#ItemIconPresenter">
-            <Setter Property="Margin" Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemIconMargin}}" />
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemColor}}" />
+            <Setter Property="Margin" Value="{atom:TabControlTokenResource ItemIconMargin}" />
+            <Setter Property="IconBrush" Value="{atom:TabControlTokenResource ItemColor}" />
         </Style>
 
         <Style Selector="^:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemHoverColor}}" />
+            <Setter Property="Foreground" Value="{atom:TabControlTokenResource ItemHoverColor}" />
             <Style Selector="^ /template/ atom|IconPresenter#ItemIconPresenter">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemHoverColor}}" />
+                        Value="{atom:TabControlTokenResource ItemHoverColor}" />
             </Style>
         </Style>
         
         <Style Selector="^:selected">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemSelectedColor}}" />
+            <Setter Property="Foreground" Value="{atom:TabControlTokenResource ItemSelectedColor}" />
             <Style Selector="^ /template/ atom|IconPresenter#ItemIconPresenter">
                 <Setter Property="IconBrush"
-                        Value="{DynamicResource {x:Static atom:TabControlTokenKey.ItemSelectedColor}}" />
+                        Value="{atom:TabControlTokenResource ItemSelectedColor}" />
             </Style>
         </Style>
         
         <Style Selector="^[SizeType=Large]">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:TabControlTokenKey.TitleFontSizeLG}}" />
+            <Setter Property="FontSize" Value="{atom:TabControlTokenResource TitleFontSizeLG}" />
             <Style Selector="^ /template/ atom|IconPresenter#ItemIconPresenter">
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                        Value="{atom:SharedTokenResource IconSize}" />
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                        Value="{atom:SharedTokenResource IconSize}" />
             </Style>
         </Style>
 
         <Style Selector="^[SizeType=Middle]">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:TabControlTokenKey.TitleFontSize}}" />
+            <Setter Property="FontSize" Value="{atom:TabControlTokenResource TitleFontSize}" />
             <Style Selector="^ /template/ atom|IconPresenter#ItemIconPresenter">
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                        Value="{atom:SharedTokenResource IconSize}" />
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSize}}" />
+                        Value="{atom:SharedTokenResource IconSize}" />
             </Style>
         </Style>
         
         <Style Selector="^[SizeType=Small]">
-            <Setter Property="FontSize" Value="{DynamicResource {x:Static atom:TabControlTokenKey.TitleFontSizeSM}}" />
+            <Setter Property="FontSize" Value="{atom:TabControlTokenResource TitleFontSizeSM}" />
             <Style Selector="^ /template/ atom|IconPresenter#ItemIconPresenter">
                 <Setter Property="Width"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                        Value="{atom:SharedTokenResource IconSizeSM}" />
                 <Setter Property="Height"
-                        Value="{DynamicResource {x:Static atom:SharedTokenKey.IconSizeSM}}" />
+                        Value="{atom:SharedTokenResource IconSizeSM}" />
             </Style>
         </Style>
         
@@ -116,7 +116,7 @@
         </Style>
         
         <Style Selector="^:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorTextDisabled}}" />
+            <Setter Property="Foreground" Value="{atom:SharedTokenResource ColorTextDisabled}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconButton#PART_ItemCloseButton">
@@ -137,6 +137,16 @@
                 </Style>
             </Style>
         </Style>
-        
+
+        <Style Selector="^[IsMotionEnabled=True]">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <atom:SolidColorBrushTransition Property="Foreground" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <atom:SolidColorBrushTransition Property="Background" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                    <DoubleTransition Property="CloseButtonOpacity" Duration="{atom:SharedTokenResourceValue Kind=MotionDurationMid}" />
+                </Transitions>
+            </Setter>
+        </Style>
+
     </Style>
 </ControlTheme>

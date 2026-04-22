@@ -1,11 +1,11 @@
 using AtomUI.Animations;
 using AtomUI.Controls;
+using AtomUI.Controls.Data;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using DynamicData;
 
 namespace AtomUI.Desktop.Controls;
 
@@ -16,7 +16,7 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
     #region 公共事件定义
 
     public static readonly RoutedEvent<RoutedEventArgs> ClickedEvent =
-        RoutedEvent.Register<DropdownButton, RoutedEventArgs>(
+        RoutedEvent.Register<ListViewItem, RoutedEventArgs>(
             nameof(Clicked),
             RoutingStrategies.Bubble);
     
@@ -183,36 +183,10 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
     private Point _pointerDownPoint = s_invalidPoint;
     int IListItemVirtualizingContextAware.VirtualIndex { get; set; } = -1;
     bool IListItemVirtualizingContextAware.VirtualContextOperating { get; set; }
-    
-    private void ConfigureTransitions(bool force)
-    {
-        if (IsMotionEnabled)
-        {
-            if (force || Transitions == null)
-            {
-                Transitions = [
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(BackgroundProperty),
-                    TransitionUtils.CreateTransition<SolidColorBrushTransition>(ForegroundProperty)
-                ];
-            }
-        }
-        else
-        {
-            Transitions = null;
-        }
-    }
-    
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (IsLoaded)
-        {
-            if (change.Property == IsMotionEnabledProperty)
-            {
-                ConfigureTransitions(true);
-            }
-        }
-
         if (change.Property == IsSelectedProperty ||
             change.Property == IsShowSelectedIndicatorProperty)
         {
@@ -220,9 +194,9 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
         }
         else if (change.Property == ContentProperty)
         {
-            if (Content is IListBoxItemData listBoxItemData)
+            if (Content is IListItemData listBoxItemData)
             {
-                ContentText = listBoxItemData.Value as string;
+                ContentText = listBoxItemData.Content as string;
             }
             else if (Content is string strContent)
             {
@@ -239,25 +213,20 @@ public class ListBoxItem : AvaloniaListBoxItem, IListItemVirtualizingContextAwar
     {
         base.OnInitialized();
         ConfigureSelectedIndicator();
+        this.DisableTransitions();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        this.EnableTransitions();
     }
 
     private void ConfigureSelectedIndicator()
     {
         SetCurrentValue(IsSelectedIndicatorVisibleProperty, IsShowSelectedIndicator && IsSelected);
     }
-    
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-        ConfigureTransitions(false);
-    }
 
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        Transitions = null;
-    }
-    
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         _pointerDownPoint = s_invalidPoint;

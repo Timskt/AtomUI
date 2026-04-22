@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
-using AtomUI.Data;
-using AtomUI.Desktop.Controls.Themes;
+﻿using AtomUI.Desktop.Controls.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 
@@ -95,10 +92,8 @@ public class CardTabControl : BaseTabControl
         if (container is TabItem tabItem)
         {
             tabItem.Shape = TabSharp.Card;
-            Debug.Assert(ItemsBindingDisposables.ContainsKey(tabItem));
-            var disposables = ItemsBindingDisposables[tabItem];
-            disposables.Add(BindUtils.RelayBind(this, EffectiveCardBorderRadiusProperty, tabItem, CornerRadiusProperty));
-            disposables.Add(BindUtils.RelayBind(this, CardBorderThicknessProperty, tabItem, BorderThicknessProperty));
+            tabItem[!CornerRadiusProperty] = this[!EffectiveCardBorderRadiusProperty];
+            tabItem[!BorderThicknessProperty] = this[!CardBorderThicknessProperty];
         }
     }
 

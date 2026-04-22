@@ -5,12 +5,12 @@
              xmlns:gallery="https://atomui.net/oss-controls/gallery"
              xmlns:viewModels="clr-namespace:AtomUIGallery.ShowCases.ViewModels">
     <gallery:ShowCasePanel>
-
+        
         <gallery:ShowCaseItem
             Title="Basic usage"
             Description="Basic usage example.">
-            <atom:List ItemsSource="{Binding ListItems}"
-                       x:DataType="viewModels:ListViewModel"/>
+            <atom:ListView ItemsSource="{Binding ListItems}"
+                           x:DataType="viewModels:ListViewModel" />
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
@@ -25,27 +25,27 @@
                         <atom:OptionButton Tag="{x:Static SelectionMode.Toggle}">Toggle</atom:OptionButton>
                     </atom:OptionButtonGroup>
                 </StackPanel>
-                <atom:List SelectionMode="{Binding SelectionMode}"
-                           ItemsSource="{Binding SelectionListItems}"
-                           x:DataType="viewModels:ListViewModel"
-                           IsShowSelectedIndicator="True"/>
+                <atom:ListView SelectionMode="{Binding SelectionMode}"
+                               ItemsSource="{Binding SelectionListItems}"
+                               x:DataType="viewModels:ListViewModel"
+                               IsShowSelectedIndicator="True" />
             </StackPanel>
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
             Title="Group"
             Description="You can group the data based on conditions.">
-            <atom:List x:DataType="viewModels:ListViewModel"
-                       ItemsSource="{Binding GroupListItems}"
-                       IsGroupEnabled="True"
-                       Height="300"/>
+            <atom:ListView x:DataType="viewModels:ListViewModel"
+                           ItemsSource="{Binding GroupListItems}"
+                           IsGroupEnabled="True"
+                           Height="300" />
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
             Title="Item disabled"
             Description="Disabled item.">
-            <atom:List x:DataType="viewModels:ListViewModel"
-                       ItemsSource="{Binding ListItemsWidthDisabled}"/>
+            <atom:ListView x:DataType="viewModels:ListViewModel"
+                           ItemsSource="{Binding ListItemsWidthDisabled}" />
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
@@ -58,30 +58,32 @@
                     <atom:Button Content="Remove Item"
                                  Click="HandleRemoveEmptyItemClicked" />
                 </StackPanel>
-                <atom:List
+                <atom:ListView
                     x:DataType="viewModels:ListViewModel"
                     ItemsSource="{Binding EmptyDemoItems}"
                     IsShowEmptyIndicator="True"
-                    IsGroupEnabled="False"/>
+                    IsGroupEnabled="False" />
             </StackPanel>
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
             Title="Filter"
             Description="You can filter the data based on criteria; here we've filtered for items containing 'a'.">
-            <atom:List Name="FilteredList"
-                       x:DataType="viewModels:ListViewModel"
-                       ItemsSource="{Binding FilteredGroupListItems}"
-                       IsGroupEnabled="False"/>
+            <atom:ListView Name="FilteredList"
+                           x:DataType="viewModels:ListViewModel"
+                           ItemsSource="{Binding FilteredGroupListItems}"
+                           IsGroupEnabled="False"
+                           Filter="{atom:ValueFilterProvider Contains}"
+                           FilterValue="a"/>
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
             Title="Ordered"
             Description="We can sort according to specified attributes.">
-            <atom:List Name="OrderedList"
-                       x:DataType="viewModels:ListViewModel"
-                       ItemsSource="{Binding OrderedGroupListItems}"
-                       IsGroupEnabled="True"/>
+            <atom:ListView Name="OrderedList"
+                           x:DataType="viewModels:ListViewModel"
+                           ItemsSource="{Binding OrderedGroupListItems}"
+                           IsGroupEnabled="True" />
         </gallery:ShowCaseItem>
         
         <gallery:ShowCaseItem
@@ -107,7 +109,7 @@
         
         <gallery:ShowCaseItem
             Title="Searchable"
-            Description="Searchable Tree.">
+            Description="Searchable List.">
             <StackPanel Orientation="Vertical" Spacing="10">
                 <atom:SearchEdit PlaceholderText="Search"
                                  SearchButtonClick="HandleFilterListBoxClicked"/>
@@ -119,6 +121,22 @@
                     <atom:ListBoxItem>Los Angeles battles huge wildfires.</atom:ListBoxItem>
                 </atom:ListBox>
             </StackPanel>
+        </gallery:ShowCaseItem>
+        
+        <gallery:ShowCaseItem
+            Title="Pagination list"
+            Description="Pagination list.">
+            <atom:ListView
+                x:DataType="viewModels:ListViewModel"
+                ItemsSource="{Binding PaginationListItems}"
+                PaginationVisibility="Bottom"
+                SelectionMode="Multiple"
+                Height="400"
+                PageSize="100">
+                <atom:ListView.BottomPagination>
+                    <atom:Pagination />
+                </atom:ListView.BottomPagination>
+            </atom:ListView>
         </gallery:ShowCaseItem>
     </gallery:ShowCasePanel>
 </UserControl>

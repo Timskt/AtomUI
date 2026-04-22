@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:atom="https://atomui.net"
+    xmlns:atomc="https://atomui.net/common-controls"
     x:ClassModifier="internal">
     <ControlTheme x:Key="{x:Type atom:ScrollBar}" TargetType="atom:ScrollBar">
         <Style Selector="^:vertical">
@@ -22,10 +23,10 @@
                                                          IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
                                                          IsLiteMode="{TemplateBinding IsLiteMode}"
                                                          Orientation="{TemplateBinding Orientation}"
-                                                         IsExpanded="{TemplateBinding IsEffectiveExpanded, Mode=TwoWay}"/>
+                                                         IsExpanded="{TemplateBinding IsEffectiveExpanded, Mode=TwoWay}" />
                                 </Track.Thumb>
                                 <Track.DecreaseButton>
-                                    <atom:ScrollBarRepeatButton
+                                    <atomc:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageUpButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -34,7 +35,7 @@
                                         Focusable="False" />
                                 </Track.DecreaseButton>
                                 <Track.IncreaseButton>
-                                    <atom:ScrollBarRepeatButton
+                                    <atomc:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageDownButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -66,11 +67,11 @@
                                     <atom:ScrollBarThumb Name="{x:Static atom:ScrollViewerThemeConstants.ThumbPart}"
                                                          IsMotionEnabled="{TemplateBinding IsMotionEnabled}"
                                                          IsLiteMode="{TemplateBinding IsLiteMode}"
-                                                         Orientation="{TemplateBinding Orientation}" 
-                                                         IsExpanded="{TemplateBinding IsEffectiveExpanded, Mode=TwoWay}"/>
+                                                         Orientation="{TemplateBinding Orientation}"
+                                                         IsExpanded="{TemplateBinding IsEffectiveExpanded, Mode=TwoWay}" />
                                 </Track.Thumb>
                                 <Track.DecreaseButton>
-                                    <atom:ScrollBarRepeatButton
+                                    <atomc:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageUpButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -79,7 +80,7 @@
                                         Focusable="False" />
                                 </Track.DecreaseButton>
                                 <Track.IncreaseButton>
-                                    <atom:ScrollBarRepeatButton
+                                    <atomc:ScrollBarRepeatButton
                                         Name="{x:Static atom:ScrollViewerThemeConstants.PageDownButtonPart}"
                                         MinHeight="0"
                                         HorizontalAlignment="Stretch"
@@ -94,19 +95,19 @@
             </Setter>
         </Style>
 
-        <Setter Property="IsMotionEnabled" Value="{DynamicResource {x:Static atom:SharedTokenKey.EnableMotion}}" />
+        <Setter Property="IsMotionEnabled" Value="{atom:SharedTokenResource EnableMotion}" />
         <Style Selector="^:vertical">
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ScrollBarContentVPadding}}" />
+                        Value="{atom:ScrollViewerTokenResource ScrollBarContentVPadding}" />
             </Style>
         </Style>
         <Style Selector="^:horizontal">
             <Style Selector="^ /template/ Border#Frame">
                 <Setter Property="Margin"
-                        Value="{DynamicResource {x:Static atom:ScrollViewerTokenKey.ScrollBarContentHPadding}}" />
+                        Value="{atom:ScrollViewerTokenResource ScrollBarContentHPadding}" />
             </Style>
         </Style>
-        
+
     </ControlTheme>
 </ResourceDictionary>

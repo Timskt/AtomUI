@@ -1,19 +1,20 @@
 <ControlTheme xmlns="https://github.com/avaloniaui"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:atom="https://atomui.net"
+              xmlns:atomc="https://atomui.net/common-controls"
               xmlns:themes="using:AtomUI.Desktop.Controls.Themes"
               x:Class="AtomUI.Desktop.Controls.Themes.AbstractCircleProgressTheme"
-              TargetType="atom:AbstractCircleProgress"
+              TargetType="atomc:AbstractCircleProgress"
               x:ClassModifier="internal">
     <ControlTheme.BasedOn>
-        <themes:AbstractProgressBarTheme TargetType="atom:AbstractCircleProgress" />
+        <themes:AbstractProgressBarTheme TargetType="atomc:AbstractCircleProgress" />
     </ControlTheme.BasedOn>
 
     <Setter Property="Template">
-        <ControlTemplate TargetType="atom:AbstractCircleProgress">
+        <ControlTemplate TargetType="atomc:AbstractCircleProgress">
             <Canvas>
-                <LayoutTransformControl Name="{x:Static atom:ProgressBarThemeConstants.LayoutTransformControlPart}">
-                    <Label Name="{x:Static atom:ProgressBarThemeConstants.PercentageLabelPart}"
+                <LayoutTransformControl Name="PART_LayoutTransformControl">
+                    <Label Name="PART_PercentageLabel"
                            Padding="0"
                            Margin="0"
                            VerticalContentAlignment="Center"
@@ -25,12 +26,12 @@
                 </LayoutTransformControl>
                 
                 <atom:IconPresenter
-                    Name="{x:Static atom:ProgressBarThemeConstants.ExceptionCompletedIconPresenterPart}"
+                    Name="PART_ExceptionCompletedIconPresenter"
                     Icon="{TemplateBinding ExceptionCompletedIcon}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>
                 <atom:IconPresenter
-                    Name="{x:Static atom:ProgressBarThemeConstants.SuccessCompletedIconPresenterPart}"
+                    Name="PART_SuccessCompletedIconPresenter"
                     Icon="{TemplateBinding SuccessCompletedIcon}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>
@@ -38,23 +39,23 @@
         </ControlTemplate>
     </Setter>
 
-    <Style Selector="^:is(atom|AbstractCircleProgress)">
+    <Style Selector="^:is(atomc|AbstractCircleProgress)">
         <Setter Property="CircleMinimumTextFontSize"
-                Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.CircleMinimumTextFontSize}}" />
+                Value="{atom:ProgressBarTokenResource CircleMinimumTextFontSize}" />
         <Setter Property="CircleMinimumIconSize"
-                Value="{DynamicResource {x:Static atom:ProgressBarTokenKey.CircleMinimumIconSize}}" />
+                Value="{atom:ProgressBarTokenResource CircleMinimumIconSize}" />
 
         <Style Selector="^ /template/ atom|IconPresenter#PART_ExceptionCompletedIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorError}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorError}" />
         </Style>
 
         <Style Selector="^ /template/ atom|IconPresenter#PART_SuccessCompletedIconPresenter">
-            <Setter Property="IconBrush" Value="{DynamicResource {x:Static atom:SharedTokenKey.ColorSuccess}}" />
+            <Setter Property="IconBrush" Value="{atom:SharedTokenResource ColorSuccess}" />
         </Style>
         
         <Style Selector="^ /template/ atom|IconPresenter:disabled">
             <Setter Property="IconBrush"
-                    Value="{DynamicResource {x:Static atom:SharedTokenKey.ControlItemBgActiveDisabled}}" />
+                    Value="{atom:SharedTokenResource ControlItemBgActiveDisabled}" />
         </Style>
 
     </Style>
