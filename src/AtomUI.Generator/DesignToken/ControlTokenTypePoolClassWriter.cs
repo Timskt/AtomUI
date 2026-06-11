@@ -1,8 +1,6 @@
-using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace AtomUI.Generator;
 
@@ -23,17 +21,15 @@ internal class ControlTokenTypePoolClassWriter
     private void SetupUsingInfos()
     {
         _usingInfos.Add("System.Collections.Generic");
+        _usingInfos.Add("System.Diagnostics.CodeAnalysis");
         _usingInfos.Add("AtomUI.Theme");
     }
 
     public void Write()
     {
         var compilationUnitSyntax = BuildCompilationUnitSyntax();
-        var sourceText = SourceText.From(
-            compilationUnitSyntax.NormalizeWhitespace().ToFullString().Replace("\r\n", "\n"), 
-            Encoding.UTF8
-        );
-        _context.AddSource("ControlTokenTypePool.g.cs", sourceText);
+        _context.AddSource("ControlTokenTypePool.g.cs",
+            GeneratedSourceText.From(compilationUnitSyntax.NormalizeWhitespace().ToFullString()));
     }
 
     private CompilationUnitSyntax BuildCompilationUnitSyntax()
@@ -64,33 +60,16 @@ internal class ControlTokenTypePoolClassWriter
 
     private MethodDeclarationSyntax GenerateGetControlTokenTypesMethod()
     {
-        List<ExpressionStatementSyntax> objectCreateStmts = new();
-        foreach (var className in _classes)
-        {
-            var registerExprStmt =
-                SyntaxFactory.ParseExpression($"ThemeManager.Current.RegisterControlTokenType(typeof({className}))");
-            var statement = SyntaxFactory.ExpressionStatement(registerExprStmt);
-            objectCreateStmts.Add(statement);
-        }
-
         var statements = new List<StatementSyntax>
         {
-            SyntaxFactory.ParseStatement($"List<Type> tokenTypes = new List<Type>({_classes.Count});")
+            SyntaxFactory.ParseStatement($"List<ControlTokenRegistration> tokenTypes = new List<ControlTokenRegistration>({_classes.Count});")
         };
 
         // 动态添加 themes.Add(typeof(XXX));
         foreach (var className in _classes)
         {
-            var addStatement = SyntaxFactory.ExpressionStatement(
-                SyntaxFactory.InvocationExpression(
-                                 SyntaxFactory.MemberAccessExpression(
-                                     SyntaxKind.SimpleMemberAccessExpression,
-                                     SyntaxFactory.IdentifierName("tokenTypes"),
-                                     SyntaxFactory.IdentifierName("Add")))
-                             .WithArgumentList(SyntaxFactory.ArgumentList(
-                                 SyntaxFactory.SingletonSeparatedList(
-                                     SyntaxFactory.Argument(
-                                         SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(className)))))));
+            var addStatement = SyntaxFactory.ParseStatement(
+                $"tokenTypes.Add(new ControlTokenRegistration(typeof({className})));");
 
             statements.Add(addStatement);
         }
@@ -99,15 +78,39 @@ internal class ControlTokenTypePoolClassWriter
         statements.Add(
             SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("tokenTypes")));
         
-        return SyntaxFactory.MethodDeclaration(
-                                SyntaxFactory.GenericName(SyntaxFactory.Identifier("IList"))
-                                             .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(
-                                                 SyntaxFactory.SingletonSeparatedList<TypeSyntax>(
-                                                     SyntaxFactory.ParseTypeName("Type")))),
-                                SyntaxFactory.Identifier("GetTokenTypes"))
-                            .WithModifiers(SyntaxFactory.TokenList(
-                                SyntaxFactory.Token(SyntaxKind.InternalKeyword),
-                                SyntaxFactory.Token(SyntaxKind.StaticKeyword)))
-                            .WithBody(SyntaxFactory.Block(statements));
+        var methodDecl = SyntaxFactory.MethodDeclaration(
+                                             SyntaxFactory.GenericName(SyntaxFactory.Identifier("IList"))
+                                                          .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(
+                                                              SyntaxFactory.SingletonSeparatedList<TypeSyntax>(
+                                                                  SyntaxFactory.ParseTypeName("ControlTokenRegistration")))),
+                                             SyntaxFactory.Identifier("GetTokenTypes"))
+                                         .WithModifiers(SyntaxFactory.TokenList(
+                                             SyntaxFactory.Token(SyntaxKind.InternalKeyword),
+                                             SyntaxFactory.Token(SyntaxKind.StaticKeyword)))
+                                         .WithBody(SyntaxFactory.Block(statements));
+
+        foreach (var className in _classes)
+        {
+            methodDecl = methodDecl.AddAttributeLists(GenerateDynamicDependencyAttributeList(className));
+        }
+
+        return methodDecl;
+    }
+
+    private static AttributeListSyntax GenerateDynamicDependencyAttributeList(string className)
+    {
+        var attribute = SyntaxFactory.Attribute(SyntaxFactory.IdentifierName("DynamicDependency"))
+                                     .WithArgumentList(SyntaxFactory.AttributeArgumentList(
+                                         SyntaxFactory.SeparatedList<AttributeArgumentSyntax>(
+                                             new SyntaxNodeOrToken[]
+                                             {
+                                                 SyntaxFactory.AttributeArgument(SyntaxFactory.ParseExpression(
+                                                     "DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties")),
+                                                 SyntaxFactory.Token(SyntaxKind.CommaToken),
+                                                 SyntaxFactory.AttributeArgument(SyntaxFactory.TypeOfExpression(
+                                                     SyntaxFactory.ParseTypeName(className)))
+                                             })));
+
+        return SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(attribute));
     }
 }

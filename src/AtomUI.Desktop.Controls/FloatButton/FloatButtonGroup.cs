@@ -208,9 +208,8 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
     private FloatButton? _triggerButton;
     ScopeAwareOverlayLayer? _overlayLayer;
     private BaseMotionActor? _motionActor;
-    private bool _showAnimating;
-    private bool _hideAnimating;
-    private bool _closeRequest;
+    private bool _isAttachedToVisualTree;
+    private CancellationTokenSource? _motionCancellationTokenSource;
     
     static FloatButtonGroup()
     {
@@ -264,17 +263,7 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
         else if (change.Property == IsOpenProperty)
         {
             CalculateItemsControlPosition();
-            Dispatcher.Post(() =>
-            {
-                if (IsOpen)
-                {
-                    Dispatcher.InvokeAsync(ApplyShowMotionAsync);
-                }
-                else
-                {
-                    Dispatcher.InvokeAsync(ApplyHideMotionAsync);
-                }
-            });
+            ScheduleOpenStateMotion();
         }
         if (change.Property == TriggerProperty ||
             change.Property == MenuPlacementProperty)
@@ -291,13 +280,14 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
             _triggerButton.PointerEntered -= HandlePointerEntered;
             _triggerButton.PointerExited  -= HandlePointerExited;
         }
+        DetachItemsControlChildren();
         _itemsControl  = e.NameScope.Find<FloatButtonItemsControl>("ItemsControl");
         _triggerButton = e.NameScope.Find<FloatButton>("Trigger");
         _motionActor   = e.NameScope.Find<BaseMotionActor>(BaseMotionActor.MotionActorPart);
 
         if (_motionActor != null)
         {
-            _motionActor.SetCurrentValue(IsVisibleProperty, IsOpen);
+            ApplyMotionActorState(IsOpen);
         }
         
         if (_triggerButton != null)
@@ -334,7 +324,7 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
                     {
                         foreach (var child in newChildren)
                         {
-                            if (child is FloatButton floatButton)
+                            if (child is AbstractFloatButton floatButton)
                             {
                                 NotifyAddItem(floatButton);
                             }
@@ -351,9 +341,9 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
                 case NotifyCollectionChangedAction.Remove:
                     for (var i = 0; i < e.OldItems!.Count; ++i)
                     {
-                        if (e.OldItems[i] is FloatButton floatButton)
+                        if (e.OldItems[i] is AbstractFloatButton floatButton)
                         {
-                            floatButton.SetCurrentValue(FloatButton.IsEmbedModeProperty, false);
+                            floatButton.SetCurrentValue(AbstractFloatButton.IsEmbedModeProperty, false);
                         }
                     }
                     _itemsControl.Children.RemoveRange(e.OldStartingIndex, e.OldItems!.Count);
@@ -409,20 +399,23 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        _clickTriggerDisposable?.Dispose();
-        _clickTriggerDisposable = null;
+        _isAttachedToVisualTree = true;
+        ConfigureTriggerType();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        ConfigureTriggerType();
+        _isAttachedToVisualTree = false;
+        DisposeClickTrigger();
+        CancelMotion();
+        ApplyMotionActorState(false);
     }
 
     private void ConfigureTriggerType()
     {
-        _clickTriggerDisposable?.Dispose();
-        if (Trigger == FloatButtonGroupTrigger.Click)
+        DisposeClickTrigger();
+        if (_isAttachedToVisualTree && Trigger == FloatButtonGroupTrigger.Click)
         {
             var inputManager = AvaloniaLocator.Current.GetService(typeof(IInputManager)) as IInputManager;
             _clickTriggerDisposable = inputManager?.Process.Subscribe(HandleMouseClick);
@@ -431,6 +424,20 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
         if (_itemsControl != null)
         {
             _itemsControl.IsTriggerMode = Trigger != FloatButtonGroupTrigger.Default;
+        }
+    }
+
+    private void DisposeClickTrigger()
+    {
+        _clickTriggerDisposable?.Dispose();
+        _clickTriggerDisposable = null;
+    }
+
+    private void DetachItemsControlChildren()
+    {
+        if (_itemsControl is { Children.Count: > 0 } itemsControl)
+        {
+            itemsControl.Children.RemoveRange(0, itemsControl.Children.Count);
         }
     }
 
@@ -530,6 +537,10 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
         {
             return;
         }
+        if (!IsOpen)
+        {
+            return;
+        }
         if (_motionActor == null || _triggerButton == null)
         {
             return;
@@ -575,19 +586,88 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
         Canvas.SetLeft(_motionActor, offsetX);
         Canvas.SetTop(_motionActor, offsetY);
     }
-    
+
+    private void ScheduleOpenStateMotion()
+    {
+        var shouldOpen = IsOpen;
+        if (!_isAttachedToVisualTree || _motionActor is null)
+        {
+            ApplyMotionActorState(shouldOpen);
+            return;
+        }
+
+        Dispatcher.InvokeAsync(async () =>
+        {
+            if (!_isAttachedToVisualTree || _motionActor is null || IsOpen != shouldOpen)
+            {
+                return;
+            }
+
+            if (shouldOpen)
+            {
+                await ApplyShowMotionAsync();
+            }
+            else
+            {
+                await ApplyHideMotionAsync();
+            }
+        });
+    }
+
+    private CancellationTokenSource RestartMotion()
+    {
+        CancelMotion();
+        _motionCancellationTokenSource = new CancellationTokenSource();
+        return _motionCancellationTokenSource;
+    }
+
+    private void CancelMotion()
+    {
+        _motionCancellationTokenSource?.Cancel();
+        _motionCancellationTokenSource?.Dispose();
+        _motionCancellationTokenSource = null;
+    }
+
+    private void CompleteMotion(CancellationTokenSource cancellationTokenSource)
+    {
+        if (ReferenceEquals(_motionCancellationTokenSource, cancellationTokenSource))
+        {
+            _motionCancellationTokenSource.Dispose();
+            _motionCancellationTokenSource = null;
+        }
+    }
+
+    private void ApplyMotionActorState(bool isOpen)
+    {
+        if (_motionActor is null)
+        {
+            return;
+        }
+
+        _motionActor.SetCurrentValue(IsVisibleProperty, isOpen);
+        _motionActor.SetCurrentValue(OpacityProperty, isOpen ? 1.0d : 0.0d);
+        if (!isOpen)
+        {
+            _motionActor.MotionTransform           = null;
+            _motionActor.MotionTransformOperations = null;
+        }
+    }
+
     private async Task ApplyShowMotionAsync()
     {
-        if (_motionActor is not null)
+        var motionActor = _motionActor;
+        if (motionActor is null || !_isAttachedToVisualTree)
+        {
+            return;
+        }
+
+        var motionCancellationTokenSource = RestartMotion();
+        var cancellationToken             = motionCancellationTokenSource.Token;
+        try
         {
             if (IsMotionEnabled)
             {
-                if (_showAnimating)
-                {
-                    return;
-                }
-                _showAnimating = true;
-                _motionActor.SetCurrentValue(IsVisibleProperty, false);
+                motionActor.SetCurrentValue(IsVisibleProperty, false);
                 AbstractMotion? motion = null;
                 if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
                 {
@@ -607,40 +687,47 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
                 }
                 if (motion != null)
                 {
-                    await motion.RunAsync(_motionActor,
-                        () => { _motionActor.SetCurrentValue(IsVisibleProperty, true); });
-                }
-                _showAnimating = false;
-                if (_closeRequest)
-                {
-                    _closeRequest = false;
-                    await ApplyHideMotionAsync();
+                    await motion.RunAsync(motionActor,
+                        () =>
+                        {
+                            if (!cancellationToken.IsCancellationRequested && _isAttachedToVisualTree)
+                            {
+                                motionActor.SetCurrentValue(IsVisibleProperty, true);
+                            }
+                        },
+                        cancellationToken);
                 }
             }
             else
             {
-                _motionActor.SetCurrentValue(IsVisibleProperty, true);
+                ApplyMotionActorState(true);
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Detach or a newer open/close request canceled this motion.
+        }
+        finally
+        {
+            CompleteMotion(motionCancellationTokenSource);
         }
     }
 
     private async Task ApplyHideMotionAsync()
     {
-        if (_motionActor is not null)
+        var motionActor = _motionActor;
+        if (motionActor is null || !_isAttachedToVisualTree)
+        {
+            ApplyMotionActorState(false);
+            return;
+        }
+
+        var motionCancellationTokenSource = RestartMotion();
+        var cancellationToken             = motionCancellationTokenSource.Token;
+        try
         {
             if (IsMotionEnabled)
             {
-                if (_hideAnimating)
-                {
-                    return;
-                }
-
-                if (_showAnimating)
-                {
-                    _closeRequest = true;
-                    return;
-                }
-                _hideAnimating = true;
                 AbstractMotion? motion = null;
                 if (MenuPlacement == FloatButtonGroupMenuPlacement.Top)
                 {
@@ -664,15 +751,25 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
                 }
                 if (motion != null)
                 {
-                    await motion.RunAsync(_motionActor);
+                    await motion.RunAsync(motionActor, cancellationToken: cancellationToken);
                 }
-                _hideAnimating = false;
-                _motionActor.SetCurrentValue(IsVisibleProperty, true);
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    ApplyMotionActorState(false);
+                }
             }
             else
             {
-                _motionActor.SetCurrentValue(IsVisibleProperty, false);
+                ApplyMotionActorState(false);
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Detach or a newer open/close request canceled this motion.
+        }
+        finally
+        {
+            CompleteMotion(motionCancellationTokenSource);
         }
     }
 
@@ -686,7 +783,7 @@ public class FloatButtonGroup : TemplatedControl, IMotionAwareControl
         }
         else
         {
-            Dispatcher.InvokeAsync(ApplyHideMotionAsync);
+            ApplyMotionActorState(false);
         }
     }
 }

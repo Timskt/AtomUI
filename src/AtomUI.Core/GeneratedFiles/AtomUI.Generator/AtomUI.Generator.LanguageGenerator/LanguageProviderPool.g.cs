@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using AtomUI.Theme;
 using AtomUI.Theme.Language;
+using Avalonia.Controls;
 
 namespace AtomUI.Theme.Language
 {

@@ -159,7 +159,7 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
     private Grid? _gridLayout;
     private MediaBreakPoint? _breakPoint;
     private int _effectiveColumns;
-    private Window? _attachedWindow;
+    private IMediaBreakAwareControl? _mediaOwner;
 
     static Descriptions()
     {
@@ -208,22 +208,25 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        if (TopLevel.GetTopLevel(this) is Window window)
+        if (MediaQueryHost.FindOwner(this) is { } mediaOwner)
         {
-            _attachedWindow               =  window;
-            window.MediaBreakPointChanged += HandleMediaBreakChanged;
+            _mediaOwner = mediaOwner;
+            _breakPoint = mediaOwner.MediaBreakPoint;
+            mediaOwner.MediaBreakPointChanged += HandleMediaBreakChanged;
+            var columns = GetColumnsForMediaBreak(_breakPoint.Value);
+            UpdateGridColumns(columns, true);
         }
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        if (_attachedWindow != null)
+        if (_mediaOwner != null)
         {
-            _attachedWindow.MediaBreakPointChanged -= HandleMediaBreakChanged;
+            _mediaOwner.MediaBreakPointChanged -= HandleMediaBreakChanged;
         }
 
-        _attachedWindow = null;
+        _mediaOwner = null;
     }
 
     private void HandleMediaBreakChanged(object? sender, MediaBreakPointChangedEventArgs args)
@@ -232,7 +235,7 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
         if (_breakPoint != null)
         {
             var columns = GetColumnsForMediaBreak(_breakPoint.Value);
-            UpdateGridColumns(columns);
+            UpdateGridColumns(columns, true);
         }
     }
 
@@ -272,11 +275,15 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
         base.OnApplyTemplate(e);
         _gridLayout = e.NameScope.Find<Grid>("PART_GridLayout");
         AddDescriptionItems((IEnumerable<DescriptionItem>)Items);
-        if (TopLevel.GetTopLevel(this) is Window window)
+        if (MediaQueryHost.FindOwner(this) is { } mediaOwner)
         {
-            _breakPoint = window.MediaBreakPoint;
+            _breakPoint = mediaOwner.MediaBreakPoint;
             var columns = GetColumnsForMediaBreak(_breakPoint.Value);
-            UpdateGridColumns(columns);
+            UpdateGridColumns(columns, true);
+        }
+        else
+        {
+            DoLayoutChildren();
         }
     }
 
@@ -468,26 +475,22 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
         return Layout == Orientation.Horizontal && IsBordered ? itemCount * 2 : itemCount;
     }
 
-    private void UpdateGridColumns(int columnCount)
+    private void UpdateGridColumns(int columnCount, bool forceLayout = false)
     {
-    
-        if (columnCount != _effectiveColumns)
+        var effectiveColumns = columnCount;
+        if (Layout == Orientation.Horizontal && IsBordered)
         {
-            if (Layout == Orientation.Horizontal)
-            {
-                if (IsBordered)
-                {
-                    _effectiveColumns = columnCount * 2;
-                }
-                else
-                {
-                    _effectiveColumns = columnCount;
-                }
-            }
-            else
-            {
-                _effectiveColumns = columnCount;
-            }
+            effectiveColumns = columnCount * 2;
+        }
+
+        if (effectiveColumns != _effectiveColumns)
+        {
+            _effectiveColumns = effectiveColumns;
+            forceLayout       = true;
+        }
+
+        if (forceLayout)
+        {
             DoLayoutChildren();
         }
     }
@@ -498,9 +501,9 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
         {
             if (_breakPoint == null)
             {
-                if (TopLevel.GetTopLevel(this) is Window window)
+                if (MediaQueryHost.FindOwner(this) is { } mediaOwner)
                 {
-                    _breakPoint = window.MediaBreakPoint;
+                    _breakPoint = mediaOwner.MediaBreakPoint;
                 }
             }
 
@@ -677,13 +680,13 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
         }
 
         var breakPoint = _breakPoint;
-        if (breakPoint == null && _attachedWindow != null)
+        if (breakPoint == null && _mediaOwner != null)
         {
-            breakPoint = _attachedWindow.MediaBreakPoint;
+            breakPoint = _mediaOwner.MediaBreakPoint;
         }
-        if (breakPoint == null && TopLevel.GetTopLevel(this) is Window window)
+        if (breakPoint == null && MediaQueryHost.FindOwner(this) is { } mediaOwner)
         {
-            breakPoint = window.MediaBreakPoint;
+            breakPoint = mediaOwner.MediaBreakPoint;
         }
 
         breakPoint   ??= MediaBreakPoint.ExtraExtraLarge;
@@ -717,5 +720,6 @@ public class Descriptions : TemplatedControl, ISizeTypeAware
     {
         _gridLayout?.Children.Clear();
         AddDescriptionItems((IEnumerable<DescriptionItem>)Items);
+        DoLayoutChildren();
     }
 }

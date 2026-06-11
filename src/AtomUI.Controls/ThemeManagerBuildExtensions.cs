@@ -8,11 +8,13 @@ internal static class ThemeManagerBuilderExtensions
     public static IThemeManagerBuilder UseCommonControls(this IThemeManagerBuilder themeManagerBuilder)
     {
         var controlTokenTypes = ControlTokenTypePool.GetTokenTypes();
-        foreach (var controlType in controlTokenTypes)
+        foreach (var controlTokenRegistration in controlTokenTypes)
         {
-            themeManagerBuilder.AddControlToken(controlType);
+            themeManagerBuilder.AddControlToken(controlTokenRegistration.TokenType);
         }
-        themeManagerBuilder.AddControlThemesProvider(new CommonControlThemesProvider());
+        themeManagerBuilder.AddControlThemesProvider(RuntimePlatform.Features.SupportsNativeWindow
+            ? new CommonControlThemesProvider()
+            : new BrowserCommonControlThemesProvider());
 
         var languageProviders = LanguageProviderPool.GetLanguageProviders();
         foreach (var languageProvider in languageProviders)

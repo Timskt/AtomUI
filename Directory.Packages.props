@@ -4,13 +4,14 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)"/>
+        <PackageVersion Include="Avalonia.Browser" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Headless" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Win32" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.X11" Version="$(AvaloniaVersion)"/>
         <PackageVersion Include="Avalonia.Native" Version="$(AvaloniaVersion)"/>
-        <PackageVersion Include="ReactiveUI.Avalonia" Version="12.0.1"/>
+        <PackageVersion Include="ReactiveUI.Avalonia" Version="12.0.3"/>
         <PackageVersion Include="Svg.Controls.Avalonia" Version="12.0.0.5"/>
         <PackageVersion Include="SkiaSharp.QrCode" Version="0.12.0"/>
         <PackageVersion Include="System.Reactive" Version="6.1.0"/>
@@ -21,6 +22,7 @@
         <PackageVersion Include="Shouldly" Version="4.3.0"/>
         <PackageVersion Include="xunit.v3" Version="3.2.2"/>
         <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.2"/>
+        <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5"/>
         <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
         <!-- 源码生成 -->
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0"/>
@@ -31,17 +33,5 @@
         <!-- 其他依赖 -->
         <PackageVersion Include="ThomasLevesque.WeakEvent" Version="4.1.0"/>
         
-    </ItemGroup>
-    <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-        <PackageVersion Include="AtomUI.Core" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Fonts.AlibabaSans" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Controls.Shared" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Generator" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Icons.AntDesign" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Icons.Shared" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Desktop.Controls" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Desktop.Controls.ColorPicker" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Desktop.Controls.DataGrid" Version="$(AtomUIVersion)"/>
-        <PackageVersion Include="AtomUI.Native" Version="$(AtomUIVersion)"/>
     </ItemGroup>
 </Project>
